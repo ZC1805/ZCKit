@@ -1,5 +1,5 @@
 //
-//  NSObject+ZC.h
+//  NSData+ZC.h
 //  ZCKit
 //
 //  Created by admin on 2018/9/6.
@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-@interface NSObject (ZC)
+@interface NSData (ZC)
 
-//@property (nonatomic, weak) id voidProperty;
+//- (NSString *)md5String;
 
 @end

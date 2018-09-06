@@ -9,5 +9,8 @@
 #ifndef ZCMacro_h
 #define ZCMacro_h
 
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
 
 #endif /* ZCMacro_h */
