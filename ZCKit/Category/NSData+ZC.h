@@ -10,6 +10,6 @@
 
 @interface NSData (ZC)
 
-//- (NSString *)md5String;
+- (NSString *)md5String;
 
 @end
