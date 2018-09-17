@@ -18,6 +18,7 @@
 
 + (UIColor *)colorFormRad:(int)intR green:(int)intG blue:(int)intB alpha:(float)alpha;   /**< 十进制颜色255 */
 
+
 - (UIColor *)brightColor;   /**< 明色 */
 
 - (UIColor *)darkColor;   /**< 暗色 */
