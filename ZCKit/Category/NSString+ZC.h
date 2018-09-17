@@ -1,17 +1,13 @@
 //
-//  NSData+ZC.h
+//  NSString+ZC.h
 //  ZCKit
 //
-//  Created by admin on 2018/9/6.
+//  Created by admin on 2018/9/11.
 //  Copyright © 2018年 Squat in house. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 
-@interface NSData (ZC)
-
-- (NSString *)md5String;
-
-- (id)jsonObject;
+@interface NSString (ZC)
 
 @end

@@ -22,4 +22,12 @@
             result[12], result[13], result[14], result[15]];
 }
 
+- (id)jsonObject {
+    NSError *error = nil;
+    id object = [NSJSONSerialization JSONObjectWithData:self options:NSJSONReadingAllowFragments error:&error];
+    if (object && !error) return object;
+    NSAssert(0, @"json serialization error");
+    return nil;
+}
+
 @end
