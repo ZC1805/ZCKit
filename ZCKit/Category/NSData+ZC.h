@@ -8,10 +8,30 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface NSData (ZC)
 
 - (NSString *)md5String;
 
-- (id)jsonObject;
+- (NSString *)hexString;
+
+- (nullable id)jsonObject;
+
+- (nullable NSString *)utf8String;
+
+- (nullable NSString *)base64EncodedString;
+
++ (nullable NSData *)dataWithBase64EncodedString:(nullable NSString *)base64EncodedString;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+
+
+
+
+
+
+

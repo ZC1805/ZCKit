@@ -18,6 +18,10 @@
 
 + (NSArray *)allSubclasses;   /**< 所有子类 */
 
++ (BOOL)swizzleInstanceMethod:(SEL)originalSel with:(SEL)newSel;   /**< 替换实例方法，返回是否成功 */
+
++ (BOOL)swizzleClassMethod:(SEL)originalSel with:(SEL)newSel;   /**< 替换类方法，返回是否成功 */
+
 - (NSDictionary *)allKeysValus;   /**< 实例变量键值对 */
 
 - (id)performSelector:(SEL)selector arguments:(NSArray *)arguments;   /**< 多参数 */

@@ -390,6 +390,41 @@
 //}
 
 
+//+ (NSData *)dataWithBase64EncodedString:(NSString *)base64EncodedString {
+//    if (!base64EncodedString) return nil;
+//    NSInteger length = base64EncodedString.length;
+//    const char *string = [base64EncodedString cStringUsingEncoding:NSASCIIStringEncoding];
+//    if (string == NULL) return nil;
+//
+//    while (length > 0 && string[length - 1] == '=') {
+//        length--;
+//    }
+//
+//    NSInteger outputLength = length * 3 / 4;
+//    NSMutableData *data = [NSMutableData dataWithLength:outputLength];
+//    if (data == nil) return nil;
+//    if (length == 0) return data;
+//
+//    uint8_t *output = data.mutableBytes;
+//    NSInteger inputPoint = 0;
+//    NSInteger outputPoint = 0;
+//    while (inputPoint < length) {
+//        char i0 = string[inputPoint++];
+//        char i1 = string[inputPoint++];
+//        char i2 = inputPoint < length ? string[inputPoint++] : 'A';
+//        char i3 = inputPoint < length ? string[inputPoint++] : 'A';
+//
+//        output[outputPoint++] = (base64DecodingTable[i0] << 2) | (base64DecodingTable[i1] >> 4);
+//        if (outputPoint < outputLength) {
+//            output[outputPoint++] = ((base64DecodingTable[i1] & 0xf) << 4) | (base64DecodingTable[i2] >> 2);
+//        }
+//        if (outputPoint < outputLength) {
+//            output[outputPoint++] = ((base64DecodingTable[i2] & 0x3) << 6) | base64DecodingTable[i3];
+//        }
+//    }
+//    return data;
+//}
+
 
 
 
