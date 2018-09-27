@@ -27,7 +27,7 @@
     return global;
 }
 
-#pragma mark - Misc
+#pragma mark - misc
 + (BOOL)isiPhoneX {
     return [ZCGlobal global].isFullScreen;
 }
@@ -56,7 +56,7 @@
     return [bundle pathForResource:name ofType:ext];
 }
 
-#pragma mark - Controller
+#pragma mark - controller
 + (UIViewController *)rootController {  //根控制器
     UIWindow *window = [UIApplication sharedApplication].delegate.window;
     if (!window || window.windowLevel != UIWindowLevelNormal) {
@@ -117,7 +117,7 @@
     return [self topController:[self rootController]];
 }
 
-#pragma mark - SafeLayout
+#pragma mark - safe layout
 + (CGFloat)leadingSpacing {  //左边距离 -> 0 / 44
     CGFloat height = [self safeLeft];
     if (height <= 0 && [self isLandscape]) {  //暂时默认横屏左右都是44

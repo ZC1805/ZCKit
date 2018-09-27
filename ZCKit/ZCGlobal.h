@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)isValidString:(NSString *)str;
 
-+ (NSString *)resourcePath:(nullable NSString *)bundleName name:(NSString *)name ext:(NSString *)ext;
++ (nullable NSString *)resourcePath:(nullable NSString *)bundleName name:(NSString *)name ext:(NSString *)ext;
 
 
 + (nullable UIViewController *)topController:(nullable UIViewController *)rootvc;  /**< 顶控制器，初始rootvc可为nil */

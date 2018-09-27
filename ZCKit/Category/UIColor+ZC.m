@@ -10,8 +10,8 @@
 
 @implementation UIColor (ZC)
 
-#pragma mark - ClassFunc
-+ (instancetype)randColor {
+#pragma mark - class
++ (UIColor *)colorForRandColor {
     float r = arc4random_uniform(256);
     float g = arc4random_uniform(256);
     float b = arc4random_uniform(256);
@@ -63,7 +63,7 @@
     }
 }
 
-#pragma mark - InstanceFunc
+#pragma mark - instance
 - (UIColor *)brightColor {
     if ([self isEqual:[UIColor whiteColor]]) return [UIColor colorWithWhite:0.99 alpha:1.0];
     if ([self isEqual:[UIColor blackColor]]) return [UIColor colorWithWhite:0.01 alpha:1.0];

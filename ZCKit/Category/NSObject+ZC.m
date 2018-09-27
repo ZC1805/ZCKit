@@ -90,7 +90,7 @@
     }
 }
 
-#pragma mark - ClassTest
+#pragma mark - class test
 + (NSArray *)allProperies {
     unsigned int count;
     objc_property_t *proprties = class_copyPropertyList(self, &count);

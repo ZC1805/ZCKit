@@ -39,11 +39,23 @@
 #define ZCBKColor           [UIColor colorFormHex:0xF6F6F8 alpha:1.0]   /**< 背景颜色 */
 
 
+/** ----- string ----- */
+#define ZCStrNonnil(str)    (str ? str : @"")              /**< 返回非nil字符串，用@""替换nil */
+#define ZCStrNonlen(str)    ([str length] ? str : @" ")    /**< 返回非空长度字符串, 用@" "替换nil、@"" */
+#define ZCStrIsValid(str)   [ZCGlobal isValidString:str]   /**< 返回布尔型，判断字符串是否有效 */
+
+
+/** ----- image ----- */
+#define ZCImage(name)       [UIImage imageNamed:(name)]                        /**< 获取图片，缓存 */
+#define ZCFileImage(name)   [ZCGlobal resourcePath:nil name:name ext:@"png"]   /**< 获取图片，不缓存 */
+
+
 /** ----- adapt 360 ----- */
 #define ZCRadix             360.0                                     /**< 适配竖屏720px */
 #define ZCA(radix)          (radix * (MIN(ZSWid, ZSHei) / ZCRadix))   /**< 适配比例计算值 */
 #define ZCFont(size)        [UIFont systemFontOfSize:ZCA(size)]       /**< 适配了的系统字体 */
 #define ZCBoldFont(size)    [UIFont boldSystemFontOfSize:ZCA(size)]   /**< 适配了的粗体系统字体 */
+
 
 /** ----- adapt 320 ----- */
 #define zs_radix            (ZClandscape ? 568.0 : 320.0)   /**< 总基准点数，按照iPhone5设定 */
@@ -51,6 +63,7 @@
 #define zs_is320            (ZFEqual(ZSWid, zs_radix))      /**< 是否基准屏 */
 #define zs_to_radix(real)   (real / zs_unit)                /**< 将实例点转为基准点 */
 #define zs_to_real(radix)   (radix * zs_unit)               /**< 将基准点转为实例点 */
+
 
 /** ----- layout cal ----- */
 #define ZSWid               ([UIScreen mainScreen].bounds.size.width)   /**< 屏幕宽 */
@@ -74,17 +87,6 @@
 #define ZFNotEqual(a, b)    (fabs((a) - (b)) >= FLT_EPSILON)                /**< a != b */
 #define ZFAboveEqual(a, b)  (ZFAbove((a), (b)) || ZFEqual((a), (b)))        /**< a >= b */
 #define ZFBelowEqual(a, b)  (ZFBelow((a), (b)) || ZFEqual((a), (b)))        /**< a <= b */
-
-
-/** ----- string ----- */
-#define ZCNonnil(str)      (str ? str : @"")              /**< 返回非nil字符串，用@""替换nil */
-#define ZCNonlen(str)      ([str length] ? str : @" ")    /**< 返回非空长度字符串, 用@" "替换nil、@"" */
-#define ZCIsValid(str)     [ZCGlobal isValidString:str]   /**< 判断字符串是否有效 */
-
-
-/** ----- image ----- */
-#define ZCImage(name)       [UIImage imageNamed:(name)]                        /**< 获取图片，缓存 */
-#define ZCFileImage(name)   [ZCGlobal resourcePath:nil name:name ext:@"png"]   /**< 获取图片，不缓存 */
 
 
 /** ----- misc ----- */

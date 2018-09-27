@@ -8,11 +8,13 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface UIColor (ZC)
 
-+ (instancetype)randColor;   /**< 随机颜色 */
++ (UIColor *)colorForRandColor;   /**< 随机颜色 */
 
-+ (UIColor *)colorFromHexString:(NSString *)hexColorStr;   /**< 十六进制颜色@"0x000000" */
++ (UIColor *)colorFromHexString:(nullable NSString *)hexColorStr;   /**< 十六进制颜色@"0x000000" */
 
 + (UIColor *)colorFormHex:(NSInteger)hexValue alpha:(float)alpha;   /**< 十六进制颜色0x000000 */
 
@@ -34,6 +36,10 @@
 - (float)A;
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+
 
 
 
