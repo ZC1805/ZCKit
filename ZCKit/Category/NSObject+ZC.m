@@ -22,41 +22,37 @@
 }
 
 #pragma mark - swizzle
-+ (BOOL)swizzleInstanceMethod:(SEL)originalSel with:(SEL)newSel {
-    Method originalMethod = class_getInstanceMethod(self, originalSel);
++ (BOOL)swizzleInstanceMethod:(SEL)originSel with:(SEL)newSel {
+    Method originMethod = class_getInstanceMethod(self, originSel);
     Method newMethod = class_getInstanceMethod(self, newSel);
-    if (!originalMethod || !newMethod) {
-        NSAssert(0, @"method is fail"); return NO;
+    if (!originMethod || !newMethod) {NSAssert(0, @"find method is fail"); return NO;}
+    if (class_addMethod(self, originSel, method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) {
+        class_replaceMethod(self, newSel, method_getImplementation(originMethod), method_getTypeEncoding(originMethod));
+    } else {
+        method_exchangeImplementations(originMethod, newMethod);
     }
-    class_addMethod(self, originalSel, class_getMethodImplementation(self, originalSel),
-                    method_getTypeEncoding(originalMethod));
-    class_addMethod(self, newSel, class_getMethodImplementation(self, newSel),
-                    method_getTypeEncoding(newMethod));
-    method_exchangeImplementations(class_getInstanceMethod(self, originalSel),
-                                   class_getInstanceMethod(self, newSel));
     return YES;
 }
 
-//SEL selA = @selector(sendAction:to:forEvent:);
-//SEL selB = @selector(mySendAction:to:forEvent:);
-//Method methodA = class_getInstanceMethod(self, selA);
-//Method methodB = class_getInstanceMethod(self, selB);
-////将methodB的实现添加到系统方法中也就是说将methodA方法指针添加成方法methodB的返回值表示是否添加成功
-//BOOL isAdd = class_addMethod(self, selA, method_getImplementation(methodB), method_getTypeEncoding(methodB));
-////添加成功了说明本类中不存在methodB所以此时必须将方法b的实现指针换成方法A的，否则b方法将没有实现。
-//if (isAdd) class_replaceMethod(self, selB, method_getImplementation(methodA), method_getTypeEncoding(methodA));
-//else method_exchangeImplementations(methodA, methodB); //添加失败了说明本类中有methodB的实现，此时只需要将methodA和methodB的IMP互换一下即可。
-
-+ (BOOL)swizzleClassMethod:(SEL)originalSel with:(SEL)newSel {
++ (BOOL)swizzleClassMethod:(SEL)originSel with:(SEL)newSel {
     Class class = object_getClass(self);
-    Method originalMethod = class_getInstanceMethod(class, originalSel);
+    Method originMethod = class_getInstanceMethod(class, originSel);
     Method newMethod = class_getInstanceMethod(class, newSel);
-    if (!originalMethod || !newMethod) {
-        NSAssert(0, @"method is fail"); return NO;
-    }
-    method_exchangeImplementations(originalMethod, newMethod);
+    if (!originMethod || !newMethod) {NSAssert(0, @"find method is fail"); return NO;}
+    method_exchangeImplementations(originMethod, newMethod);
     return YES;
 }
+
+
+
+
+//NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
+//NSString *docPath = [paths objectAtIndex:0];
+//
+//作者：devRen
+//链接：https://www.jianshu.com/p/a8251c8c0298
+//來源：简书
+//简书著作权归作者所有，任何形式的转载都请联系作者获得授权并注明出处。
 
 #pragma mark - misc
 - (id)voidProperty {
@@ -91,7 +87,7 @@
 }
 
 #pragma mark - class test
-+ (NSArray *)allProperies {
++ (NSArray *)allProperiesName {
     unsigned int count;
     objc_property_t *proprties = class_copyPropertyList(self, &count);
     NSMutableArray *list = [NSMutableArray array];
@@ -103,7 +99,7 @@
     return list;
 }
 
-+ (NSArray *)allIvars {
++ (NSArray *)allIvarsName {
     unsigned int icount = 0;
     Ivar *ivars = class_copyIvarList(self, &icount);
     NSMutableArray *list= [NSMutableArray array];
@@ -130,7 +126,7 @@
     return mySubclasses;
 }
 
-- (NSDictionary *)allKeysValus {
+- (NSDictionary *)allIvarsKeysValus {
     unsigned int icount = 0;
     NSMutableDictionary *dictionaryFormat = [NSMutableDictionary dictionary];
     Ivar *ivars = class_copyIvarList(self.class, &icount);

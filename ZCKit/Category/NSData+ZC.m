@@ -36,7 +36,6 @@
     NSError *error = nil;
     id object = [NSJSONSerialization JSONObjectWithData:self options:NSJSONReadingAllowFragments error:&error];
     if (object && !error) return object;
-    NSAssert(0, @"json serialization fail");
     return nil;
 }
 

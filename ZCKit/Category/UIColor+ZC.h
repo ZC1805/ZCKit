@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIColor (ZC)
 
-+ (UIColor *)colorForRandColor;   /**< 随机颜色 */
++ (UIColor *)colorForRandomColor;   /**< 随机颜色 */
 
 + (UIColor *)colorFromHexString:(nullable NSString *)hexColorStr;   /**< 十六进制颜色@"0x000000" */
 
@@ -25,19 +25,31 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (UIColor *)darkColor;   /**< 暗色 */
 
+- (uint32_t)RGBValue;   /**< such as 0x66ccff */
+
+- (uint32_t)RGBAValue;   /**< such as 0x66ccffff */
+
+- (nullable NSString *)hexString;   /**< such as @"66ccff" */
+
+- (nullable NSString *)hexStringWithAlpha;   /**< such as @"0066ccff" */
+
 - (BOOL)isClear;   /**< 是否是透明颜色 */
 
-- (float)R;   /**< 0~1，不适合white、black等颜色 */
 
-- (float)G;
+@property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;   /**< 色彩空间 */
 
-- (float)B;
+@property (nonatomic, readonly) CGFloat R;   /**< 0~1 */
 
-- (float)A;
+@property (nonatomic, readonly) CGFloat G;   /**< 0~1 */
+
+@property (nonatomic, readonly) CGFloat B;   /**< 0~1 */
+
+@property (nonatomic, readonly) CGFloat A;   /**< 0~1 */
 
 @end
 
 NS_ASSUME_NONNULL_END
+
 
 
 

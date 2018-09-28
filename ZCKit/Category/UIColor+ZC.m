@@ -11,7 +11,7 @@
 @implementation UIColor (ZC)
 
 #pragma mark - class
-+ (UIColor *)colorForRandColor {
++ (UIColor *)colorForRandomColor {
     float r = arc4random_uniform(256);
     float g = arc4random_uniform(256);
     float b = arc4random_uniform(256);
@@ -45,6 +45,7 @@
 }
 
 + (UIColor *)colorFromHexString:(NSString *)hexColorStr {
+    if (hexColorStr.length == 6) hexColorStr = [@"0x" stringByAppendingString:hexColorStr];
     if (hexColorStr && hexColorStr.length == 8) {
         NSString *rStr = [hexColorStr substringWithRange:NSMakeRange(2, 2)];
         NSString *gStr = [hexColorStr substringWithRange:NSMakeRange(4, 2)];
@@ -88,27 +89,84 @@
     return self;
 }
 
+- (uint32_t)RGBValue {
+    CGFloat r = 0, g = 0, b = 0, a = 0;
+    [self getRed:&r green:&g blue:&b alpha:&a];
+    int8_t red = r * 255;
+    uint8_t green = g * 255;
+    uint8_t blue = b * 255;
+    return (red << 16) + (green << 8) + blue;
+}
+
+- (uint32_t)RGBAValue {
+    CGFloat r = 0, g = 0, b = 0, a = 0;
+    [self getRed:&r green:&g blue:&b alpha:&a];
+    int8_t red = r * 255;
+    uint8_t green = g * 255;
+    uint8_t blue = b * 255;
+    uint8_t alpha = a * 255;
+    return (red << 24) + (green << 16) + (blue << 8) + alpha;
+}
+
 - (BOOL)isClear {
-    return [self isEqual:[UIColor clearColor]];
+    if ([self isEqual:[UIColor clearColor]]) return YES;
+    if (self.A == 0) return YES;
+    return NO;
 }
 
-- (float)R {
-    const CGFloat *components = CGColorGetComponents(self.CGColor);
-    return components[0];
+- (CGFloat)R {
+    CGFloat r = 0, g, b, a;
+    [self getRed:&r green:&g blue:&b alpha:&a];
+    return r;
 }
 
-- (float)G {
-    const CGFloat *components = CGColorGetComponents(self.CGColor);
-    return components[1];
+- (CGFloat)G {
+    CGFloat r, g = 0, b, a;
+    [self getRed:&r green:&g blue:&b alpha:&a];
+    return g;
 }
 
-- (float)B {
-    const CGFloat *components = CGColorGetComponents(self.CGColor);
-    return components[2];
+- (CGFloat)B {
+    CGFloat r, g, b = 0, a;
+    [self getRed:&r green:&g blue:&b alpha:&a];
+    return b;
 }
 
-- (float)A {
+- (CGFloat)A {
     return CGColorGetAlpha(self.CGColor);
+}
+
+- (CGColorSpaceModel)colorSpaceModel {
+    return CGColorSpaceGetModel(CGColorGetColorSpace(self.CGColor));
+}
+
+- (NSString *)hexString {
+    return [self hexStringWithAlpha:NO];
+}
+
+- (NSString *)hexStringWithAlpha {
+    return [self hexStringWithAlpha:YES];
+}
+
+- (NSString *)hexStringWithAlpha:(BOOL)withAlpha {
+    CGColorRef color = self.CGColor;
+    size_t count = CGColorGetNumberOfComponents(color);
+    const CGFloat *components = CGColorGetComponents(color);
+    static NSString *stringFormat = @"%02x%02x%02x";
+    NSString *hex = nil;
+    if (count == 2) {
+        NSUInteger white = (NSUInteger)(components[0] * 255.0f);
+        hex = [NSString stringWithFormat:stringFormat, white, white, white];
+    } else if (count == 4) {
+        hex = [NSString stringWithFormat:stringFormat,
+               (NSUInteger)(components[0] * 255.0f),
+               (NSUInteger)(components[1] * 255.0f),
+               (NSUInteger)(components[2] * 255.0f)];
+    }
+    if (hex && withAlpha) {
+        hex = [hex stringByAppendingFormat:@"%02lx", (unsigned long)(self.A * 255.0 + 0.5)];
+    }
+    return hex;
 }
 
 @end

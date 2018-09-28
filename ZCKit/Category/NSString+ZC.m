@@ -26,16 +26,6 @@
     return [self stringByTrimmingCharactersInSet:set];
 }
 
-- (CGFloat)widthForFont:(UIFont *)font {
-    CGSize size = [self sizeForFont:font size:CGSizeMake(HUGE, HUGE) mode:NSLineBreakByWordWrapping];
-    return size.width;
-}
-
-- (CGFloat)heightForFont:(UIFont *)font width:(CGFloat)width {
-    CGSize size = [self sizeForFont:font size:CGSizeMake(width, HUGE) mode:NSLineBreakByWordWrapping];
-    return size.height;
-}
-
 - (NSNumber *)numberObject {
     return [NSNumber numberWithString:self];
 }
@@ -46,6 +36,16 @@
 
 - (id)jsonObject {
     return [[self dataObject] jsonObject];
+}
+
+- (CGFloat)widthForFont:(UIFont *)font {
+    CGSize size = [self sizeForFont:font size:CGSizeMake(HUGE, HUGE) mode:NSLineBreakByWordWrapping];
+    return size.width;
+}
+
+- (CGFloat)heightForFont:(UIFont *)font width:(CGFloat)width {
+    CGSize size = [self sizeForFont:font size:CGSizeMake(width, HUGE) mode:NSLineBreakByWordWrapping];
+    return size.height;
 }
 
 - (NSUInteger)charCount {
@@ -217,11 +217,11 @@
     return [str isEqualToString:string];
 }
 
-- (BOOL)isBankCard:(NSString *)cardNumber {  //是否是银行卡号
-    if (cardNumber.length == 0) return NO;
+- (BOOL)isBankCard {  //是否是银行卡号
+    if (self.length == 0) return NO;
     NSString *digitsOnly = @""; char c;
-    for (int i = 0; i < cardNumber.length; i++) {
-        c = [cardNumber characterAtIndex:i];
+    for (int i = 0; i < self.length; i++) {
+        c = [self characterAtIndex:i];
         if (isdigit(c)) {
             digitsOnly =[digitsOnly stringByAppendingFormat:@"%c", c];
         }
@@ -232,7 +232,7 @@
         digit = [digitsOnly characterAtIndex:i] - '0';
         if (timesTwo) {
             addend = digit * 2;
-            if (addend >9) {addend -= 9;}
+            if (addend > 9) {addend -= 9;}
         } else {
             addend = digit;
         }
@@ -248,20 +248,9 @@
     return [self matchRegex:regex];
 }
 
-- (BOOL)isContainAdmitSpecialCharacter {  //是否包含承认的特殊字符
-    if (self.length == 0) return NO;
-    NSString *regex = @"`-=~!@#$%^&*()_+[]\\;',./{}|:\"<>?";
-    NSInteger allIndex = 0;
-    for (int i = 0; i < self.length; i++) {
-        NSString *subStr = [self substringWithRange:NSMakeRange(i, 1)];
-        if ([regex rangeOfString:subStr].location != NSNotFound) {
-            allIndex ++;
-        }
-    }
-    return (allIndex > 0);
-}
-
-- (BOOL)isPasswordAllowAdmitSpecialCharacter:(BOOL)specialChar mustAllContain:(BOOL)allContain allowSimple:(BOOL)allowSimple min:(int)min max:(int)max {
+/** 1.是否可保护特殊字符 2.是否必须保护字符、字母、数字 3.是否做字符串太简单的判断 4.需要屏蔽的字符串(如账号) 5.最小长度 6.最大长度 */
+- (BOOL)isPasswordAllowAdmitSpecialCharacter:(BOOL)specialChar mustAllContain:(BOOL)allContain allowSimple:(BOOL)allowSimple
+                                   shieldStr:(NSString *)shieldStr min:(int)min max:(int)max {
     if (self.length < min || self.length > max) return NO;  //是否是规范的密码
     NSString *admitStr = self;
     if (specialChar) {
@@ -275,7 +264,7 @@
         if (allContain && (![admitStr isContainNumber] || ![admitStr isContainAlpha])) {
             return NO;
         }
-        if (!allowSimple && [admitStr isEasyPasswordShield:nil]) {
+        if (!allowSimple && [admitStr isEasyPasswordShield:shieldStr]) {
             return NO;
         }
         return YES;
@@ -294,7 +283,20 @@
     return NO;
 }
 
-- (BOOL)containsCharacterSet:(NSCharacterSet *)set {  //是否包含字符集
+- (BOOL)isContainAdmitSpecialCharacter {  //是否包含承认的特殊字符
+    if (self.length == 0) return NO;
+    NSString *regex = @"`-=~!@#$%^&*()_+[]\\;',./{}|:\"<>?";
+    NSInteger allIndex = 0;
+    for (int i = 0; i < self.length; i++) {
+        NSString *subStr = [self substringWithRange:NSMakeRange(i, 1)];
+        if ([regex rangeOfString:subStr].location != NSNotFound) {
+            allIndex ++;
+        }
+    }
+    return (allIndex > 0);
+}
+
+- (BOOL)isContainsCharacterSet:(NSCharacterSet *)set {  //是否包含字符集
     if (!set) return NO;
     return [self rangeOfCharacterFromSet:set].location != NSNotFound;
 }
@@ -303,7 +305,6 @@
     if (!str) return NO;
     return ([self compare:str options:NSCaseInsensitiveSearch] == NSOrderedSame);
 }
-
 
 #pragma mark - class
 + (NSString *)stringWithUUID {
@@ -351,26 +352,34 @@
     if (self.length < 6) return YES;
     if ([self isContainChinese]) return YES;
     if (shield && [self containsString:shield]) return YES;
+    if (shield && [shield containsString:self]) return YES;
     if ([self stringByTrim].length != self.length) return YES;
-    int same = 0, incr = 0, decr = 0;
+    int same = 0, incr = 0, incrMax = 0, decr = 0, decrMax = 0;
     NSMutableString *chars = [NSMutableString string];
-    unichar lastC = [self characterAtIndex:0];
+    unichar last1C = [self characterAtIndex:0];
+    unichar last2C = [self characterAtIndex:0];
     for (int i = 0; i < self.length; i++) {
         unichar iC = [self characterAtIndex:i];
         NSString *ics = [NSString stringWithFormat:@"%c", iC];
-        if (![chars containsString:ics]) [chars appendString:ics];
-        if (iC == lastC) same ++;
-        if (decr == 0 && iC == lastC + 1) incr ++;
-        if (incr == 0 && iC == lastC - 1) decr ++;
-        lastC = iC;
+        if ([chars containsString:ics]) {same ++;}
+        else {[chars appendString:ics];}
+        if (iC == last1C + 1) incr ++;
+        else {incrMax = MAX(incrMax, incr); incr = 0;}
+        if (iC == last2C - 1) decr ++;
+        else {decrMax = MAX(decrMax, decr); decr = 0;}
+        incrMax = MAX(incrMax, incr);
+        decrMax = MAX(decrMax, decr);
+        last1C = iC;
+        last2C = iC;
     }
-    if (same > 5) return YES;  //此处错误和下面都错误
-    if (incr > 4 || decr > 4) return YES;
     if (chars.length < 4) return YES;
+    if (same > self.length - 5) return YES;
+    if (incrMax > self.length - 4) return YES;
+    if (decrMax > self.length - 4) return YES;
+    if (incrMax + same > self.length - 2) return YES;
+    if (decrMax + same > self.length - 2) return YES;
     return NO;
 }
-
-
 
 #pragma mark - expand
 - (NSString *)stringByURLEncode {
@@ -399,8 +408,7 @@
         CFStringEncoding cfEncoding = CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding);
         NSString *encoded = (__bridge_transfer NSString *)
         CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,(__bridge CFStringRef)self,NULL,
-                                                CFSTR("!#$&'()*+,/:;=?@[]"),
-                                                cfEncoding);
+                                                CFSTR("!#$&'()*+,/:;=?@[]"),cfEncoding);
         return encoded;
 #pragma clang diagnostic pop
     }
@@ -469,45 +477,15 @@
 
 - (NSString *)stringByReplacingRegex:(NSString *)regex
                              options:(NSRegularExpressionOptions)options
-                          withString:(NSString *)replacement; {
+                          withString:(NSString *)replacement {
     NSRegularExpression *pattern = [NSRegularExpression regularExpressionWithPattern:regex options:options error:nil];
     if (!pattern) return self;
     return [pattern stringByReplacingMatchesInString:self options:0 range:NSMakeRange(0, [self length]) withTemplate:replacement];
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @end
+
+
 
 
 
