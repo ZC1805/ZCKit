@@ -16,8 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable id)objectOrNilAtIndex:(NSUInteger)index;
 
+- (NSArray *)restExceptObjects:(nullable NSArray *)objects;   /**< 返回余下的对象数组 */
+
 - (nullable NSString *)jsonString;
 
+#pragma mark - misc
 - (nullable NSData *)plistData;
 
 - (nullable NSString *)plistString;

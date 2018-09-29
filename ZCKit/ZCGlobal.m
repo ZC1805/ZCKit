@@ -48,6 +48,20 @@
     return NO;
 }
 
++ (BOOL)isValidArray:(NSArray *)array {
+    if (array && [array isKindOfClass:[NSArray class]] && [array count]) {
+        return YES;
+    }
+    return NO;
+}
+
++ (BOOL)isValidDictionary:(NSDictionary *)dictionary {
+    if (dictionary && [dictionary isKindOfClass:[NSDictionary class]] && [dictionary count]) {
+        return YES;
+    }
+    return NO;
+}
+
 + (NSString *)resourcePath:(NSString *)bundleName name:(NSString *)name ext:(NSString *)ext {
     NSBundle *bundle = [NSBundle bundleForClass:self];
     if (bundleName && bundleName.length) {

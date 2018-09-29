@@ -20,12 +20,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSDictionary *)dictionaryForKeys:(nullable NSArray *)keys;   /**< 返回所有目标键组合的子字典 */
 
+- (NSDictionary *)restExceptForKeys:(nullable NSArray *)keys;   /**< 返回余下的键值对的字典 */
+
 - (BOOL)containsObjectForKey:(id)key;
 
 - (BOOL)containsObjectForValue:(id)value;
 
 - (nullable NSString *)jsonString;
 
+#pragma mark - misc
 - (nullable NSData *)plistData;
 
 - (nullable NSString *)plistString;
@@ -35,7 +38,6 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSDictionary *)dictionaryWithPlistString:(nullable NSString *)plist;
 
 @end
-
 
 
 @interface NSMutableDictionary (ZC)

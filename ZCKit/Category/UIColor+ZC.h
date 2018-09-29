@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIColor *)colorForRandomColor;   /**< 随机颜色 */
 
-+ (UIColor *)colorFromHexString:(nullable NSString *)hexColorStr;   /**< 十六进制颜色@"0x000000" */
++ (UIColor *)colorFromHexString:(nullable NSString *)hexColorStr;   /**< 十六进制颜色@"0x000000"&@"000000" */
 
 + (UIColor *)colorFormHex:(NSInteger)hexValue alpha:(float)alpha;   /**< 十六进制颜色0x000000 */
 
@@ -33,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)hexStringWithAlpha;   /**< such as @"0066ccff" */
 
-- (BOOL)isClear;   /**< 是否是透明颜色 */
+- (BOOL)isClear;   /**< 是否是透明颜色或透明度小于0.01 */
 
 
 @property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;   /**< 色彩空间 */

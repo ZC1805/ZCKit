@@ -40,6 +40,16 @@
     return [dic copy];
 }
 
+- (NSDictionary *)restExceptForKeys:(NSArray *)keys {
+    NSMutableDictionary *rest = [NSMutableDictionary dictionary];
+    [self enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        if (![keys containsObject:key]) {
+            [rest setObject:obj forKey:key];
+        }
+    }];
+    return [rest copy];
+}
+
 - (BOOL)containsObjectForKey:(id)key {
     if (!key) return NO;
     return self[key] != nil;
@@ -83,6 +93,7 @@
     return [self dictionaryWithPlistData:data];
 }
 
+#warning - 解析时候设定默认值
 @end
 
 

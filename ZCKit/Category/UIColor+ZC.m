@@ -110,7 +110,7 @@
 
 - (BOOL)isClear {
     if ([self isEqual:[UIColor clearColor]]) return YES;
-    if (self.A == 0) return YES;
+    if (self.A < 0.01) return YES;
     return NO;
 }
 

@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)deletePictureResolution;   /**< 删除图片尾缀@2x、@3x */
 
 
-#pragma mark - usually
+#pragma mark - judge
 - (BOOL)isPureInteger;   /**< 是否是整形 */
 
 - (BOOL)isPureFloat;   /**< 是否是浮点型 (0.2f不算) */

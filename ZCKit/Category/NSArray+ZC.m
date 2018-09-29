@@ -23,6 +23,16 @@
     return index < self.count ? self[index] : nil;
 }
 
+- (NSArray *)restExceptObjects:(NSArray *)objects {
+    NSMutableArray *rest = [NSMutableArray array];
+    for (id item in self) {
+        if (![objects containsObject:item]) {
+            [rest addObject:item];
+        }
+    }
+    return [rest copy];
+}
+
 - (NSString *)jsonString {
     if ([NSJSONSerialization isValidJSONObject:self]) {
         NSError *error = nil;
@@ -71,7 +81,7 @@
 
 - (void)insertObjects:(NSArray *)objects atIndex:(NSUInteger)index {  
     if (!objects || !objects.count) return;
-    if (index > self.count) {NSAssert(0, @"insert object is fail"); return;}
+    if (index > self.count) return;
     NSUInteger i = index;
     for (id obj in objects) {
         [self insertObject:obj atIndex:i++];
