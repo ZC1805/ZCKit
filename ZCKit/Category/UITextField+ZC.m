@@ -7,8 +7,50 @@
 //
 
 #import "UITextField+ZC.h"
+#import "UIView+ZC.h"
 
 @implementation UITextField (ZC)
+
+- (void)setLeftSpace:(float)leftSpace {
+    if (leftSpace > 0) {
+        if (self.leftView) {
+            if (self.leftView.tag == 18900) {
+                self.leftView.width = leftSpace;
+            } else {
+                NSAssert(0, @"left view is exist");
+            }
+        } else {
+            self.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftSpace, 1) color:[UIColor clearColor]];
+            self.leftView.tag = 18900;
+            self.leftViewMode = UITextFieldViewModeAlways;
+        }
+    } else {
+        if (self.leftView && self.leftView.tag == 18900) {
+            self.leftView = nil;
+        }
+    }
+}
+
+- (float)leftSpace {
+    if (self.leftView && self.leftView.tag == 18900) {
+        return self.leftView.width;
+    }
+    return 0;
+}
+
+- (NSInteger)currentOffset {
+    return [self offsetFromPosition:self.beginningOfDocument toPosition:self.selectedTextRange.start];
+}
+
+- (NSRange)currentRange {
+    UITextPosition *beginning = self.beginningOfDocument;
+    UITextRange *selectedRange = self.selectedTextRange;
+    UITextPosition *selectionStart = selectedRange.start;
+    UITextPosition *selectionEnd = selectedRange.end;
+    NSInteger location = [self offsetFromPosition:beginning toPosition:selectionStart];
+    NSInteger length = [self offsetFromPosition:selectionStart toPosition:selectionEnd];
+    return NSMakeRange(location, length);
+}
 
 - (void)selectAllText {
     UITextRange *range = [self textRangeFromPosition:self.beginningOfDocument toPosition:self.endOfDocument];
@@ -23,4 +65,46 @@
     [self setSelectedTextRange:selectionRange];
 }
 
+- (void)makeOffsetPosition:(NSInteger)position {
+    UITextPosition *begin = self.beginningOfDocument;
+    UITextPosition *start = [self positionFromPosition:begin offset:position];
+    UITextRange *range = [self textRangeFromPosition:start toPosition:start];
+    [self setSelectedTextRange:range];
+}
+
+- (void)makeOffset:(NSInteger)offset {
+    UITextRange *selectedRange = [self selectedTextRange];
+    NSInteger currentOffset = [self offsetFromPosition:self.endOfDocument toPosition:selectedRange.end];
+    currentOffset += offset;
+    UITextPosition *newPos = [self positionFromPosition:self.endOfDocument offset:currentOffset];
+    self.selectedTextRange = [self textRangeFromPosition:newPos toPosition:newPos];
+}
+
+- (void)makeOffsetFromBeginning:(NSInteger)offset {
+    UITextPosition *begin = self.beginningOfDocument;
+    UITextPosition *start = [self positionFromPosition:begin offset:0];
+    UITextRange *range = [self textRangeFromPosition:start toPosition:start];
+    [self setSelectedTextRange:range];
+    [self makeOffset:offset];
+}
+
+- (instancetype)initWithFrame:(CGRect)frame holder:(NSString *)holder font:(UIFont *)font color:(UIColor *)color {
+    if (self = [self initWithFrame:frame]) {
+        if (holder) self.placeholder = holder;
+        if (color) self.textColor = color;
+        if (font) self.font = font;
+    }
+    return self;
+}
+
 @end
+
+
+
+
+
+
+
+
+
+

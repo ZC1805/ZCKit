@@ -84,6 +84,47 @@
     return image;
 }
 
+- (UIImage *)imageWithAlpha:(CGFloat)alpha {
+    UIGraphicsBeginImageContextWithOptions(self.size, NO, 0);
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGRect area = CGRectMake(0, 0, self.size.width, self.size.height);
+    CGContextScaleCTM(ctx, 1, -1);
+    CGContextTranslateCTM(ctx, 0, -area.size.height);
+    CGContextSetBlendMode(ctx, kCGBlendModeMultiply);
+    CGContextSetAlpha(ctx, alpha);
+    CGContextDrawImage(ctx, area, self.CGImage);
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+- (UIImage *)imageToColor:(UIColor *)color alpha:(float)alpha {
+    UIGraphicsBeginImageContext(self.size);
+    [color setFill];
+    CGRect drawRect = CGRectMake(0, 0, self.size.width, self.size.height);
+    UIRectFill(drawRect);
+    [self drawInRect:drawRect blendMode:kCGBlendModeDestinationIn alpha:alpha];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+- (UIImage *)imageToGray {
+    int bitmapInfo = kCGImageAlphaNone;
+    int width = self.size.width;
+    int height = self.size.height;
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    CGContextRef context = CGBitmapContextCreate(nil, width, height, 8, 0, colorSpace, bitmapInfo);
+    CGColorSpaceRelease(colorSpace);
+    if (context == NULL) return nil;
+    CGContextDrawImage(context, CGRectMake(0, 0, width, height), self.CGImage);
+    CGImageRef imageRef = CGBitmapContextCreateImage(context);
+    UIImage *grayImage = [UIImage imageWithCGImage:imageRef];
+    CGContextRelease(context);
+    CGImageRelease(imageRef);
+    return grayImage;
+}
+
 - (BOOL)hasAlphaChannel {
     if (self.CGImage == NULL) return NO;
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(self.CGImage) & kCGBitmapAlphaInfoMask;
@@ -106,6 +147,73 @@
     } else {
         [self drawInRect:drawRect];
     }
+}
+
+#pragma mark - gif
++ (UIImage *)imageGIFAnimatedWithNamed:(NSString *)name {
+    if (!name) return nil;
+    CGFloat scale = [UIScreen mainScreen].scale;
+    if (scale > 1.0) {
+        NSString *retinaPath = [[NSBundle mainBundle] pathForResource:[name stringByAppendingString:@"@2x"] ofType:@"gif"];
+        NSData *data = [NSData dataWithContentsOfFile:retinaPath];
+        if (data) {
+            return [UIImage imageGIFAnimatedWithData:data];
+        }
+        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"gif"];
+        data = [NSData dataWithContentsOfFile:path];
+        if (data) {
+            return [UIImage imageGIFAnimatedWithData:data];
+        }
+        return [UIImage imageNamed:name];
+    } else {
+        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"gif"];
+        NSData *data = [NSData dataWithContentsOfFile:path];
+        if (data) {
+            return [UIImage imageGIFAnimatedWithData:data];
+        }
+        return [UIImage imageNamed:name];
+    }
+}
+
++ (UIImage *)imageGIFAnimatedWithData:(NSData *)data {
+    if (!data) return nil;
+    CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
+    size_t count = CGImageSourceGetCount(source);
+    UIImage *animatedImage;
+    if (count <= 1) {
+        animatedImage = [[UIImage alloc] initWithData:data];
+    } else {
+        NSMutableArray *images = [NSMutableArray array];
+        NSTimeInterval duration = 0.0;
+        for (size_t i = 0; i < count; i++) {
+            CGImageRef image = CGImageSourceCreateImageAtIndex(source, i, NULL);
+            if (!image) continue;
+            duration += [self frameDurationAtIndex:i source:source];
+            [images addObject:[UIImage imageWithCGImage:image scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp]];
+            CGImageRelease(image);
+        }
+        if (!duration) duration = (1.0 / 10.0) * count;
+        animatedImage = [UIImage animatedImageWithImages:images duration:duration];
+    }
+    CFRelease(source);
+    return animatedImage;
+}
+
++ (float)frameDurationAtIndex:(NSUInteger)index source:(CGImageSourceRef)source {
+    float frameDuration = 0.1;
+    CFDictionaryRef cfFrameProperties = CGImageSourceCopyPropertiesAtIndex(source, index, nil);
+    NSDictionary *frameProperties = (__bridge NSDictionary *)cfFrameProperties;
+    NSDictionary *gifProperties = frameProperties[(NSString *)kCGImagePropertyGIFDictionary];
+    NSNumber *delayTimeUnclampedProp = gifProperties[(NSString *)kCGImagePropertyGIFUnclampedDelayTime];
+    if (delayTimeUnclampedProp != nil) {
+        frameDuration = [delayTimeUnclampedProp floatValue];
+    } else {
+        NSNumber *delayTimeProp = gifProperties[(NSString *)kCGImagePropertyGIFDelayTime];
+        if (delayTimeProp != nil) frameDuration = [delayTimeProp floatValue];
+    }
+    if (frameDuration < 0.011) frameDuration = 0.100;
+    CFRelease(cfFrameProperties);
+    return frameDuration;
 }
 
 #pragma mark - image modify

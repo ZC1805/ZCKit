@@ -28,6 +28,29 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)jsonString;
 
+#pragma mark - parse
+- (NSArray *)arrayValueForKey:(NSString *)key;
+
+- (NSDictionary *)dictionaryValueForKey:(NSString *)key;
+
+- (NSString *)stringValueForKey:(NSString *)key;
+
+- (NSNumber *)numberValueForKey:(NSString *)key;
+
+- (NSDecimalNumber *)decimalValueForKey:(NSString *)key;
+
+- (NSString *)priceValueForKey:(NSString *)key;
+
+- (long)longValueForKey:(NSString *)key;
+
+- (float)floatValueForKey:(NSString *)key;
+
+- (BOOL)boolValueForKey:(NSString *)key;
+
+- (BOOL)boolValueForKey:(NSString *)key defaultValue:(BOOL)defalut;
+
+- (nullable NSArray *)checkInvalidKeys:(NSString *)firstKey,... __attribute__((sentinel));
+
 #pragma mark - misc
 - (nullable NSData *)plistData;
 
@@ -41,6 +64,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 @interface NSMutableDictionary (ZC)
+
+- (void)injectBoolValue:(BOOL)value forKey:(NSString *)key;
+
+- (void)injectFloatValue:(float)value forKey:(NSString *)key;
+
+- (void)injectLongValue:(long)value forKey:(NSString *)key;
+
+- (void)injectValue:(id)value forKey:(NSString *)key;
+
+- (void)injectStringValue:(NSString *)value forKey:(NSString *)key allowNull:(BOOL)allowNull;
+
+- (void)injectValue:(id)value forKey:(NSString *)key allowNull:(BOOL)allowNull;
 
 @end
 

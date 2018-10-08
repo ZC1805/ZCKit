@@ -14,13 +14,13 @@
 
 
 /** ----- normal ----- */
-#define ZCiOS8          ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0)  /**< 版本>=8.0 */
-#define ZCiOS9          ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0)  /**< 版本>=9.0 */
-#define ZCiOS10         @available(iOS 10.0, *)                                        /**< 版本>=10.0 */
-#define ZCiPad          (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)         /**< 是否是iPad */
-#define ZCiPhone        (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)       /**< 是否是iPhone */
-#define ZClandscape     [ZCGlobal isLandscape]                                         /**< 当前是否是横屏 */
-#define ZCInvalidStr    @"zc_invalid_value &.Ignore"                                   /**< 定义的特定无效值 */
+#define ZCiOS8              ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0)  /**< 版本>=8.0 */
+#define ZCiOS9              ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0)  /**< 版本>=9.0 */
+#define ZCiOS10             @available(iOS 10.0, *)                                        /**< 版本>=10.0 */
+#define ZCiPad              (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)         /**< 是否是iPad */
+#define ZCiPhone            (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)       /**< 是否是iPhone */
+#define ZClandscape         [ZCGlobal isLandscape]                                         /**< 当前是否是横屏 */
+#define ZCInvalidStr        @"zc_invalid_value &.Ignore"                                   /**< 定义的特定无效值 */
 
 
 /** ----- color ----- */
@@ -46,8 +46,8 @@
 
 
 /** ----- image ----- */
-#define ZCImage(name)       [UIImage imageNamed:(name)]                        /**< 获取图片，缓存 */
-#define ZCFileImage(name)   [ZCGlobal resourcePath:nil name:name ext:@"png"]   /**< 获取图片，不缓存 */
+#define ZCImage(name)       [UIImage imageNamed:(name)]    /**< 获取图片，缓存 */
+#define ZCFileImage(name)   [UIImage imageWithContentsOfFile:ZCBundleFilePath(nil, name, @"png")]   /**< 获取图片，不缓存 */
 
 
 /** ----- adapt 360 ----- */
@@ -90,27 +90,13 @@
 
 
 /** ----- misc ----- */
-#define ZCSyncTime      15.0     /**< 同步请求超时时间 */
-#define ZCAsyncTime     20.0     /**< 异步请求超时时间 */
-#define ZCPromptTime    2.0      /**< 提示警告时间 */
-#define ZCAnimateTime   0.3      /**< 动画持续时间 */
+#define ZCSyncTime          15.0     /**< 同步请求超时时间 */
+#define ZCAsyncTime         20.0     /**< 异步请求超时时间 */
+#define ZCPromptTime        2.0      /**< 提示警告时间 */
+#define ZCAnimateTime       0.3      /**< 动画持续时间 */
 
-
-#pragma mark - misc
-/** 判断对象是否是非空&NSNumber类型 */
-#define DEFObjectIsValidNumber(object) (object && [object isKindOfClass:[NSNumber class]])
-/** 判断对象是否是数组&数组有效（不为空 & 是NSArray类型 & count不为零）*/
-#define DEFObjectIsValidArray(object) (object && [object isKindOfClass:[NSArray class]] && [object count])
-/** 判断对象是否是字典&字典有效（不为空 & 是Dictionary类型 & count不为零）*/
-#define DEFObjectIsValidDictionary(object) (object && [object isKindOfClass:[NSDictionary class]] && [object count])
-/** 判断对象是否是字符串&非空&不是只有空格和换行&非<null> */
-#define DEFObjectIsValidString(object) (object != nil && object != NULL && ([object isKindOfClass:[NSNull class]] == NO) && \
-([object isKindOfClass:[NSString class]] == YES) && ([object length] > 0) && \
-([[object stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length] > 0) && \
-([object isEqualToString:@"<null>"] == NO))
-/** 转换为确定为非空字符串 */
-#define DEFNonnullString(object) ((object == nil || [object isKindOfClass:[NSNull class]] || \
-([object isKindOfClass:[NSString class]] == NO) || [object isEqualToString:@"<null>"]) ? @"" : object)
+/** Bundle文件路径 */
+#define ZCBundleFilePath(bundleName, fileName, extName) [ZCGlobal resourcePath:bundleNam name:fileName ext:extName]
 
 /** 打印日志 */
 #ifdef DEBUG
@@ -146,9 +132,6 @@ dispatch_async(dispatch_get_main_queue(), block); \
 }
 
 #endif /* ZCMacro_h */
-
-
-
 
 
 

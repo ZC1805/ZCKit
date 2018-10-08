@@ -33,6 +33,18 @@
     return [rest copy];
 }
 
+- (id)objectForPropertyName:(NSString *)propertyName propertyValue:(id)propertyValue {
+    if (!propertyName) return nil;
+    for (NSInteger i = 0; i < self.count; i++) {
+        id obj = [self objectAtIndex:i];
+        id value = [obj valueForKey:propertyName];
+        if (value && [value isEqual:propertyValue]) {
+            return obj;
+        }
+    }
+    return nil;
+}
+
 - (NSString *)jsonString {
     if ([NSJSONSerialization isValidJSONObject:self]) {
         NSError *error = nil;

@@ -12,41 +12,39 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIApplication (ZC)
 
-/// "Documents" folder in this app's sandbox.
+/** "Documents" 沙盒路径 */
 @property (nonatomic, readonly) NSURL *documentsURL;
 @property (nonatomic, readonly) NSString *documentsPath;
 
-/// "Caches" folder in this app's sandbox.
+/** "Caches" 沙盒路径 */
 @property (nonatomic, readonly) NSURL *cachesURL;
 @property (nonatomic, readonly) NSString *cachesPath;
 
-/// "Library" folder in this app's sandbox.
+/** "Library" 沙盒路径 */
 @property (nonatomic, readonly) NSURL *libraryURL;
 @property (nonatomic, readonly) NSString *libraryPath;
 
-/// Application's Bundle Name (show in SpringBoard).
+/** 应用 Bundle Name (show in SpringBoard) */
 @property (nullable, nonatomic, readonly) NSString *appBundleName;
 
-/// Application's Bundle ID.  e.g. "com.ibireme.MyApp"
+/** 应用 Bundle ID "com.ibireme.MyApp" */
 @property (nullable, nonatomic, readonly) NSString *appBundleID;
 
-/// Application's Version.  e.g. "1.2.0"
+/** 应用 Version "1.2.0" */
 @property (nullable, nonatomic, readonly) NSString *appVersion;
 
-/// Application's Build number. e.g. "123"
+/** 应用 Build number "123" */
 @property (nullable, nonatomic, readonly) NSString *appBuildVersion;
 
-/// Returns YES in App Extension.
+/** 当前是否是 App Extension */
 + (BOOL)isAppExtension;
 
-/// Same as sharedApplication, but returns nil in App Extension.
+/** 返回类似sharedApplication, 是App Extension返回nil */
 + (nullable UIApplication *)sharedExtensionApplication;
 
 @end
 
 NS_ASSUME_NONNULL_END
-
-
 
 
 

@@ -46,6 +46,13 @@
     return snap;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color {
+    if (self = [self initWithFrame:frame]) {
+        self.backgroundColor = color;
+    }
+    return self;
+}
+
 - (void)removeAllSubviews {
     if (self.subviews.count) {
         [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -76,6 +83,107 @@
     UIWindow *window = [UIApplication sharedApplication].delegate.window;
     if (!window) return point;
     return [self convertPoint:point toView:window];
+}
+
+#pragma mark - layout
+- (void)setTop:(CGFloat)top {
+    CGRect rect = self.frame;
+    rect.origin.y = top;
+    self.frame = rect;
+}
+
+- (CGFloat)top {
+    return self.frame.origin.y;
+}
+
+- (void)setLeft:(CGFloat)left {
+    CGRect rect = self.frame;
+    rect.origin.x = left;
+    self.frame = rect;
+}
+
+- (CGFloat)left {
+    return self.frame.origin.x;
+}
+
+- (void)setWidth:(CGFloat)width{
+    CGRect rect = self.frame;
+    rect.size.width = width;
+    self.frame = rect;
+}
+
+- (CGFloat)width{
+    return self.frame.size.width;
+}
+
+- (void)setHeight:(CGFloat)height{
+    CGRect rect = self.frame;
+    rect.size.height = height;
+    self.frame = rect;
+}
+
+- (CGFloat)height{
+    return self.frame.size.height;
+}
+
+- (void)setRight:(CGFloat)right {
+    CGRect rect = self.frame;
+    rect.origin.x = right - rect.size.width;
+    self.frame = rect;
+}
+
+- (CGFloat)right {
+    return self.frame.origin.x + self.frame.size.width;
+}
+
+- (void)setBottom:(CGFloat)bottom {
+    CGRect rect = self.frame;
+    rect.origin.y = bottom - rect.size.height;
+    self.frame = rect;
+}
+
+- (CGFloat)bottom {
+    return self.frame.origin.y + self.frame.size.height;
+}
+
+- (void)setSize:(CGSize)size{
+    CGRect rect = self.frame;
+    rect.size = size;
+    self.frame = rect;
+}
+
+- (CGSize)size{
+    return self.frame.size;
+}
+
+- (void)setOrigin:(CGPoint)origin {
+    CGRect rect = self.frame;
+    rect.origin = origin;
+    self.frame = rect;
+}
+
+- (CGPoint)origin {
+    return self.frame.origin;
+}
+
+- (void)setCenterX:(CGFloat)centerX{
+    CGPoint point = self.center;
+    point.x = centerX;
+    self.center = point;
+}
+
+- (CGFloat)centerX{
+    return self.center.x;
+}
+
+- (void)setCenterY:(CGFloat)centerY{
+    CGPoint point = self.center;
+    point.y = centerY;
+    self.center = point;
+}
+
+- (CGFloat)centerY{
+    return self.center.y;
 }
 
 @end

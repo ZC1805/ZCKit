@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ZCDecimalManager.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -16,6 +17,53 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+
+@interface NSDecimalNumber (ZC)
+
++ (NSDecimalNumber *)nOne;
+
++ (NSDecimalNumber *)decimalString:(nullable NSString *)strValue;
+
++ (NSDecimalNumber *)decimalInteger:(long)lonValue;
+
++ (NSDecimalNumber *)decimalDouble:(double)douValue;
+
++ (NSDecimalNumber *)decimalNumber:(nullable NSNumber *)number;
+
+- (NSDecimalNumber *)decimalRound:(short)decimal mode:(ZCEnumRoundType)mode;
+
+- (NSDecimalNumber *)decimalPrecise;
+
+- (NSDecimalNumber *)plus:(NSDecimalNumber *)number;
+
+- (NSDecimalNumber *)minus:(NSDecimalNumber *)number;
+
+- (NSDecimalNumber *)mltiply:(NSDecimalNumber *)number;
+
+- (NSDecimalNumber *)divide:(NSDecimalNumber *)number;
+
+- (NSDecimalNumber *)raisingToPower:(NSUInteger)power;
+
+- (NSDecimalNumber *)mltiplyPower10:(short)power;
+
+- (BOOL)less:(NSDecimalNumber *)number;
+
+- (BOOL)more:(NSDecimalNumber *)number;
+
+- (BOOL)equal:(NSDecimalNumber *)number;
+
+@end
+
 NS_ASSUME_NONNULL_END
+
+
+
+
+
+
+
+
+
+
 
 

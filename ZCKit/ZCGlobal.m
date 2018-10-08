@@ -12,6 +12,8 @@
 
 @property (nonatomic, assign) BOOL isFullScreen;  //全面屏
 
+@property (nonatomic, assign) BOOL isPrintLog;  //是否打印日志
+
 @end
 
 @implementation ZCGlobal
@@ -23,6 +25,7 @@
         global = [[ZCGlobal alloc] init];
         CGFloat scale = [UIScreen mainScreen].bounds.size.height / [UIScreen mainScreen].bounds.size.width;
         global.isFullScreen = (scale > 2.0 || scale < 0.5);
+        global.isPrintLog = NO;
     });
     return global;
 }
@@ -35,6 +38,10 @@
 + (BOOL)isLandscape {
     return ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft ||
             [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight);
+}
+
++ (BOOL)isPrintLog {
+    return [ZCGlobal global].isPrintLog;
 }
 
 + (BOOL)isValidString:(NSString *)str {

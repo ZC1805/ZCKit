@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/** 返回一个矩形，以符合指定内容模式 */
+/** 符合指定内容模式矩形 */
 CGRect ZCCGRectFitWithContentMode(CGRect rect, CGSize size, UIViewContentMode mode);
 
 /** 将度转换为弧度 */

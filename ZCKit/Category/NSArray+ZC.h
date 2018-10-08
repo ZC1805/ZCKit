@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray *)restExceptObjects:(nullable NSArray *)objects;   /**< 返回余下的对象数组 */
 
+- (nullable id)objectForPropertyName:(nullable NSString *)propertyName propertyValue:(id)propertyValue;   /**< 返回能匹配到成员的键值 */
+
 - (nullable NSString *)jsonString;
 
 #pragma mark - misc

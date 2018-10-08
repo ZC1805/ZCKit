@@ -22,6 +22,18 @@ NS_ASSUME_NONNULL_BEGIN
 /** 不给颜色默认白色 */
 + (nullable UIImage *)imageWithColor:(nullable UIColor *)color size:(CGSize)size;
 
+/** 改变图片的透明度 */
+- (nullable UIImage *)imageWithAlpha:(CGFloat)alpha;
+
+/** 将不透明部分变成目标颜色 */
+- (nullable UIImage *)imageToColor:(UIColor *)color alpha:(float)alpha;
+
+/** 加载GIF图片 */
++ (nullable UIImage *)imageGIFAnimatedWithNamed:(NSString *)name;
+
+/** 将不透明部分变成灰色 */
+- (nullable UIImage *)imageToGray;
+
 /** 此图像是否具有alpha通道 */
 - (BOOL)hasAlphaChannel;
 
@@ -39,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 返回从该图像裁剪的新图像，rect为图像内部的rect */
 - (nullable UIImage *)imageByCropToRect:(CGRect)rect;
 
-/** 扩展边缘的填充颜色，NIL意味着透明的颜色 */
+/** 扩展边缘的填充颜色，nil意味着透明的颜色 */
 - (nullable UIImage *)imageByInsetEdge:(UIEdgeInsets)insets withColor:(nullable UIColor *)color;
 
 /** 以给定的角大小新的圆角图像 */
