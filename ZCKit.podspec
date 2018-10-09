@@ -19,9 +19,11 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/ZhouClassmate/ZCKit.git", :tag => "#{s.version}" }
   s.source_files = "ZCKit/*.{h,m}"
   s.resources    = "ZCKit/Resources/*.png"
-
   s.frameworks   = "Foundation", "UIKit"
 
+  s.subspec 'Controls' do |ss|
+    ss.source_files = "ZCKit/Controls/*.{h,m}"
+  end
   s.subspec 'Category' do |ss|
     ss.source_files = "ZCKit/Category/*.{h,m}"
   end

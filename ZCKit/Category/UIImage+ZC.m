@@ -149,6 +149,124 @@
     }
 }
 
+
+
+
+////压缩图片质量的优点在于，尽可能保留图片清晰度，图片不会明显模糊；
+////缺点在于，不能保证图片压缩后小于指定大小。
+//- (NSData *)compressQualityForLimit:(NSInteger)limit {
+//    CGFloat compression = 1.0;
+//    NSData *data = UIImageJPEGRepresentation(self, compression);
+//    if (data.length < limit) return data;
+//    CGFloat max = 1;
+//    CGFloat min = 0;
+//    for (int i = 0; i < 6; ++i) {
+//        compression = (max + min) / 2.0;
+//        data = UIImageJPEGRepresentation(self, compression);
+//        if (data.length < limit * 0.9) {
+//            min = compression;
+//        } else if (data.length > limit) {
+//            max = compression;
+//        } else {
+//            break;
+//        }
+//    }
+//    return data;
+//}
+//
+//
+//
+//- (UIImage *)radgeImage:(UIImage *)inputImage {
+//    NSData *data = UIImageJPEGRepresentation(inputImage, 1);
+//    CGFloat rate = 1;
+//    if (data.length < 490000) {
+//        return inputImage;
+//    }
+//    do {
+//        rate = rate * 0.9;
+//        CGSize targetSize = CGSizeMake((NSInteger)(inputImage.size.width * rate), (NSInteger)(inputImage.size.height * rate));
+//        UIGraphicsBeginImageContext(targetSize);
+//        CGContextRef context = UIGraphicsGetCurrentContext();
+//        CGAffineTransform transform = CGAffineTransformIdentity;
+//        transform = CGAffineTransformScale(transform, rate, rate);
+//        CGContextConcatCTM(context, transform);
+//        [inputImage drawAtPoint:CGPointMake(0.0f, 0.0f)];
+//        UIImage *newimg = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//        data = UIImageJPEGRepresentation(newimg, 1);
+//    } while (data.length > 490000);
+//    UIImage *returnImg = [UIImage imageWithData:data];
+//    return returnImg;
+//}
+//
+////压缩图片尺寸可以使图片小于指定大小，但会使图片明显模糊(比压缩图片质量模糊)。
+//-(NSData *)compressBySizeForLimit:(NSInteger)limit {
+//    UIImage *resultImage = self;
+//    NSData *data = UIImageJPEGRepresentation(resultImage, 1);
+//    NSUInteger lastDataLength = 0;
+//    while (data.length > maxLength && data.length != lastDataLength) {
+//        lastDataLength = data.length;
+//        CGFloat ratio = (CGFloat)maxLength / data.length;
+//        CGSize size = CGSizeMake((NSUInteger)(resultImage.size.width * sqrtf(ratio)),
+//                                 (NSUInteger)(resultImage.size.height * sqrtf(ratio))); // Use NSUInteger to prevent white blank
+//        UIGraphicsBeginImageContext(size);
+//        // Use image to draw (drawInRect:), image is larger but more compression time
+//        // Use result image to draw, image is smaller but less compression time
+//        [resultImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
+//        resultImage = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//        data = UIImageJPEGRepresentation(resultImage, 1);
+//    }
+//    return data;
+//}
+//
+////如果要保证图片清晰度，建议选择压缩图片质量。如果要使图片一定小于指定大小，压缩图片尺寸可以满足。对于后一种需求，还可以先压缩图片质量，如果已经小于指定大小，就可得到清晰的图片，否则再压缩图片尺寸。
+//-(NSData *)compressWithMaxLength:(NSUInteger)maxLength{
+//    // Compress by quality
+//    CGFloat compression = 1;
+//    NSData *data = UIImageJPEGRepresentation(self, compression);
+//    //NSLog(@"Before compressing quality, image size = %ld KB",data.length/1024);
+//    if (data.length < maxLength) return data;
+//    
+//    CGFloat max = 1;
+//    CGFloat min = 0;
+//    for (int i = 0; i < 6; ++i) {
+//        compression = (max + min) / 2;
+//        data = UIImageJPEGRepresentation(self, compression);
+//        //NSLog(@"Compression = %.1f", compression);
+//        //NSLog(@"In compressing quality loop, image size = %ld KB", data.length / 1024);
+//        if (data.length < maxLength * 0.9) {
+//            min = compression;
+//        } else if (data.length > maxLength) {
+//            max = compression;
+//        } else {
+//            break;
+//        }
+//    }
+//    //NSLog(@"After compressing quality, image size = %ld KB", data.length / 1024);
+//    if (data.length < maxLength) return data;
+//    UIImage *resultImage = [UIImage imageWithData:data];
+//    // Compress by size
+//    NSUInteger lastDataLength = 0;
+//    while (data.length > maxLength && data.length != lastDataLength) {
+//        lastDataLength = data.length;
+//        CGFloat ratio = (CGFloat)maxLength / data.length;
+//        //NSLog(@"Ratio = %.1f", ratio);
+//        CGSize size = CGSizeMake((NSUInteger)(resultImage.size.width * sqrtf(ratio)),
+//                                 (NSUInteger)(resultImage.size.height * sqrtf(ratio))); // Use NSUInteger to prevent white blank
+//        UIGraphicsBeginImageContext(size);
+//        [resultImage drawInRect:CGRectMake(0, 0, size.width, size.height)];
+//        resultImage = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//        data = UIImageJPEGRepresentation(resultImage, compression);
+//        //NSLog(@"In compressing size loop, image size = %ld KB", data.length / 1024);
+//    }
+//    //NSLog(@"After compressing size loop, image size = %ld KB", data.length / 1024);
+//    return data;
+//}
+
+
+
 #pragma mark - gif
 + (UIImage *)imageGIFAnimatedWithNamed:(NSString *)name {
     if (!name) return nil;

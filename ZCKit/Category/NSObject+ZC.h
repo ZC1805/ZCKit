@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSObject (ZC)
 
-@property (nonatomic, nullable, weak) id voidProperty;   /**< 通用属性 */
+@property (nullable, nonatomic, weak) id voidProperty;   /**< 通用属性 */
 
 + (NSArray *)allIvarsName;   /**< 所有实例变量 */
 

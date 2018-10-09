@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface ZCTextField : UITextField
 
 @property (nonatomic, assign) BOOL forbidVisibleMenu;   /**< 是否禁止长按弹出菜单框，默认NO，不禁止 */
@@ -19,3 +21,11 @@
 @property (nonatomic, copy) BOOL(^limitTip)(NSString *originText);   /** 越界提示回调 返回是否可需要处理越界 */
 
 @end
+
+NS_ASSUME_NONNULL_END
+
+
+
+
+
+
