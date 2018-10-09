@@ -12,6 +12,20 @@
 #pragma mark - NSArray
 @implementation NSArray (ZC)
 
+- (NSString *)descriptionWithLocale:(id)locale {  //重写系统方法以便打印
+    NSMutableString *str = [NSMutableString string];
+    [str appendString:@"[\n"];
+    [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        [str appendFormat:@"%@,\n", obj];
+    }];
+    [str appendString:@"]"];
+    NSRange range = [str rangeOfString:@"," options:NSBackwardsSearch];
+    if (range.length) {
+        [str deleteCharactersInRange:range];
+    }
+    return str;
+}
+
 - (id)randomObject {
     if (self.count) {
         return self[arc4random_uniform((u_int32_t)self.count)];

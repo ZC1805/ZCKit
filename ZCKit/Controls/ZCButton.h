@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCButton : UIButton
 
+@property (nullable, nonatomic, copy) NSString *stringTag;   /**< 字符串标记，默认nil */
+
 @property (nonatomic, assign) UIEdgeInsets responseAreaExtend;   /**< 延伸响应区域，默认zero */
 
 @property (nonatomic, assign) NSTimeInterval delayResponseTime;   /**< 延迟响应时间，默认0 */

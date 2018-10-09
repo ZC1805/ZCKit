@@ -7,17 +7,8 @@
 //
 
 #import "UIButton+ZC.h"
-#import <objc/runtime.h>
 
 @implementation UIButton (ZC)
-
-- (NSString *)stringTag {
-    return objc_getAssociatedObject(self, _cmd);
-}
-
-- (void)setStringTag:(NSString *)stringTag {
-    objc_setAssociatedObject(self, @selector(stringTag), stringTag, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
 
 + (instancetype)button:(CGRect)frame title:(NSString *)title image:(NSString *)image target:(id)target action:(SEL)action {
     UIButton *btn = [self buttonWithType:UIButtonTypeCustom];

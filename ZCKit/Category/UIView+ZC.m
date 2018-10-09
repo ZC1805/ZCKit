@@ -54,9 +54,31 @@
 }
 
 - (void)removeAllSubviews {
-    if (self.subviews.count) {
-        [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+    while (self.subviews.count) {
+        [self.subviews.lastObject removeFromSuperview];
     }
+}
+
+- (BOOL)containSubView:(UIView *)subView {
+    for (UIView *view in [self subviews]) {
+        if ([view isEqual:subView]) {
+            return YES;
+        } else if ([view containSubView:subView]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)containSubViewOfClassType:(Class)aClass {
+    for (UIView *view in [self subviews]) {
+        if ([view isMemberOfClass:aClass]) {
+            return YES;
+        } else if ([view containSubViewOfClassType:aClass]) {
+            return YES;
+        }
+    }
+    return NO;
 }
 
 - (UIImage *)snapshotImageAfterScreenUpdates:(BOOL)afterUpdates {
@@ -77,6 +99,12 @@
     self.layer.shadowOpacity = 1;
     self.layer.shouldRasterize = YES;
     self.layer.rasterizationScale = [UIScreen mainScreen].scale;
+}
+
+- (void)setCorner:(NSInteger)radius color:(UIColor *)color width:(CGFloat)width {
+    self.layer.cornerRadius = radius;
+    self.layer.borderWidth = width;
+    self.layer.borderColor = color.CGColor;
 }
 
 - (CGPoint)convertPointToScrren:(CGPoint)point {

@@ -8,6 +8,7 @@
 
 #import "ZCDecimalManager.h"
 #import "NSString+ZC.h"
+#import "ZCGlobal.h"
 
 @interface ZCDecimalManager () <NSDecimalNumberBehaviors>
 
@@ -54,7 +55,7 @@
 
 - (NSNumberFormatter *)handerFormatNumberDigits:(int)digits {
     if (digits < 0 || digits > 6) {
-        NSAssert(0, @"digits point error");
+        if ([ZCGlobal isPrintLog]) NSLog(@"digits point error");
         digits = 0;
     }
     if (self.numberFormatters.count <= digits) {
@@ -78,7 +79,7 @@
 
 - (NSDecimalNumberHandler *)handerForDecimalPoint:(int)point mode:(NSRoundingMode)mode {
     if (point < 0 || point > 6) {
-        NSAssert(0, @"digits point error");
+        if ([ZCGlobal isPrintLog]) NSLog(@"digits point error");
         point = 0;
     }
     NSDecimalNumberHandler *hander = nil;
@@ -124,7 +125,7 @@
         }
         default:{
             hander = [NSDecimalNumberHandler defaultDecimalNumberHandler];
-            NSAssert(0, @"round mode error");
+            if ([ZCGlobal isPrintLog]) NSLog(@"round mode error");
             break;
         }
     }
@@ -141,7 +142,7 @@
 }
 
 - (nullable NSDecimalNumber *)exceptionDuringOperation:(SEL)operation error:(NSCalculationError)error leftOperand:(NSDecimalNumber *)leftOperand rightOperand:(nullable NSDecimalNumber *)rightOperand {
-    NSAssert(0, @"decimal number calculate fail");
+    if ([ZCGlobal isPrintLog]) NSLog(@"decimal number calculate fail");
     return nil;
 }
 
@@ -247,13 +248,16 @@
             str = [self preciseString:str];
             comps = [str componentsSeparatedByString:@"."];
             if (comps && comps.count == 2) length = (int)[comps.lastObject length];
-            if (length > 6) {length = 6; NSAssert(0, @"float string is fail value");}
-            NSLog(@"float string is fail value");
+            if (length > 6) {
+                length = 6;
+                if ([ZCGlobal isPrintLog]) NSLog(@"float string is fail value");
+            }
+            if ([ZCGlobal isPrintLog]) NSLog(@"float string is fail value");
         }
     } else if (str.length && [str isPureInteger]) {
-        NSLog(@"calculate integer digit");
+        if ([ZCGlobal isPrintLog]) NSLog(@"calculate integer digit");
     } else {
-        NSAssert(0, @"calculate decimal digit fail");
+        if ([ZCGlobal isPrintLog]) NSLog(@"calculate decimal digit fail");
     }
     return length;
 }
@@ -264,10 +268,11 @@
     if (x < 0) {
         double fraction, integer;
         fraction = modf(y, &integer);
-        if (fabs(fraction) > 0) {NSAssert(0, @"value is fail");}
-        else min = pow(x, y);
+        if (fabs(fraction) > 0) {
+            if ([ZCGlobal isPrintLog]) NSLog(@"value is fail");
+        } else min = pow(x, y);
     } else if (x == 0 && y <= 0) {
-        NSAssert(0, @"value is fail");
+        if ([ZCGlobal isPrintLog]) NSLog(@"value is fail");
     } else {
         min = pow(x, y);
     }

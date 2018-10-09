@@ -31,9 +31,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)removeAllSubviews;
 
-- (nullable UIImage *)snapshotImageAfterScreenUpdates:(BOOL)afterUpdates;
+- (BOOL)containSubView:(UIView *)subView;   /**< 递归向下，找到最顶层 */
 
-- (void)setShadow:(nullable UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius;
+- (BOOL)containSubViewOfClassType:(Class)aClass;   /**< 递归向下，找到最顶层 */
+
+- (nullable UIImage *)snapshotImageAfterScreenUpdates:(BOOL)afterUpdates;   /**< 快照 */
+
+- (void)setShadow:(nullable UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius;   /**< 阴影 */
+
+- (void)setCorner:(NSInteger)radius color:(UIColor *)color width:(CGFloat)width;   /**< 圆角 & 描边 */
 
 - (CGPoint)convertPointToScrren:(CGPoint)point;
 

@@ -56,6 +56,25 @@
     return [UIFont fontWithDescriptor:[self.fontDescriptor fontDescriptorWithSymbolicTraits:0] size:self.pointSize];
 }
 
+#pragma mark - class
++ (UIFont *)fontSize:(CGFloat)size weight:(NSInteger)weight {
+    return [UIFont fontFamily:@"Helvetica Neue" size:size weight:weight slant:0];
+}
+
++ (UIFont *)fontSize:(CGFloat)size weight:(NSInteger)weight slant:(CGFloat)slant {
+    return [UIFont fontFamily:@"Helvetica Neue" size:size weight:weight slant:slant];
+}
+
++ (UIFont *)fontFamily:(NSString *)family size:(CGFloat)size weight:(NSInteger)weight slant:(CGFloat)slant {
+    CGFloat w_f = weight * 0.25 - 1.25;
+    NSDictionary *traits = @{UIFontWeightTrait : @(w_f), UIFontSlantTrait : @(slant)};
+    NSDictionary *attr = @{UIFontDescriptorFamilyAttribute : (family ? family : @"Helvetica Neue"),
+                           UIFontDescriptorSizeAttribute   : @(size),
+                           UIFontDescriptorTraitsAttribute : traits};
+    UIFontDescriptor *descriptor = [UIFontDescriptor fontDescriptorWithFontAttributes:attr];
+    return [UIFont fontWithDescriptor:descriptor size:0.0];
+}
+
 @end
 
 

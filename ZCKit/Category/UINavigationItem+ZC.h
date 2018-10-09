@@ -1,5 +1,5 @@
 //
-//  ZCImageView.h
+//  UINavigationItem+ZC.h
 //  ZCKit
 //
 //  Created by admin on 2018/10/9.
@@ -10,9 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCImageView : UIImageView   /**< 默认开启用户交互 */
-
-@property (nullable, nonatomic, copy) NSString *linkUrl;
+@interface UINavigationItem (ZC)
 
 @end
 

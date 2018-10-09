@@ -20,15 +20,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) NSInteger minute;       /**< 分 (0~59) */
 @property (nonatomic, readonly) NSInteger second;       /**< 秒 (0~59) */
 @property (nonatomic, readonly) NSInteger nanosecond;   /**< 毫秒 (0~999) */
-@property (nonatomic, readonly) NSInteger weekday;      /**< 周几 (1~7, first day is based on user setting) */
-@property (nonatomic, readonly) NSInteger weekdayOrdinal;   /**< 月的第几个周几 */
-@property (nonatomic, readonly) NSInteger weekOfMonth;      /**< 月的第几周 (1~5) */
-@property (nonatomic, readonly) NSInteger weekOfYear;       /**< 年的第几周 (1~53) */
+@property (nonatomic, readonly) NSInteger weekday;      /**< 周几，周日为7 (1~7) */
+@property (nonatomic, readonly) NSInteger weekdayOrdinal;   /**< 月的第几个周几，每周从周日算起 */
+@property (nonatomic, readonly) NSInteger weekOfMonth;      /**< 月的第几周，每周从周日算起 (1~5) */
+@property (nonatomic, readonly) NSInteger weekOfYear;       /**< 年的第几周，每周从周日算起 (1~53) */
 
 @property (nonatomic, readonly) BOOL isLeapMonth;       /**< 是否是闰月 */
 @property (nonatomic, readonly) BOOL isLeapYear;        /**< 是否是闰年 */
 @property (nonatomic, readonly) BOOL isToday;           /**< 是否是今天 (based on current locale) */
 @property (nonatomic, readonly) BOOL isYesterday;       /**< 是否是昨天 (based on current locale) */
+@property (nonatomic, readonly) BOOL isTomorrow;        /**< 是否是明天 (based on current locale) */
+@property (nonatomic, readonly) BOOL isWeekend;         /**< 是否是周末 (based on current locale) */
+@property (nonatomic, readonly) BOOL isThisYear;        /**< 是否是今年 (based on current locale) */
 
 
 #pragma mark - adding
@@ -48,9 +51,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - format
-- (NSString *)stringWithFormat:(nullable NSString *)format;
+- (NSString *)stringWithFormat:(nullable NSString *)format;   /**< 返回格式化时间 */
 
 - (NSString *)stringWithFormat:(nullable NSString *)format timeZone:(nullable NSTimeZone *)timeZone locale:(nullable NSLocale *)locale;
+
++ (NSDateFormatter *)preciseFormatter;   /**< yyyy-MM-dd HH:mm:ss.SSS，dateFormatter外部不可对其属性赋值 */
+
++ (NSDateFormatter *)normalFormatter;   /**< yyyy-MM-dd HH:mm:ss，dateFormatter外部不可对其属性赋值 */
+
++ (NSDateFormatter *)dateFormatter;   /**< yyyy-MM-dd，dateFormatter外部不可对其属性赋值 */
+
++ (NSDateFormatter *)timeFormatter;   /**< HH:mm:ss，dateFormatter外部不可对其属性赋值 */
 
 + (NSString *)dateStringWithTime:(long)timeInterval format:(nullable NSString *)format;   /**< timeInterval为13位时可算上了三位毫秒数 */
 

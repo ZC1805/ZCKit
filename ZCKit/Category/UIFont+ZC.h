@@ -34,6 +34,15 @@ NS_ASSUME_NONNULL_BEGIN
 /** 获取粗体normal font对象 */
 - (nullable UIFont *)fontWithNormal NS_AVAILABLE_IOS(7_0);
 
+/** 字体设置，weight [1, 9] */
++ (UIFont *)fontSize:(CGFloat)size weight:(NSInteger)weight;
+
+/** 字体设置，slant [-1, 1] */
++ (UIFont *)fontSize:(CGFloat)size weight:(NSInteger)weight slant:(CGFloat)slant;
+
+/** 字体设置，family 字体 */
++ (UIFont *)fontFamily:(NSString *)family size:(CGFloat)size weight:(NSInteger)weight slant:(CGFloat)slant;
+
 @end
 
 NS_ASSUME_NONNULL_END

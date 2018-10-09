@@ -41,7 +41,8 @@
 }
 
 - (NSInteger)weekday {
-    return [[[NSCalendar currentCalendar] components:NSCalendarUnitWeekday fromDate:self] weekday];
+    NSInteger weekday = [[[NSCalendar currentCalendar] components:NSCalendarUnitWeekday fromDate:self] weekday];
+    return weekday == 1 ? 7 : (weekday - 1);
 }
 
 - (NSInteger)weekdayOrdinal {
@@ -83,6 +84,21 @@
     return [added isToday];
 }
 
+- (BOOL)isTomorrow {
+    return [[NSCalendar currentCalendar] isDateInTomorrow:self];
+}
+
+- (BOOL)isWeekend {
+    return [[NSCalendar currentCalendar] isDateInWeekend:self];
+}
+
+- (BOOL)isThisYear {
+    NSDateComponents *selfCmps = [[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:self];
+    NSDateComponents *nowCmps = [[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]];
+    return nowCmps.year == selfCmps.year;
+}
+
+#pragma mark - adding
 - (NSDate *)dateByAddingYears:(NSInteger)years {
     NSCalendar *calendar =  [NSCalendar currentCalendar];
     NSDateComponents *components = [[NSDateComponents alloc] init];
@@ -140,6 +156,22 @@
     if (timeZone) [formatter setTimeZone:timeZone];
     if (locale) [formatter setLocale:locale];
     return [formatter stringFromDate:self];
+}
+
++ (NSDateFormatter *)preciseFormatter {
+    return [ZCDateManager dateFormatter:@"yyyy-MM-dd HH:mm:ss.SSS"];
+}
+
++ (NSDateFormatter *)normalFormatter {  
+    return [ZCDateManager dateFormatter:@"yyyy-MM-dd HH:mm:ss"];
+}
+
++ (NSDateFormatter *)dateFormatter {
+    return [ZCDateManager dateFormatter:@"yyyy-MM-dd"];
+}
+
++ (NSDateFormatter *)timeFormatter {
+    return [ZCDateManager dateFormatter:@"HH:mm:ss"];
 }
 
 + (NSString *)dateStringWithTime:(long)timeInterval format:(NSString *)format {

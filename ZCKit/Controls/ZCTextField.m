@@ -31,7 +31,7 @@
 }
 
 - (void)setLimitLength:(NSUInteger)limitLength {
-    if (limitLength < 1) {NSAssert(0, @"limit length mast then 0"); return;}
+    if (limitLength < 1) return;
     _limitLength = limitLength;
     [self removeNotificationObserver];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(limitHandle:) name:UITextFieldTextDidEndEditingNotification object:self];

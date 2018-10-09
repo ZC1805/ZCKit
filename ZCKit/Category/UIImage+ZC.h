@@ -22,23 +22,32 @@ NS_ASSUME_NONNULL_BEGIN
 /** 不给颜色默认白色 */
 + (nullable UIImage *)imageWithColor:(nullable UIColor *)color size:(CGSize)size;
 
+/** 加载GIF图片 */
++ (nullable UIImage *)imageGIFAnimatedWithNamed:(NSString *)name;
+
 /** 改变图片的透明度 */
 - (nullable UIImage *)imageWithAlpha:(CGFloat)alpha;
 
 /** 将不透明部分变成目标颜色 */
 - (nullable UIImage *)imageToColor:(UIColor *)color alpha:(float)alpha;
 
-/** 加载GIF图片 */
-+ (nullable UIImage *)imageGIFAnimatedWithNamed:(NSString *)name;
-
 /** 将不透明部分变成灰色 */
 - (nullable UIImage *)imageToGray;
 
+/** 生成能够自由拉伸的图片，复制区域为焦点横纵线 */
+- (UIImage *)imageToResizedImage:(CGPoint)cross;
+
+/** 图片使用内存大小 */
+- (NSUInteger)imageUseMemorySize;
+
+/** 图片上绘制文字 */
+- (UIImage *)imageWithTitle:(nullable NSString *)title fontSize:(CGFloat)fontSize point:(CGPoint)point;
+
 /** 此图像是否具有alpha通道 */
-- (BOOL)hasAlphaChannel;
+- (BOOL)imageHasAlphaChannel;
 
 /** 在指定矩形中绘制整个图像，clips确定内容是否被限制在Rect中 */
-- (void)drawInRect:(CGRect)rect withContentMode:(UIViewContentMode)contentMode clipsToBounds:(BOOL)clips;
+- (void)imageDrawInRect:(CGRect)rect withContentMode:(UIViewContentMode)contentMode clipsToBounds:(BOOL)clips;
 
 
 #pragma mark - image modify

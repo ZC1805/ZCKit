@@ -20,11 +20,11 @@ typedef NS_ENUM(NSInteger, ZCEnumLabelCountingMethod) {
 
 @interface ZCCountingLabel : UILabel   /**< 快速计数 */
 
-@property (nullable, nonatomic, strong) NSString *format;   /**< 显示格式，@"%d"、@"%.1f%%"、默认@"%f" */
-
 @property (nonatomic, assign) ZCEnumLabelCountingMethod method;   /**< 计数方式 */
 
 @property (nonatomic, assign) NSTimeInterval animationDuration;   /**< 动画时长，默认2s */
+
+@property (nullable, nonatomic, copy) NSString *format;   /**< 显示格式，@"%d"、@"%.1f%%"、默认@"%f" */
 
 @property (nullable, nonatomic, copy) NSString *(^formatBlock)(CGFloat value);   /**< 显示格式回调 */
 

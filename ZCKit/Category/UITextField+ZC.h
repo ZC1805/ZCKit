@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UITextField (ZC)
 
 /** 左边空余位置，暂无leftview */
-@property (nonatomic, assign) float leftSpace;   /**< 左边空余位置，暂无leftview */
+@property (nonatomic, assign) float leftSpace;   /**< 左边空余位置，leftview有就不设置，暂无leftview */
 
 @property (nonatomic, assign, readonly) NSRange currentRange;   /**< 计算当前选择的Range */
 

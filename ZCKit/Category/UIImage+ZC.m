@@ -8,6 +8,7 @@
 
 #import "UIImage+ZC.h"
 #import "ZCPredefine.h"
+#import "ZCGlobal.h"
 #import <ImageIO/ImageIO.h>
 #import <Accelerate/Accelerate.h>
 #import <CoreText/CoreText.h>
@@ -125,15 +126,44 @@
     return grayImage;
 }
 
-- (BOOL)hasAlphaChannel {
+- (UIImage *)imageToResizedImage:(CGPoint)cross {
+    return [self stretchableImageWithLeftCapWidth:cross.x topCapHeight:cross.y];
+}
+
+- (NSUInteger)imageUseMemorySize {
+    NSUInteger size = CGImageGetHeight(self.CGImage) * CGImageGetBytesPerRow(self.CGImage);
+    return size;
+}
+
+- (UIImage *)imageWithTitle:(NSString *)title fontSize:(CGFloat)fontSize point:(CGPoint)point {
+    if (!title || !title.length) return self;
+    CGSize size = CGSizeMake(self.size.width, self.size.height);
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
+    [self drawAtPoint:CGPointMake(0.0, 0.0)];
+    NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+    paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
+    paragraphStyle.alignment = NSTextAlignmentCenter;  //文字居中
+    CGSize sizeText = [title boundingRectWithSize:self.size options:NSStringDrawingUsesLineFragmentOrigin
+                                       attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:fontSize]}
+                                          context:nil].size;  //计算文字所占的size
+    CGRect rect = CGRectMake(point.x, point.y, sizeText.width, sizeText.height);
+    [title drawInRect:rect withAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:fontSize],
+                                            NSForegroundColorAttributeName : [ UIColor whiteColor],
+                                            NSParagraphStyleAttributeName : paragraphStyle}];
+    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImage;
+}
+
+- (BOOL)imageHasAlphaChannel {
     if (self.CGImage == NULL) return NO;
     CGImageAlphaInfo alpha = CGImageGetAlphaInfo(self.CGImage) & kCGBitmapAlphaInfoMask;
     return (alpha == kCGImageAlphaFirst || alpha == kCGImageAlphaLast ||
             alpha == kCGImageAlphaPremultipliedFirst || alpha == kCGImageAlphaPremultipliedLast);
 }
 
-- (void)drawInRect:(CGRect)rect withContentMode:(UIViewContentMode)contentMode clipsToBounds:(BOOL)clips{
-    CGRect drawRect = ZCCGRectFitWithContentMode(rect, self.size, contentMode);
+- (void)imageDrawInRect:(CGRect)rect withContentMode:(UIViewContentMode)contentMode clipsToBounds:(BOOL)clips{
+    CGRect drawRect = ZCRectFitWithContentMode(rect, self.size, contentMode);
     if (drawRect.size.width == 0 || drawRect.size.height == 0) return;
     if (clips) {
         CGContextRef context = UIGraphicsGetCurrentContext();
@@ -347,7 +377,7 @@
 - (UIImage *)imageByResizeToSize:(CGSize)size contentMode:(UIViewContentMode)contentMode {
     if (size.width <= 0 || size.height <= 0) return nil;
     UIGraphicsBeginImageContextWithOptions(size, NO, self.scale);
-    [self drawInRect:CGRectMake(0, 0, size.width, size.height) withContentMode:contentMode clipsToBounds:NO];
+    [self imageDrawInRect:CGRectMake(0, 0, size.width, size.height) withContentMode:contentMode clipsToBounds:NO];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return image;
@@ -589,15 +619,15 @@
                     saturation:(CGFloat)saturation
                      maskImage:(UIImage *)maskImage {
     if (self.size.width < 1 || self.size.height < 1) {
-        NSLog(@"UIImage+YYAdd error: invalid size: (%.2f x %.2f). Both dimensions must be >= 1: %@", self.size.width, self.size.height, self);
+        if ([ZCGlobal isPrintLog]) NSLog(@"UIImage+YYAdd error: invalid size: (%.2f x %.2f). Both dimensions must be >= 1: %@", self.size.width, self.size.height, self);
         return nil;
     }
     if (!self.CGImage) {
-        NSLog(@"UIImage+YYAdd error: inputImage must be backed by a CGImage: %@", self);
+        if ([ZCGlobal isPrintLog]) NSLog(@"UIImage+YYAdd error: inputImage must be backed by a CGImage: %@", self);
         return nil;
     }
     if (maskImage && !maskImage.CGImage) {
-        NSLog(@"UIImage+YYAdd error: effectMaskImage must be backed by a CGImage: %@", maskImage);
+        if ([ZCGlobal isPrintLog]) NSLog(@"UIImage+YYAdd error: effectMaskImage must be backed by a CGImage: %@", maskImage);
         return nil;
     }
     
@@ -633,12 +663,12 @@
         vImage_Error err;
         err = vImageBuffer_InitWithCGImage(&effect, &format, NULL, imageRef, kvImagePrintDiagnosticsToConsole);
         if (err != kvImageNoError) {
-            NSLog(@"UIImage+YYAdd error: vImageBuffer_InitWithCGImage returned error code %zi for inputImage: %@", err, self);
+            if ([ZCGlobal isPrintLog]) NSLog(@"UIImage+YYAdd error: vImageBuffer_InitWithCGImage returned error code %zi for inputImage: %@", err, self);
             return nil;
         }
         err = vImageBuffer_Init(&scratch, effect.height, effect.width, format.bitsPerPixel, kvImageNoFlags);
         if (err != kvImageNoError) {
-            NSLog(@"UIImage+YYAdd error: vImageBuffer_Init returned error code %zi for inputImage: %@", err, self);
+            if ([ZCGlobal isPrintLog]) NSLog(@"UIImage+YYAdd error: vImageBuffer_Init returned error code %zi for inputImage: %@", err, self);
             return nil;
         }
     } else {
@@ -784,9 +814,6 @@ static void _yy_cleanupBuffer(void *userData, void *buf_data) {
 }
 
 @end
-
-
-
 
 
 

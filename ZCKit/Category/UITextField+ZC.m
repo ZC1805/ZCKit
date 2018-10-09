@@ -14,25 +14,23 @@
 - (void)setLeftSpace:(float)leftSpace {
     if (leftSpace > 0) {
         if (self.leftView) {
-            if (self.leftView.tag == 18900) {
+            if (self.leftView.tag == 189001) {
                 self.leftView.width = leftSpace;
-            } else {
-                NSAssert(0, @"left view is exist");
             }
         } else {
             self.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftSpace, 1) color:[UIColor clearColor]];
-            self.leftView.tag = 18900;
+            self.leftView.tag = 189001;
             self.leftViewMode = UITextFieldViewModeAlways;
         }
     } else {
-        if (self.leftView && self.leftView.tag == 18900) {
+        if (self.leftView && self.leftView.tag == 189001) {
             self.leftView = nil;
         }
     }
 }
 
 - (float)leftSpace {
-    if (self.leftView && self.leftView.tag == 18900) {
+    if (self.leftView && self.leftView.tag == 189001) {
         return self.leftView.width;
     }
     return 0;

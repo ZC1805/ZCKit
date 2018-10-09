@@ -38,6 +38,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)stringByTrim;   /**< 去掉两端空格和换行符 */
 
+- (NSString *)arabiaDgitalToChinese;   /**< 阿拉伯数字转中文格式，只限整数，其余返回@"" */
+
 - (NSString *)deletePictureResolution;   /**< 删除图片尾缀@2x、@3x */
 
 
@@ -57,6 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)isContainAlpha;   /**< 是否包含字母 */
 
 - (BOOL)isContainChinese;   /**< 是否包含字母 */
+
+- (BOOL)isContainEmoji;   /**< 是否有emoji */
 
 - (BOOL)isPhone;   /**< 是否是手机号 */
 
@@ -89,9 +93,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - class
-+ (NSString *)stringWithUUID;
++ (NSString *)stringWithUUID;   /**< 生成唯一个的UUID */
 
-+ (nullable NSString *)stringWithBase64EncodedString:(nullable NSString *)base64EncodedString;
++ (NSString *)emojiWithIntCode:(int)intCode;   /**< 将十六进制的编码转为emoji字符 */
+
++ (NSString *)emojiWithStringCode:(NSString *)stringCode;   /**< 将十六进制的编码转为emoji字符 */
+
++ (nullable NSString *)stringWithBase64EncodedString:(nullable NSString *)base64EncodedString;   /**< 转换base64字符串 */
 
 
 #pragma mark - expand

@@ -25,8 +25,8 @@
 
 /** ----- color ----- */
 #define ZCRGB(hex)          [UIColor colorFormHex:hex alpha:1.0]              /**< 十六进制颜色 */
-#define ZCRGBA(hex, a)      [UIColor colorFormHex:hex alpha:a]                /**< 十六进制颜色 + 透明度 */
-#define ZCRGBV(r, g, b, a)  [UIColor colorFormRad:r green:g blue:b alpha:a]   /**< 十进制颜色 + 透明度 */
+#define ZCRGBA(hex, a)      [UIColor colorFormHex:hex alpha:a]                /**< 十六进制颜色 & 透明度 */
+#define ZCRGBV(r, g, b, a)  [UIColor colorFormRad:r green:g blue:b alpha:a]   /**< 十进制颜色 & 透明度 */
 #define ZCRed               [UIColor colorFormHex:0xFF0000 alpha:1.0]   
 #define ZCBlue              [UIColor colorFormHex:0x0000FF alpha:1.0]
 #define ZCGreen             [UIColor colorFormHex:0x00FF00 alpha:1.0]
@@ -107,7 +107,7 @@
 
 /** 断言，else时不要逗号 */
 #ifdef DEBUG
-#define DEFAbnormal(lev, desc)  {if (lev == 0) {NSAssert(NO, desc);} \
+#define DEFAbnormal(lev, desc)  {if (lev == 0) {NSAssert(0, desc);} \
 else if (lev == 1) {NSLog(@"abnormal error -> %@", desc);} \
 else {NSLog(@"abnormal warning -> %@", desc);}}   /** 0->assert 1->error 2->warning */
 #else

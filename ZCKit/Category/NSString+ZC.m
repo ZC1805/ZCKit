@@ -21,11 +21,6 @@
     return [[self dataUsingEncoding:NSUTF8StringEncoding] base64EncodedString];
 }
 
-- (NSString *)stringByTrim {  //去除空格换行符
-    NSCharacterSet *set = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    return [self stringByTrimmingCharactersInSet:set];
-}
-
 - (NSNumber *)numberObject {
     return [NSNumber numberWithString:self];
 }
@@ -83,6 +78,44 @@
         return doubleString;
     }
     return self;
+}
+
+- (NSString *)stringByTrim { 
+    NSCharacterSet *set = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    return [self stringByTrimmingCharactersInSet:set];
+}
+
+- (NSString *)arabiaDgitalToChinese {
+    if (![self isPureInteger]) return @"";
+    NSString *str = self;
+    NSArray *arabic_numerals = @[@"1", @"2", @"3", @"4", @"5", @"6", @"7", @"8", @"9", @"0"];
+    NSArray *chinese_numerals = @[@"一", @"二", @"三", @"四", @"五", @"六", @"七", @"八", @"九", @"零"];
+    NSArray *digits = @[@"个", @"十", @"百", @"千", @"万", @"十", @"百", @"千", @"亿", @"十", @"百", @"千", @"兆"];
+    NSDictionary *dictionary = [NSDictionary dictionaryWithObjects:chinese_numerals forKeys:arabic_numerals];
+    NSMutableArray *sums = [NSMutableArray array];
+    for (int i = 0; i < str.length; i ++) {
+        NSString *substr = [str substringWithRange:NSMakeRange(i, 1)];
+        NSString *a = [dictionary objectForKey:substr];
+        NSString *b = digits[str.length - i - 1];
+        NSString *sum = [a stringByAppendingString:b];
+        if ([a isEqualToString:chinese_numerals[9]]) {
+            if([b isEqualToString:digits[4]] || [b isEqualToString:digits[8]]) {
+                sum = b;
+                if ([[sums lastObject] isEqualToString:chinese_numerals[9]]) {
+                    [sums removeLastObject];
+                }
+            } else {
+                sum = chinese_numerals[9];
+            }
+            if ([[sums lastObject] isEqualToString:sum]) {
+                continue;
+            }
+        }
+        [sums addObject:sum];
+    }
+    NSString *sumStr = [sums componentsJoinedByString:@""];
+    NSString *chinese = [sumStr substringToIndex:sumStr.length - 1];
+    return chinese;
 }
 
 - (NSString *)deletePictureResolution {  //删除图片尾缀@2x、@3x
@@ -146,6 +179,39 @@
     NSRegularExpression *regular = [NSRegularExpression regularExpressionWithPattern:@"[\u4e00-\u9fa5]" options:options error:nil];
     if (!regular) return NO;
     return ([regular numberOfMatchesInString:self options:NSMatchingReportProgress range:NSMakeRange(0, self.length)] > 0);
+}
+
+- (BOOL)isContainEmoji {  //是否有emoji
+    __block BOOL isEomji = NO;
+    [self enumerateSubstringsInRange:NSMakeRange(0, [self length]) options:NSStringEnumerationByComposedCharacterSequences
+                            usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+        const unichar hs = [substring characterAtIndex:0];
+        if (0xd800 <= hs && hs <= 0xdbff) {
+            if (substring.length > 1) {
+                const unichar ls = [substring characterAtIndex:1];
+                const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
+                if (0x1d000 <= uc && uc <= 0x1f77f) isEomji = YES;
+            }
+        } else {
+            if (0x2100 <= hs && hs <= 0x27ff && hs != 0x263b) {
+                isEomji = YES;
+            } else if (0x2B05 <= hs && hs <= 0x2b07) {
+                isEomji = YES;
+            } else if (0x2934 <= hs && hs <= 0x2935) {
+                isEomji = YES;
+            } else if (0x3297 <= hs && hs <= 0x3299) {
+                isEomji = YES;
+            } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 ||
+                       hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50|| hs == 0x231a) {
+                isEomji = YES;
+            }
+            if (!isEomji && substring.length > 1) {
+                const unichar ls = [substring characterAtIndex:1];
+                if (ls == 0x20e3) isEomji = YES;
+            }
+        }
+    }];
+    return isEomji;
 }
 
 - (BOOL)isPhone {  //是否是手机号
@@ -312,6 +378,20 @@
     CFStringRef string = CFUUIDCreateString(NULL, uuid);
     CFRelease(uuid);
     return (__bridge_transfer NSString *)string;
+}
+
+#define EmojiCodeToSymbol(c) ((((0x808080F0 | (c & 0x3F000) >> 4) | (c & 0xFC0) << 10) | (c & 0x1C0000) << 18) | (c & 0x3F) << 24)
++ (NSString *)emojiWithIntCode:(int)intCode {
+    int symbol = EmojiCodeToSymbol(intCode);
+    NSString *string = [[NSString alloc] initWithBytes:&symbol length:sizeof(symbol) encoding:NSUTF8StringEncoding];
+    if (string == nil) string = [NSString stringWithFormat:@"%C", (unichar)intCode];
+    return string;
+}
+
++ (NSString *)emojiWithStringCode:(NSString *)stringCode {
+    char *charCode = (char *)stringCode.UTF8String;
+    int intCode = (int)strtol(charCode, NULL, 16);
+    return [self emojiWithIntCode:intCode];
 }
 
 + (NSString *)stringWithBase64EncodedString:(NSString *)base64EncodedString {
