@@ -11,7 +11,8 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
-
+#import "UIColor+ZC.h"
+#import "ZCGlobal.h"
 
 /** ----- normal ----- */
 #define ZCiOS8              ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0)  /**< 版本>=8.0 */
@@ -20,7 +21,6 @@
 #define ZCiPad              (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)         /**< 是否是iPad */
 #define ZCiPhone            (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)       /**< 是否是iPhone */
 #define ZClandscape         [ZCGlobal isLandscape]                                         /**< 当前是否是横屏 */
-#define ZCInvalidStr        @"zc_invalid_value &.Ignore"                                   /**< 定义的特定无效值 */
 
 
 /** ----- color ----- */

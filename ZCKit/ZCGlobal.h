@@ -18,8 +18,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)isLandscape;
 
-+ (BOOL)isPrintLog;  /**< 是否打印日志，默认NO */
-
 + (BOOL)isValidString:(nullable NSString *)str;  /**< 非空长度&不是只有空格和换行&非<null> */
 
 + (BOOL)isValidArray:(nullable NSArray *)array;  /**< 判断对象是否是有效的数组&count不为零 */

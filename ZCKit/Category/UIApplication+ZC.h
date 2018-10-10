@@ -12,17 +12,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIApplication (ZC)
 
-/** "Documents" 沙盒路径 */
-@property (nonatomic, readonly) NSURL *documentsURL;
-@property (nonatomic, readonly) NSString *documentsPath;
+@property (nonatomic, readonly) NSURL *documentsURL;   /**< "Documents" 沙盒路径 */
 
-/** "Caches" 沙盒路径 */
-@property (nonatomic, readonly) NSURL *cachesURL;
-@property (nonatomic, readonly) NSString *cachesPath;
+@property (nonatomic, readonly) NSString *documentsPath;   /**< "Documents" 沙盒路径 */
 
-/** "Library" 沙盒路径 */
-@property (nonatomic, readonly) NSURL *libraryURL;
-@property (nonatomic, readonly) NSString *libraryPath;
+@property (nonatomic, readonly) NSURL *cachesURL;   /**< "Caches" 沙盒路径 */
+
+@property (nonatomic, readonly) NSString *cachesPath;   /**< "Caches" 沙盒路径 */
+
+@property (nonatomic, readonly) NSURL *libraryURL;   /**< "Library" 沙盒路径 */
+
+@property (nonatomic, readonly) NSString *libraryPath;   /**< "Library" 沙盒路径 */
+
 
 /** 应用 Bundle Name (show in SpringBoard) */
 @property (nullable, nonatomic, readonly) NSString *appBundleName;

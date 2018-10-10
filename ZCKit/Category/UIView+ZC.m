@@ -59,6 +59,15 @@
     }
 }
 
+- (UIView *)findFirstResponder {
+    if ([self isFirstResponder]) return self;
+    for (UIView *view in self.subviews) {
+        UIView *firstResponder = [view findFirstResponder];
+        if (firstResponder != nil) return firstResponder;
+    }
+    return nil;
+}
+
 - (BOOL)containSubView:(UIView *)subView {
     for (UIView *view in [self subviews]) {
         if ([view isEqual:subView]) {

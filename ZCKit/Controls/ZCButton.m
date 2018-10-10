@@ -57,6 +57,14 @@
     }
 }
 
+- (CGSize)sizeThatFits:(CGSize)size {
+    if (self.fitSize) {
+        return [self.fitSize CGSizeValue];
+    } else {
+        return [super sizeThatFits:size];
+    }
+}
+
 @end
 
 

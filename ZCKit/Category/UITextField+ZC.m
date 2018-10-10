@@ -36,11 +36,28 @@
     return 0;
 }
 
+- (UIImage *)leftImage {
+    if (self.leftView && [self.leftView isKindOfClass:[UIImageView class]]) {
+        return [(UIImageView *)self.leftView image];
+    }
+    return nil;
+}
+
+- (void)setLeftImage:(UIImage *)leftImage {
+    UIImageView* imageView = [[UIImageView alloc] init];
+    imageView.image = leftImage;
+    imageView.contentMode = UIViewContentModeScaleToFill;
+    imageView.contentMode = UIViewContentModeCenter;
+    imageView.frame = CGRectMake(0, 0, 40, 60);
+    self.leftViewMode = UITextFieldViewModeAlways;
+    self.leftView = imageView;
+}
+
 - (NSInteger)currentOffset {
     return [self offsetFromPosition:self.beginningOfDocument toPosition:self.selectedTextRange.start];
 }
 
-- (NSRange)currentRange {
+- (NSRange)currentSelectRange {
     UITextPosition *beginning = self.beginningOfDocument;
     UITextRange *selectedRange = self.selectedTextRange;
     UITextPosition *selectionStart = selectedRange.start;

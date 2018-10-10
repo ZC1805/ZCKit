@@ -74,7 +74,7 @@
     if (!strValue) return [NSDecimalNumber notANumber];
     double douValue = [strValue doubleValue];
     NSString *doubleStr = [NSString stringWithFormat:@"%lf", douValue];
-    return [NSDecimalNumber decimalNumberWithString:doubleStr];   /** 这种初始化方法测试出只保留6位小数精度 */
+    return [NSDecimalNumber decimalNumberWithString:doubleStr];  //这种初始化方法测试出只保留6位小数精度
 }
 
 /** double初始化，规避精度问题，六位小数精度 */

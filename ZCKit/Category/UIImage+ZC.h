@@ -16,6 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 从PDF文件数据或路径创建，只返回PDF第一页，大小等于原大小 */
 + (nullable UIImage *)imageWithPDF:(nullable id)dataOrPath;
 
+/** 返回透明图片image */
++ (UIImage *)imageWithClear;
+
 /** 1px * 1px，不给颜色默认白色 */
 + (nullable UIImage *)imageWithColor:(nullable UIColor *)color;
 

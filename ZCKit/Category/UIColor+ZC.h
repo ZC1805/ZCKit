@@ -12,6 +12,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIColor (ZC)
 
+@property (nonatomic, readonly) CGFloat R;   /**< 0~1 */
+
+@property (nonatomic, readonly) CGFloat G;   /**< 0~1 */
+
+@property (nonatomic, readonly) CGFloat B;   /**< 0~1 */
+
+@property (nonatomic, readonly) CGFloat A;   /**< 0~1 */
+
+@property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;   /**< 色彩空间 */
+
+
 + (UIColor *)colorForRandomColor;   /**< 随机颜色 */
 
 + (UIColor *)colorFromHexString:(nullable NSString *)hexColorStr;   /**< 十六进制颜色@"0x000000"&@"000000" */
@@ -20,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIColor *)colorFormRad:(int)intR green:(int)intG blue:(int)intB alpha:(float)alpha;   /**< 十进制颜色255 */
 
+
+- (BOOL)isClear;   /**< 是否是透明颜色或透明度小于0.01 */
 
 - (UIColor *)brightColor;   /**< 明色 */
 
@@ -32,19 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSString *)hexString;   /**< such as @"66ccff" */
 
 - (nullable NSString *)hexStringWithAlpha;   /**< such as @"0066ccff" */
-
-- (BOOL)isClear;   /**< 是否是透明颜色或透明度小于0.01 */
-
-
-@property (nonatomic, readonly) CGColorSpaceModel colorSpaceModel;   /**< 色彩空间 */
-
-@property (nonatomic, readonly) CGFloat R;   /**< 0~1 */
-
-@property (nonatomic, readonly) CGFloat G;   /**< 0~1 */
-
-@property (nonatomic, readonly) CGFloat B;   /**< 0~1 */
-
-@property (nonatomic, readonly) CGFloat A;   /**< 0~1 */
 
 @end
 
