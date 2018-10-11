@@ -15,7 +15,7 @@
 @end
 
 @implementation ZCGlobal
-
+#warning - 采购端适配全面屏
 + (instancetype)global {
     static ZCGlobal *global = nil;
     static dispatch_once_t onceToken;
