@@ -93,6 +93,26 @@
     return self.contentInset.right;
 }
 
+- (void)setVisualOffsetX:(CGFloat)visualOffsetX {
+    CGPoint offset = self.visualOffset;
+    offset.y = visualOffsetX;
+    self.visualOffset = offset;
+}
+
+- (CGFloat)visualOffsetX {
+    return self.visualOffset.x;
+}
+
+- (void)setVisualOffsetY:(CGFloat)visualOffsetY {
+    CGPoint offset = self.visualOffset;
+    offset.y = visualOffsetY;
+    self.visualOffset = offset;
+}
+
+- (CGFloat)visualOffsetY {
+    return self.visualOffset.y;
+}
+
 #pragma mark - misc
 - (void)shieldNavigationInteractivePop {
     UIViewController *controller = self.viewController;
@@ -156,7 +176,7 @@ static void *directionContext = @"ScrollViewDirectionContext";
         objc_setAssociatedObject(self, _cmd, topv, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self addSubview:topv];
     }
-    topv.frame = CGRectMake(0, -self.height, self.width, self.height);
+    topv.frame = CGRectMake(-150.0, -self.height, MAX(self.height, self.sizeWidth) + 300.0, self.height);
     [self sendSubviewToBack:topv];
     return topv;
 }
@@ -169,7 +189,7 @@ static void *directionContext = @"ScrollViewDirectionContext";
         objc_setAssociatedObject(self, _cmd, bottomv, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self addSubview:bottomv];
     }
-    bottomv.frame = CGRectMake(0, self.height, self.width, self.height);
+    bottomv.frame = CGRectMake(-150.0, MAX(self.height, self.sizeHeight), MAX(self.height, self.sizeWidth) + 300.0, self.height);
     [self sendSubviewToBack:bottomv];
     return bottomv;
 }
@@ -190,48 +210,46 @@ static void *directionContext = @"ScrollViewDirectionContext";
     return self.bottomExpandOffsetView.backgroundColor;
 }
 
-- (void)setAbsoluteOffset:(CGPoint)absoluteOffset {
-    self.contentOffset = [self convertIntoContentOffsetWithAbsoluteOffset:absoluteOffset];
+- (void)setVisualOffset:(CGPoint)visualOffset {
+    self.contentOffset = [self convertToContentOffsetFromVisualOffset:visualOffset];
 }
 
-- (CGPoint)absoluteOffset {
-    return [self convertIntoAbsoluteOffsetWithContentOffset:self.contentOffset];
+- (CGPoint)visualOffset {
+    return [self convertToVisualOffsetFromContentOffset:self.contentOffset];
 }
 
-- (CGPoint)convertIntoContentOffsetWithAbsoluteOffset:(CGPoint)absoluteOffset {
+- (CGPoint)convertToContentOffsetFromVisualOffset:(CGPoint)visualOffset {
     if (@available(iOS 11.0, *)) {
         if (self.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentNever) {
-            return absoluteOffset;
+            return visualOffset;
         } else {
-            CGFloat offx = absoluteOffset.x - self.adjustedContentInset.left - self.contentInset.left;
-            CGFloat offy = absoluteOffset.y - self.adjustedContentInset.top - self.contentInset.top;
-            return CGPointMake(offx, offy);
+            CGFloat x = visualOffset.x + self.contentInset.left - self.adjustedContentInset.left;
+            CGFloat y = visualOffset.y + self.contentInset.top - self.adjustedContentInset.top ;
+            return CGPointMake(x, y);
         }
     } else {
-        if (self.viewController.automaticallyAdjustsScrollViewInsets) {
-            CGFloat offx = absoluteOffset.x - self.contentInset.left;
-            CGFloat offy = absoluteOffset.y - self.viewController.topLayoutGuide.length - self.contentInset.top;
-            return CGPointMake(offx, offy);
+        UIViewController *controller = self.viewController;
+        if (controller && controller.automaticallyAdjustsScrollViewInsets) {
+            return CGPointMake(visualOffset.x, visualOffset.y - controller.topLayoutGuide.length);
         } else {
-            return absoluteOffset;
+            return visualOffset;
         }
     }
 }
 
-- (CGPoint)convertIntoAbsoluteOffsetWithContentOffset:(CGPoint)contentOffset {
+- (CGPoint)convertToVisualOffsetFromContentOffset:(CGPoint)contentOffset {
     if (@available(iOS 11.0, *)) {
         if (self.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentNever) {
             return contentOffset;
         } else {
-            CGFloat offx = contentOffset.x + self.adjustedContentInset.left + self.contentInset.left;
-            CGFloat offy = contentOffset.y + self.adjustedContentInset.top + self.contentInset.top;
+            CGFloat offx = contentOffset.x + self.adjustedContentInset.left - self.contentInset.left;
+            CGFloat offy = contentOffset.y + self.adjustedContentInset.top - self.contentInset.top;
             return CGPointMake(offx, offy);
         }
     } else {
-        if (self.viewController.automaticallyAdjustsScrollViewInsets) {
-            CGFloat offx = contentOffset.x + self.contentInset.left;
-            CGFloat offy = contentOffset.y + self.viewController.topLayoutGuide.length + self.contentInset.top;
-            return CGPointMake(offx, offy);
+        UIViewController *controller = self.viewController;
+        if (controller && controller.automaticallyAdjustsScrollViewInsets) {
+            return CGPointMake(contentOffset.x, contentOffset.y + controller.topLayoutGuide.length);
         } else {
             return contentOffset;
         }
@@ -239,6 +257,7 @@ static void *directionContext = @"ScrollViewDirectionContext";
 }
 
 #pragma mark - scroll
+#warning - xxxx 位置错误  contentInset offset 都要检查
 - (void)scrollToTopAnimated:(BOOL)animated {
     CGPoint off = self.contentOffset;
     off.y = 0 - self.contentInset.top;
@@ -264,16 +283,4 @@ static void *directionContext = @"ScrollViewDirectionContext";
 }
 
 @end
-
-
-
-
-
-
-
-
-
-
-
-
 

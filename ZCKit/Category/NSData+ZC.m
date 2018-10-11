@@ -142,13 +142,3 @@ static const short base64DecodingTable[256] = {
 
 @end
 
-
-
-
-
-
-
-
-
-
-

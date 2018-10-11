@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
 };
 
 @interface UIScrollView (ZC)
-
+#warning - visualInset
 @property (nonatomic, assign) CGFloat offsetX;
 
 @property (nonatomic, assign) CGFloat offsetY;
@@ -35,6 +35,10 @@ typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
 @property (nonatomic, assign) CGFloat insetBottom;
 
 @property (nonatomic, assign) CGFloat insetRight;
+
+@property (nonatomic, assign) CGFloat visualOffsetX;
+
+@property (nonatomic, assign) CGFloat visualOffsetY; 
 
 #pragma mark - direction
 @property (nonatomic, assign, readonly) ZCEnumScrollViewDirection horizontalScrollingDirection;   /**< 水平滑动方向 */
@@ -53,11 +57,11 @@ typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
 
 @property (nonatomic, strong) UIColor *bottomOffsetColor;   /**< 底部偏移出来的颜色设置 */
 
-@property (nonatomic, assign) CGPoint absoluteOffset;   /**< 直观的偏移量 */
+@property (nonatomic, assign) CGPoint visualOffset;   /**< 直观的偏移量，相对于初始位置目视滑动的距离 */
 
-- (CGPoint)convertIntoContentOffsetWithAbsoluteOffset:(CGPoint)absoluteOffset;   /**< 转换成 content offset */
+- (CGPoint)convertToContentOffsetFromVisualOffset:(CGPoint)visualOffset;   /**< 转换成 content offset */
 
-- (CGPoint)convertIntoAbsoluteOffsetWithContentOffset:(CGPoint)contentOffset;   /**< 转换成 absolute offset */
+- (CGPoint)convertToVisualOffsetFromContentOffset:(CGPoint)contentOffset;   /**< 转换成 visual offset */
 
 #pragma mark - scroll
 - (void)scrollToTopAnimated:(BOOL)animated;
@@ -71,13 +75,4 @@ typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
 @end
 
 NS_ASSUME_NONNULL_END
-
-
-
-
-
-
-
-
-
 

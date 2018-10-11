@@ -37,9 +37,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, readonly) UIViewController *viewController;   /**< 返回当前所在的控制器 */
 
 
-- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color;
+- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color;   /**< 带背景颜色初始化 */
 
-- (void)removeAllSubviews;
+- (void)removeAllSubviews;   /**< 移除所有子视图 */
 
 - (nullable UIView *)findFirstResponder;   /**< 往下找到第一响应者 */
 
@@ -53,18 +53,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setCorner:(NSInteger)radius color:(UIColor *)color width:(CGFloat)width;   /**< 圆角 & 描边 */
 
+- (void)setCorner:(UIRectCorner)corner radius:(CGSize)radius;   /**< 设置部分圆角 */
+
 - (CGPoint)convertPointToScrren:(CGPoint)point;   /**< 转换到屏幕的坐标 */
 
 @end
 
 NS_ASSUME_NONNULL_END
-
-
-
-
-
-
-
-
-
 

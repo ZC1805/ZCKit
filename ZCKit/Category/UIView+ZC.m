@@ -63,7 +63,7 @@
     if ([self isFirstResponder]) return self;
     for (UIView *view in self.subviews) {
         UIView *firstResponder = [view findFirstResponder];
-        if (firstResponder != nil) return firstResponder;
+        if (firstResponder) return firstResponder;
     }
     return nil;
 }
@@ -114,6 +114,15 @@
     self.layer.cornerRadius = radius;
     self.layer.borderWidth = width;
     self.layer.borderColor = color.CGColor;
+}
+
+- (void)setCorner:(UIRectCorner)corner radius:(CGSize)radius {
+    CGRect rect = self.bounds;
+    UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:rect byRoundingCorners:corner cornerRadii:radius];
+    CAShapeLayer *masklayer = [[CAShapeLayer alloc] init];
+    masklayer.frame = self.bounds;
+    masklayer.path = path.CGPath;
+    self.layer.mask = masklayer;
 }
 
 - (CGPoint)convertPointToScrren:(CGPoint)point {
@@ -224,15 +233,4 @@
 }
 
 @end
-
-
-
-
-
-
-
-
-
-
-
 
