@@ -38,14 +38,6 @@
     return nil;
 }
 
-- (UIImage *)snapshotImage {
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
-    UIImage *snap = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return snap;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color {
     if (self = [self initWithFrame:frame]) {
         self.backgroundColor = color;
@@ -57,6 +49,17 @@
     while (self.subviews.count) {
         [self.subviews.lastObject removeFromSuperview];
     }
+}
+
+- (NSArray *)containAllSubviews {
+    NSMutableArray *vis = [NSMutableArray array];
+    for (UIView *sub in self.subviews) {
+        [vis addObject:sub];
+        if (sub.subviews.count) {
+            [vis addObjectsFromArray:[sub containAllSubviews]];
+        }
+    }
+    return vis;
 }
 
 - (UIView *)findFirstResponder {
@@ -96,6 +99,14 @@
     }
     UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
     [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:afterUpdates];
+    UIImage *snap = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return snap;
+}
+
+- (UIImage *)snapshotImage {
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
+    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *snap = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return snap;

@@ -15,7 +15,10 @@
 @implementation ZCKitManager
 
 @dynamic naviBackImageName, sideArrowImageName, isPrintLog, invalidStr;
+@dynamic toastTextColor, toastBackGroundColor;
 
+static UIColor *_toastTextColor = nil;
+static UIColor *_toastBackGroundColor = nil;
 static NSString *_sideArrowImageName = nil;
 static NSString *_naviBackImageName = nil;
 static BOOL _isPrintLog = NO;
@@ -52,6 +55,32 @@ static BOOL _isPrintLog = NO;
 + (void)setSideArrowImageName:(NSString *)sideArrowImageName {
     if (sideArrowImageName) {
         _sideArrowImageName = sideArrowImageName;
+    }
+}
+
++ (UIColor *)toastBackGroundColor {
+    if (_toastBackGroundColor == nil) {
+        _toastBackGroundColor = [UIColor blackColor];
+    }
+    return _toastBackGroundColor;
+}
+
++ (void)setToastBackGroundColor:(UIColor *)toastBackGroundColor {
+    if (toastBackGroundColor) {
+        _toastBackGroundColor = toastBackGroundColor;
+    }
+}
+
++ (UIColor *)toastTextColor {
+    if (_toastTextColor == nil) {
+        _toastTextColor = [UIColor whiteColor];
+    }
+    return _toastTextColor;
+}
+
++ (void)setToastTextColor:(UIColor *)toastTextColor {
+    if (toastTextColor) {
+        _toastTextColor = toastTextColor;
     }
 }
 

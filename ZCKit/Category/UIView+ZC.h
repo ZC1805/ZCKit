@@ -41,11 +41,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)removeAllSubviews;   /**< 移除所有子视图 */
 
+- (NSArray *)containAllSubviews;   /**< 所有子视图集合 */
+
 - (nullable UIView *)findFirstResponder;   /**< 往下找到第一响应者 */
 
-- (BOOL)containSubView:(UIView *)subView;   /**< 递归向下，找到最顶层 */
+- (BOOL)containSubView:(UIView *)subView;   /**< 递归向下，找到最低层 */
 
-- (BOOL)containSubViewOfClassType:(Class)aClass;   /**< 递归向下，找到最顶层 */
+- (BOOL)containSubViewOfClassType:(Class)aClass;   /**< 递归向下，找到最低层 */
 
 - (nullable UIImage *)snapshotImageAfterScreenUpdates:(BOOL)afterUpdates;   /**< 快照 */
 

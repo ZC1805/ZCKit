@@ -44,15 +44,14 @@
 }
 
 - (void)limitHandle:(id)sender {
-    if (self.limitLength > 0 && self.text.length > self.limitLength) {
-        BOOL handle = YES;
-        if (self.limitTip) handle = self.limitTip([self.text copy]);
-        if (handle) self.text = [self.text substringToIndex:self.limitLength];
+    if (self.limitLength > 0) {
+        [self removeNotificationObserver];
+        if (self.text.length > self.limitLength) {
+            BOOL handle = YES;
+            if (self.limitTip) handle = self.limitTip([self.text copy]);
+            if (handle) self.text = [self.text substringToIndex:self.limitLength];
+        }
     }
-}
-
-- (void)dealloc {
-    [self removeNotificationObserver];
 }
 
 @end

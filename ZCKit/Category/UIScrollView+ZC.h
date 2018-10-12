@@ -19,7 +19,7 @@ typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
 };
 
 @interface UIScrollView (ZC)
-#warning - visualInset
+
 @property (nonatomic, assign) CGFloat offsetX;
 
 @property (nonatomic, assign) CGFloat offsetY;

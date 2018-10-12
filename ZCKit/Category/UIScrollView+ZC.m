@@ -18,7 +18,7 @@
     offset.x = offsetX;
     self.contentOffset = offset;
 }
-
+#warning - visualInset
 - (CGFloat)offsetX {
     return self.contentOffset.x;
 }

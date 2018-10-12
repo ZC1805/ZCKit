@@ -300,9 +300,9 @@
 //}
 
 
-
+#pragma mark - 更改所有的bundle 下面的2x也要适配3x
 #pragma mark - gif
-+ (UIImage *)imageGIFAnimatedWithNamed:(NSString *)name {
++ (UIImage *)imageGIFAnimated:(NSString *)name {
     if (!name) return nil;
     CGFloat scale = [UIScreen mainScreen].scale;
     if (scale > 1.0) {

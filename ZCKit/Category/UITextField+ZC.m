@@ -48,7 +48,7 @@
     imageView.image = leftImage;
     imageView.contentMode = UIViewContentModeScaleToFill;
     imageView.contentMode = UIViewContentModeCenter;
-    imageView.frame = CGRectMake(0, 0, 40, 60);
+    imageView.frame = CGRectMake(0, 0, 40.0, 60.0);
     self.leftViewMode = UITextFieldViewModeAlways;
     self.leftView = imageView;
 }

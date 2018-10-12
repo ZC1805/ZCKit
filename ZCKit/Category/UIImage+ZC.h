@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable UIImage *)imageWithColor:(nullable UIColor *)color size:(CGSize)size;
 
 /** 加载GIF图片 */
-+ (nullable UIImage *)imageGIFAnimatedWithNamed:(NSString *)name;
++ (nullable UIImage *)imageGIFAnimated:(NSString *)name;
 
 /** 改变图片的透明度 */
 - (nullable UIImage *)imageWithAlpha:(CGFloat)alpha;
