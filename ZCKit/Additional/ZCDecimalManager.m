@@ -10,7 +10,7 @@
 #import "ZCKitManager.h"
 #import "NSString+ZC.h"
 
-@interface ZCDecimalManager () <NSDecimalNumberBehaviors>
+@interface ZCDecimalManager () 
 
 @property (nonatomic, strong) NSMutableArray <NSNumberFormatter *>*numberFormatters;
 

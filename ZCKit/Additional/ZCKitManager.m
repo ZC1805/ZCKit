@@ -10,12 +10,14 @@
 
 @interface ZCKitManager ()
 
+@property (nonatomic, weak) id<ZCKitManagerDelegate> singleDelegate;
+
 @end
 
 @implementation ZCKitManager
 
 @dynamic naviBackImageName, sideArrowImageName, isPrintLog, invalidStr;
-@dynamic toastTextColor, toastBackGroundColor;
+@dynamic toastTextColor, toastBackGroundColor, delegate;
 
 static UIColor *_toastTextColor = nil;
 static UIColor *_toastBackGroundColor = nil;
@@ -32,6 +34,7 @@ static BOOL _isPrintLog = NO;
     return instacne;
 }
 
+#pragma mark - ivar
 + (NSString *)naviBackImageName {
     if (_naviBackImageName == nil) {
         _naviBackImageName = @"zc_image_back_arrow";
@@ -95,6 +98,26 @@ static BOOL _isPrintLog = NO;
 + (NSString *)invalidStr {
     return @"zc_invalid_value &.Ignore";
 }
+
++ (id<ZCKitManagerDelegate>)delegate {
+    id <ZCKitManagerDelegate> singleDelegate = [ZCKitManager instance].singleDelegate;
+    if (!singleDelegate) {if (self.isPrintLog) NSLog(@"kit manager delegate is nil");}
+    return singleDelegate;
+}
+
++ (void)setDelegate:(id<ZCKitManagerDelegate>)delegate {
+    if ([ZCKitManager instance].singleDelegate) {
+        if (self.isPrintLog) NSLog(@"single delegate only registration once");
+    }
+    if (delegate) {
+        [ZCKitManager instance].singleDelegate = delegate;
+    } else {
+        if (self.isPrintLog) NSLog(@"kit manager delegate is nil");
+    }
+}
+
+#pragma mark - func
+
 
 @end
 

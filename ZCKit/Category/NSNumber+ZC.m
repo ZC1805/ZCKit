@@ -110,32 +110,32 @@
 #pragma mark - calculate
 /** 加 */
 - (NSDecimalNumber *)plus:(NSDecimalNumber *)decimalNumber {
-    return [self decimalNumberByAdding:decimalNumber withBehavior:(id <NSDecimalNumberBehaviors>)[ZCDecimalManager instance]];
+    return [self decimalNumberByAdding:decimalNumber withBehavior:[ZCDecimalManager instance]];
 }
 
 /** 减 */
 - (NSDecimalNumber *)minus:(NSDecimalNumber *)decimalNumber {
-    return [self decimalNumberBySubtracting:decimalNumber withBehavior:(id <NSDecimalNumberBehaviors>)[ZCDecimalManager instance]];
+    return [self decimalNumberBySubtracting:decimalNumber withBehavior:[ZCDecimalManager instance]];
 }
 
 /** 乘 */
 - (NSDecimalNumber *)mltiply:(NSDecimalNumber *)decimalNumber {
-    return [self decimalNumberByMultiplyingBy:decimalNumber withBehavior:(id <NSDecimalNumberBehaviors>)[ZCDecimalManager instance]];
+    return [self decimalNumberByMultiplyingBy:decimalNumber withBehavior:[ZCDecimalManager instance]];
 }
 
 /** 除 */
 - (NSDecimalNumber *)divide:(NSDecimalNumber *)decimalNumber {
-    return [self decimalNumberByDividingBy:decimalNumber withBehavior:(id <NSDecimalNumberBehaviors>)[ZCDecimalManager instance]];
+    return [self decimalNumberByDividingBy:decimalNumber withBehavior:[ZCDecimalManager instance]];
 }
 
 /** 幂 */
 - (NSDecimalNumber *)raisingToPower:(NSUInteger)power {
-    return [self decimalNumberByRaisingToPower:power withBehavior:(id <NSDecimalNumberBehaviors>)[ZCDecimalManager instance]];
+    return [self decimalNumberByRaisingToPower:power withBehavior:[ZCDecimalManager instance]];
 }
 
 /** 乘10^x方 */
 - (NSDecimalNumber *)mltiplyPower10:(short)power {
-    return [self decimalNumberByMultiplyingByPowerOf10:power withBehavior:(id <NSDecimalNumberBehaviors>)[ZCDecimalManager instance]];
+    return [self decimalNumberByMultiplyingByPowerOf10:power withBehavior:[ZCDecimalManager instance]];
 }
 
 #pragma mark - compare

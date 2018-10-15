@@ -16,7 +16,7 @@ typedef NS_ENUM(NSUInteger, ZCEnumRoundType) {
     ZCEnumRoundTypeUp,     /** 只入不舍 */
 };
 
-@interface ZCDecimalManager : NSObject
+@interface ZCDecimalManager : NSObject <NSDecimalNumberBehaviors>
 
 #pragma mark - decimal number
 /** 获取DecimalHandler，来处理四舍五入 */

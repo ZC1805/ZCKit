@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSTimeZone *beijingTimeZone;
 
++ (instancetype)instance;
+
 + (NSDateFormatter *)dateFormatter:(nullable NSString *)format;   /**< 此处拿到的DateFormatter有缓存，外部不可对其属性赋值 */
 
 @end

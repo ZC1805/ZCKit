@@ -11,8 +11,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class ZCKitManager;
+
+@protocol ZCKitManagerDelegate <NSObject>
+
+- (void)imageViewWebCache:(nullable UIImageView *)imageView url:(nullable NSURL *)url holder:(nullable UIImage *)image;
+
+@end
+
+
 @interface ZCKitManager : NSObject
 
+#pragma mark - misc1
 @property (class, nonatomic, assign) BOOL isPrintLog;   /**< 是否需要打印日志，默认NO */
 
 @property (class, nonatomic, copy) NSString *naviBackImageName;   /**< 导航的返回箭头图片，默认"zc_image_back_arrow" */
@@ -24,6 +34,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (class, nonatomic, strong) UIColor *toastTextColor;   /**< 侧边箭头图片名字，默认@"0xffffff white" */
 
 @property (class, nonatomic, copy, readonly) NSString *invalidStr;   /**< 定义的特定无效值，默认"zc_invalid_value &.Ignore" */
+
+@property (class, nullable, nonatomic, strong) id<ZCKitManagerDelegate> delegate;   /**< 上层实现协议供Kit调用，程序启动时需要上层注入 */
+
+#pragma mark - misc2
 
 @end
 
