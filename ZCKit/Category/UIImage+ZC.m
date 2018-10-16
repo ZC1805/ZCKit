@@ -8,7 +8,7 @@
 
 #import "UIImage+ZC.h"
 #import "ZCPredefine.h"
-#import "ZCKitManager.h"
+#import "ZCKitBridge.h"
 #import <ImageIO/ImageIO.h>
 #import <Accelerate/Accelerate.h>
 #import <CoreText/CoreText.h>
@@ -623,15 +623,15 @@
                     saturation:(CGFloat)saturation
                      maskImage:(UIImage *)maskImage {
     if (self.size.width < 1 || self.size.height < 1) {
-        if (ZCKitManager.isPrintLog) NSLog(@"UIImage+YYAdd error: invalid size: (%.2f x %.2f). Both dimensions must be >= 1: %@", self.size.width, self.size.height, self);
+        if (ZCKitBridge.isPrintLog) NSLog(@"UIImage+YYAdd error: invalid size: (%.2f x %.2f). Both dimensions must be >= 1: %@", self.size.width, self.size.height, self);
         return nil;
     }
     if (!self.CGImage) {
-        if (ZCKitManager.isPrintLog) NSLog(@"UIImage+YYAdd error: inputImage must be backed by a CGImage: %@", self);
+        if (ZCKitBridge.isPrintLog) NSLog(@"UIImage+YYAdd error: inputImage must be backed by a CGImage: %@", self);
         return nil;
     }
     if (maskImage && !maskImage.CGImage) {
-        if (ZCKitManager.isPrintLog) NSLog(@"UIImage+YYAdd error: effectMaskImage must be backed by a CGImage: %@", maskImage);
+        if (ZCKitBridge.isPrintLog) NSLog(@"UIImage+YYAdd error: effectMaskImage must be backed by a CGImage: %@", maskImage);
         return nil;
     }
     
@@ -667,12 +667,12 @@
         vImage_Error err;
         err = vImageBuffer_InitWithCGImage(&effect, &format, NULL, imageRef, kvImagePrintDiagnosticsToConsole);
         if (err != kvImageNoError) {
-            if (ZCKitManager.isPrintLog) NSLog(@"UIImage+YYAdd error: vImageBuffer_InitWithCGImage returned error code %zi for inputImage: %@", err, self);
+            if (ZCKitBridge.isPrintLog) NSLog(@"UIImage+YYAdd error: vImageBuffer_InitWithCGImage returned error code %zi for inputImage: %@", err, self);
             return nil;
         }
         err = vImageBuffer_Init(&scratch, effect.height, effect.width, format.bitsPerPixel, kvImageNoFlags);
         if (err != kvImageNoError) {
-            if (ZCKitManager.isPrintLog) NSLog(@"UIImage+YYAdd error: vImageBuffer_Init returned error code %zi for inputImage: %@", err, self);
+            if (ZCKitBridge.isPrintLog) NSLog(@"UIImage+YYAdd error: vImageBuffer_Init returned error code %zi for inputImage: %@", err, self);
             return nil;
         }
     } else {

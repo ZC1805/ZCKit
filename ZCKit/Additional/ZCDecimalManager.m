@@ -7,7 +7,7 @@
 //
 
 #import "ZCDecimalManager.h"
-#import "ZCKitManager.h"
+#import "ZCKitBridge.h"
 #import "NSString+ZC.h"
 
 @interface ZCDecimalManager () 
@@ -55,7 +55,7 @@
 
 - (NSNumberFormatter *)handerFormatNumberDigits:(int)digits {
     if (digits < 0 || digits > 6) {
-        if (ZCKitManager.isPrintLog) NSLog(@"digits point error");
+        if (ZCKitBridge.isPrintLog) NSLog(@"digits point error");
         digits = 0;
     }
     if (self.numberFormatters.count <= digits) {
@@ -79,7 +79,7 @@
 
 - (NSDecimalNumberHandler *)handerForDecimalPoint:(int)point mode:(NSRoundingMode)mode {
     if (point < 0 || point > 6) {
-        if (ZCKitManager.isPrintLog) NSLog(@"digits point error");
+        if (ZCKitBridge.isPrintLog) NSLog(@"digits point error");
         point = 0;
     }
     NSDecimalNumberHandler *hander = nil;
@@ -125,7 +125,7 @@
         }
         default:{
             hander = [NSDecimalNumberHandler defaultDecimalNumberHandler];
-            if (ZCKitManager.isPrintLog) NSLog(@"round mode error");
+            if (ZCKitBridge.isPrintLog) NSLog(@"round mode error");
             break;
         }
     }
@@ -142,7 +142,7 @@
 }
 
 - (nullable NSDecimalNumber *)exceptionDuringOperation:(SEL)operation error:(NSCalculationError)error leftOperand:(NSDecimalNumber *)leftOperand rightOperand:(nullable NSDecimalNumber *)rightOperand {
-    if (ZCKitManager.isPrintLog) NSLog(@"decimal number calculate fail");
+    if (ZCKitBridge.isPrintLog) NSLog(@"decimal number calculate fail");
     return nil;
 }
 
@@ -250,14 +250,14 @@
             if (comps && comps.count == 2) length = (int)[comps.lastObject length];
             if (length > 6) {
                 length = 6;
-                if (ZCKitManager.isPrintLog) NSLog(@"float string is fail value");
+                if (ZCKitBridge.isPrintLog) NSLog(@"float string is fail value");
             }
-            if (ZCKitManager.isPrintLog) NSLog(@"float string is fail value");
+            if (ZCKitBridge.isPrintLog) NSLog(@"float string is fail value");
         }
     } else if (str.length && [str isPureInteger]) {
-        if (ZCKitManager.isPrintLog) NSLog(@"calculate integer digit");
+        if (ZCKitBridge.isPrintLog) NSLog(@"calculate integer digit");
     } else {
-        if (ZCKitManager.isPrintLog) NSLog(@"calculate decimal digit fail");
+        if (ZCKitBridge.isPrintLog) NSLog(@"calculate decimal digit fail");
     }
     return length;
 }
@@ -269,10 +269,10 @@
         double fraction, integer;
         fraction = modf(y, &integer);
         if (fabs(fraction) > 0) {
-            if (ZCKitManager.isPrintLog) NSLog(@"value is fail");
+            if (ZCKitBridge.isPrintLog) NSLog(@"value is fail");
         } else min = pow(x, y);
     } else if (x == 0 && y <= 0) {
-        if (ZCKitManager.isPrintLog) NSLog(@"value is fail");
+        if (ZCKitBridge.isPrintLog) NSLog(@"value is fail");
     } else {
         min = pow(x, y);
     }

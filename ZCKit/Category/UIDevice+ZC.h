@@ -36,25 +36,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSDate *systemUptime;  /**< 系统启动时间 */
 
-@property (nonatomic, readonly) int64_t diskSpace;
+@property (nonatomic, readonly) int64_t diskSpace;   /**< 磁盘大小 */
 
-@property (nonatomic, readonly) int64_t diskSpaceFree;
-
-@property (nonatomic, readonly) int64_t diskSpaceUsed;
-
-@property (nonatomic, readonly) int64_t memoryTotal;
-
-@property (nonatomic, readonly) int64_t memoryUsed;
-
-@property (nonatomic, readonly) int64_t memoryFree;
-
-@property (nonatomic, readonly) int64_t memoryActive;
-
-@property (nonatomic, readonly) int64_t memoryInactive;
-
-@property (nonatomic, readonly) int64_t memoryWired;
-
-@property (nonatomic, readonly) int64_t memoryPurgable;
+@property (nonatomic, readonly) int64_t memoryTotal;   /**< 内存大小 */
 
 @end
 

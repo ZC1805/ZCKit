@@ -7,7 +7,7 @@
 //
 
 #import "UINavigationItem+ZC.h"
-#import "ZCKitManager.h"
+#import "ZCKitBridge.h"
 #import "UIImage+ZC.h"
 #import "ZCButton.h"
 
@@ -16,7 +16,7 @@
 - (UIButton *)itemCustomBackTitle:(NSString *)title target:(id)target action:(SEL)action {
     if (!title) title = @"";
     CGFloat height = 32.0, offset = 6.0;
-    UIImage *iamgeIm = [[UIImage imageNamed:ZCKitManager.naviBackImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *iamgeIm = [[UIImage imageNamed:ZCKitBridge.naviBackImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     ZCButton *back = [ZCButton buttonWithType:UIButtonTypeCustom];
     [back setTitle:title forState:UIControlStateNormal];
     [back setTitle:title forState:UIControlStateHighlighted];

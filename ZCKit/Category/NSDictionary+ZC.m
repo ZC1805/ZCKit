@@ -7,7 +7,7 @@
 //
 
 #import "NSDictionary+ZC.h"
-#import "ZCKitManager.h"
+#import "ZCKitBridge.h"
 #import "NSNumber+ZC.h"
 #import "NSString+ZC.h"
 #import "NSArray+ZC.h"
@@ -106,7 +106,7 @@
     if ([obj isKindOfClass:[NSArray class]]) {
         arrvalue = (NSArray *)obj;
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
-        if (ZCKitManager.isPrintLog) NSLog(@"parse array obj is null");
+        if (ZCKitBridge.isPrintLog) NSLog(@"parse array obj is null");
     } else {
         NSAssert(0, @"parse array obj is invalid");
     }
@@ -122,7 +122,7 @@
     if ([obj isKindOfClass:[NSDictionary class]]) {
         dicvalue = (NSDictionary *)obj;
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
-        if (ZCKitManager.isPrintLog) NSLog(@"parse dict obj is null");
+        if (ZCKitBridge.isPrintLog) NSLog(@"parse dict obj is null");
     } else {
         NSAssert(0, @"parse dict obj is invalid");
     }
@@ -137,7 +137,7 @@
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:[NSString class]]) {
         if ([(NSString *)obj isEqualToString:@"<null>"]) {
-            if (ZCKitManager.isPrintLog) NSLog(@"parse string obj is <null>");
+            if (ZCKitBridge.isPrintLog) NSLog(@"parse string obj is <null>");
         } else if ([(NSString *)obj isPureFloat]) {
             strvalue = [[NSDecimalNumber decimalString:(NSString *)obj] stringValue];
         } else {
@@ -150,7 +150,7 @@
             strvalue = nil;
         }
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
-        if (ZCKitManager.isPrintLog) NSLog(@"parse string obj is null");
+        if (ZCKitBridge.isPrintLog) NSLog(@"parse string obj is null");
     } else {
         NSAssert(0, @"parse string obj is invalid string");
     }
@@ -172,7 +172,7 @@
             numvalue = nil;
         }
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
-        if (ZCKitManager.isPrintLog) NSLog(@"parse number obj is null");
+        if (ZCKitBridge.isPrintLog) NSLog(@"parse number obj is null");
     } else {
         NSAssert(0, @"parse number obj is invalid");
     }
@@ -190,12 +190,12 @@
     } else if ([obj isKindOfClass:[NSString class]]) {
         decvalue = [NSDecimalNumber decimalString:(NSString *)obj];
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
-        if (ZCKitManager.isPrintLog) NSLog(@"parse decimal obj is null");
+        if (ZCKitBridge.isPrintLog) NSLog(@"parse decimal obj is null");
     } else {
         NSAssert(0, @"parse decimal obj is invalid");
     }
     if (decvalue == nil || [decvalue equal:[NSDecimalNumber notANumber]]) {
-        if (ZCKitManager.isPrintLog) NSLog(@"parse decimal obj is invalid number");
+        if (ZCKitBridge.isPrintLog) NSLog(@"parse decimal obj is invalid number");
         decvalue = [NSDecimalNumber decimalNumberWithString:@"0"];
     }
     return decvalue;
@@ -220,7 +220,7 @@
             NSAssert(0, @"parse price obj is invalid price");
         }
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
-        if (ZCKitManager.isPrintLog) NSLog(@"parse price obj is null");
+        if (ZCKitBridge.isPrintLog) NSLog(@"parse price obj is null");
     } else {
         NSAssert(0, @"parse price obj is invalid");
     }
@@ -254,7 +254,7 @@
             NSAssert(0, @"parse long obj is invalid integer");
         }
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
-        if (ZCKitManager.isPrintLog) NSLog(@"parse long obj is null");
+        if (ZCKitBridge.isPrintLog) NSLog(@"parse long obj is null");
     } else {
         NSAssert(0, @"parse long obj is invalid");
     }
@@ -283,7 +283,7 @@
             flovalue = (float)[number doubleValue];
         }
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
-        if (ZCKitManager.isPrintLog) NSLog(@"parse float obj is null");
+        if (ZCKitBridge.isPrintLog) NSLog(@"parse float obj is null");
     } else {
         NSAssert(0, @"parse float obj is invalid");
     }
@@ -313,7 +313,7 @@
             NSAssert(0, @"parse bool obj is invalid bool");
         }
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
-        if (ZCKitManager.isPrintLog) NSLog(@"parse bool obj is null");
+        if (ZCKitBridge.isPrintLog) NSLog(@"parse bool obj is null");
     } else {
         NSAssert(0, @"parse bool obj is invalid");
     }
@@ -403,7 +403,7 @@
         } else if ([(NSString *)value length] && ![(NSString *)value isEqualToString:@"<null>"]) {
             [self setObject:value forKey:key];
         } else {
-            if (ZCKitManager.isPrintLog) NSLog(@"inject string obj is invalid");
+            if (ZCKitBridge.isPrintLog) NSLog(@"inject string obj is invalid");
         }
     } else if ([value isMemberOfClass:[NSNumber class]]) {
         [self setObject:value forKey:key];
@@ -412,7 +412,7 @@
     } else if ([value isKindOfClass:[NSDictionary class]]) {
         [self setObject:value forKey:key];
     } else {
-        if (ZCKitManager.isPrintLog) NSLog(@"inject value obj is invalid");
+        if (ZCKitBridge.isPrintLog) NSLog(@"inject value obj is invalid");
     }
 }
 

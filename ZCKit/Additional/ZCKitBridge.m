@@ -1,23 +1,23 @@
 //
-//  ZCKitManager.m
+//  ZCKitBridge.m
 //  ZCKit
 //
 //  Created by admin on 2018/10/10.
 //  Copyright © 2018 Squat in house. All rights reserved.
 //
 
-#import "ZCKitManager.h"
+#import "ZCKitBridge.h"
 
-@interface ZCKitManager ()
+@interface ZCKitBridge ()
 
-@property (nonatomic, weak) id<ZCKitManagerDelegate> singleDelegate;
+@property (nonatomic, weak) id<ZCKitExternalRealize> singleRealize;
 
 @end
 
-@implementation ZCKitManager
+@implementation ZCKitBridge
 
 @dynamic naviBackImageName, sideArrowImageName, isPrintLog, invalidStr;
-@dynamic toastTextColor, toastBackGroundColor, delegate;
+@dynamic toastTextColor, toastBackGroundColor, realize;
 
 static UIColor *_toastTextColor = nil;
 static UIColor *_toastBackGroundColor = nil;
@@ -26,10 +26,10 @@ static NSString *_naviBackImageName = nil;
 static BOOL _isPrintLog = NO;
 
 + (instancetype)instance {
-    static ZCKitManager *instacne = nil;
+    static ZCKitBridge *instacne = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        instacne = [[ZCKitManager alloc] init];
+        instacne = [[ZCKitBridge alloc] init];
     });
     return instacne;
 }
@@ -99,18 +99,18 @@ static BOOL _isPrintLog = NO;
     return @"zc_invalid_value &.Ignore";
 }
 
-+ (id<ZCKitManagerDelegate>)delegate {
-    id <ZCKitManagerDelegate> singleDelegate = [ZCKitManager instance].singleDelegate;
-    if (!singleDelegate) {if (self.isPrintLog) NSLog(@"kit manager delegate is nil");}
-    return singleDelegate;
++ (id<ZCKitExternalRealize>)realize {
+    id <ZCKitExternalRealize> singleRealize = [ZCKitBridge instance].singleRealize;
+    if (!singleRealize) {if (self.isPrintLog) NSLog(@"kit manager delegate is nil");}
+    return singleRealize;
 }
 
-+ (void)setDelegate:(id<ZCKitManagerDelegate>)delegate {
-    if ([ZCKitManager instance].singleDelegate) {
++ (void)setRealize:(id<ZCKitExternalRealize>)realize {
+    if ([ZCKitBridge instance].singleRealize) {
         if (self.isPrintLog) NSLog(@"single delegate only registration once");
     }
-    if (delegate) {
-        [ZCKitManager instance].singleDelegate = delegate;
+    if (realize) {
+        [ZCKitBridge instance].singleRealize = realize;
     } else {
         if (self.isPrintLog) NSLog(@"kit manager delegate is nil");
     }

@@ -1,5 +1,5 @@
 //
-//  ZCKitManager.h
+//  ZCKitBridge.h
 //  ZCKit
 //
 //  Created by admin on 2018/10/10.
@@ -11,16 +11,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class ZCKitManager;
-
-@protocol ZCKitManagerDelegate <NSObject>
+@protocol ZCKitExternalRealize <NSObject>   /**< 上x层需要实现的方法 */
 
 - (void)imageViewWebCache:(nullable UIImageView *)imageView url:(nullable NSURL *)url holder:(nullable UIImage *)image;
 
 @end
 
 
-@interface ZCKitManager : NSObject
+@interface ZCKitBridge : NSObject   /**< 供上层直接操作的类 */
 
 #pragma mark - misc1
 @property (class, nonatomic, assign) BOOL isPrintLog;   /**< 是否需要打印日志，默认NO */
@@ -35,7 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic, copy, readonly) NSString *invalidStr;   /**< 定义的特定无效值，默认"zc_invalid_value &.Ignore" */
 
-@property (class, nullable, nonatomic, strong) id<ZCKitManagerDelegate> delegate;   /**< 上层实现协议供Kit调用，程序启动时需要上层注入 */
+@property (class, nullable, nonatomic, strong) id<ZCKitExternalRealize> realize;   /**< 上层外部实现，供Kit调用，程序启动时需要上层注入 */
 
 #pragma mark - misc2
 

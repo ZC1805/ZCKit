@@ -7,7 +7,7 @@
 //
 
 #import "UIView+ZCToast.h"
-#import "ZCKitManager.h"
+#import "ZCKitBridge.h"
 #import <objc/runtime.h>
 
 static const CGFloat ZCToastVerticalPadding = 8.0;
@@ -108,11 +108,11 @@ static const NSString *ZCToastTapCallbackKey = @"ZCToastTapCallbackKey";
     wrapperView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
                                    UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     wrapperView.layer.cornerRadius = 8.0;
-    wrapperView.layer.shadowColor = ZCKitManager.toastBackGroundColor.CGColor;
+    wrapperView.layer.shadowColor = ZCKitBridge.toastBackGroundColor.CGColor;
     wrapperView.layer.shadowOffset = CGSizeMake(1.5, 1.5);
     wrapperView.layer.shadowOpacity = 0.6;
     wrapperView.layer.shadowRadius = 5.0;
-    wrapperView.backgroundColor = [ZCKitManager.toastBackGroundColor colorWithAlphaComponent:0.8];
+    wrapperView.backgroundColor = [ZCKitBridge.toastBackGroundColor colorWithAlphaComponent:0.8];
     
     CGFloat left = ZCToastHorizontalPadding, top = ZCToastVerticalPadding;
     CGFloat width = self.bounds.size.width * 0.8 - 2.0 * left, height = self.bounds.size.height * 0.8 - 2.0 * top;
@@ -131,7 +131,7 @@ static const NSString *ZCToastTapCallbackKey = @"ZCToastTapCallbackKey";
         titleLabel.font = [UIFont boldSystemFontOfSize:16.0];
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        titleLabel.textColor = ZCKitManager.toastTextColor;
+        titleLabel.textColor = ZCKitBridge.toastTextColor;
         titleLabel.backgroundColor = [UIColor clearColor];
         titleLabel.text = title;
         CGSize maxSize = CGSizeMake(width, height);
@@ -147,7 +147,7 @@ static const NSString *ZCToastTapCallbackKey = @"ZCToastTapCallbackKey";
         messageLabel.font = [UIFont systemFontOfSize:15.0];
         messageLabel.textAlignment = NSTextAlignmentCenter;
         messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        messageLabel.textColor = ZCKitManager.toastTextColor;
+        messageLabel.textColor = ZCKitBridge.toastTextColor;
         messageLabel.backgroundColor = [UIColor clearColor];
         messageLabel.text = message;
         CGSize maxSize = CGSizeMake(width, height);

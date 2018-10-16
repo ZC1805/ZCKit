@@ -11,7 +11,7 @@
 
 @implementation NSData (ZC)
 
-#warning - xxxxx 本地缓存  引导页  方法交换  YYModel
+#warning - xxxxx 本地缓存  引导页  方法交换  YYModel  网络判断
 //NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask,YES);
 //NSString *docPath = [paths objectAtIndex:0];
 //

@@ -7,7 +7,7 @@
 //
 
 #import "ZCCycleControl.h"
-#import "ZCKitManager.h"
+#import "ZCKitBridge.h"
 #import "UIView+ZC.h"
 
 static CGSize const kDefaultDotSize = {6.0, 6.0};
@@ -729,7 +729,7 @@ static NSString *ident = @"cycleControlCell";
     NSString *imagePath = self.imagePathsGroup[itemIndex];
     if (!self.onlyDisplayText && [imagePath isKindOfClass:[NSString class]]) {
         if ([imagePath hasPrefix:@"http"]) {
-            [ZCKitManager.delegate imageViewWebCache:cell.imageView url:[NSURL URLWithString:imagePath] holder:self.placeholderImage];
+            [ZCKitBridge.realize imageViewWebCache:cell.imageView url:[NSURL URLWithString:imagePath] holder:self.placeholderImage];
         } else {
             UIImage *image = [UIImage imageNamed:imagePath];
             if (!image) [UIImage imageWithContentsOfFile:imagePath];
