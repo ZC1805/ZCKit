@@ -50,7 +50,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @property (nonatomic, assign) UIViewContentMode imageViewContentMode;   /**< 轮播图片Mode，默认ScaleToFill */
 
-@property (nonatomic, assign) UICollectionViewScrollDirection scrollDirection;   /** 图片滚动方向，默认为水平滚动 */
+@property (nonatomic, assign) UICollectionViewScrollDirection scrollDirection;   /**< 图片滚动方向，默认为水平滚动 */
 
 @property (nonatomic, assign) ZCEnumCyclePageStyle pageControlStyle;   /**< pagecontrol 样式，默认为动画样式 */
 

@@ -33,6 +33,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL isWeekend;         /**< 是否是周末 (based on current locale) */
 @property (nonatomic, readonly) BOOL isThisYear;        /**< 是否是今年 (based on current locale) */
 
+@property (nonatomic, strong, readonly) NSString *dateString;   /**< 日期年月日时分秒，2018-10-01 02:20:08 */
+@property (nonatomic, strong, readonly) NSString *dateChinese;  /**< 中国农历日期，date时间为标准时区时间，戊戌年九月初八 */
+
 
 #pragma mark - adding
 - (nullable NSDate *)dateByAddingYears:(NSInteger)years;
@@ -51,6 +54,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - format
+- (BOOL)isSameDayAsDate:(NSDate *)date;   /**< 是否是同年同月同日 */
+
+- (BOOL)isSameMonthAsDate:(NSDate *)date;   /**< 是否是同年同月 */
+
+- (BOOL)isSameYearAsDate:(NSDate *)date;   /**< 是否是同年 */
+
 - (NSString *)stringWithFormat:(nullable NSString *)format;   /**< 返回格式化时间 */
 
 - (NSString *)stringWithFormat:(nullable NSString *)format timeZone:(nullable NSTimeZone *)timeZone locale:(nullable NSLocale *)locale;

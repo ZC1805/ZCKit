@@ -75,13 +75,11 @@
 }
 
 - (BOOL)isToday {
-    if (fabs(self.timeIntervalSinceNow) >= 60 * 60 * 24) return NO;
-    return [NSDate new].day == self.day;
+    return [[NSCalendar currentCalendar] isDateInToday:self];
 }
 
 - (BOOL)isYesterday {
-    NSDate *added = [self dateByAddingDays:1];
-    return [added isToday];
+    return [[NSCalendar currentCalendar] isDateInYesterday:self];
 }
 
 - (BOOL)isTomorrow {
@@ -96,6 +94,14 @@
     NSDateComponents *selfCmps = [[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:self];
     NSDateComponents *nowCmps = [[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:[NSDate date]];
     return nowCmps.year == selfCmps.year;
+}
+
+- (NSString *)dateString {
+    return [[NSDate normalFormatter] stringFromDate:self];
+}
+
+- (NSString *)dateChinese {
+    return [ZCDateManager chineseDate:self];
 }
 
 #pragma mark - adding
@@ -145,6 +151,21 @@
 }
 
 #pragma mark - date format
+- (BOOL)isSameDayAsDate:(NSDate *)date {
+    if (!date) return NO;
+    return [[NSCalendar currentCalendar] isDate:self inSameDayAsDate:date];
+}
+
+- (BOOL)isSameMonthAsDate:(NSDate *)date {
+    if (!date) return NO;
+    return [[NSCalendar currentCalendar] isDate:self equalToDate:date toUnitGranularity:NSCalendarUnitMonth];
+}
+
+- (BOOL)isSameYearAsDate:(NSDate *)date {
+    if (!date) return NO;
+    return [[NSCalendar currentCalendar] isDate:self equalToDate:date toUnitGranularity:NSCalendarUnitYear];
+}
+
 - (NSString *)stringWithFormat:(NSString *)format {
     return [[ZCDateManager dateFormatter:format] stringFromDate:self];
 }
