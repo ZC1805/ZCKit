@@ -31,6 +31,8 @@
     back.adjustsImageWhenHighlighted = YES;
     CGSize size = [back.titleLabel sizeThatFits:CGSizeMake(100.0, height)];
     back.fitSize = [NSValue valueWithCGSize:CGSizeMake(MAX(size.width + 18.0, height), height)];
+    back.responseTouchInterval = 0.3;
+    back.delayResponseTime = 0.2;
     back.imageEdgeInsets = UIEdgeInsetsMake(0, -offset, 0, 0);
     back.titleEdgeInsets = UIEdgeInsetsMake(0, -offset, 0, 0);
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:back];
@@ -65,6 +67,8 @@
     rightBtn.adjustsImageWhenHighlighted = YES;
     CGSize size = [rightBtn.titleLabel sizeThatFits:CGSizeMake(100.0, height)];
     rightBtn.fitSize = [NSValue valueWithCGSize:CGSizeMake(MAX(size.width, 30.0), height)];
+    rightBtn.responseTouchInterval = 0.3;
+    rightBtn.delayResponseTime = 0.2;
     self.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     return rightBtn;
 }
@@ -78,6 +82,8 @@
     if (target && action) [rightBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     rightBtn.adjustsImageWhenHighlighted = YES;
     rightBtn.fitSize = [NSValue valueWithCGSize:CGSizeMake(width, height)];
+    rightBtn.responseTouchInterval = 0.3;
+    rightBtn.delayResponseTime = 0.2;
     CGFloat edgeLeft = width - (height - 2.0 * offset), edgeRight = 0;
     if (self.rightBarButtonItems.count) {edgeLeft = edgeLeft / 2.0; edgeRight = edgeLeft;}
     rightBtn.imageView.contentMode = UIViewContentModeScaleToFill;

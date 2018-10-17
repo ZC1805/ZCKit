@@ -37,12 +37,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** 应用 Build number "123" */
 @property (nullable, nonatomic, readonly) NSString *appBuildVersion;
 
-/** 当前是否是 App Extension */
-+ (BOOL)isAppExtension;
-
-/** 返回类似sharedApplication, 是App Extension返回nil */
-+ (nullable UIApplication *)sharedExtensionApplication;
-
 @end
 
 NS_ASSUME_NONNULL_END

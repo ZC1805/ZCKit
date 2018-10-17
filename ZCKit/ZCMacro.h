@@ -11,19 +11,21 @@
 
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import "UIDevice+ZC.h"
 #import "UIColor+ZC.h"
 #import "ZCGlobal.h"
 
-/** ----- normal ----- */
-#define ZCiOS8              ([[UIDevice currentDevice].systemVersion doubleValue] >= 8.0)  /**< 版本>=8.0 */
-#define ZCiOS9              ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0)  /**< 版本>=9.0 */
-#define ZCiOS10             @available(iOS 10.0, *)                                        /**< 版本>=10.0 */
+
+/** --- normal --- */
+#define ZCiOS8              (UIDevice.systemVersion >= 8.0)  /**< 版本>=8.0 */
+#define ZCiOS9              (UIDevice.systemVersion >= 9.0)  /**< 版本>=9.0 */
+#define ZCiOS10             (UIDevice.systemVersion >= 10.0) /**< 版本>=10.0 */
 #define ZCiPad              (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)         /**< 是否是iPad */
 #define ZCiPhone            (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)       /**< 是否是iPhone */
 #define ZClandscape         [ZCGlobal isLandscape]                                         /**< 当前是否是横屏 */
 
 
-/** ----- color ----- */
+/** --- color --- */
 #define ZCRGB(hex)          [UIColor colorFormHex:hex alpha:1.0]              /**< 十六进制颜色 */
 #define ZCRGBA(hex, a)      [UIColor colorFormHex:hex alpha:a]                /**< 十六进制颜色 & 透明度 */
 #define ZCRGBV(r, g, b, a)  [UIColor colorFormRad:r green:g blue:b alpha:a]   /**< 十进制颜色 & 透明度 */
@@ -39,25 +41,25 @@
 #define ZCBKColor           [UIColor colorFormHex:0xF6F6F8 alpha:1.0]   /**< 背景颜色 */
 
 
-/** ----- string ----- */
+/** --- string --- */
 #define ZCStrNonnil(str)    (str ? str : @"")              /**< 返回非nil字符串，用@""替换nil */
 #define ZCStrNonlen(str)    ([str length] ? str : @" ")    /**< 返回非空长度字符串, 用@" "替换nil、@"" */
 #define ZCStrIsValid(str)   [ZCGlobal isValidString:str]   /**< 返回布尔型，判断字符串是否有效 */
 
 
-/** ----- image ----- */
+/** --- image --- */
 #define ZCImage(name)       [UIImage imageNamed:(name)]    /**< 获取图片，缓存 */
 #define ZCFileImage(name)   [UIImage imageWithContentsOfFile:ZCBundleFilePath(nil, name, @"png")]   /**< 获取图片，不缓存 */
 
 
-/** ----- adapt 360 ----- */
+/** --- adapt 360 --- */
 #define ZCRadix             360.0                                     /**< 适配竖屏720px */
 #define ZCA(radix)          (radix * (MIN(ZSWid, ZSHei) / ZCRadix))   /**< 适配比例计算值 */
 #define ZCFont(size)        [UIFont systemFontOfSize:ZCA(size)]       /**< 适配了的系统字体 */
 #define ZCBoldFont(size)    [UIFont boldSystemFontOfSize:ZCA(size)]   /**< 适配了的粗体系统字体 */
 
 
-/** ----- adapt 320 ----- */
+/** --- adapt 320 --- */
 #define zs_radix            (ZClandscape ? 568.0 : 320.0)   /**< 总基准点数，按照iPhone5设定 */
 #define zs_unit             (ZSWid / zs_radix)              /**< 单位基准相当于的实例点数 */
 #define zs_is320            (ZFEqual(ZSWid, zs_radix))      /**< 是否基准屏 */
@@ -65,7 +67,7 @@
 #define zs_to_real(radix)   (radix * zs_unit)               /**< 将基准点转为实例点 */
 
 
-/** ----- layout cal ----- */
+/** --- layout cal --- */
 #define ZSWid               ([UIScreen mainScreen].bounds.size.width)   /**< 屏幕宽 */
 #define ZSHei               ([UIScreen mainScreen].bounds.size.height)  /**< 屏幕高 */
 #define ZSSepHei            (1.0 / [UIScreen mainScreen].scale)         /**< 最小显示点 */
@@ -79,7 +81,7 @@
 #define ZSAvailableHei      (ZSHei - ZSNaviHei - ZSBomResHei)           /**< 内容高度，默认为竖屏通常值 */
 
 
-/** ----- float ----- */
+/** --- float --- */
 #define ZFZero(a)           (fabs((a)) < FLT_EPSILON)                       /**< a = 0 */
 #define ZFEqual(a, b)       (fabs((a) - (b)) < FLT_EPSILON)                 /**< a = b */
 #define ZFAbove(a, b)       (fabs((a) - (b)) >= FLT_EPSILON && (a) > (b))   /**< a > b */
@@ -89,32 +91,32 @@
 #define ZFBelowEqual(a, b)  (ZFBelow((a), (b)) || ZFEqual((a), (b)))        /**< a <= b */
 
 
-/** ----- misc ----- */
+/** --- misc --- */
 #define ZCSyncTime          15.0     /**< 同步请求超时时间 */
 #define ZCAsyncTime         20.0     /**< 异步请求超时时间 */
 #define ZCPromptTime        2.0      /**< 提示警告时间 */
 #define ZCAnimateTime       0.3      /**< 动画持续时间 */
 
-/** Bundle文件路径 */
-#define ZCBundleFilePath(bundleName, fileName, extName) [ZCGlobal resourcePath:bundleNam name:fileName ext:extName]
+/** --- 文件路径 --- */
+#define ZCBundleFilePath(bundleName, fileName, extName) [ZCGlobal resourcePath:bundleName name:fileName ext:extName]
 
-/** 打印日志 */
+/** --- 打印日志 --- */
 #ifdef DEBUG
 #define NSLog(format, ...) fprintf(stderr, "%s\n", [[NSString stringWithFormat:format, ##__VA_ARGS__] UTF8String]);
 #else
 #define NSLog(...)
 #endif
 
-/** 断言，else时不要逗号 */
+/** --- 断言打印 --- */
 #ifdef DEBUG
-#define DEFAbnormal(lev, desc)  {if (lev == 0) {NSAssert(0, desc);} \
+#define ZCAbnormal(lev, desc)  {if (lev == 0) {NSAssert(0, desc);} \
 else if (lev == 1) {NSLog(@"abnormal error -> %@", desc);} \
-else {NSLog(@"abnormal warning -> %@", desc);}}   /** 0->assert 1->error 2->warning */
+else {NSLog(@"abnormal warning -> %@", desc);}}   /**< 0->assert 1->error 2->warning */
 #else
-#define DEFAbnormal(lev, desc)
+#define ZCAbnormal(lev, desc)
 #endif
 
-/** 屏蔽leaks警告 */
+/** --- leaks警告 --- */
 #define zc_suppress_leak_warning(func) \
 do { \
 _Pragma("clang diagnostic push") \
@@ -123,13 +125,6 @@ func; \
 _Pragma("clang diagnostic pop") \
 } while (0)
 
-/** 回到主线程执行 */
-#define zc_dispatch_main(block) \
-if ([NSThread isMainThread]) { \
-block(); \
-} else { \
-dispatch_async(dispatch_get_main_queue(), block); \
-}
 
 #endif /* ZCMacro_h */
 

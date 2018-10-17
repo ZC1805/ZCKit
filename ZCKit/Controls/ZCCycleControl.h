@@ -79,7 +79,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @property (nullable, nonatomic, strong) NSArray *imageURLStringsGroup;   /**< 网络图片 url string 数组，默认nil */
 
-@property (nullable, nonatomic, strong) NSArray *localizationImageNamesGroup;   /**< 本地图片数组 (本地图片请填写全名)，默认nil */
+@property (nullable, nonatomic, strong) NSArray *localizationImageGroup;   /**< 本地图片数组或本地图片名数组，默认nil */
 
 @property (nullable, nonatomic, weak) id<ZCCycleControlDelegate> delegate;   /**< 回调代理，默认nil */
 
@@ -89,6 +89,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @property (nullable, nonatomic, copy) void (^scrollCallback)(NSInteger currentIndex);   /**< block方式监听滚动回调，默认nil */
 
+#warning - 点击小圆点的问题 滑到第一页右滑不了
 #pragma mark - 构建
 /** URL初始化 */
 + (instancetype)cycleControlFrame:(CGRect)frame imageURLStringsGroup:(nullable NSArray *)imageURLStringsGroup;
@@ -97,7 +98,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 + (instancetype)cycleControlFrame:(CGRect)frame delegate:(nullable id<ZCCycleControlDelegate>)delegate holderImage:(nullable UIImage *)holderImage;
 
 /** 本地图片初始化 */
-+ (instancetype)cycleControlFrame:(CGRect)frame shouldInfiniteLoop:(BOOL)infiniteLoop imageNamesGroup:(nullable NSArray *)imageNamesGroup;
++ (instancetype)cycleControlFrame:(CGRect)frame shouldInfiniteLoop:(BOOL)infiniteLoop imageGroup:(NSArray *)imageGroup;
 
 /** 解决viewWillAppear时出现时轮播图卡在一半的问题，在控制器viewWillAppear时调用此方法 */
 - (void)adjustWhenControllerViewWillAppera;

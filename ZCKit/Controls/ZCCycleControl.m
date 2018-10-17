@@ -114,7 +114,7 @@ static NSString *ident = @"cycleControlCell";
     self.spacingBetweenDots = 7.0;
     self.numberOfPages = 0;
     self.currentPage = 0;
-    self.backgroundColor = [UIColor redColor];
+    self.backgroundColor = [UIColor clearColor];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -359,10 +359,10 @@ static NSString *ident = @"cycleControlCell";
     return cycleView;
 }
 
-+ (instancetype)cycleControlFrame:(CGRect)frame shouldInfiniteLoop:(BOOL)infiniteLoop imageNamesGroup:(NSArray *)imageNamesGroup {
++ (instancetype)cycleControlFrame:(CGRect)frame shouldInfiniteLoop:(BOOL)infiniteLoop imageGroup:(NSArray *)imageGroup {
     ZCCycleControl *cycleView = [[self alloc] initWithFrame:frame];
     cycleView.infiniteLoop = infiniteLoop;
-    cycleView.localizationImageNamesGroup = [NSMutableArray arrayWithArray:imageNamesGroup];
+    cycleView.localizationImageGroup = [NSMutableArray arrayWithArray:imageGroup];
     return cycleView;
 }
 
@@ -392,6 +392,7 @@ static NSString *ident = @"cycleControlCell";
 }
 
 - (void)setupMainView {
+    self.backgroundColor = [UIColor whiteColor];
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     flowLayout.minimumLineSpacing = 0;
     flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
@@ -552,9 +553,9 @@ static NSString *ident = @"cycleControlCell";
     self.imagePathsGroup = [temp copy];
 }
 
-- (void)setLocalizationImageNamesGroup:(NSArray *)localizationImageNamesGroup {
-    _localizationImageNamesGroup = localizationImageNamesGroup;
-    self.imagePathsGroup = [localizationImageNamesGroup copy];
+- (void)setLocalizationImageGroup:(NSArray *)localizationImageGroup {
+    _localizationImageGroup = localizationImageGroup;
+    self.imagePathsGroup = [localizationImageGroup copy];
 }
 
 - (void)setTitlesGroup:(NSArray *)titlesGroup {
@@ -564,7 +565,6 @@ static NSString *ident = @"cycleControlCell";
         for (int i = 0; i < _titlesGroup.count; i++) {
             [temp addObject:@""];
         }
-        self.backgroundColor = [UIColor clearColor];
         self.imageURLStringsGroup = [temp copy];
     }
 }

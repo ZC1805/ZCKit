@@ -11,9 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ZCEnumRoundType) {
-    ZCEnumRoundTypeRound,  /** 四舍五入 */
-    ZCEnumRoundTypeDown,   /** 只舍不入 */
-    ZCEnumRoundTypeUp,     /** 只入不舍 */
+    ZCEnumRoundTypeRound,  /**< 四舍五入 */
+    ZCEnumRoundTypeDown,   /**< 只舍不入 */
+    ZCEnumRoundTypeUp,     /**< 只入不舍 */
 };
 
 @interface ZCDecimalManager : NSObject <NSDecimalNumberBehaviors>

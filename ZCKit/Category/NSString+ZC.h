@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSUInteger)bytesCount;   /**< 字节长度 */
 
-- (NSString *)preciseString;   /**< 精确浮点数 */
+- (NSString *)preciseString;   /**< 精确浮点数 & 去除无效数字 */
 
 - (NSString *)formatterPrice;   /**< 保留两位有效数字 */
 

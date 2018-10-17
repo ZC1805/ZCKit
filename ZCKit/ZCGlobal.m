@@ -12,6 +12,10 @@
 
 @property (nonatomic, assign) BOOL isFullScreen;  //全面屏
 
+@property (nonatomic, strong) NSString *imageSuffix;  //exp@3x
+
+@property (nonatomic, strong) NSString *imageSuffixSmaller;  //exp@2x
+
 @end
 
 @implementation ZCGlobal
@@ -25,6 +29,20 @@
         global.isFullScreen = (scale > 2.0 || scale < 0.5);
     });
     return global;
+}
+
+- (NSString *)imageSuffix {
+    if (!_imageSuffix) {
+        _imageSuffix = [NSString stringWithFormat:@"@%dx", (int)[UIScreen mainScreen].scale];
+    }
+    return _imageSuffix;
+}
+
+- (NSString *)imageSuffixSmaller {
+    if (!_imageSuffixSmaller) {
+        _imageSuffixSmaller = [NSString stringWithFormat:@"@%dx", (int)([UIScreen mainScreen].scale - 1)];
+    }
+    return _imageSuffixSmaller;
 }
 
 #pragma mark - misc
@@ -63,11 +81,16 @@
 }
 
 + (NSString *)resourcePath:(NSString *)bundleName name:(NSString *)name ext:(NSString *)ext {
+    if (!name) return nil;
     NSBundle *bundle = [NSBundle bundleForClass:self];
     if (bundleName && bundleName.length) {
         bundle = [NSBundle bundleWithURL:[bundle URLForResource:bundleName withExtension:@"bundle"]];
     }
-    return [bundle pathForResource:name ofType:ext];
+    if (!bundle) return nil;
+    NSString *path = [bundle pathForResource:name ofType:ext];
+    if (!path) path = [bundle pathForResource:[name stringByAppendingString:[ZCGlobal global].imageSuffix] ofType:ext];
+    if (!path) path = [bundle pathForResource:[name stringByAppendingString:[ZCGlobal global].imageSuffixSmaller] ofType:ext];
+    return path;
 }
 
 #pragma mark - controller
