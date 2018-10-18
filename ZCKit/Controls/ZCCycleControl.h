@@ -89,7 +89,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @property (nullable, nonatomic, copy) void (^scrollCallback)(NSInteger currentIndex);   /**< block方式监听滚动回调，默认nil */
 
-#warning - 点击小圆点的问题 滑到第一页右滑不了
+
 #pragma mark - 构建
 /** URL初始化 */
 + (instancetype)cycleControlFrame:(CGRect)frame imageURLStringsGroup:(nullable NSArray *)imageURLStringsGroup;

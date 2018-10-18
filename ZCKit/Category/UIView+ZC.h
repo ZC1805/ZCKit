@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable UIImage *)snapshotImageAfterScreenUpdates:(BOOL)afterUpdates;   /**< 快照 */
 
-- (void)setShadow:(nullable UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius;   /**< 阴影 */
+- (void)setShadow:(UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius;   /**< 阴影 */
 
 - (void)setCorner:(NSInteger)radius color:(UIColor *)color width:(CGFloat)width;   /**< 圆角 & 描边 */
 

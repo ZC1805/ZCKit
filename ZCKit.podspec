@@ -21,6 +21,9 @@ Pod::Spec.new do |s|
   s.resources    = "ZCKit/Resources/*.png"
   s.frameworks   = "Foundation", "UIKit"
 
+  s.subspec 'Inherit' do |ss|
+    ss.source_files = "ZCKit/Inherit/*.{h,m}"
+  end
   s.subspec 'Extend' do |ss|
     ss.source_files = "ZCKit/Extend/*.{h,m}"
   end

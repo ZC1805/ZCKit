@@ -48,7 +48,7 @@
     CFRelease(line);
     
     [path applyTransform:CGAffineTransformMakeScale(1.0, -1.0)];
-    [path applyTransform:CGAffineTransformMakeTranslation(0.0, boundingBox.size.height)];
+    [path applyTransform:CGAffineTransformMakeTranslation(0, boundingBox.size.height)];
     
     return path;
 }

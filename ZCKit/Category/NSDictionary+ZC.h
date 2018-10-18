@@ -18,9 +18,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray *)allValuesSortedByKeys;   /**< 返回按键排序好的所有值 */
 
-- (NSDictionary *)dictionaryForKeys:(nullable NSArray *)keys;   /**< 返回所有目标键组合的子字典 */
+- (NSDictionary *)dictionaryForKeys:(NSArray *)keys;   /**< 返回所有目标键组合的子字典 */
 
-- (NSDictionary *)restExceptForKeys:(nullable NSArray *)keys;   /**< 返回余下的键值对的字典 */
+- (NSDictionary *)restExceptForKeys:(NSArray *)keys;   /**< 返回余下的键值对的字典 */
 
 - (BOOL)containsObjectForKey:(id)key;
 
@@ -56,9 +56,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)plistString;
 
-+ (nullable NSDictionary *)dictionaryWithPlistData:(nullable NSData *)plist;
++ (nullable NSDictionary *)dictionaryWithPlistData:(NSData *)plist;
 
-+ (nullable NSDictionary *)dictionaryWithPlistString:(nullable NSString *)plist;
++ (nullable NSDictionary *)dictionaryWithPlistString:(NSString *)plist;
 
 @end
 

@@ -27,9 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic, copy) NSString *sideArrowImageName;   /**< 侧边箭头图片名字，默认"zc_image_side_accessory" */
 
-@property (class, nonatomic, strong) UIColor *toastBackGroundColor;   /**< 侧边箭头图片名字，默认@"0x000000 black" */
+@property (class, nonatomic, strong) UIColor *toastBackGroundColor;   /**< toast背景颜色，默认@"0x000000 black" */
 
-@property (class, nonatomic, strong) UIColor *toastTextColor;   /**< 侧边箭头图片名字，默认@"0xffffff white" */
+@property (class, nonatomic, strong) UIColor *toastTextColor;   /**< toast文字颜色，默认@"0xffffff white" */
 
 @property (class, nonatomic, copy, readonly) NSString *invalidStr;   /**< 定义的特定无效值，默认"zc_invalid_value &.Ignore" */
 

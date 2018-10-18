@@ -110,21 +110,25 @@
 #pragma mark - calculate
 /** 加 */
 - (NSDecimalNumber *)plus:(NSDecimalNumber *)decimalNumber {
+    if (!decimalNumber) decimalNumber = [NSDecimalNumber zero];
     return [self decimalNumberByAdding:decimalNumber withBehavior:[ZCDecimalManager instance]];
 }
 
 /** 减 */
 - (NSDecimalNumber *)minus:(NSDecimalNumber *)decimalNumber {
+    if (!decimalNumber) decimalNumber = [NSDecimalNumber zero];
     return [self decimalNumberBySubtracting:decimalNumber withBehavior:[ZCDecimalManager instance]];
 }
 
 /** 乘 */
 - (NSDecimalNumber *)mltiply:(NSDecimalNumber *)decimalNumber {
+    if (!decimalNumber) decimalNumber = [NSDecimalNumber one];
     return [self decimalNumberByMultiplyingBy:decimalNumber withBehavior:[ZCDecimalManager instance]];
 }
 
 /** 除 */
 - (NSDecimalNumber *)divide:(NSDecimalNumber *)decimalNumber {
+    if (!decimalNumber) decimalNumber = [NSDecimalNumber one];
     return [self decimalNumberByDividingBy:decimalNumber withBehavior:[ZCDecimalManager instance]];
 }
 
@@ -141,6 +145,7 @@
 #pragma mark - compare
 /** 小于 */
 - (BOOL)less:(NSDecimalNumber *)decimalNumber {
+    if (!decimalNumber) return NO;
     NSComparisonResult result = [self compare:decimalNumber];
     if (result == NSOrderedAscending) return YES;
     return NO;
@@ -148,6 +153,7 @@
 
 /** 大于 */
 - (BOOL)more:(NSDecimalNumber *)decimalNumber {
+    if (!decimalNumber) return NO;
     NSComparisonResult result = [self compare:decimalNumber];
     if (result == NSOrderedDescending) return YES;
     return NO;
@@ -155,6 +161,7 @@
 
 /** 等于 */
 - (BOOL)equal:(NSDecimalNumber *)decimalNumber {
+    if (!decimalNumber) return NO;
     NSComparisonResult result = [self compare:decimalNumber];
     if (result == NSOrderedSame) return YES;
     return NO;

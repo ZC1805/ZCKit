@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable NSData *)snapshotPDF;
 
 /** 给图层添加阴影 */
-- (void)setLayerShadow:(nullable UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius;
+- (void)setLayerShadow:(UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius;
 
 /** 移除所有子图层 */
 - (void)removeAllSublayers;

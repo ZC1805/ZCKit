@@ -24,9 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable id)jsonObject;
 
-- (CGFloat)widthForFont:(nullable UIFont *)font;
+- (CGFloat)widthForFont:(UIFont *)font;   /**< 计算宽度，NSLineBreakByWordWrapping */
 
-- (CGFloat)heightForFont:(nullable UIFont *)font width:(CGFloat)width;
+- (CGFloat)heightForFont:(UIFont *)font width:(CGFloat)width;   /**< 计算高度，NSLineBreakByWordWrapping */
 
 - (NSUInteger)charCount;   /**< 字符长度 */
 
@@ -87,9 +87,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isContainAdmitSpecialCharacter;   /**< 是否包含承认的特殊字符 */
 
-- (BOOL)isContainsCharacterSet:(nullable NSCharacterSet *)set;   /**< 是否包含字符集 */
+- (BOOL)isContainsCharacterSet:(NSCharacterSet *)set;   /**< 是否包含字符集 */
 
-- (BOOL)isEqualIgnoreCase:(nullable NSString *)str;   /**< 不区分大小写比对字符串相等 */
+- (BOOL)isEqualIgnoreCase:(NSString *)str;   /**< 不区分大小写比对字符串相等 */
 
 
 #pragma mark - class

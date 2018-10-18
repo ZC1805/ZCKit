@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 /** 初始化 */
-- (instancetype)initWithFrame:(CGRect)frame holder:(nullable NSString *)holder font:(nullable UIFont *)font color:(nullable UIColor *)color;
+- (instancetype)initWithFrame:(CGRect)frame holder:(nullable NSString *)holder font:(UIFont *)font color:(UIColor *)color;
 
 /** 选定所有文本 */
 - (void)selectAllText;

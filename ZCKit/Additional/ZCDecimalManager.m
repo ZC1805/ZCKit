@@ -165,6 +165,7 @@
 
 /** 转化成->NSDecimalNumber，会四舍五入处理 */
 + (NSDecimalNumber *)decimalNumber:(NSNumber *)number decimalPoint:(int)point roundMode:(ZCEnumRoundType)mode {
+    if (!number) return [NSDecimalNumber notANumber];
     NSDecimalNumberHandler *hander = [self decimalHander:point type:mode];
     NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithDecimal:[number decimalValue]];
     return [decimal decimalNumberByRoundingAccordingToBehavior:hander];
@@ -217,7 +218,7 @@
 
 /** 去除无效数字，只对浮点数有用 */
 + (NSString *)stringDisposeWithFloatString:(NSString *)floatString {
-    if (!floatString) return nil;
+    if (!floatString) return floatString;
     if ([floatString rangeOfString:@"."].location == NSNotFound) {
         return floatString;
     }
@@ -281,6 +282,7 @@
 
 #pragma mark - class switch judge
 + (NSString *)preciseString:(NSString *)strvalue {
+    if (!strvalue) return strvalue;
     double douvalue = [strvalue doubleValue];
     NSString *doubleString = [NSString stringWithFormat:@"%lf", douvalue];
     NSDecimalNumber *decNumber = [NSDecimalNumber decimalNumberWithString:doubleString];

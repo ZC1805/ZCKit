@@ -12,17 +12,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UITableView (ZC)
 
-/** 清除所有选择的行 */
-- (void)clearSelectedRowsAnimated:(BOOL)animated;
+- (void)clearSelectedRowsAnimated:(BOOL)animated;   /** 清除所有选择的行 */
 
-/** 执行beginUpdates&endUpdates，block执行插入、删除、选择，不可在此里面执行reloadData */
-- (void)updateWithBlock:(void (^)(UITableView *tableView))block;
+- (void)updateWithBlock:(void(^)(UITableView *tableView))block;   /** 执行beginUpdates&endUpdates，block执行插入、删除、选择，block不可执行reloadData */
 
-- (void)insertRowInIndexPath:(nullable NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)animation;
+- (void)insertRowInIndexPath:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)animation;
 
-- (void)reloadRowInIndexPath:(nullable NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)animation;
+- (void)reloadRowInIndexPath:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)animation;
 
-- (void)deleteRowInIndexPath:(nullable NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)animation;
+- (void)deleteRowInIndexPath:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)animation;
 
 - (void)insertSectionInIndex:(NSUInteger)section withRowAnimation:(UITableViewRowAnimation)animation;
 

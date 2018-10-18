@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSNumber (ZC)
 
-+ (nullable NSNumber *)numberWithString:(nullable NSString *)string;
++ (nullable NSNumber *)numberWithString:(NSString *)string;
 
 @end
 
@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSDecimalNumber *)decimalDouble:(double)douValue;
 
-+ (NSDecimalNumber *)decimalNumber:(nullable NSNumber *)number;
++ (NSDecimalNumber *)decimalNumber:(nullable NSNumber *)number;  
 
 - (NSDecimalNumber *)decimalRound:(short)decimal mode:(ZCEnumRoundType)mode;
 

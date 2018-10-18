@@ -24,18 +24,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSString *libraryPath;   /**< "Library" 沙盒路径 */
 
+@property (nonatomic, readonly) NSString *appBundleName;   /**< 应用 Bundle Name (show in SpringBoard) */
 
-/** 应用 Bundle Name (show in SpringBoard) */
-@property (nullable, nonatomic, readonly) NSString *appBundleName;
+@property (nonatomic, readonly) NSString *appBundleID;   /**< 应用 Bundle ID "com.ibireme.MyApp" */
 
-/** 应用 Bundle ID "com.ibireme.MyApp" */
-@property (nullable, nonatomic, readonly) NSString *appBundleID;
+@property (nonatomic, readonly) NSString *appVersion;   /**< 应用 Version "1.2.0" */
 
-/** 应用 Version "1.2.0" */
-@property (nullable, nonatomic, readonly) NSString *appVersion;
-
-/** 应用 Build number "123" */
-@property (nullable, nonatomic, readonly) NSString *appBuildVersion;
+@property (nonatomic, readonly) NSString *appBuildVersion;   /**< 应用 Build number "123" */
 
 @end
 

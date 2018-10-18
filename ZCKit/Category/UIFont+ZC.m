@@ -72,7 +72,7 @@
                            UIFontDescriptorSizeAttribute   : @(size),
                            UIFontDescriptorTraitsAttribute : traits};
     UIFontDescriptor *descriptor = [UIFontDescriptor fontDescriptorWithFontAttributes:attr];
-    return [UIFont fontWithDescriptor:descriptor size:0.0];
+    return [UIFont fontWithDescriptor:descriptor size:0];
 }
 
 @end

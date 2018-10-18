@@ -113,6 +113,7 @@
 }
 
 - (void)setShadow:(UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius {
+    if (!color) return;
     self.layer.shadowColor = color.CGColor;
     self.layer.shadowOffset = offset;
     self.layer.shadowRadius = radius;

@@ -31,18 +31,18 @@ typedef NS_ENUM(NSInteger, ZCEnumRoundType) {
 /** 四舍五入转换成string显示，且舍去末尾0，小于6位精度 */
 + (NSString *)roundString:(nullable NSString *)string orDouble:(double)dou decimalPoint:(int)point;
 
-/** 四舍五入转换成标准价格显示，四舍五入，0.00 两位精度 */
+/** 四舍五入转换成标准价格显示，四舍五入，0.00，两位精度 */
 + (nullable NSString *)priceFormat:(nullable NSNumber *)number orString:(nullable NSString *)string orDouble:(double)dou;
 
 /** 保留指定位数有效小数，后面舍去 */
-+ (nullable NSString *)formatFloorNumber:(nullable NSNumber *)number digits:(int)digits;
++ (nullable NSString *)formatFloorNumber:(NSNumber *)number digits:(int)digits;
 
 #pragma mark - number function
 /** 唯一实例 */
 + (instancetype)instance;
 
 /** 去除无效数字，只对浮点数有用 */
-+ (nullable NSString *)stringDisposeWithFloatString:(nullable NSString *)floatString;
++ (NSString *)stringDisposeWithFloatString:(NSString *)floatString;
 
 /** 计算浮点数的有效小数位数，最大六位小数 */
 + (int)calculateDecimalDigitFromFloat:(double)dou;

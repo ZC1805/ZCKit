@@ -60,9 +60,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isSameYearAsDate:(NSDate *)date;   /**< 是否是同年 */
 
-- (NSString *)stringWithFormat:(nullable NSString *)format;   /**< 返回格式化时间 */
+- (NSString *)stringWithFormat:(NSString *)format;   /**< 返回格式化时间 */
 
-- (NSString *)stringWithFormat:(nullable NSString *)format timeZone:(nullable NSTimeZone *)timeZone locale:(nullable NSLocale *)locale;
+- (NSString *)stringWithFormat:(NSString *)format timeZone:(nullable NSTimeZone *)timeZone locale:(nullable NSLocale *)locale;
 
 + (NSDateFormatter *)preciseFormatter;   /**< yyyy-MM-dd HH:mm:ss.SSS，dateFormatter外部不可对其属性赋值 */
 
@@ -72,12 +72,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSDateFormatter *)timeFormatter;   /**< HH:mm:ss，dateFormatter外部不可对其属性赋值 */
 
-+ (NSString *)dateStringWithTime:(long)timeInterval format:(nullable NSString *)format;   /**< timeInterval为13位时可算上了三位毫秒数 */
++ (NSString *)dateStringWithTime:(long)timeInterval format:(NSString *)format;   /**< timeInterval为13位时可算上了三位毫秒数 */
 
-+ (nullable NSDate *)dateWithString:(nullable NSString *)dateString format:(nullable NSString *)format;
++ (nullable NSDate *)dateWithString:(NSString *)dateString format:(NSString *)format;
 
-+ (nullable NSDate *)dateWithString:(nullable NSString *)dateString format:(nullable NSString *)format
-                           timeZone:(nullable NSTimeZone *)timeZone locale:(nullable NSLocale *)locale;
++ (nullable NSDate *)dateWithString:(NSString *)dateString format:(NSString *)format timeZone:(nullable NSTimeZone *)timeZone locale:(nullable NSLocale *)locale;
 
 @end
 

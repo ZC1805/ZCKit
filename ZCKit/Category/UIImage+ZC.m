@@ -78,8 +78,8 @@
 
 + (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size {
     if (!color) color = [UIColor whiteColor];
-    if (size.width <= 0 || size.height <= 0) return nil;
-    CGRect rect = CGRectMake(0.0, 0.0, size.width, size.height);
+    if (size.width <= 0 || size.height <= 0) size = CGSizeMake(MAX(1.0, size.width), MAX(1.0, size.height));
+    CGRect rect = CGRectMake(0, 0, size.width, size.height);
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, color.CGColor);
@@ -100,7 +100,7 @@
     CGContextDrawImage(ctx, area, self.CGImage);
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return newImage;
+    return (newImage ? newImage : self);
 }
 
 - (UIImage *)imageToColor:(UIColor *)color alpha:(float)alpha {
@@ -111,7 +111,7 @@
     [self drawInRect:drawRect blendMode:kCGBlendModeDestinationIn alpha:alpha];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return newImage;
+    return (newImage ? newImage : self);
 }
 
 - (UIImage *)imageToGray {
@@ -127,7 +127,7 @@
     UIImage *grayImage = [UIImage imageWithCGImage:imageRef];
     CGContextRelease(context);
     CGImageRelease(imageRef);
-    return grayImage;
+    return (grayImage ? grayImage : self);
 }
 
 - (UIImage *)imageToResizedImage:(CGPoint)cross {
@@ -142,8 +142,8 @@
 - (UIImage *)imageWithTitle:(NSString *)title fontSize:(CGFloat)fontSize point:(CGPoint)point {
     if (!title || !title.length) return self;
     CGSize size = CGSizeMake(self.size.width, self.size.height);
-    UIGraphicsBeginImageContextWithOptions(size, NO, 0.0);
-    [self drawAtPoint:CGPointMake(0.0, 0.0)];
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+    [self drawAtPoint:CGPointMake(0, 0)];
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
     paragraphStyle.alignment = NSTextAlignmentCenter;  //文字居中
@@ -224,7 +224,7 @@
 //        CGAffineTransform transform = CGAffineTransformIdentity;
 //        transform = CGAffineTransformScale(transform, rate, rate);
 //        CGContextConcatCTM(context, transform);
-//        [inputImage drawAtPoint:CGPointMake(0.0f, 0.0f)];
+//        [inputImage drawAtPoint:CGPointMake(0, 0.)];
 //        UIImage *newimg = UIGraphicsGetImageFromCurrentImageContext();
 //        UIGraphicsEndImageContext();
 //        data = UIImageJPEGRepresentation(newimg, 1);
@@ -336,7 +336,7 @@
         animatedImage = [[UIImage alloc] initWithData:data];
     } else {
         NSMutableArray *images = [NSMutableArray array];
-        NSTimeInterval duration = 0.0;
+        NSTimeInterval duration = 0;
         for (size_t i = 0; i < count; i++) {
             CGImageRef image = CGImageSourceCreateImageAtIndex(source, i, NULL);
             if (!image) continue;
@@ -375,7 +375,7 @@
     [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return image;
+    return (image ? image : self);
 }
 
 - (UIImage *)imageByResizeToSize:(CGSize)size contentMode:(UIViewContentMode)contentMode {
@@ -384,7 +384,7 @@
     [self imageDrawInRect:CGRectMake(0, 0, size.width, size.height) withContentMode:contentMode clipsToBounds:NO];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return image;
+    return (image ? image : self);
 }
 
 - (UIImage *)imageByCropToRect:(CGRect)rect {
@@ -426,9 +426,7 @@
     return [self imageByRoundCornerRadius:radius borderWidth:0 borderColor:nil];
 }
 
-- (UIImage *)imageByRoundCornerRadius:(CGFloat)radius
-                          borderWidth:(CGFloat)borderWidth
-                          borderColor:(UIColor *)borderColor {
+- (UIImage *)imageByRoundCornerRadius:(CGFloat)radius borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor {
     return [self imageByRoundCornerRadius:radius
                                   corners:UIRectCornerAllCorners
                               borderWidth:borderWidth
@@ -487,16 +485,12 @@
 - (UIImage *)imageByRotate:(CGFloat)radians fitSize:(BOOL)fitSize {
     size_t width = (size_t)CGImageGetWidth(self.CGImage);
     size_t height = (size_t)CGImageGetHeight(self.CGImage);
-    CGRect newRect = CGRectApplyAffineTransform(CGRectMake(0., 0., width, height),
+    CGRect newRect = CGRectApplyAffineTransform(CGRectMake(0, 0, width, height),
                                                 fitSize ? CGAffineTransformMakeRotation(radians) : CGAffineTransformIdentity);
     
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(NULL,
-                                                 (size_t)newRect.size.width,
-                                                 (size_t)newRect.size.height,
-                                                 8,
-                                                 (size_t)newRect.size.width * 4,
-                                                 colorSpace,
+    CGContextRef context = CGBitmapContextCreate(NULL, (size_t)newRect.size.width, (size_t)newRect.size.height,
+                                                 8, (size_t)newRect.size.width * 4, colorSpace,
                                                  kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedFirst);
     CGColorSpaceRelease(colorSpace);
     if (!context) return nil;

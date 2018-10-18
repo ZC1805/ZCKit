@@ -68,8 +68,8 @@
 
 - (CGFloat)update:(CGFloat)t {
     t *= 2;
-    if (t < 1) return (0.5f * powf (t, kUILabelCounterRate));
-    else return (0.5f * (2.0f - powf(2.0 - t, kUILabelCounterRate)));
+    if (t < 1.0) return (0.5 * powf (t, kUILabelCounterRate));
+    else return (0.5 * (2.0 - powf(2.0 - t, kUILabelCounterRate)));
 }
 
 @end
@@ -99,7 +99,7 @@
 @implementation ZCCountingLabel
 
 - (void)countFrom:(CGFloat)value to:(CGFloat)endValue {
-    if (self.animationDuration == 0.0f) self.animationDuration = 2.0f;
+    if (self.animationDuration == 0) self.animationDuration = 2.0;
     [self countFrom:value to:endValue withDuration:self.animationDuration];
 }
 
@@ -109,13 +109,13 @@
     [self.timer invalidate];  // remove any (possible) old timers
     self.timer = nil;
     
-    if (duration == 0.0) {  // No animation
+    if (duration == 0) {  // No animation
         [self setTextValue:endValue];
         [self runCompletionBlock];
         return;
     }
     
-    self.easingRate = 3.0f;
+    self.easingRate = 3.0;
     self.progress = 0;
     self.totalTime = duration;
     self.lastUpdate = [NSDate timeIntervalSinceReferenceDate];
@@ -152,11 +152,11 @@
 }
 
 - (void)countFromZeroTo:(CGFloat)endValue {
-    [self countFrom:0.0f to:endValue];
+    [self countFrom:0 to:endValue];
 }
 
 - (void)countFromZeroTo:(CGFloat)endValue withDuration:(NSTimeInterval)duration {
-    [self countFrom:0.0f to:endValue withDuration:duration];
+    [self countFrom:0 to:endValue withDuration:duration];
 }
 
 - (void)updateValue:(NSTimer *)timer {

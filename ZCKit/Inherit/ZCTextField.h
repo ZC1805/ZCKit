@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) NSUInteger limitLength;   /**< 最大长度，大于0的值 */
 
-@property (nonatomic, copy) BOOL(^limitTip)(NSString *originText);   /**< 越界提示回调，返回是否可需要处理越界 */
+@property (nullable, nonatomic, copy) BOOL(^limitTip)(NSString *originText);   /**< 越界提示回调，返回是否可需要处理越界 */
 
 @end
 

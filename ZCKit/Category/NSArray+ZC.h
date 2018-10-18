@@ -16,9 +16,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable id)objectOrNilAtIndex:(NSUInteger)index;
 
-- (NSArray *)restExceptObjects:(nullable NSArray *)objects;   /**< 返回余下的对象数组 */
+- (NSArray *)restExceptObjects:(NSArray *)objects;   /**< 返回余下的对象数组 */
 
-- (nullable id)objectForPropertyName:(nullable NSString *)propertyName propertyValue:(id)propertyValue;   /**< 返回能匹配到成员的键值 */
+- (nullable id)objectForPropertyName:(NSString *)propertyName propertyValue:(id)propertyValue;   /**< 返回能匹配到成员的键值 */
 
 - (nullable NSString *)jsonString;
 
@@ -27,9 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSString *)plistString;
 
-+ (nullable NSArray *)arrayWithPlistData:(nullable NSData *)plist;
++ (nullable NSArray *)arrayWithPlistData:(NSData *)plist;
 
-+ (nullable NSArray *)arrayWithPlistString:(nullable NSString *)plist;
++ (nullable NSArray *)arrayWithPlistString:(NSString *)plist;
 
 @end
 
@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)removeFirstObject;   /**< 移除首位 */
 
-- (void)insertObjects:(nullable NSArray *)objects atIndex:(NSUInteger)index;  /**< 插入数组 */
+- (void)insertObjects:(NSArray *)objects atIndex:(NSUInteger)index;  /**< 插入数组 */
 
 - (void)reverse;   /**< 反向排列 */
 

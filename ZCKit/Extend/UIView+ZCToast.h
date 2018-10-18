@@ -18,19 +18,18 @@ typedef NS_ENUM(NSInteger, ZCEnumToastPosition) {
 
 @interface UIView (ZCToast)
 
-- (void)makeToast:(nullable NSString *)message;   /**< 默认持续显示2秒 */
+- (void)makeToast:(NSString *)message;   /**< 显示文字内容，默认持续显示2秒 */
 
-- (void)makeToast:(nullable NSString *)message duration:(NSTimeInterval)interval position:(ZCEnumToastPosition)position;
+- (void)makeToast:(NSString *)message duration:(NSTimeInterval)interval position:(ZCEnumToastPosition)position;
 
 - (void)makeToast:(nullable NSString *)message duration:(NSTimeInterval)interval position:(ZCEnumToastPosition)position
             title:(nullable NSString *)title image:(nullable UIImage *)image;
 
+- (void)showToast:(UIView *)toast;   /**< 显示图片内容，默认持续显示2秒 */
 
-- (void)showToast:(nullable UIView *)toast;   /**< 默认持续显示2秒 */
+- (void)showToast:(UIView *)toast duration:(NSTimeInterval)interval position:(ZCEnumToastPosition)position;
 
-- (void)showToast:(nullable UIView *)toast duration:(NSTimeInterval)interval position:(ZCEnumToastPosition)position;
-
-- (void)showToast:(nullable UIView *)toast duration:(NSTimeInterval)interval position:(ZCEnumToastPosition)position
+- (void)showToast:(UIView *)toast duration:(NSTimeInterval)interval position:(ZCEnumToastPosition)position
       tapCallback:(nullable void(^)(void))tapCallback;
 
 @end

@@ -17,7 +17,7 @@
     }];
 }
 
-- (void)updateWithBlock:(void (^)(UITableView *tableView))block {
+- (void)updateWithBlock:(void(^)(UITableView *tableView))block {
     [self beginUpdates];
     block(self);
     [self endUpdates];

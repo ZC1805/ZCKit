@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIButton (ZC)
 
 /** 构建一个Button */
-+ (instancetype)button:(CGRect)frame title:(nullable NSString *)title image:(nullable NSString *)image target:(nullable id)target action:(nullable SEL)action;
++ (instancetype)button:(CGRect)frame title:(nullable NSString *)title image:(nullable NSString *)image target:(id)target action:(SEL)action;
 
 @end
 

@@ -14,28 +14,28 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - usually
 /** 从PDF文件数据或路径创建，只返回PDF第一页，大小等于原大小 */
-+ (nullable UIImage *)imageWithPDF:(nullable id)dataOrPath;
++ (nullable UIImage *)imageWithPDF:(id)dataOrPath;
+
+/** 加载GIF图片 */
++ (nullable UIImage *)imageGIFAnimated:(NSString *)name;
 
 /** 返回透明图片image */
 + (UIImage *)imageWithClear;
 
 /** 1px * 1px，不给颜色默认白色 */
-+ (nullable UIImage *)imageWithColor:(nullable UIColor *)color;
++ (UIImage *)imageWithColor:(UIColor *)color;
 
 /** 不给颜色默认白色 */
-+ (nullable UIImage *)imageWithColor:(nullable UIColor *)color size:(CGSize)size;
-
-/** 加载GIF图片 */
-+ (nullable UIImage *)imageGIFAnimated:(NSString *)name;
++ (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size;
 
 /** 改变图片的透明度 */
-- (nullable UIImage *)imageWithAlpha:(CGFloat)alpha;
+- (UIImage *)imageWithAlpha:(CGFloat)alpha;
 
 /** 将不透明部分变成目标颜色 */
-- (nullable UIImage *)imageToColor:(UIColor *)color alpha:(float)alpha;
+- (UIImage *)imageToColor:(UIColor *)color alpha:(float)alpha;
 
 /** 将不透明部分变成灰色 */
-- (nullable UIImage *)imageToGray;
+- (UIImage *)imageToGray;
 
 /** 生成能够自由拉伸的图片，复制区域为焦点横纵线 */
 - (UIImage *)imageToResizedImage:(CGPoint)cross;
@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSUInteger)imageUseMemorySize;
 
 /** 图片上绘制文字 */
-- (UIImage *)imageWithTitle:(nullable NSString *)title fontSize:(CGFloat)fontSize point:(CGPoint)point;
+- (UIImage *)imageWithTitle:(NSString *)title fontSize:(CGFloat)fontSize point:(CGPoint)point;
 
 /** 此图像是否具有alpha通道 */
 - (BOOL)imageHasAlphaChannel;
@@ -55,10 +55,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - image modify
 /** 返回从该图像缩放的新图像，图像将根据需要拉伸 */
-- (nullable UIImage *)imageByResizeToSize:(CGSize)size;
+- (UIImage *)imageByResizeToSize:(CGSize)size;
 
 /** 返回从该图像缩放的新图像，图像将根据内容模式自适应 */
-- (nullable UIImage *)imageByResizeToSize:(CGSize)size contentMode:(UIViewContentMode)contentMode;
+- (UIImage *)imageByResizeToSize:(CGSize)size contentMode:(UIViewContentMode)contentMode;
 
 /** 返回从该图像裁剪的新图像，rect为图像内部的rect */
 - (nullable UIImage *)imageByCropToRect:(CGRect)rect;

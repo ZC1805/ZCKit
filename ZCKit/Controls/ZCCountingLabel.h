@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, ZCEnumLabelCountingMethod) {
 
 @property (nullable, nonatomic, copy) void (^completionBlock)(void);   /**< 显示完成回调 */
 
+
 - (void)countFrom:(CGFloat)startValue to:(CGFloat)endValue;
 
 - (void)countFrom:(CGFloat)startValue to:(CGFloat)endValue withDuration:(NSTimeInterval)duration;

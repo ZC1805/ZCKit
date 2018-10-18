@@ -257,7 +257,7 @@ static void *directionContext = @"ScrollViewDirectionContext";
 }
 
 #pragma mark - scroll
-#warning - xxxx 位置错误  contentInset offset 都要检查
+#warning - xxxx 位置错误  contentInset offset 都要检查  .h重新改
 - (void)scrollToTopAnimated:(BOOL)animated {
     CGPoint off = self.contentOffset;
     off.y = 0 - self.contentInset.top;

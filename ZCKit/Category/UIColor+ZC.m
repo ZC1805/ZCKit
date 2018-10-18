@@ -45,6 +45,7 @@
 }
 
 + (UIColor *)colorFromHexString:(NSString *)hexColorStr {
+    if (!hexColorStr) return [UIColor blackColor];
     if (hexColorStr.length == 6) hexColorStr = [@"0x" stringByAppendingString:hexColorStr];
     if (hexColorStr && hexColorStr.length == 8) {
         NSString *rStr = [hexColorStr substringWithRange:NSMakeRange(2, 2)];
@@ -84,7 +85,7 @@
     if ([self getHue:&hue saturation:&sat brightness:&bri alpha:&alpha]) {
         return [UIColor colorWithHue:hue saturation:sat brightness:bri * 0.75 alpha:alpha];
     } else if ([self getWhite:&white alpha:&alpha]) {
-        return [UIColor colorWithWhite:MAX(white * 0.75, 0.0) alpha:alpha];
+        return [UIColor colorWithWhite:MAX(white * 0.75, 0) alpha:alpha];
     }
     return self;
 }
@@ -155,13 +156,13 @@
     static NSString *stringFormat = @"%02x%02x%02x";
     NSString *hex = nil;
     if (count == 2) {
-        NSUInteger white = (NSUInteger)(components[0] * 255.0f);
+        NSUInteger white = (NSUInteger)(components[0] * 255.0);
         hex = [NSString stringWithFormat:stringFormat, white, white, white];
     } else if (count == 4) {
         hex = [NSString stringWithFormat:stringFormat,
-               (NSUInteger)(components[0] * 255.0f),
-               (NSUInteger)(components[1] * 255.0f),
-               (NSUInteger)(components[2] * 255.0f)];
+               (NSUInteger)(components[0] * 255.0),
+               (NSUInteger)(components[1] * 255.0),
+               (NSUInteger)(components[2] * 255.0)];
     }
     if (hex && withAlpha) {
         hex = [hex stringByAppendingFormat:@"%02lx", (unsigned long)(self.A * 255.0 + 0.5)];
