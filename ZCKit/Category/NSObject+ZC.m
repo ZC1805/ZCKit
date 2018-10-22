@@ -7,7 +7,7 @@
 //
 
 #import "NSObject+ZC.h"
-#import <objc/runtime.h>
+#include <objc/runtime.h>
 
 @implementation NSObject (ZC)
 

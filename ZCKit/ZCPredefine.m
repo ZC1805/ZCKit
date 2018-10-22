@@ -7,7 +7,7 @@
 //
 
 #import "ZCPredefine.h"
-#import <objc/runtime.h>
+#include <objc/runtime.h>
 
 CGRect ZCRectFitWithContentMode(CGRect rect, CGSize size, UIViewContentMode mode) {
     rect = CGRectStandardize(rect);

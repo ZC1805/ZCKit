@@ -11,7 +11,7 @@
 
 #import "NSObject+YYModel.h"
 #import "YYClassInfo.h"
-#import <objc/message.h>
+#include <objc/message.h>
 
 #define force_inline __inline__ __attribute__((always_inline))
 

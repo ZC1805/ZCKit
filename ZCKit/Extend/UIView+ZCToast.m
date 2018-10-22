@@ -8,7 +8,7 @@
 
 #import "UIView+ZCToast.h"
 #import "ZCKitBridge.h"
-#import <objc/runtime.h>
+#include <objc/runtime.h>
 
 static const CGFloat ZCToastVerticalPadding = 8.0;
 static const CGFloat ZCToastHorizontalPadding = 12.0;

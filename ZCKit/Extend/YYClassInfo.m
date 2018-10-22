@@ -10,7 +10,7 @@
 //
 
 #import "YYClassInfo.h"
-#import <objc/runtime.h>
+#include <objc/runtime.h>
 
 YYEncodingType YYEncodingGetType(const char *typeEncoding) {
     char *type = (char *)typeEncoding;

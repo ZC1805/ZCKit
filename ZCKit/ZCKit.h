@@ -9,5 +9,7 @@
 #ifndef ZCKit_h
 #define ZCKit_h
 
+#import "Additional/ZCKitBridge.h"
+
 
 #endif /* ZCKit_h */

@@ -8,7 +8,7 @@
 
 #import "UIScrollView+ZC.h"
 #import "UIView+ZC.h"
-#import <objc/runtime.h>
+#include <objc/runtime.h>
 
 @implementation UIScrollView (ZC)
 

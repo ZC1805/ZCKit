@@ -19,25 +19,38 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/ZhouClassmate/ZCKit.git", :tag => "#{s.version}" }
   s.source_files = "ZCKit/*.{h,m}"
   s.resources    = "ZCKit/Resources/*.png"
-  s.frameworks   = "Foundation", "UIKit"
+  s.frameworks   = "Foundation", "UIKit", "MessageUI", "CoreText", "Accelerate", "ImageIO", "QuartzCore"
+  s.xcconfig     = { "HEADER_SEARCH_PATHS" => "$(PODS_ROOT)" }
 
   s.subspec 'Inherit' do |ss|
     ss.source_files = "ZCKit/Inherit/*.{h,m}"
+    ss.xcconfig = { "HEADER_SEARCH_PATHS" => "$(PODS_ROOT)/Inherit" }
+    ss.frameworks = "Foundation", "UIKit", "MessageUI", "CoreText", "Accelerate", "ImageIO", "QuartzCore"
   end
   s.subspec 'Extend' do |ss|
     ss.source_files = "ZCKit/Extend/*.{h,m}"
+    ss.xcconfig = { "HEADER_SEARCH_PATHS" => "$(PODS_ROOT)/../Additional" }
+    ss.frameworks = "Foundation", "UIKit", "MessageUI", "CoreText", "Accelerate", "ImageIO", "QuartzCore"
   end
   s.subspec 'Swizzle' do |ss|
     ss.source_files = "ZCKit/Swizzle/*.{h,m}"
+    ss.xcconfig = { "HEADER_SEARCH_PATHS" => "$(PODS_ROOT)/Swizzle" }
+    ss.frameworks = "Foundation", "UIKit", "MessageUI", "CoreText", "Accelerate", "ImageIO", "QuartzCore"
   end
   s.subspec 'Controls' do |ss|
     ss.source_files = "ZCKit/Controls/*.{h,m}"
+    ss.xcconfig = { "HEADER_SEARCH_PATHS" => "$(PODS_ROOT)/../Additional" }
+    ss.frameworks = "Foundation", "UIKit", "MessageUI", "CoreText", "Accelerate", "ImageIO", "QuartzCore"
   end
   s.subspec 'Category' do |ss|
     ss.source_files = "ZCKit/Category/*.{h,m}"
+    ss.xcconfig = { "HEADER_SEARCH_PATHS" => "$(PODS_ROOT)/Category" }
+    ss.frameworks = "Foundation", "UIKit", "MessageUI", "CoreText", "Accelerate", "ImageIO", "QuartzCore"
   end
   s.subspec 'Additional' do |ss|
     ss.source_files = "ZCKit/Additional/*.{h,m}"
+    ss.xcconfig = { "HEADER_SEARCH_PATHS" => "$(PODS_ROOT)/Additional" }
+    ss.frameworks = "Foundation", "UIKit", "MessageUI", "CoreText", "Accelerate", "ImageIO", "QuartzCore"
   end
 
   # s.exclude_files = "Classes/Exclude"
@@ -46,11 +59,9 @@ Pod::Spec.new do |s|
   # s.resource  = "icon.png"
   # s.preserve_paths = "FilesToSave", "MoreFilesToSave"
 
-  # s.framework = "SomeFramework"
-  # s.library   = "iconv"
-  # s.libraries = "iconv", "xml2"
-
-  # s.xcconfig = { "HEADER_SEARCH_PATHS" => "$(SDKROOT)/usr/include/libxml2" }
+  # s.frameworks = "UIKit"
+  # s.library    = "iconv"
+  # s.libraries  = "iconv", "xml2"
   # s.dependency "JSONKit", "~> 1.4"
 
 end
