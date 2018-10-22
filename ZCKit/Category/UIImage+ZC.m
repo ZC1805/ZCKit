@@ -121,7 +121,7 @@
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
     CGContextRef context = CGBitmapContextCreate(nil, width, height, 8, 0, colorSpace, bitmapInfo);
     CGColorSpaceRelease(colorSpace);
-    if (context == NULL) return nil;
+    if (context == NULL) return self;
     CGContextDrawImage(context, CGRectMake(0, 0, width, height), self.CGImage);
     CGImageRef imageRef = CGBitmapContextCreateImage(context);
     UIImage *grayImage = [UIImage imageWithCGImage:imageRef];
@@ -370,7 +370,7 @@
 
 #pragma mark - image modify
 - (UIImage *)imageByResizeToSize:(CGSize)size {
-    if (size.width <= 0 || size.height <= 0) return nil;
+    if (size.width <= 0 || size.height <= 0) size = CGSizeMake(MAX(1.0, size.width), MAX(1.0, size.height));
     UIGraphicsBeginImageContextWithOptions(size, NO, self.scale);
     [self drawInRect:CGRectMake(0, 0, size.width, size.height)];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
@@ -379,7 +379,7 @@
 }
 
 - (UIImage *)imageByResizeToSize:(CGSize)size contentMode:(UIViewContentMode)contentMode {
-    if (size.width <= 0 || size.height <= 0) return nil;
+    if (size.width <= 0 || size.height <= 0) size = CGSizeMake(MAX(1.0, size.width), MAX(1.0, size.height));
     UIGraphicsBeginImageContextWithOptions(size, NO, self.scale);
     [self imageDrawInRect:CGRectMake(0, 0, size.width, size.height) withContentMode:contentMode clipsToBounds:NO];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();

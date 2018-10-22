@@ -25,8 +25,19 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)photoPicker:(nullable NSString *)message mustCamera:(BOOL)mustCamera mustAlbum:(BOOL)mustAlbum edit:(BOOL)edit
              finish:(void(^)(UIImage * _Nullable image, NSString * _Nullable fail))done;
 
-/**< 发送短信，短信内容可以再编辑，isSendSuccesss是否发送成功，isCancelSend是否取消发送 */
-+ (void)send:(nullable NSString *)message receivers:(NSArray <NSString *>*)receivers finish:(nullable void(^)(BOOL isSendSuccess, BOOL isCancelSend))finish;
+/** 发送短信，短信内容可以再编辑，isSendSuccesss是否发送成功，isCancelSend是否取消发送 */
++ (void)sendMessage:(nullable NSString *)message receivers:(NSArray <NSString *>*)receivers
+             finish:(nullable void(^)(BOOL isSendSuccess, BOOL isCancelSend))finish;
+
+/** 用系统alertController展示提示框，ctor调用两次，默认是isCancel为YES & actionTitle为@"确定" */
++ (void)alertChoice:(NSString *)title message:(nullable NSString *)message
+               ctor:(nullable NSString * _Nullable(^)(BOOL isCancel, BOOL *destructive))ctor
+             action:(nullable void(^)(BOOL isCancel))doAction;
+
+/** 用系统alertController展示提示框，cancel为nil默认添加取消action & 此时index = -1，ctor调用多次 & 直到返回重复或者nil */
++ (void)alertSheet:(nullable NSString *)title cancel:(nullable NSString * _Nullable(^)(void))cancel
+              ctor:(NSString *(^)(NSInteger index, BOOL *destructive))ctor
+            action:(void(^)(NSInteger index))doAction;
 
 @end
 

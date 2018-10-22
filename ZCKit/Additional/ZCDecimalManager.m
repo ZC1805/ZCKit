@@ -165,7 +165,7 @@
 
 /** 转化成->NSDecimalNumber，会四舍五入处理 */
 + (NSDecimalNumber *)decimalNumber:(NSNumber *)number decimalPoint:(int)point roundMode:(ZCEnumRoundType)mode {
-    if (!number) return [NSDecimalNumber notANumber];
+    if (number == nil) return [NSDecimalNumber notANumber];
     NSDecimalNumberHandler *hander = [self decimalHander:point type:mode];
     NSDecimalNumber *decimal = [NSDecimalNumber decimalNumberWithDecimal:[number decimalValue]];
     return [decimal decimalNumberByRoundingAccordingToBehavior:hander];

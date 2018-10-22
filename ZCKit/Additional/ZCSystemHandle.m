@@ -63,8 +63,7 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
     [rootVc presentViewController:handle.picker animated:YES completion:nil];
 }
 
-+ (void)photoPicker:(NSString *)message mustCamera:(BOOL)mustCamera mustAlbum:(BOOL)mustAlbum edit:(BOOL)edit
-             finish:(void(^)(UIImage *image, NSString *fail))done {
++ (void)photoPicker:(NSString *)message mustCamera:(BOOL)mustCamera mustAlbum:(BOOL)mustAlbum edit:(BOOL)edit finish:(void(^)(UIImage *image, NSString *fail))done {
     if (mustCamera == mustAlbum) {
         BOOL camera = [self cameraAvailable];
         BOOL album = [self photoLibraryAvailable];
@@ -153,7 +152,7 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
     }
 }
 
-+ (void)send:(NSString *)message receivers:(NSArray <NSString *>*)receivers finish:(void(^)(BOOL isSendSuccess, BOOL isCancelSend))finish {
++ (void)sendMessage:(NSString *)message receivers:(NSArray <NSString *>*)receivers finish:(void(^)(BOOL isSendSuccess, BOOL isCancelSend))finish {
     UIViewController *rootVc = [ZCGlobal rootController];
     if (message && receivers.count && rootVc) {
         if ([MFMessageComposeViewController canSendText]) {
@@ -168,6 +167,71 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
             [avc addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:nil]];
             [rootVc presentViewController:avc animated:YES completion:nil];
         }
+    }
+}
+
+#pragma mark - system alert
++ (void)alertChoice:(NSString *)title message:(NSString *)message ctor:(NSString * _Nullable (^)(BOOL, BOOL * _Nonnull))ctor action:(void (^)(BOOL))doAction {
+    if ([ZCGlobal rootController] == nil) return;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    NSString *cancel = nil, *confirm = nil; BOOL destructive = NO;
+    if (ctor) {
+        destructive = NO;
+        cancel = ctor(YES, &destructive);
+        if (cancel.length) {
+            UIAlertActionStyle style = destructive ? UIAlertActionStyleDestructive : UIAlertActionStyleCancel;
+            [alert addAction:[UIAlertAction actionWithTitle:cancel style:style handler:^(UIAlertAction * _Nonnull action) {
+                if (doAction) doAction(YES);
+            }]];
+        }
+        destructive = NO;
+        confirm = ctor(NO, &destructive);
+        if (confirm.length && !(cancel.length && [cancel isEqualToString:confirm])) {
+            UIAlertActionStyle style = destructive ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault;
+            [alert addAction:[UIAlertAction actionWithTitle:confirm style:style handler:^(UIAlertAction * _Nonnull action) {
+                if (doAction) doAction(NO);
+            }]];
+        }
+    }
+    if (!cancel.length && !confirm.length) {
+        [alert addAction:[UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            if (doAction) doAction(YES);
+        }]];
+    }
+    [[ZCGlobal rootController] presentViewController:alert animated:YES completion:nil];
+}
+
++ (void)alertSheet:(NSString *)title cancel:(NSString * _Nullable (^)(void))cancel ctor:(NSString * _Nonnull (^)(NSInteger, BOOL * _Nonnull))ctor action:(void (^)(NSInteger))doAction {
+    if ([ZCGlobal rootController] == nil || ctor == nil || doAction == nil) return;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    BOOL isBreak = NO; NSInteger index = 0; NSMutableArray *sheets = [NSMutableArray array];
+    do {
+        BOOL destructive = NO;
+        NSString *name = ctor(index, &destructive);
+        isBreak = name.length && ![sheets containsObject:name];
+        if (isBreak) {
+            UIAlertActionStyle style = destructive ? UIAlertActionStyleDestructive : UIAlertActionStyleDefault;
+            [alert addAction:[UIAlertAction actionWithTitle:name style:style handler:^(UIAlertAction * _Nonnull action) {
+                if (doAction) doAction(index);
+            }]];
+            [sheets addObject:name];
+            index = index + 1;
+        }
+    } while (isBreak);
+    if (index) {
+        if (cancel) {
+            NSString *name = cancel();
+            if (name.length) {
+                [alert addAction:[UIAlertAction actionWithTitle:name style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                    if (doAction) doAction(-1);
+                }]];
+            }
+        } else {
+            [alert addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+                if (doAction) doAction(-1);
+            }]];
+        }
+        [[ZCGlobal rootController] presentViewController:alert animated:YES completion:nil];
     }
 }
 
