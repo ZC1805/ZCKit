@@ -568,7 +568,7 @@ static NSString *ident = @"cycleControlCell";
         self.imageURLStringsGroup = [temp copy];
     }
 }
-#warning - 点击小圆点的问题 滑到第一页右滑不了
+//#warning - 点击小圆点的问题 滑到第一页右滑不了
 #pragma mark - actions
 - (void)setupTimer {
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:self.autoScrollTimeInterval target:self selector:@selector(automaticScroll) userInfo:nil repeats:YES];

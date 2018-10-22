@@ -185,7 +185,7 @@
 
 
 
-#warning - yasuo
+//#warning - yasuo
 ////压缩图片质量的优点在于，尽可能保留图片清晰度，图片不会明显模糊；
 ////缺点在于，不能保证图片压缩后小于指定大小。
 //- (NSData *)compressQualityForLimit:(NSInteger)limit {
