@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCImageView : UIImageView   /**< 默认开启用户交互 */
+@interface ZCImageView : UIImageView  /**< 默认开启用户交互 */
 
 @property (nullable, nonatomic, copy) NSString *linkUrl;
 

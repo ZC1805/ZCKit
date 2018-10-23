@@ -13,7 +13,7 @@
 static const CGFloat ZCToastVerticalPadding = 8.0;
 static const CGFloat ZCToastHorizontalPadding = 12.0;
 static const NSTimeInterval ZCToastDefaultDuration = 2.0;
-static const NSString *ZCToastTapCallbackKey = @"ZCToastTapCallbackKey";
+static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
 
 @implementation UIView (ZCToast)
 
@@ -28,27 +28,27 @@ static const NSString *ZCToastTapCallbackKey = @"ZCToastTapCallbackKey";
 
 - (void)makeToast:(NSString *)message duration:(NSTimeInterval)duration position:(ZCEnumToastPosition)position title:(NSString *)title image:(UIImage *)image {
     UIView *toast = [self viewForMessage:message title:title image:image];
-    [self showToast:toast duration:duration position:position tapCallback:nil];
+    [self showToast:toast duration:duration position:position action:nil];
 }
 
 - (void)showToast:(UIView *)toast {
-    [self showToast:toast duration:ZCToastDefaultDuration position:ZCEnumToastPositionCenter tapCallback:nil];
+    [self showToast:toast duration:ZCToastDefaultDuration position:ZCEnumToastPositionCenter action:nil];
 }
 
 - (void)showToast:(UIView *)toast duration:(NSTimeInterval)duration position:(ZCEnumToastPosition)position {
-    [self showToast:toast duration:duration position:position tapCallback:nil];
+    [self showToast:toast duration:duration position:position action:nil];
 }
 
 #pragma mark - mine
-- (void)showToast:(UIView *)toast duration:(NSTimeInterval)duration position:(ZCEnumToastPosition)position tapCallback:(void(^)(void))tapCallback {
+- (void)showToast:(UIView *)toast duration:(NSTimeInterval)duration position:(ZCEnumToastPosition)position action:(void (^)(void))action {
     if (toast == nil) return;
     if (duration < 0.5) duration = 0.5;
     if (position < ZCEnumToastPositionCenter || position > ZCEnumToastPositionBottom) position = ZCEnumToastPositionCenter;
     toast.center = [self centerPointForPosition:position withToast:toast];
     toast.alpha = 0;
     [self addSubview:toast];
-    if (tapCallback) {
-        objc_setAssociatedObject(toast, &ZCToastTapCallbackKey, tapCallback, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    if (action) {
+        objc_setAssociatedObject(toast, &ZCToastTapActionKey, action, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         UITapGestureRecognizer *recognizer = [[UITapGestureRecognizer alloc] initWithTarget:toast action:@selector(handleToastTapped:)];
         [toast addGestureRecognizer:recognizer];
         toast.userInteractionEnabled = YES;
@@ -58,13 +58,13 @@ static const NSString *ZCToastTapCallbackKey = @"ZCToastTapCallbackKey";
         toast.alpha = 1.0;
     } completion:nil];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self hideToast:toast tap:tapCallback];
+        [self hideToast:toast tap:action];
     });
 }
 
-- (void)hideToast:(UIView *)toast tap:(void(^)(void))tapCallback {
+- (void)hideToast:(UIView *)toast tap:(void(^)(void))action {
     if (toast == nil) return;
-    if (tapCallback) objc_removeAssociatedObjects(toast);
+    if (action) objc_removeAssociatedObjects(toast);
     [UIView animateWithDuration:0.2 delay:0 options:(UIViewAnimationOptionCurveEaseIn|UIViewAnimationOptionBeginFromCurrentState) animations:^{
         toast.alpha = 0;
     } completion:^(BOOL finished) {
@@ -73,11 +73,11 @@ static const NSString *ZCToastTapCallbackKey = @"ZCToastTapCallbackKey";
 }
 
 - (void)handleToastTapped:(UITapGestureRecognizer *)recognizer {
-    void(^tapCallback)(void) = objc_getAssociatedObject(self, &ZCToastTapCallbackKey);
-    if (tapCallback) {
-        tapCallback(); tapCallback = nil; //暂时是等延迟执行到了时间再销毁
+    void(^action)(void) = objc_getAssociatedObject(self, &ZCToastTapActionKey);
+    if (action) {
+        action(); action = nil; //暂时是等延迟执行到了时间再销毁
     }
-    [self hideToast:recognizer.view tap:tapCallback];
+    [self hideToast:recognizer.view tap:action];
 }
 
 #pragma mark - Helpers

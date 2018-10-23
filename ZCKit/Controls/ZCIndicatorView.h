@@ -10,13 +10,13 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCIndicatorView : UIView
+@interface ZCIndicatorView : UIView  /**< 转圈等待动画视图 */
 
-- (instancetype)initWithFrame:(CGRect)frame diameter:(CGFloat)diameter color:(UIColor *)color;   /**< 转圈图像，diameter是小圆圈半径 */
+- (instancetype)initWithFrame:(CGRect)frame diameter:(CGFloat)diameter color:(UIColor *)color;  /**< 转圈图像，diameter是小圆圈半径 */
 
-- (void)pause;   /**< 暂停 */
+- (void)pause;  /**< 暂停 */
 
-- (void)resume;   /**< 继续 */
+- (void)resume;  /**< 继续 */
 
 @end
 

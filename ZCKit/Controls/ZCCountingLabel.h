@@ -18,19 +18,19 @@ typedef NS_ENUM(NSInteger, ZCEnumLabelCountingMethod) {
     ZCEnumLabelCountingMethodLinear,
 };
 
-@interface ZCCountingLabel : UILabel   /**< 快速计数 */
+@interface ZCCountingLabel : UILabel  /**< 快速计数标签 */
 
-@property (nonatomic, assign) ZCEnumLabelCountingMethod method;   /**< 计数方式 */
+@property (nonatomic, assign) ZCEnumLabelCountingMethod method;  /**< 计数方式 */
 
-@property (nonatomic, assign) NSTimeInterval animationDuration;   /**< 动画时长，默认2s */
+@property (nonatomic, assign) NSTimeInterval animationDuration;  /**< 动画时长，默认2s */
 
-@property (nullable, nonatomic, copy) NSString *format;   /**< 显示格式，@"%d"、@"%.1f%%"、默认@"%f" */
+@property (nullable, nonatomic, copy) NSString *format;  /**< 显示格式，@"%d"、@"%.1f%%"、默认@"%f" */
 
-@property (nullable, nonatomic, copy) NSString *(^formatBlock)(CGFloat value);   /**< 显示格式回调 */
+@property (nullable, nonatomic, copy) NSString *(^formatBlock)(CGFloat value);  /**< 显示格式回调 */
 
-@property (nullable, nonatomic, copy) NSAttributedString *(^attributedFormatBlock)(CGFloat value);   /**< 显示格式回调 */
+@property (nullable, nonatomic, copy) NSAttributedString *(^attributedFormatBlock)(CGFloat value);  /**< 显示格式回调 */
 
-@property (nullable, nonatomic, copy) void (^completionBlock)(void);   /**< 显示完成回调 */
+@property (nullable, nonatomic, copy) void (^completionBlock)(void);  /**< 显示完成回调 */
 
 
 - (void)countFrom:(CGFloat)startValue to:(CGFloat)endValue;

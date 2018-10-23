@@ -7,8 +7,10 @@
 //
 
 #import "ZCSheetControl.h"
+#import "ZCMaskView.h"
 #import "UIImage+ZC.h"
 #import "UIColor+ZC.h"
+#import "ZCButton.h"
 #import "ZCGlobal.h"
 
 #define sheet_cal_top   7.0
@@ -33,7 +35,7 @@
 @implementation ZCSheetControl
 
 + (void)display:(NSString *)msg sheet:(NSArray<NSString *> *)sheet ctor:(void (^)(ZCSheetControl * _Nonnull))ctor action:(void (^)(NSInteger))action {
-    ZCSheetControl *sheetControl = [[ZCSheetControl alloc] initWithMsg:msg sheets:sheet click:action];
+    ZCSheetControl *sheetControl = [[ZCSheetControl alloc] initWithMsg:msg sheets:sheet action:action];
     [sheetControl initProperty];
     if (ctor) ctor(sheetControl);
     [sheetControl resetItems];
@@ -41,11 +43,11 @@
     [sheetControl showItems];
 }
 
-- (instancetype)initWithMsg:(NSString *)msg sheets:(NSArray <NSString *>*)sheets click:(void(^)(NSInteger selectIndex))click {
+- (instancetype)initWithMsg:(NSString *)msg sheets:(NSArray <NSString *>*)sheets action:(void(^)(NSInteger selectIndex))action {
     if (self = [super initWithFrame:CGRectZero]) {
         self.items = [NSMutableArray array];
         if (sheets.count) [self.items addObjectsFromArray:sheets];
-        self.sheetBlock = click;
+        self.sheetBlock = action;
         self.msgText = msg;
     }
     return self;
@@ -57,7 +59,7 @@
     self.canTouch = NO;
     self.dangerous = nil;
     self.cancelTitle = @"取消";
-    self.maxHeight = 375.0;
+    self.maxHeight = 383.0;
 }
 
 - (void)resetItems {
@@ -76,18 +78,16 @@
     }
     return isDangerous;
 }
-#warning - 待修改
+
 #pragma mark - Display
 - (void)showItems {
-//    [[ZDCommonMaskViewController instance] visibleSubview:self time:0.3 blur:NO
-//                                                maskClear:self.maskClear
-//                                                maskClick:self.maskHide ? (^{[self disappearItems:-1];}) : nil];
-//    self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.height);
-//    [UIView animateWithDuration:0.3 animations:^{
-//        self.transform = CGAffineTransformIdentity;
-//    } completion:^(BOOL finished) {
-//        self.canTouch = YES;
-//    }];
+    [ZCWindowView display:self time:0.3 blur:NO clear:self.maskClear action:(self.maskHide ? (^{[self disappearItems:-1];}) : nil)];
+    self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.frame.size.height);
+    [UIView animateWithDuration:0.3 animations:^{
+        self.transform = CGAffineTransformIdentity;
+    } completion:^(BOOL finished) {
+        self.canTouch = YES;
+    }];
 }
 
 - (void)onItem:(UIButton *)itemBtn {
@@ -97,16 +97,16 @@
 }
 
 - (void)disappearItems:(NSInteger)selectIndex {
-//    if (!self.canTouch) return;
-//    self.canTouch = NO;
-//    [[ZDCommonMaskViewController instance] dismissSubview];
-//    [UIView animateWithDuration:0.3 animations:^{
-//        self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.height);
-//    } completion:^(BOOL finished) {
-//        [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-//        [self.contentView removeFromSuperview];
-//        if (self.sheetBlock) {self.sheetBlock(selectIndex); self.sheetBlock = nil;}
-//    }];
+    if (!self.canTouch) return;
+    self.canTouch = NO;
+    [ZCWindowView dismissSubview];
+    [UIView animateWithDuration:0.3 animations:^{
+        self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.frame.size.height);
+    } completion:^(BOOL finished) {
+        [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
+        [self.contentView removeFromSuperview];
+        if (self.sheetBlock) {self.sheetBlock(selectIndex); self.sheetBlock = nil;}
+    }];
 }
 
 #pragma mark - Constructor
@@ -148,7 +148,7 @@
 
 - (void)build:(BOOL)msgExist cancel:(BOOL)celExist only:(BOOL)isOnly safeHei:(CGFloat)safeHei initHei:(CGFloat)initHei conHei:(CGFloat)conHei {
     CGFloat initWid = [UIScreen mainScreen].bounds.size.width;
-    self.backgroundColor = [UIColor colorFormHex:0xf5f6f8 alpha:1.0];
+    self.backgroundColor = [UIColor colorFormHex:0xf5f5f7 alpha:1.0];
     self.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - initHei, initWid, initHei);
     self.contentView = [[UIScrollView alloc] initWithFrame:CGRectZero];
     self.contentView.backgroundColor = [UIColor clearColor];
@@ -182,34 +182,51 @@
         msglabel.backgroundColor = [UIColor whiteColor];
         msglabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:msglabel];
+        if (self.maskClear) {
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, 1.0 / [UIScreen mainScreen].scale)];
+            line.backgroundColor = [UIColor colorFormHex:0xdcdcdc alpha:1.0];
+            [msglabel addSubview:line];
+        }
     }
     for (int i = 0; i < self.items.count; i ++) {
         BOOL isCancel = NO;
         UIView *topSep = nil;
-        UIButton *itemBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        ZCButton *itemBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
+        itemBtn.delayResponseTime = 0.1;
         UIColor *titleColor = [self isDangerousForIndex:i] ? [UIColor redColor] : [UIColor blackColor];
-        UIImage *imageBk = [UIImage imageWithColor:[UIColor colorFormHex:0xeeeeee alpha:1.0] size:CGSizeMake(1.0, 1.0)];
+        UIImage *imageBk = [UIImage imageWithColor:[UIColor colorFormHex:0xe1e1e3 alpha:1.0] size:CGSizeMake(1.0, 1.0)];
         itemBtn.tag = sheet_flag_tag + i;
         itemBtn.backgroundColor = [UIColor whiteColor];
         itemBtn.titleLabel.font = [UIFont systemFontOfSize:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
         [itemBtn setTitleColor:titleColor forState:UIControlStateNormal];
-        [itemBtn setTitleColor:[titleColor colorWithAlphaComponent:0.25] forState:UIControlStateHighlighted];
+        [itemBtn setTitleColor:[titleColor colorWithAlphaComponent:0.2] forState:UIControlStateHighlighted];
         [itemBtn setBackgroundImage:imageBk forState:UIControlStateHighlighted];
         [itemBtn addTarget:self action:@selector(onItem:) forControlEvents:UIControlEventTouchUpInside];
         if (isOnly && celExist) {
-            itemBtn.frame = CGRectMake(0, initHei - sheet_item_hei - safeHei, initWid, sheet_item_hei);
+            itemBtn.frame = CGRectMake(0, initHei - sheet_item_hei - safeHei, initWid, sheet_item_hei + safeHei);
             isCancel = YES;
         } else if (isOnly) {
             itemBtn.frame = CGRectMake(0, i * sheet_item_hei, initWid, sheet_item_hei);
         } else {
             if (celExist && (i == self.items.count - 1)) {
-                itemBtn.frame = CGRectMake(0, initHei - sheet_item_hei - safeHei, initWid, sheet_item_hei);
+                itemBtn.frame = CGRectMake(0, initHei - sheet_item_hei - safeHei, initWid, sheet_item_hei + safeHei);
                 isCancel = YES;
             } else {
                 itemBtn.frame = CGRectMake(0, i * sheet_item_hei, initWid, sheet_item_hei);
-                if (i != 0) topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * sheet_item_hei, initWid, 0.35)];
-                if (topSep) topSep.backgroundColor = [UIColor colorFormHex:0xdcdcdc alpha:1.0];
+                if (i != 0 || (!msgExist && self.maskClear)) {
+                    topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * sheet_item_hei, initWid, 1.0 / [UIScreen mainScreen].scale)];
+                    topSep.backgroundColor = [UIColor colorFormHex:0xdcdcdc alpha:1.0];
+                }
+            }
+        }
+        if (isCancel) {
+            itemBtn.titleEdgeInsets = UIEdgeInsetsMake(-safeHei, 0, 0, 0);
+            itemBtn.responseAreaExtend = UIEdgeInsetsMake(0, 0, -safeHei, 0);
+            if (isOnly && self.maskClear) {
+                UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, 1.0 / [UIScreen mainScreen].scale)];
+                line.backgroundColor = [UIColor colorFormHex:0xdcdcdc alpha:1.0];
+                [itemBtn addSubview:line];
             }
         }
         if (isCancel) [self addSubview:itemBtn];
@@ -217,6 +234,5 @@
         if (topSep) [self.contentView addSubview:topSep];
     }
 }
-
 
 @end

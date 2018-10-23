@@ -52,7 +52,7 @@
     objc_setAssociatedObject(self, @selector(voidProperty), voidProperty, OBJC_ASSOCIATION_ASSIGN);
 }
 
-- (id)performSelector:(SEL)selector arguments:(NSArray *)arguments {   /**< 执行顺序有问题，不立即返回 */
+- (id)performSelector:(SEL)selector arguments:(NSArray *)arguments {  /**< 执行顺序有问题，不立即返回 */
     NSMethodSignature *methodSignature = [[self class] instanceMethodSignatureForSelector:selector];
     if (methodSignature == nil) {
         @throw [NSException exceptionWithName:@"exception" reason:@"function name is mistake" userInfo:nil];

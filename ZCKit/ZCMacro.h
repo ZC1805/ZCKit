@@ -17,9 +17,9 @@
 
 
 /** --- normal --- */
-#define ZCiOS8              (UIDevice.systemVersion >= 8.0)  /**< 版本>=8.0 */
-#define ZCiOS9              (UIDevice.systemVersion >= 9.0)  /**< 版本>=9.0 */
-#define ZCiOS10             (UIDevice.systemVersion >= 10.0) /**< 版本>=10.0 */
+#define ZCiOS8              (UIDevice.systemVersion >= 8.0)   /**< 版本>=8.0 */
+#define ZCiOS9              (UIDevice.systemVersion >= 9.0)   /**< 版本>=9.0 */
+#define ZCiOS10             (UIDevice.systemVersion >= 10.0)  /**< 版本>=10.0 */
 #define ZCiPad              (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)         /**< 是否是iPad */
 #define ZCiPhone            (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)       /**< 是否是iPhone */
 #define ZClandscape         [ZCGlobal isLandscape]                                         /**< 当前是否是横屏 */
@@ -90,12 +90,6 @@
 #define ZFAboveEqual(a, b)  (ZFAbove((a), (b)) || ZFEqual((a), (b)))        /**< a >= b */
 #define ZFBelowEqual(a, b)  (ZFBelow((a), (b)) || ZFEqual((a), (b)))        /**< a <= b */
 
-
-/** --- misc --- */
-#define ZCSyncTime          15.0     /**< 同步请求超时时间 */
-#define ZCAsyncTime         20.0     /**< 异步请求超时时间 */
-#define ZCPromptTime        2.0      /**< 提示警告时间 */
-#define ZCAnimateTime       0.3      /**< 动画持续时间 */
 
 /** --- 文件路径 --- */
 #define ZCBundleFilePath(bundleName, fileName, extName) [ZCGlobal resourcePath:bundleName name:fileName ext:extName]

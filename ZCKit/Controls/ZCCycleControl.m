@@ -755,8 +755,8 @@ static NSString *ident = @"cycleControlCell";
     int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:indexPath.item];
     if ([self.delegate respondsToSelector:@selector(cycleControl:didSelectAtIndex:)]) {
         [self.delegate cycleControl:self didSelectAtIndex:indexOnPageControl];
-    } else if (self.clickCallback) {
-        self.clickCallback(indexOnPageControl);
+    } else if (self.selectAction) {
+        self.selectAction(indexOnPageControl);
     }
 }
 
@@ -792,8 +792,8 @@ static NSString *ident = @"cycleControlCell";
     int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:itemIndex];
     if ([self.delegate respondsToSelector:@selector(cycleControl:didScrollToIndex:)]) {
         [self.delegate cycleControl:self didScrollToIndex:indexOnPageControl];
-    } else if (self.scrollCallback) {
-        self.scrollCallback(indexOnPageControl);
+    } else if (self.scrollAction) {
+        self.scrollAction(indexOnPageControl);
     }
 }
 

@@ -12,15 +12,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIFont (ZC)
 
-@property (nonatomic, readonly) BOOL isBold;   /**< 是否是粗体 */
+@property (nonatomic, readonly) BOOL isBold;  /**< 是否是粗体 */
 
-@property (nonatomic, readonly) BOOL isItalic;   /**< 是否是斜体 */
+@property (nonatomic, readonly) BOOL isItalic;  /**< 是否是斜体 */
 
-@property (nonatomic, readonly) BOOL isMonoSpace;   /**< 是否是isMonoSpace字体 */
+@property (nonatomic, readonly) BOOL isMonoSpace;  /**< 是否是isMonoSpace字体 */
 
-@property (nonatomic, readonly) BOOL isColorGlyphs;   /**< 是否是isColorGlyphs字体 */
+@property (nonatomic, readonly) BOOL isColorGlyphs;  /**< 是否是isColorGlyphs字体 */
 
-@property (nonatomic, readonly) CGFloat fontWeight;   /**< 获取weight值，从-1.0到1.0之间，Regular为0 */
+@property (nonatomic, readonly) CGFloat fontWeight;  /**< 获取weight值，从-1.0到1.0之间，Regular为0 */
 
 
 /** 获取粗体font对象 */

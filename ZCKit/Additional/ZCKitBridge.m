@@ -116,8 +116,5 @@ static BOOL _isPrintLog = NO;
     }
 }
 
-#pragma mark - func
-
-
 @end
 

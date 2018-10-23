@@ -208,8 +208,8 @@
 
 #pragma mark - class misc function
 + (instancetype)instance {
+    static ZCDecimalManager *instance = nil;
     static dispatch_once_t onceToken;
-    static ZCDecimalManager *instance;
     dispatch_once(&onceToken, ^{
         instance = [[ZCDecimalManager alloc] init];
     });

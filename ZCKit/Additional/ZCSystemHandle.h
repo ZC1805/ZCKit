@@ -13,9 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCSystemHandle : NSObject
 
-+ (BOOL)cameraAvailable;   /**< 相机是否可用 */
++ (BOOL)cameraAvailable;  /**< 相机是否可用 */
 
-+ (BOOL)photoLibraryAvailable;   /**< 相册是否可用 */
++ (BOOL)photoLibraryAvailable;  /**< 相册是否可用 */
 
 /** 从特定地方选取照片，点击取消不回调，edit是否可编辑 */
 + (void)photoPicker:(UIImagePickerControllerSourceType)type edit:(BOOL)edit
