@@ -168,7 +168,7 @@ static void *directionContext = @"ScrollViewDirectionContext";
 }
 
 #pragma mark - offset
-- (UIView *)topExpandOffsetView {   //frame变化不联动
+- (UIView *)topExpandOffsetView { //frame变化不联动
     UIView *topv = objc_getAssociatedObject(self, _cmd);
     if (!topv) {
         topv = [[UIView alloc] initWithFrame:CGRectZero];
@@ -181,7 +181,7 @@ static void *directionContext = @"ScrollViewDirectionContext";
     return topv;
 }
 
-- (UIView *)bottomExpandOffsetView {   //frame变化不联动
+- (UIView *)bottomExpandOffsetView { //frame变化不联动
     UIView *bottomv = objc_getAssociatedObject(self, _cmd);
     if (!bottomv) {
         bottomv = [[UIView alloc] initWithFrame:CGRectZero];
@@ -202,7 +202,7 @@ static void *directionContext = @"ScrollViewDirectionContext";
     return self.topExpandOffsetView.backgroundColor;
 }
 
-- (void)setBottomOffsetColor:(UIColor *)bottomOffsetColor {    ///contentSize/frame变化需要更新位置
+- (void)setBottomOffsetColor:(UIColor *)bottomOffsetColor { //contentSize/frame变化需要更新位置
     self.bottomExpandOffsetView.backgroundColor = bottomOffsetColor;
 }
 

@@ -58,7 +58,7 @@
 //              @"bookID" : @[@"id",@"ID",@"book_id"]};
 //1.在json->model时，如果一个属性对应了多个json key，那么转换过程会按顺序查找，并使用第一个不为空的值。
 //2.在model->json时，如果一个属性对应了多个json key，那么转换过程仅会处理第一个json key。
-//  如果多个属性对应了同一个json key，则转换过过程会使用其中任意一个不为空的值。
+//3.如果多个属性对应了同一个json key，则转换过过程会使用其中任意一个不为空的值。
 + (nullable NSDictionary<NSString *, id> *)modelCustomPropertyMapper {
     return [self transformPropertyToKeyMappingRelation];
 }
@@ -72,21 +72,21 @@
     return [self transformContainerPropertyToClassMappingRelation];
 }
 
-// 如果实现了该方法，则处理过程中会忽略该列表内的所有属性
+//如果实现了该方法，则处理过程中会忽略该列表内的所有属性
 + (nullable NSArray<NSString *> *)modelPropertyBlacklist {
     return [self transformIgnoreProperty];
 }
 
-// 当 JSON 转为 Model 完成后，该方法会被调用。
-// 你可以在这里对数据进行校验，如果校验不通过，可以返回 NO，则该 Model 会被忽略。
-// 你也可以在这里做一些自动转换不能完成的工作。
+//当 JSON 转为 Model 完成后，该方法会被调用。
+//你可以在这里对数据进行校验，如果校验不通过，可以返回 NO，则该 Model 会被忽略。
+//你也可以在这里做一些自动转换不能完成的工作。
 - (BOOL)modelCustomTransformFromDictionary:(NSDictionary *)dic {
     return [self transformCheckInstanceFromInformation:dic];
 }
 
-// 当 Model 转为 JSON 完成后，该方法会被调用。
-// 你可以在这里对数据进行校验，如果校验不通过，可以返回 NO，则该 Model 会被忽略。
-// 你也可以在这里做一些自动转换不能完成的工作。
+//当 Model 转为 JSON 完成后，该方法会被调用。
+//你可以在这里对数据进行校验，如果校验不通过，可以返回 NO，则该 Model 会被忽略。
+//你也可以在这里做一些自动转换不能完成的工作。
 - (BOOL)modelCustomTransformToDictionary:(NSMutableDictionary *)dic {
     return [self transformCheckInstanceToInformation:dic];
 }

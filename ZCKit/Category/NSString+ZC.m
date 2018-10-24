@@ -118,7 +118,7 @@
     return chinese;
 }
 
-- (NSString *)deletePictureResolution {  //删除图片尾缀@2x、@3x
+- (NSString *)deletePictureResolution { //删除图片尾缀@2x、@3x
     NSString *doubleResolution = @"@2x";
     NSString *tribleResolution = @"@3x";
     NSString *fileName = self.stringByDeletingPathExtension;
@@ -133,55 +133,55 @@
 }
 
 #pragma mark - judge
-- (BOOL)isPureInteger {  //是否是整形
+- (BOOL)isPureInteger { //是否是整形
     NSScanner *scan = [NSScanner scannerWithString:self];
     NSInteger val;
     return [scan scanInteger:&val] && [scan isAtEnd];
 }
 
-- (BOOL)isPureFloat {  //是否是浮点型 (0.2f不属于)
+- (BOOL)isPureFloat { //是否是浮点型 (0.2f不属于)
     NSScanner *scan = [NSScanner scannerWithString:self];
     float val;
     return [scan scanFloat:&val] && [scan isAtEnd];
 }
 
-- (BOOL)isPureNumber {  //是否是全数字
+- (BOOL)isPureNumber { //是否是全数字
     NSString *regex = @"^[0-9]+$";
     return [self matchRegex:regex];
 }
 
-- (BOOL)isPureAlpha {  //是否是全字母
+- (BOOL)isPureAlpha { //是否是全字母
     NSString *regex = @"^[a-zA-Z]+$";
     return [self matchRegex:regex];
 }
 
-- (BOOL)isPureChinese {  //是否是全中文
+- (BOOL)isPureChinese { //是否是全中文
     NSString *regex = @"^[\u4e00-\u9fa5]+$";
     return [self matchRegex:regex];
 }
 
-- (BOOL)isContainNumber {  //是否包含数字
+- (BOOL)isContainNumber { //是否包含数字
     NSRegularExpressionOptions options = NSRegularExpressionCaseInsensitive;
     NSRegularExpression *regular = [NSRegularExpression regularExpressionWithPattern:@"[0-9]" options:options error:nil];
     if (!regular) return NO;
     return ([regular numberOfMatchesInString:self options:NSMatchingReportProgress range:NSMakeRange(0, self.length)] > 0);
 }
 
-- (BOOL)isContainAlpha {  //是否包含字母
+- (BOOL)isContainAlpha { //是否包含字母
     NSRegularExpressionOptions options = NSRegularExpressionCaseInsensitive;
     NSRegularExpression *regular = [NSRegularExpression regularExpressionWithPattern:@"[A-Za-z]" options:options error:nil];
     if (!regular) return NO;
     return ([regular numberOfMatchesInString:self options:NSMatchingReportProgress range:NSMakeRange(0, self.length)] > 0);
 }
 
-- (BOOL)isContainChinese {  //是否包含字母
+- (BOOL)isContainChinese { //是否包含字母
     NSRegularExpressionOptions options = NSRegularExpressionCaseInsensitive;
     NSRegularExpression *regular = [NSRegularExpression regularExpressionWithPattern:@"[\u4e00-\u9fa5]" options:options error:nil];
     if (!regular) return NO;
     return ([regular numberOfMatchesInString:self options:NSMatchingReportProgress range:NSMakeRange(0, self.length)] > 0);
 }
 
-- (BOOL)isContainEmoji {  //是否有emoji
+- (BOOL)isContainEmoji { //是否有emoji
     __block BOOL isEomji = NO;
     [self enumerateSubstringsInRange:NSMakeRange(0, [self length]) options:NSStringEnumerationByComposedCharacterSequences
                             usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
@@ -214,32 +214,32 @@
     return isEomji;
 }
 
-- (BOOL)isPhone {  //是否是手机号
+- (BOOL)isPhone { //是否是手机号
     NSString *regex = @"^1+[3578]+\\d{9}";
     return [self matchRegex:regex];
 }
 
-- (BOOL)isUrl {  //是否是网址
+- (BOOL)isUrl { //是否是网址
     NSString *regex = @"^((http)|(https))+:[^\\s]+\\.[^\\s]*$";
     return [self matchRegex:regex];
 }
 
-- (BOOL)isPostalcode {  //是否是邮政编码
+- (BOOL)isPostalcode { //是否是邮政编码
     NSString *regex = @"^[0-8]\\d{5}(?!\\d)$";
     return [self matchRegex:regex];
 }
 
-- (BOOL)isEmail {  //是否是邮箱
+- (BOOL)isEmail { //是否是邮箱
     NSString *regex = @"[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}";
     return [self matchRegex:regex];
 }
 
-- (BOOL)isTaxNo {  //是否是工商税号
+- (BOOL)isTaxNo { //是否是工商税号
     NSString *regex = @"[0-9]\\d{13}([0-9]|X)$";
     return [self matchRegex:regex];
 }
 
-- (BOOL)isIP {  //是否是IP地址，xxx.xxx.xxx.xxx
+- (BOOL)isIP { //是否是IP地址，xxx.xxx.xxx.xxx
     NSString *regex = [NSString stringWithFormat:@"^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$"];
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
     BOOL rc = [pred evaluateWithObject:self];
@@ -256,7 +256,7 @@
     return NO;
 }
 
-- (BOOL)isCorrect {  //是否是身份证号码
+- (BOOL)isCorrect { //是否是身份证号码
     if (![self isPureNumber] || self.length != 18) return NO;
     NSString *regex = @"^(^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$)|(^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx])$)$";
     NSPredicate *pred = [NSPredicate predicateWithFormat:@"SELF MATCHES %@", regex];
@@ -277,13 +277,13 @@
     }
     NSString *str = rarr[(sum % 11)];
     NSString *string = [self substringFromIndex:17];
-    if ([str isEqualToString:@"10"]) {  //不区分大小写
+    if ([str isEqualToString:@"10"]) { //不区分大小写
         return ([string isEqualToString:@"X"] || [string isEqualToString:@"x"]);
     }
     return [str isEqualToString:string];
 }
 
-- (BOOL)isBankCard {  //是否是银行卡号
+- (BOOL)isBankCard { //是否是银行卡号
     if (self.length == 0) return NO;
     NSString *digitsOnly = @""; char c;
     for (int i = 0; i < self.length; i++) {
@@ -309,15 +309,49 @@
     return modulus == 0;
 }
 
-- (BOOL)isUserName {  //是否是用户姓名，20位的中文或英文
+- (BOOL)isUserName { //是否是用户姓名，20位的中文或英文
     NSString *regex = @"^[a-zA-Z\u4E00-\u9FA5]{1,20}";
     return [self matchRegex:regex];
+}
+
+- (BOOL)isNotBlank { //是否不是空白，nil，@""，@"  "，@"\n" will Returns NO
+    NSCharacterSet *blank = [NSCharacterSet whitespaceAndNewlineCharacterSet];
+    for (NSInteger i = 0; i < self.length; ++i) {
+        unichar c = [self characterAtIndex:i];
+        if (![blank characterIsMember:c]) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (BOOL)isContainAdmitSpecialCharacter { //是否包含承认的特殊字符
+    if (self.length == 0) return NO;
+    NSString *regex = @"`-=~!@#$%^&*()_+[]\\;',./{}|:\"<>?";
+    NSInteger allIndex = 0;
+    for (int i = 0; i < self.length; i++) {
+        NSString *subStr = [self substringWithRange:NSMakeRange(i, 1)];
+        if ([regex rangeOfString:subStr].location != NSNotFound) {
+            allIndex ++;
+        }
+    }
+    return (allIndex > 0);
+}
+
+- (BOOL)isContainsCharacterSet:(NSCharacterSet *)set { //是否包含字符集
+    if (!set) return NO;
+    return [self rangeOfCharacterFromSet:set].location != NSNotFound;
+}
+
+- (BOOL)isEqualIgnoreCase:(NSString *)str { //不区分大小写比对字符串相等
+    if (!str) return NO;
+    return ([self compare:str options:NSCaseInsensitiveSearch] == NSOrderedSame);
 }
 
 /** 1.是否可保护特殊字符 2.是否必须保护字符、字母、数字 3.是否做字符串太简单的判断 4.需要屏蔽的字符串(如账号) 5.最小长度 6.最大长度 */
 - (BOOL)isPasswordAllowAdmitSpecialCharacter:(BOOL)specialChar mustAllContain:(BOOL)allContain allowSimple:(BOOL)allowSimple
                                    shieldStr:(NSString *)shieldStr min:(int)min max:(int)max {
-    if (self.length < min || self.length > max) return NO;  //是否是规范的密码
+    if (self.length < min || self.length > max) return NO; //是否是规范的密码
     NSString *admitStr = self;
     if (specialChar) {
         NSString *regex = @"`-=~!@#$%^&*()_+[]\\;',./{}|:\"<>?";
@@ -336,40 +370,6 @@
         return YES;
     }
     return NO;
-}
-
-- (BOOL)isNotBlank {  //是否不是空白，nil，@""，@"  "，@"\n" will Returns NO
-    NSCharacterSet *blank = [NSCharacterSet whitespaceAndNewlineCharacterSet];
-    for (NSInteger i = 0; i < self.length; ++i) {
-        unichar c = [self characterAtIndex:i];
-        if (![blank characterIsMember:c]) {
-            return YES;
-        }
-    }
-    return NO;
-}
-
-- (BOOL)isContainAdmitSpecialCharacter {  //是否包含承认的特殊字符
-    if (self.length == 0) return NO;
-    NSString *regex = @"`-=~!@#$%^&*()_+[]\\;',./{}|:\"<>?";
-    NSInteger allIndex = 0;
-    for (int i = 0; i < self.length; i++) {
-        NSString *subStr = [self substringWithRange:NSMakeRange(i, 1)];
-        if ([regex rangeOfString:subStr].location != NSNotFound) {
-            allIndex ++;
-        }
-    }
-    return (allIndex > 0);
-}
-
-- (BOOL)isContainsCharacterSet:(NSCharacterSet *)set {  //是否包含字符集
-    if (!set) return NO;
-    return [self rangeOfCharacterFromSet:set].location != NSNotFound;
-}
-
-- (BOOL)isEqualIgnoreCase:(NSString *)str {  //不区分大小写比对字符串相等
-    if (!str) return NO;
-    return ([self compare:str options:NSCaseInsensitiveSearch] == NSOrderedSame);
 }
 
 #pragma mark - class
@@ -401,26 +401,17 @@
 
 #pragma mark - private
 - (CGSize)sizeForFont:(UIFont *)font size:(CGSize)size mode:(NSLineBreakMode)lineBreakMode {
-    CGSize result;
-    if (!font) font = [UIFont systemFontOfSize:12];
-    if ([self respondsToSelector:@selector(boundingRectWithSize:options:attributes:context:)]) {
-        NSMutableDictionary *attr = [NSMutableDictionary new];
-        attr[NSFontAttributeName] = font;
-        if (lineBreakMode != NSLineBreakByWordWrapping) {
-            NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
-            paragraphStyle.lineBreakMode = lineBreakMode;
-            attr[NSParagraphStyleAttributeName] = paragraphStyle;
-        }
-        NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
-        CGRect rect = [self boundingRectWithSize:size options:options attributes:attr context:nil];
-        result = rect.size;
-    } else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        result = [self sizeWithFont:font constrainedToSize:size lineBreakMode:lineBreakMode];
-#pragma clang diagnostic pop
+    if (!font) font = [UIFont systemFontOfSize:12.0];
+    NSMutableDictionary *attr = [NSMutableDictionary dictionary];
+    attr[NSFontAttributeName] = font;
+    if (lineBreakMode != NSLineBreakByWordWrapping) {
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.lineBreakMode = lineBreakMode;
+        attr[NSParagraphStyleAttributeName] = paragraphStyle;
     }
-    return result;
+    NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
+    CGRect rect = [self boundingRectWithSize:size options:options attributes:attr context:nil];
+    return rect.size;
 }
 
 - (BOOL)matchRegex:(NSString *)regex {
@@ -428,7 +419,7 @@
     return [pred evaluateWithObject:self];
 }
 
-- (BOOL)isEasyPasswordShield:(NSString *)shield {  //规则:不含汉字，连续数或递增数不超过6位
+- (BOOL)isEasyPasswordShield:(NSString *)shield { //规则:不含汉字，连续数或递增数不超过6位
     if (self.length < 6) return YES;
     if ([self isContainChinese]) return YES;
     if (shield && [self containsString:shield]) return YES;
@@ -463,50 +454,27 @@
 
 #pragma mark - expand
 - (NSString *)stringByURLEncode {
-    if ([self respondsToSelector:@selector(stringByAddingPercentEncodingWithAllowedCharacters:)]) {
-        static NSString * const kAFCharactersGeneralDelimitersToEncode = @":#[]@";
-        static NSString * const kAFCharactersSubDelimitersToEncode = @"!$&'()*+,;=";
-        NSMutableCharacterSet * allowedCharacterSet = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
-        [allowedCharacterSet removeCharactersInString:[kAFCharactersGeneralDelimitersToEncode stringByAppendingString:kAFCharactersSubDelimitersToEncode]];
-        static NSUInteger const batchSize = 50;
-        NSUInteger index = 0;
-        NSMutableString *escaped = @"".mutableCopy;
-        while (index < self.length) {
-            NSUInteger length = MIN(self.length - index, batchSize);
-            NSRange range = NSMakeRange(index, length);
-            // To avoid breaking up character sequences such as 👴🏻👮🏽
-            range = [self rangeOfComposedCharacterSequencesForRange:range];
-            NSString *substring = [self substringWithRange:range];
-            NSString *encoded = [substring stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacterSet];
-            [escaped appendString:encoded];
-            index += range.length;
-        }
-        return escaped;
-    } else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        CFStringEncoding cfEncoding = CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding);
-        NSString *encoded = (__bridge_transfer NSString *)
-        CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,(__bridge CFStringRef)self,NULL,
-                                                CFSTR("!#$&'()*+,/:;=?@[]"),cfEncoding);
-        return encoded;
-#pragma clang diagnostic pop
+    static NSString * const kAFCharactersGeneralDelimitersToEncode = @":#[]@";
+    static NSString * const kAFCharactersSubDelimitersToEncode = @"!$&'()*+,;=";
+    NSMutableCharacterSet * allowedCharacterSet = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
+    [allowedCharacterSet removeCharactersInString:[kAFCharactersGeneralDelimitersToEncode stringByAppendingString:kAFCharactersSubDelimitersToEncode]];
+    static NSUInteger const batchSize = 50;
+    NSUInteger index = 0;
+    NSMutableString *escaped = @"".mutableCopy;
+    while (index < self.length) {
+        NSUInteger length = MIN(self.length - index, batchSize);
+        NSRange range = NSMakeRange(index, length); //To avoid breaking up character sequences such as 👴🏻👮🏽
+        range = [self rangeOfComposedCharacterSequencesForRange:range];
+        NSString *substring = [self substringWithRange:range];
+        NSString *encoded = [substring stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacterSet];
+        [escaped appendString:encoded];
+        index += range.length;
     }
+    return escaped;
 }
 
 - (NSString *)stringByURLDecode {
-    if ([self respondsToSelector:@selector(stringByRemovingPercentEncoding)]) {
-        return [self stringByRemovingPercentEncoding];
-    } else {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        CFStringEncoding en = CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding);
-        NSString *decoded = [self stringByReplacingOccurrencesOfString:@"+" withString:@" "];
-        decoded = (__bridge_transfer NSString *)
-        CFURLCreateStringByReplacingPercentEscapesUsingEncoding(NULL,(__bridge CFStringRef)decoded,CFSTR(""),en);
-        return decoded;
-#pragma clang diagnostic pop
-    }
+    return [self stringByRemovingPercentEncoding];
 }
 
 - (NSString *)stringByEscapingHTML {

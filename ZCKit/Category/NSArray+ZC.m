@@ -12,7 +12,7 @@
 #pragma mark - NSArray
 @implementation NSArray (ZC)
 
-- (NSString *)descriptionWithLocale:(id)locale {  //重写系统方法以便打印
+- (NSString *)descriptionWithLocale:(id)locale { //重写系统方法以便打印
     NSMutableString *str = [NSMutableString string];
     [str appendString:@"[\n"];
     [self enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {

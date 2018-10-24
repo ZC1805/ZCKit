@@ -76,7 +76,7 @@
 - (UIButton *)itemAddRightImage:(NSString *)image target:(id)target action:(SEL)action {
     CGFloat height = 32.0, width = 30.0, offset = 5.0;
     UIImage *iamgeIm = [[UIImage imageNamed:image] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    ZCButton *rightBtn = [ZCButton buttonWithType:UIButtonTypeCustom];  // size 32 * 32 image 22 * 22
+    ZCButton *rightBtn = [ZCButton buttonWithType:UIButtonTypeCustom]; // size 32 * 32 image 22 * 22
     [rightBtn setImage:iamgeIm forState:UIControlStateNormal];
     [rightBtn setImage:[iamgeIm imageWithAlpha:0.3] forState:UIControlStateHighlighted];
     if (target && action) [rightBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];

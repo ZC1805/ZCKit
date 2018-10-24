@@ -92,7 +92,7 @@
 
 
 /** --- 文件路径 --- */
-#define ZCBundleFilePath(bundleName, fileName, extName) [ZCGlobal resourcePath:bundleName name:fileName ext:extName]
+#define ZCBundleFilePath(bundle, fileName, extName) [ZCGlobal resourcePath:bundle name:fileName ext:extName]
 
 /** --- 打印日志 --- */
 #ifdef DEBUG

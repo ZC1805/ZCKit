@@ -18,13 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)isLandscape;
 
-+ (BOOL)isValidString:(nullable NSString *)str;  /**< 非空长度&不是只有空格和换行&非<null> */
++ (BOOL)isValidString:(nullable NSString *)str;  /**< 非空长度 & 不是只有空格和换行 & 非<null> */
 
-+ (BOOL)isValidArray:(nullable NSArray *)array;  /**< 判断对象是否是有效的数组&count不为零 */
++ (BOOL)isValidArray:(nullable NSArray *)array;  /**< 判断对象是否是有效的数组 & count不为零 */
 
-+ (BOOL)isValidDictionary:(nullable NSDictionary *)dictionary;  /**< 判断对象是否是有效的字典&count不为零 */
++ (BOOL)isValidDictionary:(nullable NSDictionary *)dictionary;  /**< 判断对象是否是有效的字典 & count不为零 */
 
-+ (nullable NSString *)resourcePath:(nullable NSString *)bundleName name:(NSString *)name ext:(NSString *)ext;
++ (nullable NSString *)resourcePath:(nullable NSString *)bundle name:(NSString *)name ext:(NSString *)ext;  /**< 资源文件路径 */
 
 #pragma mark - misc
 + (nullable UIViewController *)topController:(nullable UIViewController *)rootvc;  /**< 顶控制器，初始rootvc可为nil */

@@ -11,11 +11,11 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
-    ZCEnumScrollViewDirectionNone,
-    ZCEnumScrollViewDirectionRight,
-    ZCEnumScrollViewDirectionLeft,
-    ZCEnumScrollViewDirectionUp,
-    ZCEnumScrollViewDirectionDown,
+    ZCEnumScrollViewDirectionNone  = 0,  /**< 无滑动 */
+    ZCEnumScrollViewDirectionRight = 1,  /**< 右滑动 */
+    ZCEnumScrollViewDirectionLeft  = 2,  /**< 左滑动 */
+    ZCEnumScrollViewDirectionUp    = 3,  /**< 上滑动 */
+    ZCEnumScrollViewDirectionDown  = 4,  /**< 下滑动 */
 };
 
 @interface UIScrollView (ZC)

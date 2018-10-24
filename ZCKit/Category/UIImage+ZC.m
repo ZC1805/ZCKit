@@ -9,6 +9,7 @@
 #import "UIImage+ZC.h"
 #import "ZCPredefine.h"
 #import "ZCKitBridge.h"
+#import "ZCGlobal.h"
 #import <ImageIO/ImageIO.h>
 #import <Accelerate/Accelerate.h>
 #import <CoreText/CoreText.h>
@@ -24,48 +25,13 @@
     return [self zc_imageWithPDF:dataOrPath resize:NO size:CGSizeZero];
 }
 
-+ (UIImage *)zc_imageWithPDF:(id)dataOrPath resize:(BOOL)resize size:(CGSize)size {
-    if (!dataOrPath) return nil;
-    CGPDFDocumentRef pdf = NULL;
-    if ([dataOrPath isKindOfClass:[NSData class]]) {
-        CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)dataOrPath);
-        pdf = CGPDFDocumentCreateWithProvider(provider);
-        CGDataProviderRelease(provider);
-    } else if ([dataOrPath isKindOfClass:[NSString class]]) {
-        pdf = CGPDFDocumentCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:dataOrPath]);
-    }
-    if (!pdf) return nil;
-    
-    CGPDFPageRef page = CGPDFDocumentGetPage(pdf, 1);
-    if (!page) {
-        CGPDFDocumentRelease(pdf);
-        return nil;
-    }
-    
-    CGRect pdfRect = CGPDFPageGetBoxRect(page, kCGPDFCropBox);
-    CGSize pdfSize = resize ? size : pdfRect.size;
-    CGFloat scale = [UIScreen mainScreen].scale;
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    CGContextRef ctx = CGBitmapContextCreate(NULL, pdfSize.width * scale, pdfSize.height * scale, 8, 0, colorSpace,
-                                             kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedFirst);
-    if (!ctx) {
-        CGColorSpaceRelease(colorSpace);
-        CGPDFDocumentRelease(pdf);
-        return nil;
-    }
-    
-    CGContextScaleCTM(ctx, scale, scale);
-    CGContextTranslateCTM(ctx, -pdfRect.origin.x, -pdfRect.origin.y);
-    CGContextDrawPDFPage(ctx, page);
-    CGPDFDocumentRelease(pdf);
-    
-    CGImageRef image = CGBitmapContextCreateImage(ctx);
-    UIImage *pdfImage = [[UIImage alloc] initWithCGImage:image scale:scale orientation:UIImageOrientationUp];
-    CGImageRelease(image);
-    CGContextRelease(ctx);
-    CGColorSpaceRelease(colorSpace);
-    
-    return pdfImage;
++ (UIImage *)imageGIFAnimated:(NSString *)name {
+    if (!name) return nil;
+    NSString *path = [ZCGlobal resourcePath:nil name:name ext:@"gif"];
+    if (!path) return [UIImage imageNamed:name];
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    if (data) return [UIImage imageGIFAnimatedWithData:data];
+    return [UIImage imageNamed:name];
 }
 
 + (UIImage *)imageWithClear {
@@ -93,7 +59,7 @@
     UIGraphicsBeginImageContextWithOptions(self.size, NO, 0);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGRect area = CGRectMake(0, 0, self.size.width, self.size.height);
-    CGContextScaleCTM(ctx, 1, -1);
+    CGContextScaleCTM(ctx, 1.0, -1.0);
     CGContextTranslateCTM(ctx, 0, -area.size.height);
     CGContextSetBlendMode(ctx, kCGBlendModeMultiply);
     CGContextSetAlpha(ctx, alpha);
@@ -146,10 +112,10 @@
     [self drawAtPoint:CGPointMake(0, 0)];
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
-    paragraphStyle.alignment = NSTextAlignmentCenter;  //文字居中
+    paragraphStyle.alignment = NSTextAlignmentCenter; //文字居中
     CGSize sizeText = [title boundingRectWithSize:self.size options:NSStringDrawingUsesLineFragmentOrigin
                                        attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:fontSize]}
-                                          context:nil].size;  //计算文字所占的size
+                                          context:nil].size; //计算文字所占的size
     CGRect rect = CGRectMake(point.x, point.y, sizeText.width, sizeText.height);
     [title drawInRect:rect withAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:fontSize],
                                             NSForegroundColorAttributeName : [ UIColor whiteColor],
@@ -186,7 +152,7 @@
 
 
 //#warning - yasuo
-////压缩图片质量的优点在于，尽可能保留图片清晰度，图片不会明显模糊；
+////压缩图片质量的优点在于，尽可能保留图片清晰度，图片不会明显模糊。
 ////缺点在于，不能保证图片压缩后小于指定大小。
 //- (NSData *)compressQualityForLimit:(NSInteger)limit {
 //    CGFloat compression = 1.0;
@@ -300,31 +266,50 @@
 //}
 
 
-#pragma mark - 更改所有的bundle 下面的2x也要适配3x
-#pragma mark - gif
-+ (UIImage *)imageGIFAnimated:(NSString *)name {
-    if (!name) return nil;
-    CGFloat scale = [UIScreen mainScreen].scale;
-    if (scale > 1.0) {
-        NSString *retinaPath = [[NSBundle mainBundle] pathForResource:[name stringByAppendingString:@"@2x"] ofType:@"gif"];
-        NSData *data = [NSData dataWithContentsOfFile:retinaPath];
-        if (data) {
-            return [UIImage imageGIFAnimatedWithData:data];
-        }
-        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"gif"];
-        data = [NSData dataWithContentsOfFile:path];
-        if (data) {
-            return [UIImage imageGIFAnimatedWithData:data];
-        }
-        return [UIImage imageNamed:name];
-    } else {
-        NSString *path = [[NSBundle mainBundle] pathForResource:name ofType:@"gif"];
-        NSData *data = [NSData dataWithContentsOfFile:path];
-        if (data) {
-            return [UIImage imageGIFAnimatedWithData:data];
-        }
-        return [UIImage imageNamed:name];
+
+#pragma mark - misc
++ (UIImage *)zc_imageWithPDF:(id)dataOrPath resize:(BOOL)resize size:(CGSize)size {
+    if (!dataOrPath) return nil;
+    CGPDFDocumentRef pdf = NULL;
+    if ([dataOrPath isKindOfClass:[NSData class]]) {
+        CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)dataOrPath);
+        pdf = CGPDFDocumentCreateWithProvider(provider);
+        CGDataProviderRelease(provider);
+    } else if ([dataOrPath isKindOfClass:[NSString class]]) {
+        pdf = CGPDFDocumentCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:dataOrPath]);
     }
+    if (!pdf) return nil;
+    
+    CGPDFPageRef page = CGPDFDocumentGetPage(pdf, 1);
+    if (!page) {
+        CGPDFDocumentRelease(pdf);
+        return nil;
+    }
+    
+    CGRect pdfRect = CGPDFPageGetBoxRect(page, kCGPDFCropBox);
+    CGSize pdfSize = resize ? size : pdfRect.size;
+    CGFloat scale = [UIScreen mainScreen].scale;
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef ctx = CGBitmapContextCreate(NULL, pdfSize.width * scale, pdfSize.height * scale, 8, 0, colorSpace,
+                                             kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedFirst);
+    if (!ctx) {
+        CGColorSpaceRelease(colorSpace);
+        CGPDFDocumentRelease(pdf);
+        return nil;
+    }
+    
+    CGContextScaleCTM(ctx, scale, scale);
+    CGContextTranslateCTM(ctx, -pdfRect.origin.x, -pdfRect.origin.y);
+    CGContextDrawPDFPage(ctx, page);
+    CGPDFDocumentRelease(pdf);
+    
+    CGImageRef image = CGBitmapContextCreateImage(ctx);
+    UIImage *pdfImage = [[UIImage alloc] initWithCGImage:image scale:scale orientation:UIImageOrientationUp];
+    CGImageRelease(image);
+    CGContextRelease(ctx);
+    CGColorSpaceRelease(colorSpace);
+    
+    return pdfImage;
 }
 
 + (UIImage *)imageGIFAnimatedWithData:(NSData *)data {

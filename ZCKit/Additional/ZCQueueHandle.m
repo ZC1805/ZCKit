@@ -98,14 +98,14 @@ void concurrent_async(dispatch_block_t block) {
 }
 
 #pragma mark - GCD apply
-void apply_serial_queue(void(^operation)(dispatch_queue_t queue)) {  //串行迭代队列
+void apply_serial_queue(void(^operation)(dispatch_queue_t queue)) { //串行迭代队列
     dispatch_queue_t serialQueue = dispatch_queue_create("serial_queue_apply", DISPATCH_QUEUE_SERIAL);
     if (operation) {
         operation(serialQueue);
     }
 }
 
-void apply_concurrent_queue(void(^operation)(dispatch_queue_t queue)) {  //并行迭代队列，所以使用dispatch_apply可以运行的更快
+void apply_concurrent_queue(void(^operation)(dispatch_queue_t queue)) { //并行迭代队列，所以使用dispatch_apply可以运行的更快
     dispatch_queue_t concurrentQueue = dispatch_queue_create("concurrent_queue_apply", DISPATCH_QUEUE_CONCURRENT);
     if (operation) {
         operation(concurrentQueue);

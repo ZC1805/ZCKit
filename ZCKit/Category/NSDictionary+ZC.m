@@ -34,7 +34,7 @@
 }
 
 - (NSDictionary *)dictionaryForKeys:(NSArray *)keys {
-    NSMutableDictionary *dic = [NSMutableDictionary new];
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     if (!keys || !keys.count) return [dic copy];
     for (id key in keys) {
         id value = self[key];
@@ -377,7 +377,7 @@
     [self injectValue:[NSNumber numberWithLong:value] forKey:key];
 }
 
-/** 注入string，allowNull为YES时value不规则值直接替换成NSNull值插入，NO时候value为@""&nil时不加入字典 */
+/** 注入string，allowNull为YES时value不规则值直接替换成NSNull值插入，NO时候value为@"" & nil时不加入字典 */
 - (void)injectStringValue:(NSString *)value forKey:(NSString *)key allowNull:(BOOL)allowNull {
     [self injectValue:value forKey:key allowNull:allowNull];
 }

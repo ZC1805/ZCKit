@@ -12,10 +12,10 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ZCEnumLabelCountingMethod) {
-    ZCEnumLabelCountingMethodEaseInOut,
-    ZCEnumLabelCountingMethodEaseIn,
-    ZCEnumLabelCountingMethodEaseOut,
-    ZCEnumLabelCountingMethodLinear,
+    ZCEnumLabelCountingMethodEaseInOut = 0,  /**< 计数方式 */
+    ZCEnumLabelCountingMethodEaseIn    = 1,  /**< 计数方式 */
+    ZCEnumLabelCountingMethodEaseOut   = 2,  /**< 计数方式 */
+    ZCEnumLabelCountingMethodLinear    = 3,  /**< 计数方式 */
 };
 
 @interface ZCCountingLabel : UILabel  /**< 快速计数标签 */

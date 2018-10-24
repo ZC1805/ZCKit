@@ -37,7 +37,7 @@
         if (num == [NSNull null]) {return nil;}
         return num;
     }
-    // hex number
+    //hex number
     int sign = 0;
     if ([str hasPrefix:@"0x"]) sign = 1;
     else if ([str hasPrefix:@"-0x"]) sign = -1;
@@ -51,7 +51,7 @@
             return nil;
         }
     }
-    // normal number
+    //normal number
     NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     return [formatter numberFromString:string];
@@ -74,7 +74,7 @@
     if (!strValue) return [NSDecimalNumber notANumber];
     double douValue = [strValue doubleValue];
     NSString *doubleStr = [NSString stringWithFormat:@"%lf", douValue];
-    return [NSDecimalNumber decimalNumberWithString:doubleStr];  //这种初始化方法测试出只保留6位小数精度
+    return [NSDecimalNumber decimalNumberWithString:doubleStr]; //这种初始化方法测试出只保留6位小数精度
 }
 
 /** double初始化，规避精度问题，六位小数精度 */

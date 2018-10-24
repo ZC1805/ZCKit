@@ -57,14 +57,6 @@
     return [[[NSCalendar currentCalendar] components:NSCalendarUnitWeekOfYear fromDate:self] weekOfYear];
 }
 
-//- (NSInteger)yearForWeekOfYear {
-//    return [[[NSCalendar currentCalendar] components:NSCalendarUnitYearForWeekOfYear fromDate:self] yearForWeekOfYear];
-//}
-
-//- (NSInteger)quarter {
-//    return [[[NSCalendar currentCalendar] components:NSCalendarUnitQuarter fromDate:self] quarter];
-//}
-
 - (BOOL)isLeapMonth {
     return [[[NSCalendar currentCalendar] components:NSCalendarUnitQuarter fromDate:self] isLeapMonth];
 }

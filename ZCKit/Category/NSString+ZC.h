@@ -44,52 +44,53 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - judge
-- (BOOL)isPureInteger;  /**< 是否是整形 */
+@property (nonatomic, readonly) BOOL isPureInteger;  /**< 是否是整形 */
 
-- (BOOL)isPureFloat;  /**< 是否是浮点型 (0.2f不算) */
+@property (nonatomic, readonly) BOOL isPureFloat;  /**< 是否是浮点型 (0.2f不算) */
 
-- (BOOL)isPureNumber;  /**< 是否是全数字 */
+@property (nonatomic, readonly) BOOL isPureNumber;  /**< 是否是全数字 */
 
-- (BOOL)isPureAlpha;  /**< 是否是全字母 */
+@property (nonatomic, readonly) BOOL isPureAlpha;  /**< 是否是全字母 */
 
-- (BOOL)isPureChinese;  /**< 是否是全中文 */
+@property (nonatomic, readonly) BOOL isPureChinese;  /**< 是否是全中文 */
 
-- (BOOL)isContainNumber;  /**< 是否包含数字 */
+@property (nonatomic, readonly) BOOL isContainNumber;  /**< 是否包含数字 */
 
-- (BOOL)isContainAlpha;  /**< 是否包含字母 */
+@property (nonatomic, readonly) BOOL isContainAlpha;  /**< 是否包含字母 */
 
-- (BOOL)isContainChinese;  /**< 是否包含字母 */
+@property (nonatomic, readonly) BOOL isContainChinese;  /**< 是否包含字母 */
 
-- (BOOL)isContainEmoji;  /**< 是否有emoji */
+@property (nonatomic, readonly) BOOL isContainEmoji;  /**< 是否有emoji */
 
-- (BOOL)isPhone;  /**< 是否是手机号 */
+@property (nonatomic, readonly) BOOL isPhone;  /**< 是否是手机号 */
 
-- (BOOL)isUrl;  /**< 是否是网址 */
+@property (nonatomic, readonly) BOOL isUrl;  /**< 是否是网址 */
 
-- (BOOL)isPostalcode;  /**< 是否是邮政编码 */
+@property (nonatomic, readonly) BOOL isPostalcode;  /**< 是否是邮政编码 */
 
-- (BOOL)isEmail;  /**< 是否是邮箱 */
+@property (nonatomic, readonly) BOOL isEmail;  /**< 是否是邮箱 */
 
-- (BOOL)isTaxNo;  /**< 是否是工商税号 */
+@property (nonatomic, readonly) BOOL isTaxNo;  /**< 是否是工商税号 */
 
-- (BOOL)isIP;  /**< 是否是IP地址xxx.xxx.xxx.xxx */
+@property (nonatomic, readonly) BOOL isIP;  /**< 是否是IP地址xxx.xxx.xxx.xxx */
 
-- (BOOL)isCorrect;  /**< 是否是身份证号码 */
+@property (nonatomic, readonly) BOOL isCorrect;  /**< 是否是身份证号码 */
 
-- (BOOL)isBankCard;  /**< 是否是银行卡号 */
+@property (nonatomic, readonly) BOOL isBankCard;  /**< 是否是银行卡号 */
 
-- (BOOL)isUserName;  /**< 是否是用户姓名，1-20位的中文或英文 */
+@property (nonatomic, readonly) BOOL isUserName;  /**< 是否是用户姓名，1-20位的中文或英文 */
 
-- (BOOL)isPasswordAllowAdmitSpecialCharacter:(BOOL)specialChar mustAllContain:(BOOL)allContain allowSimple:(BOOL)allowSimple
-                                   shieldStr:(nullable NSString *)shieldStr min:(int)min max:(int)max;  /**< 是否是规范的密码 */
+@property (nonatomic, readonly) BOOL isNotBlank;  /**< 是否不是空白，nil，@""，@"  "，@"\n" will Returns NO */
 
-- (BOOL)isNotBlank;  /**< 是否不是空白，nil，@""，@"  "，@"\n" will Returns NO */
 
 - (BOOL)isContainAdmitSpecialCharacter;  /**< 是否包含承认的特殊字符 */
 
 - (BOOL)isContainsCharacterSet:(NSCharacterSet *)set;  /**< 是否包含字符集 */
 
 - (BOOL)isEqualIgnoreCase:(NSString *)str;  /**< 不区分大小写比对字符串相等 */
+
+- (BOOL)isPasswordAllowAdmitSpecialCharacter:(BOOL)specialChar mustAllContain:(BOOL)allContain allowSimple:(BOOL)allowSimple
+                                   shieldStr:(nullable NSString *)shieldStr min:(int)min max:(int)max;  /**< 是否是规范的密码 */
 
 
 #pragma mark - class

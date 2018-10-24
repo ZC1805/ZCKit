@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)clearSelectedRowsAnimated:(BOOL)animated;  /**< 清除所有选择的行 */
 
-- (void)updateWithBlock:(void(^)(UITableView *tableView))block;  /**< 执行beginUpdates&endUpdates，block执行插入、删除、选择，block不可执行reloadData */
+- (void)updateWithBlock:(void(^)(UITableView *tableView))block;  /**< 执行beginUpdates & endUpdates，block执行插入、删除、选择，block不可执行reloadData */
 
 - (void)insertRowInIndexPath:(NSIndexPath *)indexPath withRowAnimation:(UITableViewRowAnimation)animation;
 

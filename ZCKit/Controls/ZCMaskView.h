@@ -23,16 +23,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCMaskView : UIView  /**< 自定义view，添加mask和点击处理，仅透明度动画 */
 
-/**< 可在此单例对象添加额外的子视图 */
+/** 可在此单例对象添加额外的子视图 */
 + (instancetype)mask;
 
-/**< 展示子视图，默认灰色背景 & 点击背景自动隐藏 */
+/** 展示子视图，默认灰色背景 & 点击背景自动隐藏 */
 + (void)display:(UIView *)subview hideAction:(nullable void(^)(void))hideAction;
 
-/**< 展示子视图，autoHides点击背景是否自动隐藏，clearMask是否使用透明mask，hideAction手动隐藏或点击背景自动隐藏的回调 */
+/** 展示子视图，autoHides点击背景是否自动隐藏，clearMask是否使用透明mask，hideAction手动隐藏或点击背景自动隐藏的回调 */
 + (void)display:(UIView *)subview autoHide:(BOOL)autoHide clearMask:(BOOL)clearMask hideAction:(nullable void(^)(void))hideAction;
 
-/**< 主动隐藏或者点击背景能隐藏时会触发Action回调，subview是nil时候，能隐藏时只要获取到了焦点就会隐藏 */
+/** 主动隐藏或者点击背景能隐藏时会触发Action回调，subview是nil时候，能隐藏时只要获取到了焦点就会隐藏 */
 + (void)dismissSubview;
 
 @end

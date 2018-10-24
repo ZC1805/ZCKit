@@ -11,14 +11,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, ZCEnumCycleAliment) {
-    ZCEnumCycleAlimentRight,
-    ZCEnumCycleAlimentCenter,
+    ZCEnumCycleAlimentCenter = 0,  /**< 小圆点位置居中 */
+    ZCEnumCycleAlimentRight  = 1,  /**< 小圆点位置居右 */
 };
 
 typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
-    ZCEnumCyclePageStyleClassic,    /**< 系统自带样式 */
-    ZCEnumCyclePageStyleAnimated,   /**< 自定义动画效果 */
-    ZCEnumCyclePageStyleNone,       /**< 不显示PageControl */
+    ZCEnumCyclePageStyleAnimated = 0,  /**< 自定动画效果 */
+    ZCEnumCyclePageStyleClassic  = 1,  /**< 系统自带样式 */
+    ZCEnumCyclePageStyleNone     = 2,  /**< 不显示PageControl */
 };
 
 
@@ -74,7 +74,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @property (nullable, nonatomic, strong) UIImage *pageDotImage;  /**< 其他分页控件小圆标图片，nil */
 
-#pragma mark - 数据&回调
+#pragma mark - 数据 & 回调
 @property (nullable, nonatomic, strong) NSArray *titlesGroup;  /**< 每张图片对应要显示的文字数组，默认nil */
 
 @property (nullable, nonatomic, strong) NSArray *imageURLStringsGroup;  /**< 网络图片 url string 数组，默认nil */

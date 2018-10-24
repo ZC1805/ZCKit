@@ -415,7 +415,7 @@ static NSString *ident = @"cycleControlCell";
 - (void)setPlaceholderImage:(UIImage *)placeholderImage {
     _placeholderImage = placeholderImage;
     if (!_backgroundImageView) {
-        UIImageView *bgImageView = [UIImageView new];
+        UIImageView *bgImageView = [[UIImageView alloc] init];
         bgImageView.contentMode = UIViewContentModeScaleAspectFit;
         [self insertSubview:bgImageView belowSubview:self.mainView];
         _backgroundImageView = bgImageView;
@@ -537,7 +537,7 @@ static NSString *ident = @"cycleControlCell";
 
 - (void)setImageURLStringsGroup:(NSArray *)imageURLStringsGroup {
     _imageURLStringsGroup = imageURLStringsGroup;
-    NSMutableArray *temp = [NSMutableArray new];
+    NSMutableArray *temp = [NSMutableArray array];
     [_imageURLStringsGroup enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * stop) {
         NSString *urlString;
         if ([obj isKindOfClass:[NSString class]]) {
@@ -561,7 +561,7 @@ static NSString *ident = @"cycleControlCell";
 - (void)setTitlesGroup:(NSArray *)titlesGroup {
     _titlesGroup = titlesGroup;
     if (self.onlyDisplayText) {
-        NSMutableArray *temp = [NSMutableArray new];
+        NSMutableArray *temp = [NSMutableArray array];
         for (int i = 0; i < _titlesGroup.count; i++) {
             [temp addObject:@""];
         }
@@ -582,7 +582,7 @@ static NSString *ident = @"cycleControlCell";
 }
 
 - (void)setupPageControl {
-    if (_pageControl) [_pageControl removeFromSuperview];  //重新加载数据时调整
+    if (_pageControl) [_pageControl removeFromSuperview]; //重新加载数据时调整
     if (self.imagePathsGroup.count == 0 || self.onlyDisplayText) return;
     if (self.imagePathsGroup.count == 1) return;
     int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
@@ -609,7 +609,7 @@ static NSString *ident = @"cycleControlCell";
         } break;
         default: break;
     }
-    if (self.currentPageDotImage) {  //重设pagecontroldot图片
+    if (self.currentPageDotImage) { //重设pagecontroldot图片
         self.currentPageDotImage = self.currentPageDotImage;
     }
     if (self.pageDotImage) {
@@ -695,11 +695,11 @@ static NSString *ident = @"cycleControlCell";
     }
 }
 
-- (void)willMoveToSuperview:(UIView *)newSuperview {  //解决当父View释放时，当前视图因为被Timer强引用而不能释放的问题
+- (void)willMoveToSuperview:(UIView *)newSuperview { //解决当父View释放时，当前视图因为被Timer强引用而不能释放的问题
     if (!newSuperview) [self invalidateTimer];
 }
 
-- (void)dealloc {  //解决当timer释放后，回调scrollViewDidScroll时访问野指针导致崩溃
+- (void)dealloc { //解决当timer释放后，回调scrollViewDidScroll时访问野指针导致崩溃
     _mainView.delegate = nil;
     _mainView.dataSource = nil;
     [self invalidateTimer];
@@ -762,7 +762,7 @@ static NSString *ident = @"cycleControlCell";
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (!self.imagePathsGroup.count) return;  //解决清除timer时偶尔会出现的问题
+    if (!self.imagePathsGroup.count) return; //解决清除timer时偶尔会出现的问题
     int itemIndex = [self currentIndex];
     int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:itemIndex];
     if ([self.pageControl isKindOfClass:[ZCCyclePageControl class]]) {
@@ -787,7 +787,7 @@ static NSString *ident = @"cycleControlCell";
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {
-    if (!self.imagePathsGroup.count) return;  //解决清除timer时偶尔会出现的问题
+    if (!self.imagePathsGroup.count) return; //解决清除timer时偶尔会出现的问题
     int itemIndex = [self currentIndex];
     int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:itemIndex];
     if ([self.delegate respondsToSelector:@selector(cycleControl:didScrollToIndex:)]) {
