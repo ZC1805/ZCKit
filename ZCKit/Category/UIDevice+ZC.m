@@ -45,28 +45,6 @@
 #endif
 }
 
-- (BOOL)isJailbroken {
-    if ([self isSimulator]) return NO;
-    // iOS9 URL Scheme query changed ...
-    // NSURL *cydiaURL = [NSURL URLWithString:@"cydia://package"];
-    // if ([[UIApplication sharedApplication] canOpenURL:cydiaURL]) return YES;
-    NSArray *paths = @[@"/Applications/Cydia.app", @"/private/var/lib/apt/", @"/private/var/lib/cydia", @"/private/var/stash"];
-    for (NSString *path in paths) {
-        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) return YES;
-    }
-    FILE *bash = fopen("/bin/bash", "r");
-    if (bash != NULL) {
-        fclose(bash);
-        return YES;
-    }
-    NSString *path = [NSString stringWithFormat:@"/private/%@", [NSString stringWithUUID]];
-    if ([@"test" writeToFile : path atomically : YES encoding : NSUTF8StringEncoding error : NULL]) {
-        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
-        return YES;
-    }
-    return NO;
-}
-
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 - (BOOL)isCanMakePhoneCalls {
     __block BOOL can;
@@ -88,14 +66,14 @@
             if ([[NSString stringWithUTF8String:addr->ifa_name] isEqualToString:name]) {
                 sa_family_t family = addr->ifa_addr->sa_family;
                 switch (family) {
-                    case AF_INET: { // IPv4
+                    case AF_INET: { //IPv4
                         char str[INET_ADDRSTRLEN] = {0};
                         inet_ntop(family, &(((struct sockaddr_in *)addr->ifa_addr)->sin_addr), str, sizeof(str));
                         if (strlen(str) > 0) {
                             address = [NSString stringWithUTF8String:str];
                         }
                     } break;
-                    case AF_INET6: { // IPv6
+                    case AF_INET6: { //IPv6
                         char str[INET6_ADDRSTRLEN] = {0};
                         inet_ntop(family, &(((struct sockaddr_in6 *)addr->ifa_addr)->sin6_addr), str, sizeof(str));
                         if (strlen(str) > 0) {
@@ -192,11 +170,6 @@
         cpu += n.floatValue;
     }
     return cpu;
-}
-
-- (NSDate *)systemUptime {
-    NSTimeInterval time = [[NSProcessInfo processInfo] systemUptime];
-    return [[NSDate alloc] initWithTimeIntervalSinceNow:(0 - time)];
 }
 
 #pragma mark - misc

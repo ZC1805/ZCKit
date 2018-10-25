@@ -104,7 +104,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
     UILabel *messageLabel = nil;
     UILabel *titleLabel = nil;
     UIImageView *imageView = nil;
-    UIView *wrapperView = [[UIView alloc] init];
+    UIView *wrapperView = [[UIView alloc] initWithFrame:CGRectZero];
     wrapperView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
                                    UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
     wrapperView.layer.cornerRadius = 8.0;
@@ -126,7 +126,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
         [wrapperView addSubview:imageView];
     }
     if (title != nil) {
-        titleLabel = [[UILabel alloc] init];
+        titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         titleLabel.numberOfLines = 1;
         titleLabel.font = [UIFont boldSystemFontOfSize:16.0];
         titleLabel.textAlignment = NSTextAlignmentCenter;
@@ -142,7 +142,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
         [wrapperView addSubview:titleLabel];
     }
     if (message != nil) {
-        messageLabel = [[UILabel alloc] init];
+        messageLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         messageLabel.numberOfLines = 0;
         messageLabel.font = [UIFont systemFontOfSize:15.0];
         messageLabel.textAlignment = NSTextAlignmentCenter;

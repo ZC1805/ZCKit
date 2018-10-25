@@ -286,13 +286,13 @@ static NSString *ident = @"cycleControlCell";
 }
 
 - (void)setupImageView {
-    UIImageView *imageView = [[UIImageView alloc] init];
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     _imageView = imageView;
     [self.contentView addSubview:imageView];
 }
 
 - (void)setupTitleLabel {
-    UILabel *titleLabel = [[UILabel alloc] init];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _titleLabel = titleLabel;
     _titleLabel.textColor = [UIColor whiteColor];
     _titleLabel.font = [UIFont systemFontOfSize:14];
@@ -415,7 +415,7 @@ static NSString *ident = @"cycleControlCell";
 - (void)setPlaceholderImage:(UIImage *)placeholderImage {
     _placeholderImage = placeholderImage;
     if (!_backgroundImageView) {
-        UIImageView *bgImageView = [[UIImageView alloc] init];
+        UIImageView *bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         bgImageView.contentMode = UIViewContentModeScaleAspectFit;
         [self insertSubview:bgImageView belowSubview:self.mainView];
         _backgroundImageView = bgImageView;
@@ -588,7 +588,7 @@ static NSString *ident = @"cycleControlCell";
     int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
     switch (self.pageControlStyle) {
         case ZCEnumCyclePageStyleAnimated: {
-            ZCCyclePageControl *pageControl = [[ZCCyclePageControl alloc] init];
+            ZCCyclePageControl *pageControl = [[ZCCyclePageControl alloc] initWithFrame:CGRectZero];
             pageControl.numberOfPages = self.imagePathsGroup.count;
             pageControl.dotColor = self.pageDotSelectColor;
             pageControl.userInteractionEnabled = YES;
@@ -598,7 +598,7 @@ static NSString *ident = @"cycleControlCell";
             _pageControl = pageControl;
         } break;
         case ZCEnumCyclePageStyleClassic:{
-            UIPageControl *pageControl = [[UIPageControl alloc] init];
+            UIPageControl *pageControl = [[UIPageControl alloc] initWithFrame:CGRectZero];
             pageControl.numberOfPages = self.imagePathsGroup.count;
             pageControl.currentPageIndicatorTintColor = self.pageDotSelectColor;
             pageControl.pageIndicatorTintColor = self.pageDotColor;

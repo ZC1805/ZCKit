@@ -44,7 +44,7 @@
 }
 
 - (void)setLeftImage:(UIImage *)leftImage {
-    UIImageView* imageView = [[UIImageView alloc] init];
+    UIImageView* imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
     imageView.image = leftImage;
     imageView.contentMode = UIViewContentModeScaleToFill;
     imageView.contentMode = UIViewContentModeCenter;

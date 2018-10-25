@@ -37,8 +37,8 @@
 #define ZCBlack30           [UIColor colorFormHex:0x303030 alpha:1.0]
 #define ZCBlack80           [UIColor colorFormHex:0x808080 alpha:1.0]
 #define ZCBlackA2           [UIColor colorFormHex:0xA2A2A2 alpha:1.0]
-#define ZCSPColor           [UIColor colorFormHex:0xC8C8C8 alpha:1.0]   /**< 分割线颜色 */
-#define ZCBKColor           [UIColor colorFormHex:0xF6F6F8 alpha:1.0]   /**< 背景颜色 */
+#define ZCSPColor           [UIColor colorFormHex:0xC8C8C8 alpha:1.0]   /**< 间隔线颜色 */
+#define ZCBKColor           [UIColor colorFormHex:0xF7F7F8 alpha:1.0]   /**< 背景颜色 */
 
 
 /** --- string --- */

@@ -37,8 +37,8 @@
         if (num == [NSNull null]) {return nil;}
         return num;
     }
-    //hex number
-    int sign = 0;
+    
+    int sign = 0; //hex number
     if ([str hasPrefix:@"0x"]) sign = 1;
     else if ([str hasPrefix:@"-0x"]) sign = -1;
     if (sign != 0) {
@@ -51,8 +51,8 @@
             return nil;
         }
     }
-    //normal number
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init]; //normal number
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     return [formatter numberFromString:string];
 }
