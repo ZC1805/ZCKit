@@ -13,10 +13,10 @@
 #import "ZCButton.h"
 #import "ZCGlobal.h"
 
-#define sheet_cal_top   7.0
-#define sheet_msg_hei   60.0
-#define sheet_item_hei  47.0
-#define sheet_flag_tag  83803
+static CGFloat sheetEdgeTop = 7.0;
+static CGFloat sheetMsgHei  = 60.0;
+static CGFloat sheetItemHei = 47.0;
+static CGFloat sheetFlagTag = 83803;
 
 @interface ZCSheetControl ()
 
@@ -91,7 +91,7 @@
 }
 
 - (void)onItem:(UIButton *)itemBtn {
-    NSInteger selectIndex = itemBtn.tag - sheet_flag_tag;
+    NSInteger selectIndex = itemBtn.tag - sheetFlagTag;
     if (self.cancelTitle.length && (selectIndex == self.items.count - 1)) selectIndex = -1;
     [self disappearItems:selectIndex];
 }
@@ -119,26 +119,26 @@
     if (messageExist) {
         if (!itemIsOnly) {
             if (itemIsZero) {
-                conHei = sheet_msg_hei - sheet_cal_top;
+                conHei = sheetMsgHei - sheetEdgeTop;
             } else {
                 if (cancelExist) {
-                    conHei = self.items.count * sheet_item_hei + sheet_msg_hei + sheet_cal_top;
+                    conHei = self.items.count * sheetItemHei + sheetMsgHei + sheetEdgeTop;
                 } else {
-                    conHei = self.items.count * sheet_item_hei + sheet_msg_hei;
+                    conHei = self.items.count * sheetItemHei + sheetMsgHei;
                 }
             }
         } else {
-            conHei = self.items.count * sheet_item_hei + sheet_msg_hei;
+            conHei = self.items.count * sheetItemHei + sheetMsgHei;
         }
     } else {
         if (!itemIsOnly) {
             if (cancelExist) {
-                conHei = self.items.count * sheet_item_hei + sheet_cal_top;
+                conHei = self.items.count * sheetItemHei + sheetEdgeTop;
             } else {
-                conHei = self.items.count * sheet_item_hei;
+                conHei = self.items.count * sheetItemHei;
             }
         } else {
-            conHei = self.items.count * sheet_item_hei;
+            conHei = self.items.count * sheetItemHei;
         }
     }
     CGFloat safeHei = [ZCGlobal isiPhoneX] ? 24.0 : 0;
@@ -158,23 +158,23 @@
     [self addSubview:self.contentView];
     if (msgExist) {
         if (celExist) {
-            self.contentView.frame = CGRectMake(0, sheet_msg_hei, initWid, initHei - sheet_msg_hei - sheet_item_hei - sheet_cal_top - safeHei);
-            self.contentView.contentSize = CGSizeMake(initWid, conHei - sheet_msg_hei - sheet_item_hei - sheet_cal_top);
+            self.contentView.frame = CGRectMake(0, sheetMsgHei, initWid, initHei - sheetMsgHei - sheetItemHei - sheetEdgeTop - safeHei);
+            self.contentView.contentSize = CGSizeMake(initWid, conHei - sheetMsgHei - sheetItemHei - sheetEdgeTop);
         } else {
-            self.contentView.frame = CGRectMake(0, sheet_msg_hei, initWid, initHei - sheet_msg_hei - safeHei);
-            self.contentView.contentSize = CGSizeMake(initWid, conHei - sheet_msg_hei);
+            self.contentView.frame = CGRectMake(0, sheetMsgHei, initWid, initHei - sheetMsgHei - safeHei);
+            self.contentView.contentSize = CGSizeMake(initWid, conHei - sheetMsgHei);
         }
     } else {
         if (celExist) {
-            self.contentView.frame = CGRectMake(0, 0, initWid, initHei - sheet_item_hei - sheet_cal_top - safeHei);
-            self.contentView.contentSize = CGSizeMake(initWid, conHei - sheet_item_hei - sheet_cal_top);
+            self.contentView.frame = CGRectMake(0, 0, initWid, initHei - sheetItemHei - sheetEdgeTop - safeHei);
+            self.contentView.contentSize = CGSizeMake(initWid, conHei - sheetItemHei - sheetEdgeTop);
         } else {
             self.contentView.frame = CGRectMake(0, 0, initWid, initHei - safeHei);
             self.contentView.contentSize = CGSizeMake(initWid, conHei);
         }
     }
     if (msgExist) {
-        UILabel *msglabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, initWid, sheet_msg_hei - sheet_cal_top)];
+        UILabel *msglabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, initWid, sheetMsgHei - sheetEdgeTop)];
         msglabel.text = self.msgText;
         msglabel.numberOfLines = 0;
         msglabel.textColor = [UIColor colorFormHex:0x808080 alpha:1.0];
@@ -195,7 +195,7 @@
         itemBtn.delayResponseTime = 0.1;
         UIColor *titleColor = [self isDangerousForIndex:i] ? [UIColor redColor] : [UIColor blackColor];
         UIImage *imageBk = [UIImage imageWithColor:[UIColor colorFormHex:0xe1e1e3 alpha:1.0] size:CGSizeMake(1.0, 1.0)];
-        itemBtn.tag = sheet_flag_tag + i;
+        itemBtn.tag = sheetFlagTag + i;
         itemBtn.backgroundColor = [UIColor whiteColor];
         itemBtn.titleLabel.font = [UIFont systemFontOfSize:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
@@ -204,18 +204,18 @@
         [itemBtn setBackgroundImage:imageBk forState:UIControlStateHighlighted];
         [itemBtn addTarget:self action:@selector(onItem:) forControlEvents:UIControlEventTouchUpInside];
         if (isOnly && celExist) {
-            itemBtn.frame = CGRectMake(0, initHei - sheet_item_hei - safeHei, initWid, sheet_item_hei + safeHei);
+            itemBtn.frame = CGRectMake(0, initHei - sheetItemHei - safeHei, initWid, sheetItemHei + safeHei);
             isCancel = YES;
         } else if (isOnly) {
-            itemBtn.frame = CGRectMake(0, i * sheet_item_hei, initWid, sheet_item_hei);
+            itemBtn.frame = CGRectMake(0, i * sheetItemHei, initWid, sheetItemHei);
         } else {
             if (celExist && (i == self.items.count - 1)) {
-                itemBtn.frame = CGRectMake(0, initHei - sheet_item_hei - safeHei, initWid, sheet_item_hei + safeHei);
+                itemBtn.frame = CGRectMake(0, initHei - sheetItemHei - safeHei, initWid, sheetItemHei + safeHei);
                 isCancel = YES;
             } else {
-                itemBtn.frame = CGRectMake(0, i * sheet_item_hei, initWid, sheet_item_hei);
+                itemBtn.frame = CGRectMake(0, i * sheetItemHei, initWid, sheetItemHei);
                 if (i != 0 || (!msgExist && self.maskClear)) {
-                    topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * sheet_item_hei, initWid, 1.0 / [UIScreen mainScreen].scale)];
+                    topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * sheetItemHei, initWid, 1.0 / [UIScreen mainScreen].scale)];
                     topSep.backgroundColor = [UIColor colorFormHex:0xdcdcdc alpha:1.0];
                 }
             }

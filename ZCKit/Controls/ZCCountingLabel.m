@@ -9,14 +9,6 @@
 #import "ZCCountingLabel.h"
 #import <QuartzCore/QuartzCore.h>
 
-#if !__has_feature(objc_arc)
-#error ZCCountingLabel is ARC only. Either turn on ARC for the project or use -fobjc-arc flag
-#endif
-
-#ifndef kUILabelCounterRate
-#define kUILabelCounterRate 3.0
-#endif
-
 @protocol UILabelCounter<NSObject>
 
 - (CGFloat)update:(CGFloat)t;
@@ -51,7 +43,7 @@
 @implementation UILabelCounterEaseIn
 
 - (CGFloat)update:(CGFloat)t {
-    return powf(t, kUILabelCounterRate);
+    return powf(t, 3.0);
 }
 
 @end
@@ -59,7 +51,7 @@
 @implementation UILabelCounterEaseOut
 
 - (CGFloat)update:(CGFloat)t {
-    return (1.0 - powf((1.0 - t), kUILabelCounterRate));
+    return (1.0 - powf((1.0 - t), 3.0));
 }
 
 @end
@@ -68,8 +60,8 @@
 
 - (CGFloat)update:(CGFloat)t {
     t *= 2;
-    if (t < 1.0) return (0.5 * powf (t, kUILabelCounterRate));
-    else return (0.5 * (2.0 - powf(2.0 - t, kUILabelCounterRate)));
+    if (t < 1.0) return (0.5 * powf (t, 3.0));
+    else return (0.5 * (2.0 - powf(2.0 - t, 3.0)));
 }
 
 @end
@@ -98,9 +90,34 @@
 
 @implementation ZCCountingLabel
 
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor clearColor];
+        self.font = [UIFont systemFontOfSize:15.0];
+        self.textAlignment = NSTextAlignmentCenter;
+    }
+    return self;
+}
+
 - (void)countFrom:(CGFloat)value to:(CGFloat)endValue {
     if (self.animationDuration == 0) self.animationDuration = 2.0;
     [self countFrom:value to:endValue withDuration:self.animationDuration];
+}
+
+- (void)countFromCurrentValueTo:(CGFloat)endValue {
+    [self countFrom:[self currentValue] to:endValue];
+}
+
+- (void)countFromCurrentValueTo:(CGFloat)endValue withDuration:(NSTimeInterval)duration {
+    [self countFrom:[self currentValue] to:endValue withDuration:duration];
+}
+
+- (void)countFromZeroTo:(CGFloat)endValue {
+    [self countFrom:0 to:endValue];
+}
+
+- (void)countFromZeroTo:(CGFloat)endValue withDuration:(NSTimeInterval)duration {
+    [self countFrom:0 to:endValue withDuration:duration];
 }
 
 - (void)countFrom:(CGFloat)startValue to:(CGFloat)endValue withDuration:(NSTimeInterval)duration {
@@ -141,22 +158,6 @@
     [timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     [timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:UITrackingRunLoopMode];
     self.timer = timer;
-}
-
-- (void)countFromCurrentValueTo:(CGFloat)endValue {
-    [self countFrom:[self currentValue] to:endValue];
-}
-
-- (void)countFromCurrentValueTo:(CGFloat)endValue withDuration:(NSTimeInterval)duration {
-    [self countFrom:[self currentValue] to:endValue withDuration:duration];
-}
-
-- (void)countFromZeroTo:(CGFloat)endValue {
-    [self countFrom:0 to:endValue];
-}
-
-- (void)countFromZeroTo:(CGFloat)endValue withDuration:(NSTimeInterval)duration {
-    [self countFrom:0 to:endValue withDuration:duration];
 }
 
 - (void)updateValue:(NSTimer *)timer {

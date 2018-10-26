@@ -37,8 +37,9 @@
 #define ZCBlack30           [UIColor colorFormHex:0x303030 alpha:1.0]
 #define ZCBlack80           [UIColor colorFormHex:0x808080 alpha:1.0]
 #define ZCBlackA2           [UIColor colorFormHex:0xA2A2A2 alpha:1.0]
-#define ZCSPColor           [UIColor colorFormHex:0xC8C8C8 alpha:1.0]   /**< 间隔线颜色 */
+#define ZCSPColor           [UIColor colorFormHex:0xC8C8C8 alpha:1.0]   /**< 交线颜色 */
 #define ZCBKColor           [UIColor colorFormHex:0xF7F7F8 alpha:1.0]   /**< 背景颜色 */
+#define ZCClear             [UIColor clearColor]                        /**< 透明颜色 */
 
 
 /** --- string --- */
@@ -93,6 +94,9 @@
 
 /** --- 文件路径 --- */
 #define ZCBundleFilePath(bundle, fileName, extName) [ZCGlobal resourcePath:bundle name:fileName ext:extName]
+
+/** --- 数值交换 --- */
+#define ZCSwap(_a_, _b_)  do { __typeof__(_a_) _tmp_ = (_a_); (_a_) = (_b_); (_b_) = _tmp_; } while (0)
 
 /** --- 打印日志 --- */
 #ifdef DEBUG

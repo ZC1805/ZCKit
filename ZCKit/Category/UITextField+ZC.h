@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UITextField (ZC)
 
-@property (nonatomic, assign) float leftSpace;  /**< 左边空余位置，leftview有就不设置，暂无leftview */
+@property (nonatomic, assign) CGFloat leftSpace;  /**< 左边空余位置，leftview有就不设置，暂无leftview */
 
 @property (nullable, nonatomic, strong) UIImage *leftImage;  /**< 设置左侧imageView */
 
@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign, readonly) NSRange currentSelectRange;  /**< 计算当前选择的Range */
 
 
-/** 初始化 */
+/**< 带字体的初始化和占位文字的初始化，color为textColor */
 - (instancetype)initWithFrame:(CGRect)frame holder:(nullable NSString *)holder font:(UIFont *)font color:(UIColor *)color;
 
 /** 选定所有文本 */

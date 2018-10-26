@@ -110,16 +110,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)stringByEscapingHTML;
 
-- (BOOL)matchesRegex:(NSString *)regex options:(NSRegularExpressionOptions)options;
-
-- (void)enumerateRegexMatches:(NSString *)regex
-                      options:(NSRegularExpressionOptions)options
-                   usingBlock:(void (^)(NSString *match, NSRange matchRange, BOOL *stop))block;
-
-- (NSString *)stringByReplacingRegex:(NSString *)regex
-                             options:(NSRegularExpressionOptions)options
-                          withString:(NSString *)replacement;
-
 @end
 
 NS_ASSUME_NONNULL_END

@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)bottomAlignment;
 
-- (instancetype)initWithFrame:(CGRect)frame font:(UIFont *)font color:(UIColor *)color;
+- (instancetype)initWithFrame:(CGRect)frame font:(UIFont *)font color:(UIColor *)color;  /**< 带字体的初始化，color为textColor */
 
 @end
 

@@ -10,13 +10,10 @@
 #import "ZCPredefine.h"
 #import "ZCKitBridge.h"
 #import "ZCGlobal.h"
+#import "ZCMacro.h"
 #import <ImageIO/ImageIO.h>
 #import <Accelerate/Accelerate.h>
 #import <CoreText/CoreText.h>
-
-#ifndef ZC_SWAP
-#define ZC_SWAP(_a_, _b_)  do { __typeof__(_a_) _tmp_ = (_a_); (_a_) = (_b_); (_b_) = _tmp_; } while (0)
-#endif
 
 @implementation UIImage (ZC)
 
@@ -701,7 +698,7 @@
         void *temp = malloc(tempSize);
         for (int i = 0; i < iterations; i++) {
             vImageBoxConvolve_ARGB8888(input, output, temp, 0, 0, radius, radius, NULL, kvImageEdgeExtend);
-            ZC_SWAP(input, output);
+            ZCSwap(input, output);
         }
         free(temp);
     }
@@ -723,7 +720,7 @@
             matrix[i] = (int16_t)roundf(matrixFloat[i] * divisor);
         }
         vImageMatrixMultiply_ARGB8888(input, output, matrix, divisor, NULL, NULL, kvImageNoFlags);
-        ZC_SWAP(input, output);
+        ZCSwap(input, output);
     }
     
     UIImage *outputImage = nil;

@@ -380,9 +380,8 @@
     return (__bridge_transfer NSString *)string;
 }
 
-#define EmojiCodeToSymbol(c) ((((0x808080F0 | (c & 0x3F000) >> 4) | (c & 0xFC0) << 10) | (c & 0x1C0000) << 18) | (c & 0x3F) << 24)
 + (NSString *)emojiWithIntCode:(int)intCode {
-    int symbol = EmojiCodeToSymbol(intCode);
+    int symbol = ((((0x808080F0 | (intCode & 0x3F000) >> 4) | (intCode & 0xFC0) << 10) | (intCode & 0x1C0000) << 18) | (intCode & 0x3F) << 24);
     NSString *string = [[NSString alloc] initWithBytes:&symbol length:sizeof(symbol) encoding:NSUTF8StringEncoding];
     if (string == nil) string = [NSString stringWithFormat:@"%C", (unichar)intCode];
     return string;
@@ -503,32 +502,6 @@
     }
     free(buf);
     return result;
-}
-
-- (BOOL)matchesRegex:(NSString *)regex options:(NSRegularExpressionOptions)options {
-    NSRegularExpression *pattern = [NSRegularExpression regularExpressionWithPattern:regex options:options error:NULL];
-    if (!pattern) return NO;
-    return ([pattern numberOfMatchesInString:self options:0 range:NSMakeRange(0, self.length)] > 0);
-}
-
-- (void)enumerateRegexMatches:(NSString *)regex
-                      options:(NSRegularExpressionOptions)options
-                   usingBlock:(void (^)(NSString *match, NSRange matchRange, BOOL *stop))block {
-    if (regex.length == 0 || !block) return;
-    NSRegularExpression *pattern = [NSRegularExpression regularExpressionWithPattern:regex options:options error:nil];
-    if (!regex) return;
-    [pattern enumerateMatchesInString:self options:kNilOptions range:NSMakeRange(0, self.length)
-                           usingBlock:^(NSTextCheckingResult *result, NSMatchingFlags flags, BOOL *stop) {
-        block([self substringWithRange:result.range], result.range, stop);
-    }];
-}
-
-- (NSString *)stringByReplacingRegex:(NSString *)regex
-                             options:(NSRegularExpressionOptions)options
-                          withString:(NSString *)replacement {
-    NSRegularExpression *pattern = [NSRegularExpression regularExpressionWithPattern:regex options:options error:nil];
-    if (!pattern) return self;
-    return [pattern stringByReplacingMatchesInString:self options:0 range:NSMakeRange(0, [self length]) withTemplate:replacement];
 }
 
 @end

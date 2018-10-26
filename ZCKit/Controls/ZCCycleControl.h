@@ -91,14 +91,14 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 
 #pragma mark - 构建
-/** URL初始化 */
-+ (instancetype)cycleControlFrame:(CGRect)frame imageURLStringsGroup:(nullable NSArray *)imageURLStringsGroup;
+/** Url初始化，数组内可为NSUrl或NSString */
+- (instancetype)initWithFrame:(CGRect)frame imageUrlGroup:(NSArray *)imageUrlGroup;
 
-/** 代理初始化 */
-+ (instancetype)cycleControlFrame:(CGRect)frame delegate:(nullable id<ZCCycleControlDelegate>)delegate holderImage:(nullable UIImage *)holderImage;
+/** 本地图片初始化，loop是否循环 */
+- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(NSArray <UIImage *>*)imageGroup;
 
-/** 本地图片初始化 */
-+ (instancetype)cycleControlFrame:(CGRect)frame shouldInfiniteLoop:(BOOL)infiniteLoop imageGroup:(NSArray *)imageGroup;
+/** 代理初始化，holders占位image */
+- (instancetype)initWithFrame:(CGRect)frame delegate:(nullable id<ZCCycleControlDelegate>)delegate holder:(nullable UIImage *)holder;
 
 /** 解决viewWillAppear时出现时轮播图卡在一半的问题，在控制器viewWillAppear时调用此方法 */
 - (void)adjustWhenControllerViewWillAppera;

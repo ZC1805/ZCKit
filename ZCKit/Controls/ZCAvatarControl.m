@@ -11,7 +11,7 @@
 
 @implementation ZCAvatarControl
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
         self.layer.geometryFlipped = YES;

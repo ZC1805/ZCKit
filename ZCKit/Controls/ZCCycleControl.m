@@ -22,7 +22,7 @@ static NSString *ident = @"cycleControlCell";
 
 @implementation ZCCycleAnimatedDot
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self initialization];
     }
@@ -102,7 +102,7 @@ static NSString *ident = @"cycleControlCell";
 
 @implementation ZCCyclePageControl
 
-- (id)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self initialization];
     }
@@ -346,24 +346,31 @@ static NSString *ident = @"cycleControlCell";
 @implementation ZCCycleControl
 
 #pragma mark - initial
-+ (instancetype)cycleControlFrame:(CGRect)frame imageURLStringsGroup:(NSArray *)imageURLsGroup {
-    ZCCycleControl *cycleView = [[self alloc] initWithFrame:frame];
-    cycleView.imageURLStringsGroup = [NSMutableArray arrayWithArray:imageURLsGroup];
-    return cycleView;
+- (instancetype)initWithFrame:(CGRect)frame imageUrlGroup:(NSArray *)imageUrlGroup {
+    if (self = [super initWithFrame:frame]) {
+        if (imageUrlGroup) {
+            self.imageURLStringsGroup = [NSMutableArray arrayWithArray:imageUrlGroup];
+        }
+    }
+    return self;
 }
 
-+ (instancetype)cycleControlFrame:(CGRect)frame delegate:(id<ZCCycleControlDelegate>)delegate holderImage:(UIImage *)holderImage {
-    ZCCycleControl *cycleView = [[self alloc] initWithFrame:frame];
-    cycleView.delegate = delegate;
-    cycleView.placeholderImage = holderImage;
-    return cycleView;
+- (instancetype)initWithFrame:(CGRect)frame delegate:(id<ZCCycleControlDelegate>)delegate holder:(nullable UIImage *)holder {
+    if (self = [super initWithFrame:frame]) {
+        self.delegate = delegate;
+        if (holder) self.placeholderImage = holder;
+    }
+    return self;
 }
 
-+ (instancetype)cycleControlFrame:(CGRect)frame shouldInfiniteLoop:(BOOL)infiniteLoop imageGroup:(NSArray *)imageGroup {
-    ZCCycleControl *cycleView = [[self alloc] initWithFrame:frame];
-    cycleView.infiniteLoop = infiniteLoop;
-    cycleView.localizationImageGroup = [NSMutableArray arrayWithArray:imageGroup];
-    return cycleView;
+- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(NSArray *)imageGroup {
+    if (self = [super initWithFrame:frame]) {
+        self.infiniteLoop = loop;
+        if (imageGroup) {
+            self.localizationImageGroup = [NSMutableArray arrayWithArray:imageGroup];
+        }
+    }
+    return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -555,7 +562,9 @@ static NSString *ident = @"cycleControlCell";
 
 - (void)setLocalizationImageGroup:(NSArray *)localizationImageGroup {
     _localizationImageGroup = localizationImageGroup;
-    self.imagePathsGroup = [localizationImageGroup copy];
+    if (localizationImageGroup) {
+        self.imagePathsGroup = [localizationImageGroup copy];
+    }
 }
 
 - (void)setTitlesGroup:(NSArray *)titlesGroup {

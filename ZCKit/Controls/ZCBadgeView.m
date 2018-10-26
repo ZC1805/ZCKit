@@ -36,8 +36,8 @@
     return self;
 }
 
-- (instancetype)initWithOrigin:(CGPoint)origin badgeValue:(NSString *)badgeValue {
-    if (self = [self initWithFrame:CGRectMake(origin.x, origin.y, 0, 0)]) {
+- (instancetype)initWithFrame:(CGRect)frame badgeValue:(NSString *)badgeValue {
+    if (self = [self initWithFrame:frame]) {
         self.badgeValue = badgeValue;
     }
     return self;

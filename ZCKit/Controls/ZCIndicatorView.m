@@ -8,39 +8,89 @@
 
 #import "ZCIndicatorView.h"
 
+@interface ZCIndicatorView ()
+
+@property (nonatomic, strong) CAShapeLayer *animationLayer;
+
+@property (nonatomic, strong) CAGradientLayer *gradientLayer;
+
+@end
+
 @implementation ZCIndicatorView
 
-- (instancetype)initWithFrame:(CGRect)frame diameter:(CGFloat)diameter color:(UIColor *)color {
-    if (self = [super initWithFrame:frame]) {
-        [self obtainWaitIndicatorSize:frame.size diameter:diameter color:color]; 
+- (instancetype)initWithFrame:(CGRect)frame diameter:(CGFloat)diameter {
+    if (self = [self initWithFrame:frame]) {
+        self.diameter = diameter;
     }
     return self;
 }
 
-- (void)obtainWaitIndicatorSize:(CGSize)size diameter:(CGFloat)diameter color:(UIColor *)color {
-    if (!color) color = [UIColor whiteColor];
-    self.clipsToBounds = YES;
-    CAShapeLayer *animationLayer = [[CAShapeLayer alloc] init];
-    animationLayer.bounds = CGRectMake(0, 0, diameter, diameter);
-    animationLayer.position = CGPointMake(size.width / 2.0, size.height - diameter - 2.0);
-    animationLayer.cornerRadius = diameter / 2.0;
-    animationLayer.shadowColor  = color.CGColor;
-    animationLayer.shadowOffset = CGSizeMake(diameter / 5.0, 0);
-    animationLayer.shadowRadius = diameter / 3.0;
-    animationLayer.shadowOpacity = 1.0;
-    animationLayer.transform = CATransform3DMakeScale(0.01, 0.01, 0.01);
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        _tintColor = [UIColor grayColor];
+        _diameter = frame.size.width / 9;
+        self.backgroundColor = [UIColor clearColor];
+        [self indicatorSize:self.frame.size];
+    }
+    return self;
+}
+
+- (void)setDiameter:(CGFloat)diameter {
+    _diameter = diameter;
+    [self layoutSubviews];
+}
+
+- (void)setTintColor:(UIColor *)tintColor {
+    _tintColor = tintColor;
+    [self layoutSubviews];
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    [self resetIndicator:self.frame.size];
+}
+
+- (void)resetIndicator:(CGSize)size {
+    if (!self.animationLayer || !self.gradientLayer) return;
+    self.animationLayer.bounds = CGRectMake(0, 0, self.diameter, self.diameter);
+    self.animationLayer.position = CGPointMake(size.width / 2.0, size.height - self.diameter - 2.0);
+    self.animationLayer.cornerRadius = self.diameter / 2.0;
+    self.animationLayer.shadowColor  = self.tintColor.CGColor;
+    self.animationLayer.shadowOffset = CGSizeMake(self.diameter / 5.0, 0);
+    self.animationLayer.shadowRadius = self.diameter / 3.0;
     
-    CAGradientLayer *gradientLayer = [[CAGradientLayer alloc] init];
-    gradientLayer.colors = @[(id)[color colorWithAlphaComponent:0.25].CGColor, (id)color.CGColor, (id)[color colorWithAlphaComponent:0.01].CGColor];
-    gradientLayer.frame = CGRectMake(0, 0, diameter, diameter);
-    gradientLayer.position = CGPointMake(diameter / 2.0, diameter / 2.0);
-    gradientLayer.cornerRadius = diameter / 2.0;
-    gradientLayer.borderColor = color.CGColor;
-    gradientLayer.borderWidth = 0.5;
-    gradientLayer.locations = @[@(0), @(0.4), @(1.0)];
-    gradientLayer.startPoint = CGPointMake(0.5, 1.0);
-    gradientLayer.endPoint = CGPointMake(0.5, 0);
-    [animationLayer addSublayer:gradientLayer];
+    self.gradientLayer.frame = CGRectMake(0, 0, self.diameter, self.diameter);
+    self.gradientLayer.position = CGPointMake(self.diameter / 2.0, self.diameter / 2.0);
+    self.gradientLayer.cornerRadius = self.diameter / 2.0;
+    self.gradientLayer.borderColor = self.tintColor.CGColor;
+    self.gradientLayer.colors = @[(id)[self.tintColor colorWithAlphaComponent:0.25].CGColor,
+                                  (id)self.tintColor.CGColor, (id)[self.tintColor colorWithAlphaComponent:0.01].CGColor];
+}
+
+- (void)indicatorSize:(CGSize)size {
+    self.clipsToBounds = YES;
+    self.animationLayer = [[CAShapeLayer alloc] init];
+    self.animationLayer.bounds = CGRectMake(0, 0, self.diameter, self.diameter);
+    self.animationLayer.position = CGPointMake(size.width / 2.0, size.height - self.diameter - 2.0);
+    self.animationLayer.cornerRadius = self.diameter / 2.0;
+    self.animationLayer.shadowColor  = self.tintColor.CGColor;
+    self.animationLayer.shadowOffset = CGSizeMake(self.diameter / 5.0, 0);
+    self.animationLayer.shadowRadius = self.diameter / 3.0;
+    self.animationLayer.shadowOpacity = 1.0;
+    self.animationLayer.transform = CATransform3DMakeScale(0.01, 0.01, 0.01);
+    
+    self.gradientLayer = [[CAGradientLayer alloc] init];
+    self.gradientLayer.colors = @[(id)[self.tintColor colorWithAlphaComponent:0.25].CGColor,
+                                  (id)self.tintColor.CGColor, (id)[self.tintColor colorWithAlphaComponent:0.01].CGColor];
+    self.gradientLayer.frame = CGRectMake(0, 0, self.diameter, self.diameter);
+    self.gradientLayer.position = CGPointMake(self.diameter / 2.0, self.diameter / 2.0);
+    self.gradientLayer.cornerRadius = self.diameter / 2.0;
+    self.gradientLayer.borderColor = self.tintColor.CGColor;
+    self.gradientLayer.borderWidth = 0.5;
+    self.gradientLayer.locations = @[@(0), @(0.4), @(1.0)];
+    self.gradientLayer.startPoint = CGPointMake(0.5, 1.0);
+    self.gradientLayer.endPoint = CGPointMake(0.5, 0);
+    [self.animationLayer addSublayer:self.gradientLayer];
     
     CABasicAnimation *transformAnim = [CABasicAnimation animationWithKeyPath:@"transform"];
     transformAnim.fromValue = [NSValue valueWithCATransform3D:CATransform3DMakeScale(1.0, 1.0, 1.0)];
@@ -53,7 +103,7 @@
     animGroup.animations = @[transformAnim, opacityAnim];
     animGroup.duration = 1.0;
     animGroup.repeatCount = HUGE;
-    [animationLayer addAnimation:animGroup forKey:nil];
+    [self.animationLayer addAnimation:animGroup forKey:nil];
     
     CAReplicatorLayer *replicatorLayer = [[CAReplicatorLayer alloc] init];
     replicatorLayer.bounds = CGRectMake(0, 0, size.width, size.height);
@@ -62,7 +112,7 @@
     replicatorLayer.instanceDelay = 0.0625;
     CGFloat angle = (2 * M_PI) / 16.0;
     replicatorLayer.instanceTransform = CATransform3DMakeRotation(angle, 0, 0, 1.0);
-    [replicatorLayer addSublayer:animationLayer];
+    [replicatorLayer addSublayer:self.animationLayer];
     [self.layer addSublayer:replicatorLayer];
 }
 

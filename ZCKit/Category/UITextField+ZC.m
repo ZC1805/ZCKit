@@ -11,7 +11,7 @@
 
 @implementation UITextField (ZC)
 
-- (void)setLeftSpace:(float)leftSpace {
+- (void)setLeftSpace:(CGFloat)leftSpace {
     if (leftSpace > 0) {
         if (self.leftView) {
             if (self.leftView.tag == 189001) {
@@ -29,7 +29,7 @@
     }
 }
 
-- (float)leftSpace {
+- (CGFloat)leftSpace {
     if (self.leftView && self.leftView.tag == 189001) {
         return self.leftView.width;
     }
