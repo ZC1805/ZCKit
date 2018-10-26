@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) NSString *holderText;  /**< 占位文字说明，默认nil */
 
+@property (nullable, nonatomic, copy) void(^touchAction)(void);  /**< 添加TouchUpInset回调 */
+
 - (instancetype)initWithFrame:(CGRect)frame holder:(nullable NSString *)holder;  /**< 初始化方法 */
 
 @end

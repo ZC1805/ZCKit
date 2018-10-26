@@ -44,15 +44,20 @@
     self.eventButton = [UIButton buttonWithType:UIButtonTypeCustom];
     self.eventButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [self.eventButton setTitle:self.holderText forState:UIControlStateNormal];
-    [self.eventButton addTarget:self action:@selector(onTouch:) forControlEvents:UIControlEventTouchUpInside];
     [self.eventButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 5.0)];
     self.eventButton.layer.cornerRadius = 4.0;
     self.eventButton.adjustsImageWhenHighlighted = NO;
     [self addSubview:self.eventButton];
 }
 
-- (void)onTouch:(id)sender {
-    
+- (void)setTouchAction:(void (^)(void))touchAction {
+    _touchAction = touchAction;
+    [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)onTouchAction:(id)sender {
+    if (_touchAction) _touchAction();
 }
 
 #pragma mark - Setter

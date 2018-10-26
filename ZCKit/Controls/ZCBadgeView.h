@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSString *badgeValue;  /**< badge值，没长度将不显示，默认nil */
 
-- (instancetype)initWithFrame:(CGRect)frame badgeValue:(NSString *)badgeValue;  /**< 构建，只需改变位置不必改变size */
+- (instancetype)initWithFrame:(CGRect)frame badgeValue:(NSString *)badgeValue;  /**< 初始化，只需改变位置不必改变size */
 
 @end
 

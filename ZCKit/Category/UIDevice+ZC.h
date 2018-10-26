@@ -26,11 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, readonly) NSString *machineModel;  /**< 设备型号 "iPhone6,1" */
 
-@property (nullable, nonatomic, readonly) NSArray<NSNumber *> *cpuUsagePerProcessor;  /**< CPU每个核使用率 (0~1，nil表示错误) */
-
 @property (nonatomic, readonly) NSUInteger cpuCount;  /**< 处理器核数 (-1表示错误) */
-
-@property (nonatomic, readonly) float cpuUsage;  /**< CPU使用率，(0~1，-1表示错误) */
 
 @property (nonatomic, readonly) int64_t diskSpace;  /**< 磁盘大小 */
 

@@ -74,6 +74,7 @@
 #define ZSSepHei            (1.0 / [UIScreen mainScreen].scale)         /**< 最小显示点 */
 #define ZSMarInvl           ([ZCGlobal isiPhoneX] ? ZCA(13) : ZCA(15))  /**< 标准边距值 */
 #define ZSNaviSowHei        ([ZCGlobal naviShadowHeight])               /**< 导航阴影高 */
+#define ZSNaviBarHei        ([ZCGlobal isiPhoneX] ? 44.0 : 44.0)        /**< 导航栏高，默认为竖屏通常值 */
 #define ZSNaviHei           ([ZCGlobal isiPhoneX] ? 88.0 : 44.0)        /**< 导航栏高，默认为竖屏通常值 */
 #define ZSStuBarHei         ([ZCGlobal isiPhoneX] ? 44.0 : 20.0)        /**< 状态栏高，默认为竖屏通常值 */
 #define ZSTabBarHei         ([ZCGlobal isiPhoneX] ? 83.0 : 49.0)        /**< 标签栏高，默认为竖屏通常值 */

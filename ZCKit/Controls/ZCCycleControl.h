@@ -90,7 +90,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 @property (nullable, nonatomic, copy) void (^scrollAction)(NSInteger currentIndex);  /**< block方式监听滚动回调，默认nil */
 
 
-#pragma mark - 构建
+#pragma mark - 初始化
 /** Url初始化，数组内可为NSUrl或NSString */
 - (instancetype)initWithFrame:(CGRect)frame imageUrlGroup:(NSArray *)imageUrlGroup;
 
