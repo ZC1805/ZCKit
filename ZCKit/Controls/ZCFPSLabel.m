@@ -38,7 +38,7 @@
     }
 }
 
-- (void)FPSInvalidate; {
+- (void)FPSInvalidate {
     [_link invalidate];
     _link = nil;
     self.text = nil;

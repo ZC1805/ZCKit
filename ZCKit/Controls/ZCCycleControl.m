@@ -507,7 +507,7 @@ static NSString *ident = @"cycleControlCell";
     }
 }
 
-- (void)setAutoScroll:(BOOL)autoScroll{
+- (void)setAutoScroll:(BOOL)autoScroll {
     _autoScroll = autoScroll;
     [self invalidateTimer];
     if (_autoScroll) [self setupTimer];

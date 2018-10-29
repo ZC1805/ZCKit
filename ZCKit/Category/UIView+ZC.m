@@ -164,23 +164,23 @@
     return self.frame.origin.x;
 }
 
-- (void)setWidth:(CGFloat)width{
+- (void)setWidth:(CGFloat)width {
     CGRect rect = self.frame;
     rect.size.width = width;
     self.frame = rect;
 }
 
-- (CGFloat)width{
+- (CGFloat)width {
     return self.frame.size.width;
 }
 
-- (void)setHeight:(CGFloat)height{
+- (void)setHeight:(CGFloat)height {
     CGRect rect = self.frame;
     rect.size.height = height;
     self.frame = rect;
 }
 
-- (CGFloat)height{
+- (CGFloat)height {
     return self.frame.size.height;
 }
 
@@ -204,13 +204,13 @@
     return self.frame.origin.y + self.frame.size.height;
 }
 
-- (void)setSize:(CGSize)size{
+- (void)setSize:(CGSize)size {
     CGRect rect = self.frame;
     rect.size = size;
     self.frame = rect;
 }
 
-- (CGSize)size{
+- (CGSize)size {
     return self.frame.size;
 }
 
@@ -224,23 +224,23 @@
     return self.frame.origin;
 }
 
-- (void)setCenterX:(CGFloat)centerX{
+- (void)setCenterX:(CGFloat)centerX {
     CGPoint point = self.center;
     point.x = centerX;
     self.center = point;
 }
 
-- (CGFloat)centerX{
+- (CGFloat)centerX {
     return self.center.x;
 }
 
-- (void)setCenterY:(CGFloat)centerY{
+- (void)setCenterY:(CGFloat)centerY {
     CGPoint point = self.center;
     point.y = centerY;
     self.center = point;
 }
 
-- (CGFloat)centerY{
+- (CGFloat)centerY {
     return self.center.y;
 }
 

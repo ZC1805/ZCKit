@@ -12,25 +12,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIView (ZC)
 
-@property (nonatomic, assign) CGFloat top;
+@property (nonatomic, assign) CGFloat top;  /**< 视图顶部距离父视图顶部距离 */
 
-@property (nonatomic, assign) CGFloat left;
+@property (nonatomic, assign) CGFloat left;  /**< 视图左边距离父视图左边距离 */
 
-@property (nonatomic, assign) CGFloat width;
+@property (nonatomic, assign) CGFloat bottom;  /**< 视图底部距离父视图底部距离，在设置高度后(或size)再设置bottom，同时设置上下不能确定高 */
 
-@property (nonatomic, assign) CGFloat height;
+@property (nonatomic, assign) CGFloat right;  /**< 视图右边距离父视图右边距离，在设置宽度后(或size)再设置right，同时设置左右不能确定宽 */
 
-@property (nonatomic, assign) CGFloat right;  /**< 在设置宽度后(或size)再设置right，同时设置左右不能确定宽 */
+@property (nonatomic, assign) CGFloat width;  /**< 视图宽度 */
 
-@property (nonatomic, assign) CGFloat bottom;  /**< 在设置高度后(或size)再设置bottom，同时设置上下不能确定高 */
+@property (nonatomic, assign) CGFloat height;  /**< 视图高度 */
 
-@property (nonatomic, assign) CGPoint origin;
+@property (nonatomic, assign) CGPoint origin;  /**< 视图左上顶点位置 */
 
-@property (nonatomic, assign) CGSize  size;
+@property (nonatomic, assign) CGSize  size;  /**< 视图宽高尺寸 */
 
-@property (nonatomic, assign) CGFloat centerX;  /**< 在设置宽度后(或size)再设置centerX */
+@property (nonatomic, assign) CGFloat centerX;  /**< 视图x轴位置，在设置宽度后(或size)再设置centerX */
 
-@property (nonatomic, assign) CGFloat centerY;  /**< 在设置高度后(或size)再设置centerY */
+@property (nonatomic, assign) CGFloat centerY;  /**< 视图y轴位置，在设置高度后(或size)再设置centerY */
 
 @property (nonatomic, readonly) CGFloat visibleAlpha;  /**< 返回屏幕上可见的alpha，考虑到超视窗和窗口 */
 

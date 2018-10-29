@@ -32,7 +32,7 @@ static __weak id currentSecodResponder;
     [self.nextResponder findSecondResponder:sender];
 }
 
-- (void)findSecondResponder:(id)sender{
+- (void)findSecondResponder:(id)sender {
     currentSecodResponder = self;
 }
 

@@ -22,7 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, strong) NSArray <NSNumber *>*dangerous;  /**< 红色Title数组，默认nil */
 
-/** 当点击背景或者取消时selectIndex = -1，其余从0开始，ctor回调中可给sheet的属性赋值 */
+/** 当点击背景或者取消时selectIndex = -1，其余从0开始，ctor回调中可给sheet的属性赋值，但不可改frame */
 + (void)display:(nullable NSString *)msg sheet:(NSArray <NSString *>*)sheet
            ctor:(nullable void(^)(ZCSheetControl *sheetControl))ctor
          action:(nullable void(^)(NSInteger selectIndex))action;
