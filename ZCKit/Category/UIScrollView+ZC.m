@@ -7,8 +7,8 @@
 //
 
 #import "UIScrollView+ZC.h"
-#import "UIView+ZC.h"
 #include <objc/runtime.h>
+#import "UIView+ZC.h"
 
 @implementation UIScrollView (ZC)
 
@@ -121,52 +121,7 @@
     }
 }
 
-#pragma mark - direction
-static void *directionContext = @"ScrollViewDirectionContext";
-- (void)startObservingDirection {
-    [self addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:directionContext];
-}
-
-- (void)stopObservingDirection {
-    [self removeObserver:self forKeyPath:@"contentOffset" context:directionContext];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (![keyPath isEqualToString:@"contentOffset"] || context != directionContext) return;
-    CGPoint newContentOffset = [[change valueForKey:NSKeyValueChangeNewKey] CGPointValue];
-    CGPoint oldContentOffset = [[change valueForKey:NSKeyValueChangeOldKey] CGPointValue];
-    if (oldContentOffset.x < newContentOffset.x) {
-        self.horizontalScrollingDirection = ZCEnumScrollViewDirectionRight;
-    } else if (oldContentOffset.x > newContentOffset.x) {
-        self.horizontalScrollingDirection = ZCEnumScrollViewDirectionLeft;
-    } else {
-        self.horizontalScrollingDirection = ZCEnumScrollViewDirectionNone;
-    }
-    if (oldContentOffset.y < newContentOffset.y) {
-        self.verticalScrollingDirection = ZCEnumScrollViewDirectionDown;
-    } else if (oldContentOffset.y > newContentOffset.y) {
-        self.verticalScrollingDirection = ZCEnumScrollViewDirectionUp;
-    } else {
-        self.verticalScrollingDirection = ZCEnumScrollViewDirectionNone;
-    }
-}
-
-- (ZCEnumScrollViewDirection)horizontalScrollingDirection {
-    return [objc_getAssociatedObject(self, _cmd) integerValue];
-}
-
-- (void)setHorizontalScrollingDirection:(ZCEnumScrollViewDirection)horizontalScrollingDirection {
-    objc_setAssociatedObject(self, @selector(horizontalScrollingDirection), [NSNumber numberWithInteger:horizontalScrollingDirection], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (ZCEnumScrollViewDirection)verticalScrollingDirection {
-    return [objc_getAssociatedObject(self, _cmd) integerValue];
-}
-
-- (void)setVerticalScrollingDirection:(ZCEnumScrollViewDirection)verticalScrollingDirection {
-    objc_setAssociatedObject(self, @selector(verticalScrollingDirection), [NSNumber numberWithInteger:verticalScrollingDirection], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
+//#warning - xxx 观察frameb变化
 #pragma mark - offset
 - (UIView *)topExpandOffsetView { //frame变化不联动
     UIView *topv = objc_getAssociatedObject(self, _cmd);
@@ -216,6 +171,18 @@ static void *directionContext = @"ScrollViewDirectionContext";
 
 - (CGPoint)visualOffset {
     return [self convertToVisualOffsetFromContentOffset:self.contentOffset];
+}
+
+- (CGPoint)relativeOffset {
+    if (@available(iOS 11.0, *)) {
+        CGFloat x = self.contentOffset.x + self.adjustedContentInset.left;
+        CGFloat y = self.contentOffset.y + self.adjustedContentInset.top;
+        return CGPointMake(x, y);
+    } else {
+        CGFloat x = self.contentOffset.x + self.contentInset.left;
+        CGFloat y = self.contentOffset.y + self.contentInset.top;
+        return CGPointMake(x, y);
+    }
 }
 
 - (CGPoint)convertToContentOffsetFromVisualOffset:(CGPoint)visualOffset {
@@ -280,6 +247,52 @@ static void *directionContext = @"ScrollViewDirectionContext";
     CGPoint off = self.contentOffset;
     off.x = self.contentSize.width - self.bounds.size.width + self.contentInset.right;
     [self setContentOffset:off animated:animated];
+}
+
+#pragma mark - direction
+static void *directionContext = @"scrollViewDirectionContext";
+- (void)startObservingDirection {
+    [self addObserver:self forKeyPath:@"contentOffset" options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:directionContext];
+}
+
+- (void)stopObservingDirection {
+    [self removeObserver:self forKeyPath:@"contentOffset" context:directionContext];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if (![keyPath isEqualToString:@"contentOffset"] || context != directionContext) return;
+    CGPoint newContentOffset = [[change valueForKey:NSKeyValueChangeNewKey] CGPointValue];
+    CGPoint oldContentOffset = [[change valueForKey:NSKeyValueChangeOldKey] CGPointValue];
+    if (oldContentOffset.x < newContentOffset.x) {
+        self.horizontalScrollingDirection = ZCEnumScrollViewDirectionRight;
+    } else if (oldContentOffset.x > newContentOffset.x) {
+        self.horizontalScrollingDirection = ZCEnumScrollViewDirectionLeft;
+    } else {
+        self.horizontalScrollingDirection = ZCEnumScrollViewDirectionNone;
+    }
+    if (oldContentOffset.y < newContentOffset.y) {
+        self.verticalScrollingDirection = ZCEnumScrollViewDirectionDown;
+    } else if (oldContentOffset.y > newContentOffset.y) {
+        self.verticalScrollingDirection = ZCEnumScrollViewDirectionUp;
+    } else {
+        self.verticalScrollingDirection = ZCEnumScrollViewDirectionNone;
+    }
+}
+
+- (ZCEnumScrollViewDirection)horizontalScrollingDirection {
+    return [objc_getAssociatedObject(self, _cmd) integerValue];
+}
+
+- (void)setHorizontalScrollingDirection:(ZCEnumScrollViewDirection)horizontalScrollingDirection {
+    objc_setAssociatedObject(self, @selector(horizontalScrollingDirection), [NSNumber numberWithInteger:horizontalScrollingDirection], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (ZCEnumScrollViewDirection)verticalScrollingDirection {
+    return [objc_getAssociatedObject(self, _cmd) integerValue];
+}
+
+- (void)setVerticalScrollingDirection:(ZCEnumScrollViewDirection)verticalScrollingDirection {
+    objc_setAssociatedObject(self, @selector(verticalScrollingDirection), [NSNumber numberWithInteger:verticalScrollingDirection], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

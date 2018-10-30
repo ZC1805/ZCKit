@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) CGFloat cornerRadius;  /**< 圆角半径，默认0 */
 
-@property (nullable, nonatomic, strong) UIImage *loaclImage;  /**< 赋值显示本地图片，默认nil */
+@property (nullable, nonatomic, strong) UIImage *localImage;  /**< 赋值显示本地图片，默认nil */
 
 @property (nullable, nonatomic, copy) void(^touchAction)(void);  /**< 添加TouchUpInset回调 */
 

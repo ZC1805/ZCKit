@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCSearchControl : UIControl  /**< 搜索l样式控件 */
+@interface ZCSearchControl : UIControl  /**< 搜索样式控件 */
 
 @property (nonatomic, assign) BOOL isGrayStyle;  /**< 是否是灰色风格，默认YES */
 

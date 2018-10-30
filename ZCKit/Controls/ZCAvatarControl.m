@@ -15,15 +15,16 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
         self.layer.geometryFlipped = YES;
-        self.cornerRadius = 0;
-        self.loaclImage = nil;
+        _cornerRadius = 0;
+        _localImage = nil;
     }
     return self;
 }
 
-- (void)setLoaclImage:(UIImage *)loaclImage {
-    if (_loaclImage != loaclImage) {
-        _loaclImage = loaclImage;
+#pragma mark - set
+- (void)setLocalImage:(UIImage *)localImage {
+    if (_localImage != localImage) {
+        _localImage = localImage;
         [self setNeedsDisplay];
     }
 }
@@ -41,6 +42,7 @@
     [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+#pragma mark - misc
 - (void)onTouchAction:(id)sender {
     if (_touchAction) _touchAction();
 }
@@ -53,7 +55,7 @@
         CGContextAddPath(context, [self cornerPath]);
         CGContextClip(context);
     }
-    UIImage *image = _loaclImage;
+    UIImage *image = _localImage;
     if (image && image.size.height && image.size.width) { //ScaleAspectFill模式
         CGPoint center = CGPointMake(self.frame.size.width / 2.0, self.frame.size.height / 2.0);
         CGFloat widScale = image.size.width / self.frame.size.width;
@@ -73,7 +75,7 @@
 - (void)imageUrl:(NSString *)url holder:(UIImage *)holder {
     [ZCKitBridge.realize imageWebCache:self url:[NSURL URLWithString:url] holder:holder
                             assignment:^(UIImage * _Nullable image, NSData * _Nullable imageData) {
-                                self.loaclImage = image;
+                                self.localImage = image;
                             }];
 }
 
