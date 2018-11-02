@@ -111,8 +111,7 @@
             return window.rootViewController;
         }
     } else {
-        NSAssert(0, @"window is no normal level");
-        return nil;
+        NSAssert(0, @"window is no normal level"); return nil;
     }
 }
 

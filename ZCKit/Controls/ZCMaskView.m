@@ -265,13 +265,11 @@
 @implementation ZCWindowView
 
 + (void)display:(UIView *)subview time:(NSTimeInterval)time blur:(BOOL)blur clear:(BOOL)clear action:(void (^)(void))action {
-    ZCMaskViewController *maskvc = [ZCMaskViewController instance];
-    [maskvc visibleSubview:subview time:time blur:blur clear:clear action:action];
+    [[ZCMaskViewController instance] visibleSubview:subview time:time blur:blur clear:clear action:action];
 }
 
 + (void)dismissSubview {
-    ZCMaskViewController *maskvc = [ZCMaskViewController instance];
-    [maskvc dismissSubview];
+    [[ZCMaskViewController instance] dismissSubview];
 }
 
 @end

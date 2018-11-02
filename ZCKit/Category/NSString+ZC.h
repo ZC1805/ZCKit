@@ -46,7 +46,9 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - judge
 @property (nonatomic, readonly) BOOL isPureInteger;  /**< 是否是整形 */
 
-@property (nonatomic, readonly) BOOL isPureFloat;  /**< 是否是浮点型 (0.2f不算) */
+@property (nonatomic, readonly) BOOL isPureFloat;  /**< 是否是浮点型 */
+
+@property (nonatomic, readonly) BOOL isPureDouble;  /**< 是否是浮点型 */
 
 @property (nonatomic, readonly) BOOL isPureNumber;  /**< 是否是全数字 */
 

@@ -22,16 +22,16 @@ typedef NS_ENUM(NSInteger, ZCEnumRoundType) {
 /** 获取DecimalHandler，来处理四舍五入 */
 + (NSDecimalNumberHandler *)decimalHander:(int)decimal type:(ZCEnumRoundType)type;
 
-/** 转化成->NSDecimalNumber，会四舍五入处理 */
+/** 转换成->NSDecimalNumber，会四舍五入处理，number为nil返回notANumbet */
 + (NSDecimalNumber *)decimalNumber:(NSNumber *)number decimalPoint:(int)point roundMode:(ZCEnumRoundType)mode;
 
-/** 舍入转换成string显示，zero是否舍去末尾0 */
+/** 舍入转换成string显示，zero是否舍去末尾0，number为nil返回@"NaN" */
 + (NSString *)roundNumber:(NSNumber *)number decimalPoint:(int)point roundMode:(ZCEnumRoundType)mode roundZero:(BOOL)zero;
 
 /** 四舍五入转换成string显示，且舍去末尾0，小于6位精度 */
 + (NSString *)roundString:(nullable NSString *)string orDouble:(double)dou decimalPoint:(int)point;
 
-/** 四舍五入转换成标准价格显示，四舍五入，0.00，两位精度 */
+/** 四舍五入转换成标准价格显示，四舍五入，不规范传入格式返回0.00 */
 + (nullable NSString *)priceFormat:(nullable NSNumber *)number orString:(nullable NSString *)string orDouble:(double)dou;
 
 /** 保留指定位数有效小数，后面舍去 */
@@ -49,9 +49,6 @@ typedef NS_ENUM(NSInteger, ZCEnumRoundType) {
 
 /** 计算字符串的小数位，最大六位小数 */
 + (int)calculateDecimalDigitFromString:(NSString *)str;
-
-/** 计算指定小数位数的最小正小数，默认 1 */
-+ (float)minFloatFromDecimalDigit:(int)digit;
 
 /** string类型精确为字符串类型 */
 + (NSString *)preciseString:(NSString *)strvalue;

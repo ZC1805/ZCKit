@@ -7,6 +7,7 @@
 //
 
 #import "NSNumber+ZC.h"
+#import "NSString+ZC.h"
 
 #pragma mark - NSNumber
 @implementation NSNumber (ZC)
@@ -63,21 +64,21 @@
 #pragma mark - NSDecimalNumber
 @implementation NSDecimalNumber (ZC)
 
-#pragma mark - factory
+#pragma mark - class func
 /** -1 */
 + (NSDecimalNumber *)nOne {
     return [self decimalNumberWithMantissa:1 exponent:0 isNegative:YES];
 }
 
-/** string初始化，规避精度问题，六位小数精度，nil返回notANumber */
+/** string初始化，能规避精度问题，六位小数精度，string为nil或不规范格式时都返回notANumber */
 + (NSDecimalNumber *)decimalString:(NSString *)strValue {
     if (!strValue) return [NSDecimalNumber notANumber];
     double douValue = [strValue doubleValue];
     NSString *doubleStr = [NSString stringWithFormat:@"%lf", douValue];
-    return [NSDecimalNumber decimalNumberWithString:doubleStr]; //这种初始化方法测试出只保留6位小数精度
+    return [NSDecimalNumber decimalNumberWithString:doubleStr]; //以这种初始化方法测试结果表明只会保留6位小数精度
 }
 
-/** double初始化，规避精度问题，六位小数精度 */
+/** double初始化，能规避精度问题，六位小数精度 */
 + (NSDecimalNumber *)decimalDouble:(double)douValue {
     NSString *doubleStr = [NSString stringWithFormat:@"%lf", douValue];
     return [NSDecimalNumber decimalNumberWithString:doubleStr];
@@ -89,25 +90,26 @@
     return [NSDecimalNumber decimalNumberWithString:longStr];
 }
 
-/** number初始化，nil返回notANumber */
+/** number初始化，number为nil返回notANumber */
 + (NSDecimalNumber *)decimalNumber:(NSNumber *)number {
     if (number == nil) return [NSDecimalNumber notANumber];
     return [NSDecimalNumber decimalNumberWithDecimal:[number decimalValue]];
 }
 
-/** decimal四舍五入 */
-- (NSDecimalNumber *)decimalRound:(short)decimal mode:(ZCEnumRoundType)mode {
-    NSDecimalNumberHandler *hander = [ZCDecimalManager decimalHander:decimal type:mode];
-    return [self decimalNumberByRoundingAccordingToBehavior:hander];
-}
-
-/** decimal的最小精度值，最小0.000001 */
+#pragma mark - instance func
+/** decimal的最精度，最小返回值为0.000001 */
 - (NSDecimalNumber *)decimalPrecise {
     int dec = [ZCDecimalManager calculateDecimalDigitFromString:[self stringValue]];
     return [NSDecimalNumber decimalNumberWithMantissa:1 exponent:-dec isNegative:NO];
 }
 
-#pragma mark - calculate
+/** decimal按小数位数四舍五入操作 */
+- (NSDecimalNumber *)decimalRound:(short)decimal mode:(ZCEnumRoundType)mode {
+    NSDecimalNumberHandler *hander = [ZCDecimalManager decimalHander:decimal type:mode];
+    return [self decimalNumberByRoundingAccordingToBehavior:hander];
+}
+
+#pragma mark - calculate func
 /** 加 */
 - (NSDecimalNumber *)plus:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) decimalNumber = [NSDecimalNumber zero];
@@ -142,7 +144,7 @@
     return [self decimalNumberByMultiplyingByPowerOf10:power withBehavior:[ZCDecimalManager instance]];
 }
 
-#pragma mark - compare
+#pragma mark - compare func
 /** 小于 */
 - (BOOL)less:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) return NO;
@@ -165,6 +167,18 @@
     NSComparisonResult result = [self compare:decimalNumber];
     if (result == NSOrderedSame) return YES;
     return NO;
+}
+
+/** 返回价格格式，notANumber返回0.00 */
+- (NSString *)priceValue {
+    if (self.isANumber) return [ZCDecimalManager priceFormat:self orString:nil orDouble:0];
+    return @"0.00";
+}
+
+/** 是否是number */
+- (BOOL)isANumber {
+    if ([self equal:[NSDecimalNumber notANumber]]) return NO;
+    return YES;
 }
 
 @end

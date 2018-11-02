@@ -17,8 +17,7 @@
 }
 
 - (id)valueForUndefinedKey:(NSString *)key {
-    NSAssert(0, @"kvc get value for key fail -> key: %@", key);
-    return nil;
+    NSAssert(0, @"kvc get value for key fail -> key: %@", key); return nil;
 }
 
 #pragma mark - swizzle

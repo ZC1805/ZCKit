@@ -66,7 +66,7 @@
 }
 
 + (UIFont *)fontFamily:(NSString *)family size:(CGFloat)size weight:(NSInteger)weight slant:(CGFloat)slant {
-    CGFloat w_f = weight * 0.25 - 1.25;
+    CGFloat w_f = weight * 0.25 - 1.25; 
     NSDictionary *traits = @{UIFontWeightTrait : @(w_f), UIFontSlantTrait : @(slant)};
     NSDictionary *attr = @{UIFontDescriptorFamilyAttribute : (family ? family : @"Helvetica Neue"),
                            UIFontDescriptorSizeAttribute   : @(size),

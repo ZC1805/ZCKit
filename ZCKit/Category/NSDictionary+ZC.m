@@ -16,6 +16,7 @@
 #pragma mark - NSDictionary
 @implementation NSDictionary (ZC)
 
+#pragma mark - usually
 - (id)randomValue {
     return [self.allValues randomObject];
 }
@@ -130,24 +131,30 @@
     return dicvalue;
 }
 
-/** 错误时候默认返回 @""，精确到6位小数点 */
+/** 错误时候默认返回 @""，number型或者浮点型字符串都会强制精确到6位小数点 */
 - (NSString *)stringValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return @"";
     NSString *strvalue = nil;
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:[NSString class]]) {
-        if ([(NSString *)obj isEqualToString:@"<null>"]) {
-            if (ZCKitBridge.isPrintLog) NSLog(@"parse string obj is <null>");
-        } else if ([(NSString *)obj isPureFloat]) {
-            strvalue = [[NSDecimalNumber decimalString:(NSString *)obj] stringValue];
+        if ([obj isEqualToString:@"null"] || [obj isEqualToString:@"<null>"] || [obj isEqualToString:@"(null)"]) {
+            if (ZCKitBridge.isPrintLog) NSLog(@"parse string obj is null");
+        } else if ([obj isPureDouble]) {
+            NSDecimalNumber *decimal = [NSDecimalNumber decimalString:obj];
+            if (decimal.isANumber) {
+                strvalue = [decimal stringValue];
+            } else {
+                strvalue = obj;
+            }
         } else {
-            strvalue = (NSString *)obj;
+            strvalue = obj;
         }
     } else if ([obj isKindOfClass:[NSNumber class]]) {
-        strvalue = [[ZCDecimalManager decimalNumber:(NSNumber *)obj decimalPoint:6 roundMode:ZCEnumRoundTypeRound] stringValue];
-        if ([strvalue isEqualToString:@"NaN"]) {
+        NSDecimalNumber *decimal = [[NSDecimalNumber decimalNumber:obj] decimalRound:6 mode:ZCEnumRoundTypeRound];
+        if (decimal.isANumber) {
+            strvalue = [decimal stringValue];
+        } else {
             NSAssert(0, @"parse string obj is invalid string");
-            strvalue = nil;
         }
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
         if (ZCKitBridge.isPrintLog) NSLog(@"parse string obj is null");
@@ -158,64 +165,66 @@
     return strvalue;
 }
 
-/** 错误时候默认返回 @0，字符串浮点数解析会精确到6位小数点 */
+/** 错误时候默认返回 0，字符串浮点数解析会精确到6位小数点 */
 - (NSNumber *)numberValueForKey:(NSString *)key {
-    if ([self keyIsInvalidKey:key]) return [NSNumber numberWithInt:0];
+    if ([self keyIsInvalidKey:key]) return [NSNumber numberWithFloat:0];
     NSNumber *numvalue = nil;
     id obj = [self objectForKey:key];
-    if ([obj isKindOfClass:[NSNumber class]]) {
-        numvalue = (NSNumber *)obj;
+    if ([obj isKindOfClass:[NSNumber class]]) { 
+        numvalue = obj;
     } else if ([obj isKindOfClass:[NSString class]]) {
-        numvalue = [NSDecimalNumber decimalString:(NSString *)obj];
-        if ([(NSDecimalNumber *)numvalue equal:[NSDecimalNumber notANumber]]) {
+        NSDecimalNumber *decimal = [NSDecimalNumber decimalString:obj];
+        if (decimal.isANumber) {
+            numvalue = decimal;
+        } else {
             NSAssert(0, @"parse number obj is invalid number");
-            numvalue = nil;
         }
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
         if (ZCKitBridge.isPrintLog) NSLog(@"parse number obj is null");
     } else {
         NSAssert(0, @"parse number obj is invalid");
     }
-    if (numvalue == nil) numvalue = [NSNumber numberWithInt:0];
+    if (numvalue == nil) numvalue = [NSNumber numberWithFloat:0];
     return numvalue;
 }
 
-/** 错误时候默认返回 @0，字符串浮点数解析会精确到6位小数点 */
+/** 错误时候默认返回 zero，字符串浮点数解析会精确到6位小数点 */
 - (NSDecimalNumber *)decimalValueForKey:(NSString *)key {
-    if ([self keyIsInvalidKey:key]) return [NSDecimalNumber decimalNumberWithString:@"0"];
+    if ([self keyIsInvalidKey:key]) return [NSDecimalNumber zero];
     NSDecimalNumber *decvalue = nil;
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:[NSNumber class]]) {
-        decvalue = [NSDecimalNumber decimalNumber:(NSNumber *)obj];
+        decvalue = [NSDecimalNumber decimalNumber:obj];
     } else if ([obj isKindOfClass:[NSString class]]) {
-        decvalue = [NSDecimalNumber decimalString:(NSString *)obj];
+        decvalue = [NSDecimalNumber decimalString:obj];
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
         if (ZCKitBridge.isPrintLog) NSLog(@"parse decimal obj is null");
     } else {
         NSAssert(0, @"parse decimal obj is invalid");
     }
-    if (decvalue == nil || [decvalue equal:[NSDecimalNumber notANumber]]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"parse decimal obj is invalid number");
-        decvalue = [NSDecimalNumber decimalNumberWithString:@"0"];
+    if (decvalue && !decvalue.isANumber) {
+        NSAssert(0, @"parse decimal obj is invalid");
     }
+    if (decvalue == nil || !decvalue.isANumber) decvalue = [NSDecimalNumber zero];
     return decvalue;
 }
 
-/** 错误时候默认返回 @"0.00"，保留2位小数点 */
+/** 错误时候默认返回 @"0.00"，四舍五入，保留2位小数点 */
 - (NSString *)priceValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return @"0.00";
     NSString *privalue = nil;
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:[NSString class]]) {
-        if ([(NSString *)obj isPureFloat] || [(NSString *)obj isPureInteger]) {
-            privalue = [ZCDecimalManager priceFormat:nil orString:(NSString *)obj orDouble:0];
+        NSDecimalNumber *decimal = [NSDecimalNumber decimalString:obj];
+        if (decimal.isANumber) {
+            privalue = [decimal priceValue];
         } else {
             NSAssert(0, @"parse price obj is invalid price");
         }
     } else if ([obj isKindOfClass:[NSNumber class]]) {
-        NSString *string = [[NSDecimalNumber decimalNumber:(NSNumber *)obj] stringValue];
-        if ([string isPureFloat] || [string isPureInteger]) {
-            privalue = [ZCDecimalManager priceFormat:(NSNumber *)obj orString:nil orDouble:0];
+        NSDecimalNumber *decimal = [NSDecimalNumber decimalNumber:obj];
+        if (decimal.isANumber) {
+            privalue = [decimal priceValue];
         } else {
             NSAssert(0, @"parse price obj is invalid price");
         }
@@ -228,30 +237,26 @@
     return privalue;
 }
 
-/** 错误时候默认返回 0，浮点数在此会舍弃小数部分 */
+/** 错误时候默认返回 0，浮点数在此取整会舍弃小数部分 */
 - (long)longValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return 0;
     long intvalue = 0;
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:[NSNumber class]]) {
-        NSString *string = [[NSDecimalNumber decimalNumber:(NSNumber *)obj] stringValue];
-        if ([string isPureInteger]) {
-            intvalue = [string integerValue];
+        NSDecimalNumber *decimal = [NSDecimalNumber decimalNumber:obj];
+        if (decimal.isANumber) {
+            intvalue = [decimal longValue];
         } else {
             NSAssert(0, @"parse long obj is invalid integer");
-            intvalue = [(NSNumber *)obj integerValue];
+            intvalue = [obj longValue];
         }
     } else if ([obj isKindOfClass:[NSString class]]) {
-        if ([(NSString *)obj isPureInteger] || [(NSString *)obj isPureFloat]) {
-            NSString *string = [[NSDecimalNumber decimalString:(NSString *)obj] stringValue];
-            if ([string isPureInteger]) {
-                intvalue = [string integerValue];
-            } else {
-                NSAssert(0, @"parse long obj is invalid integer");
-                intvalue = [(NSString *)obj integerValue];
-            }
+        NSDecimalNumber *decimal = [NSDecimalNumber decimalString:obj];
+        if (decimal.isANumber) {
+            intvalue = [decimal longValue];
         } else {
             NSAssert(0, @"parse long obj is invalid integer");
+            intvalue = [obj longValue];
         }
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
         if (ZCKitBridge.isPrintLog) NSLog(@"parse long obj is null");
@@ -261,26 +266,24 @@
     return intvalue;
 }
 
-/** 错误时候默认返回 0，四舍五入，保留6位小数 */
+/** 错误时候默认返回 0，保留有效位数为四舍五入模式，保留6位小数 */
 - (float)floatValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return 0;
     float flovalue = 0;
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:[NSNumber class]]) {
-        NSDecimalNumber *number = [ZCDecimalManager decimalNumber:(NSNumber *)obj decimalPoint:6 roundMode:ZCEnumRoundTypeRound];
-        if ([number equal:[NSDecimalNumber notANumber]]) {
-            NSAssert(0, @"parse float obj is invalid number");
-            flovalue = 0;
+        NSDecimalNumber *decimal = [[NSDecimalNumber decimalNumber:obj] decimalRound:6 mode:ZCEnumRoundTypeRound];
+        if (decimal.isANumber) {
+            flovalue = (float)[decimal doubleValue];
         } else {
-            flovalue = (float)[number doubleValue];
+            NSAssert(0, @"parse float obj is invalid number");
         }
     } else if ([obj isKindOfClass:[NSString class]]) {
-        NSDecimalNumber *number = [NSDecimalNumber decimalString:(NSString *)obj];
-        if ([number equal:[NSDecimalNumber notANumber]]) {
-            NSAssert(0, @"parse float obj is invalid number");
-            flovalue = 0;
+        NSDecimalNumber *decimal = [NSDecimalNumber decimalString:obj];
+        if (decimal.isANumber) {
+            flovalue = (float)[decimal doubleValue];
         } else {
-            flovalue = (float)[number doubleValue];
+            NSAssert(0, @"parse float obj is invalid number");
         }
     } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
         if (ZCKitBridge.isPrintLog) NSLog(@"parse float obj is null");
@@ -296,18 +299,18 @@
     BOOL boolvalue = defalut;
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:[NSNumber class]]) {
-        if ([[(NSNumber *)obj stringValue] isEqualToString:@"1"]) {
+        if ([[obj stringValue] isEqualToString:@"1"]) {
             boolvalue = YES;
-        } else if ([[(NSNumber *)obj stringValue] isEqualToString:@"0"]) {
+        } else if ([[obj stringValue] isEqualToString:@"0"]) {
             boolvalue = NO;
         } else {
-            boolvalue = [(NSNumber *)obj boolValue];
+            boolvalue = [obj boolValue];
             NSAssert(0, @"parse bool obj is invalid bool");
         }
     } else if ([obj isKindOfClass:[NSString class]]) {
-        if ([(NSString *)obj isEqualToString:@"true"] || [(NSString *)obj isEqualToString:@"YES"]) {
+        if ([obj isEqualToString:@"true"] || [obj isEqualToString:@"YES"] || [obj isEqualToString:@"yes"]) {
             boolvalue = YES;
-        } else if ([(NSString *)obj isEqualToString:@"false"] || [(NSString *)obj isEqualToString:@"NO"]) {
+        } else if ([obj isEqualToString:@"false"] || [obj isEqualToString:@"NO"] || [obj isEqualToString:@"no"]) {
             boolvalue = NO;
         } else {
             NSAssert(0, @"parse bool obj is invalid bool");
@@ -377,17 +380,17 @@
     [self injectValue:[NSNumber numberWithLong:value] forKey:key];
 }
 
-/** 注入string，allowNull为YES时value不规则值直接替换成NSNull值插入，NO时候value为@"" & nil时不加入字典 */
+/** 注入string，allowNull为YES时不规则value值将替换成NSNull注入，allowNull为NO时value为@""或者nil时不可注入字典 */
 - (void)injectStringValue:(NSString *)value forKey:(NSString *)key allowNull:(BOOL)allowNull {
     [self injectValue:value forKey:key allowNull:allowNull];
 }
 
-/** 注入number string array dictionary 没问题，不加入空值，string为@""时不加入字典 */
+/** 注入number string array dictionary 没问题，当value为nil或@""时不可注入字典 */
 - (void)injectValue:(id)value forKey:(NSString *)key {
     [self injectValue:value forKey:key allowNull:NO];
 }
 
-/** 注入number string array dictionary 没问题，allowNull为YES时候，不规则value直接替换成NSNull值插入 */
+/** 注入number string array dictionary 没问题，allowNull为YES时候，不规则value值将替换成NSNull注入 */
 - (void)injectValue:(id)value forKey:(NSString *)key allowNull:(BOOL)allowNull {
     if ([self keyIsInvalidKey:key value:value allowNull:allowNull]) return;
     if (allowNull && (value == nil || value == NULL)) {
@@ -395,12 +398,12 @@
     }
     if ([value isKindOfClass:[NSString class]]) {
         if (allowNull) {
-            if ([(NSString *)value isEqualToString:@"<null>"]) {
+            if ([value isEqualToString:@"<null>"]) {
                 [self setObject:[NSNull null] forKey:key];
             } else {
                 [self setObject:value forKey:key];
             }
-        } else if ([(NSString *)value length] && ![(NSString *)value isEqualToString:@"<null>"]) {
+        } else if ([value length] && ![value isEqualToString:@"<null>"]) {
             [self setObject:value forKey:key];
         } else {
             if (ZCKitBridge.isPrintLog) NSLog(@"inject string obj is invalid");

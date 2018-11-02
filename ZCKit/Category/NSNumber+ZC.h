@@ -52,6 +52,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)equal:(NSDecimalNumber *)number;
 
+- (NSString *)priceValue;
+
+- (BOOL)isANumber;
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -145,6 +145,12 @@
     return [scan scanFloat:&val] && [scan isAtEnd];
 }
 
+- (BOOL)isPureDouble { //是否是浮点型，经测试效果同上
+    NSScanner *scan = [NSScanner scannerWithString:self];
+    double val;
+    return [scan scanDouble:&val] && [scan isAtEnd];
+}
+
 - (BOOL)isPureNumber { //是否是全数字
     NSString *regex = @"^[0-9]+$";
     return [self matchRegex:regex];

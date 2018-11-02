@@ -53,10 +53,14 @@
     return _decimalUpHandles;
 }
 
+- (NSDecimalNumberHandler *)careteHandler:(NSRoundingMode)mode point:(int)point {
+    return [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:mode scale:point raiseOnExactness:NO
+                                                        raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:YES];
+}
+
 - (NSNumberFormatter *)handerFormatNumberDigits:(int)digits {
     if (digits < 0 || digits > 6) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"digits point error");
-        digits = 0;
+        if (ZCKitBridge.isPrintLog) NSLog(@"digits point error"); digits = 0;
     }
     if (self.numberFormatters.count <= digits) {
         for (NSUInteger i = self.numberFormatters.count; i <= digits; i ++) {
@@ -77,50 +81,37 @@
     return formatter;
 }
 
-- (NSDecimalNumberHandler *)handerForDecimalPoint:(int)point mode:(NSRoundingMode)mode {
+- (NSDecimalNumberHandler *)handerForDecimalPoint:(int)point mode:(ZCEnumRoundType)mode {
     if (point < 0 || point > 6) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"digits point error");
-        point = 0;
+        if (ZCKitBridge.isPrintLog) NSLog(@"digits point error"); point = 0;
     }
     NSDecimalNumberHandler *hander = nil;
     switch (mode) {
-        case NSRoundPlain:{
+        case ZCEnumRoundTypeRound:{
             if (self.decimalRoundHandles.count <= point) {
                 for (NSUInteger i = self.decimalRoundHandles.count; i <= point; i ++) {
-                    [self.decimalRoundHandles addObject:(NSDecimalNumberHandler *)[NSNumber numberWithInt:point]];
+                    [self.decimalRoundHandles addObject:[self careteHandler:NSRoundPlain point:point]];
                 }
             }
             hander = [self.decimalRoundHandles objectAtIndex:point];
-            if ([hander isKindOfClass:[NSDecimalNumberHandler class]] == NO) {
-                hander = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundPlain scale:point raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:YES];
-                [self.decimalRoundHandles replaceObjectAtIndex:point withObject:hander];
-            }
             break;
         }
-        case NSRoundDown:{
+        case ZCEnumRoundTypeDown:{
             if (self.decimalDownHandles.count <= point) {
                 for (NSUInteger i = self.decimalDownHandles.count; i <= point; i ++) {
-                    [self.decimalDownHandles addObject:(NSDecimalNumberHandler *)[NSNumber numberWithInt:point]];
+                    [self.decimalDownHandles addObject:[self careteHandler:NSRoundDown point:point]];
                 }
             }
             hander = [self.decimalDownHandles objectAtIndex:point];
-            if ([hander isKindOfClass:[NSDecimalNumberHandler class]] == NO) {
-                hander = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundDown scale:point raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:YES];
-                [self.decimalDownHandles replaceObjectAtIndex:point withObject:hander];
-            }
             break;
         }
-        case NSRoundUp:{
+        case ZCEnumRoundTypeUp:{
             if (self.decimalUpHandles.count <= point) {
                 for (NSUInteger i = self.decimalUpHandles.count; i <= point; i ++) {
-                    [self.decimalUpHandles addObject:(NSDecimalNumberHandler *)[NSNumber numberWithInt:point]];
+                    [self.decimalUpHandles addObject:[self careteHandler:NSRoundUp point:point]];
                 }
             }
             hander = [self.decimalUpHandles objectAtIndex:point];
-            if ([hander isKindOfClass:[NSDecimalNumberHandler class]] == NO) {
-                hander = [NSDecimalNumberHandler decimalNumberHandlerWithRoundingMode:NSRoundUp scale:point raiseOnExactness:NO raiseOnOverflow:NO raiseOnUnderflow:NO raiseOnDivideByZero:YES];
-                [self.decimalUpHandles replaceObjectAtIndex:point withObject:hander];
-            }
             break;
         }
         default:{
@@ -149,7 +140,7 @@
 #pragma mark - class decimal number
 /** 获取DecimalHandler，来处理四舍五入 */
 + (NSDecimalNumberHandler *)decimalHander:(int)decimal type:(ZCEnumRoundType)type {
-    return [[ZCDecimalManager instance] handerForDecimalPoint:decimal mode:(NSRoundingMode)type];
+    return [[ZCDecimalManager instance] handerForDecimalPoint:decimal mode:type];
 }
 
 /** 转化成->NSDecimalNumber，在此会稍微转换，返回数据都是6位精度 */
@@ -163,7 +154,7 @@
     return [NSDecimalNumber decimalNumberWithString:douvalue];
 }
 
-/** 转化成->NSDecimalNumber，会四舍五入处理 */
+/** 转换成->NSDecimalNumber，会四舍五入处理，number为nil返回notANumber */
 + (NSDecimalNumber *)decimalNumber:(NSNumber *)number decimalPoint:(int)point roundMode:(ZCEnumRoundType)mode {
     if (number == nil) return [NSDecimalNumber notANumber];
     NSDecimalNumberHandler *hander = [self decimalHander:point type:mode];
@@ -171,7 +162,7 @@
     return [decimal decimalNumberByRoundingAccordingToBehavior:hander];
 }
 
-/** 舍入转换成string显示，zero是否舍去末尾0 */
+/** 舍入转换成string显示，zero是否舍去末尾0，number为nil返回@"NaN" */
 + (NSString *)roundNumber:(NSNumber *)number decimalPoint:(int)point roundMode:(ZCEnumRoundType)mode roundZero:(BOOL)zero {
     NSDecimalNumber *decimal = [self decimalNumber:number decimalPoint:point roundMode:mode];
     if (zero) return [decimal stringValue];
@@ -186,15 +177,20 @@
     return [result stringValue];
 }
 
-/** 四舍五入转换成标准价格显示，四舍五入，0.00 两位精度 */
+/** 四舍五入转换成标准价格显示，四舍五入，不规范传入格式返回0.00 */
 + (NSString *)priceFormat:(NSNumber *)number orString:(NSString *)string orDouble:(double)dou {
     NSDecimalNumberHandler *hander = [self decimalHander:2 type:ZCEnumRoundTypeRound];
     NSDecimalNumber *decimal = nil;
     if (number != nil) {
-        decimal = [NSDecimalNumber decimalNumberWithDecimal:[number decimalValue]];
+        if ([number isKindOfClass:[NSDecimalNumber class]]) {
+            decimal = (NSDecimalNumber *)number;
+        } else {
+            decimal = [NSDecimalNumber decimalNumberWithDecimal:[number decimalValue]];
+        }
     } else {
         decimal = [self decimalNumberString:string orDouble:dou];
     }
+    if ([decimal compare:[NSDecimalNumber notANumber]] == NSOrderedSame) return @"0.00";
     NSDecimalNumber *result = [decimal decimalNumberByRoundingAccordingToBehavior:hander];
     return [self formatFloorNumber:result digits:2];
 }
@@ -242,17 +238,14 @@
 /** 计算字符串的小数位数，最大六位小数 */
 + (int)calculateDecimalDigitFromString:(NSString *)str {
     int length = 0;
-    if (str.length && [str isPureFloat]) {
+    if (str.length && [str isPureDouble]) {
         NSArray *comps = [str componentsSeparatedByString:@"."];
         if (comps && comps.count == 2) length = (int)[comps.lastObject length];
         if (length > 6) {
             str = [self preciseString:str];
             comps = [str componentsSeparatedByString:@"."];
             if (comps && comps.count == 2) length = (int)[comps.lastObject length];
-            if (length > 6) {
-                length = 6;
-                if (ZCKitBridge.isPrintLog) NSLog(@"float string is fail value");
-            }
+            if (length > 6) length = 6;
             if (ZCKitBridge.isPrintLog) NSLog(@"float string is fail value");
         }
     } else if (str.length && [str isPureInteger]) {
