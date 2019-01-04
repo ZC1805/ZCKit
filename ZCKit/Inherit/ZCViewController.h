@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZCViewController : UIViewController
+@interface ZCViewController : UIViewController  /**< 模型控制器 */
 
 @end
 

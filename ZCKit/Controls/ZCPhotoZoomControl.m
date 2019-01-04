@@ -48,7 +48,7 @@ static float initAdditional = 30.0;
 }
 
 - (void)onTouchAction:(id)sender {
-    if (_touchAction) _touchAction();
+    if (_touchAction) _touchAction(self);
 }
 
 #pragma mark - set
@@ -89,7 +89,7 @@ static float initAdditional = 30.0;
     [self resetImage];
 }
 
-- (void)setTouchAction:(void (^)(void))touchAction {
+- (void)setTouchAction:(void (^)(ZCPhotoZoomControl * _Nonnull))touchAction {
     _touchAction = touchAction;
     [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];

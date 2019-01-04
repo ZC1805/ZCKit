@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, strong) UIImage *localImage;  /**< 赋值显示本地图片，默认nil */
 
-@property (nullable, nonatomic, copy) void(^touchAction)(void);  /**< 添加TouchUpInset回调 */
+@property (nullable, nonatomic, copy) void(^touchAction)(ZCAvatarControl *sender);  /**< 添加TouchUpInset回调，默认nil */
 
 - (void)imageUrl:(NSString *)url holder:(nullable UIImage *)holder;  /**< 加载网路图片 */
 

@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZCNavigationController : UINavigationController
+@interface ZCNavigationController : UINavigationController  /**< 模型导航控制器 */
 
 @end

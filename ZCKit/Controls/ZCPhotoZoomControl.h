@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) CGPoint originOffset;  /**< 初始向上偏移量，默认Zero & Auto */
 
-@property (nullable, nonatomic, copy) void(^touchAction)(void);  /**< 添加TouchUpInset回调 */
+@property (nullable, nonatomic, copy) void(^touchAction)(ZCPhotoZoomControl *sender);  /**< 添加TouchUpInset回调，默认nil */
 
 @property (nullable, nonatomic, strong) UIImage *localImage;  /**< 显示的图片，本地图片、web图片、占位图片 */
 

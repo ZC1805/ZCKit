@@ -13,6 +13,7 @@
 #import <Foundation/Foundation.h>
 #import "UIDevice+ZC.h"
 #import "UIColor+ZC.h"
+#import "UIImage+ZC.h"
 #import "ZCGlobal.h"
 
 
@@ -29,17 +30,19 @@
 #define ZCRGB(hex)          [UIColor colorFormHex:hex alpha:1.0]              /**< 十六进制颜色 */
 #define ZCRGBA(hex, a)      [UIColor colorFormHex:hex alpha:a]                /**< 十六进制颜色 & 透明度 */
 #define ZCRGBV(r, g, b, a)  [UIColor colorFormRad:r green:g blue:b alpha:a]   /**< 十进制颜色 & 透明度 */
-#define ZCRed               [UIColor colorFormHex:0xFF0000 alpha:1.0]   
-#define ZCBlue              [UIColor colorFormHex:0x0000FF alpha:1.0]
-#define ZCGreen             [UIColor colorFormHex:0x00FF00 alpha:1.0]
-#define ZCWhite             [UIColor colorFormHex:0xFFFFFF alpha:1.0]
-#define ZCBlack             [UIColor colorFormHex:0x000000 alpha:1.0]
-#define ZCBlack30           [UIColor colorFormHex:0x303030 alpha:1.0]
-#define ZCBlack80           [UIColor colorFormHex:0x808080 alpha:1.0]
-#define ZCBlackA2           [UIColor colorFormHex:0xA2A2A2 alpha:1.0]
-#define ZCSPColor           [UIColor colorFormHex:0xC8C8C8 alpha:1.0]   /**< 交线颜色 */
-#define ZCBKColor           [UIColor colorFormHex:0xF7F7F8 alpha:1.0]   /**< 背景颜色 */
-#define ZCClear             [UIColor clearColor]                        /**< 透明颜色 */
+#define ZCColorA(color, a)  [color colorWithAlphaComponent:a]                 /**< 返回指定透明度颜色 */
+#define ZCBlack30           [UIColor colorFormHex:0x303030 alpha:1.0]         /**< 0x30灰 */
+#define ZCBlack80           [UIColor colorFormHex:0x808080 alpha:1.0]         /**< 0x80灰 */
+#define ZCBlackA2           [UIColor colorFormHex:0xA2A2A2 alpha:1.0]         /**< 0xA2灰 */
+#define ZCBlackC8           [UIColor colorFormHex:0xC8C8C8 alpha:1.0]         /**< 0xC8灰 */
+#define ZCSPColor           [UIColor colorFormHex:0xDCDCDC alpha:1.0]         /**< 交线颜色 */
+#define ZCBKColor           [UIColor colorFormHex:0xF6F5F7 alpha:1.0]         /**< 背景颜色 */
+#define ZCClear             [UIColor clearColor]   /**< 透明 */
+#define ZCWhite             [UIColor whiteColor]   /**< 白色 */
+#define ZCBlack             [UIColor blackColor]   /**< 黑色 */
+#define ZCGreen             [UIColor greenColor]   /**< 绿色 */
+#define ZCBlue              [UIColor blueColor]    /**< 蓝色 */
+#define ZCRed               [UIColor redColor]     /**< 红色 */
 
 
 /** --- string --- */
@@ -50,6 +53,7 @@
 
 /** --- image --- */
 #define ZCImage(name)       [UIImage imageNamed:(name)]    /**< 获取图片，缓存 */
+#define ZCImageA(image, a)  [image imageWithAlpha:a]   /**< 返回新的指定透明度的图片 */
 #define ZCFileImage(name)   [UIImage imageWithContentsOfFile:ZCBundleFilePath(nil, name, @"png")]   /**< 获取图片，不缓存 */
 
 
@@ -74,13 +78,13 @@
 #define ZSSepHei            (1.0 / [UIScreen mainScreen].scale)         /**< 最小显示点 */
 #define ZSMarInvl           ([ZCGlobal isiPhoneX] ? ZCA(13) : ZCA(15))  /**< 标准边距值 */
 #define ZSNaviSowHei        ([ZCGlobal naviShadowHeight])               /**< 导航阴影高 */
-#define ZSNaviBarHei        ([ZCGlobal isiPhoneX] ? 44.0 : 44.0)        /**< 导航栏高，默认为竖屏通常值 */
-#define ZSNaviHei           ([ZCGlobal isiPhoneX] ? 88.0 : 44.0)        /**< 导航栏高，默认为竖屏通常值 */
-#define ZSStuBarHei         ([ZCGlobal isiPhoneX] ? 44.0 : 20.0)        /**< 状态栏高，默认为竖屏通常值 */
-#define ZSTabBarHei         ([ZCGlobal isiPhoneX] ? 83.0 : 49.0)        /**< 标签栏高，默认为竖屏通常值 */
-#define ZSTopResHei         ([ZCGlobal isiPhoneX] ? 30.0 : 0)           /**< 顶预留高，默认为竖屏通常值 */
-#define ZSBomResHei         ([ZCGlobal isiPhoneX] ? 34.0 : 0)           /**< 底预留高，默认为竖屏通常值 */
-#define ZSAvailableHei      (ZSHei - ZSNaviHei - ZSBomResHei)           /**< 内容高度，默认为竖屏通常值 */
+#define ZSNaviBarHei        ([ZCGlobal isiPhoneX] ? 44.0 : 44.0)        /**< 导航栏高，竖屏值 */
+#define ZSNaviHei           ([ZCGlobal isiPhoneX] ? 88.0 : 44.0)        /**< 导航栏高，竖屏值 */
+#define ZSStuBarHei         ([ZCGlobal isiPhoneX] ? 44.0 : 20.0)        /**< 状态栏高，竖屏值 */
+#define ZSTabBarHei         ([ZCGlobal isiPhoneX] ? 83.0 : 49.0)        /**< 标签栏高，竖屏值 */
+#define ZSTopResHei         ([ZCGlobal isiPhoneX] ? 30.0 : 0)           /**< 顶预留高，竖屏值 */
+#define ZSBomResHei         ([ZCGlobal isiPhoneX] ? 34.0 : 0)           /**< 底预留高，竖屏值 */
+#define ZSAvailableHei      (ZSHei - ZSNaviHei - ZSBomResHei)           /**< 内容高度，竖屏值 */
 
 
 /** --- float --- */

@@ -16,7 +16,7 @@
         return self.alpha;
     }
     if (!self.window) return 0;
-    CGFloat alpha = 1;
+    CGFloat alpha = 1.0;
     UIView *v = self;
     while (v) {
         if (v.hidden) {

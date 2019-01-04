@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ZCTabBarController : UITabBarController
+@interface ZCTabBarController : UITabBarController  /**< 模型BAR控制器 */
 
 @end

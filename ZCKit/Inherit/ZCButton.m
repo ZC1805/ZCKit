@@ -98,6 +98,17 @@
     [self layoutSubviews];
 }
 
+- (void)setTouchAction:(void (^)(ZCButton * _Nonnull))touchAction {
+    _touchAction = touchAction;
+    [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+#pragma mark - misc
+- (void)onTouchAction:(id)sender {
+    if (_touchAction) _touchAction(self);
+}
+
 #pragma mark - overload
 - (CGRect)imageRectForContentRect:(CGRect)contentRect {
     CGRect rect = [super imageRectForContentRect:contentRect];

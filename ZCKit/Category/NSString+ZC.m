@@ -180,7 +180,7 @@
     return ([regular numberOfMatchesInString:self options:NSMatchingReportProgress range:NSMakeRange(0, self.length)] > 0);
 }
 
-- (BOOL)isContainChinese { //是否包含字母
+- (BOOL)isContainChinese { //是否包含汉字
     NSRegularExpressionOptions options = NSRegularExpressionCaseInsensitive;
     NSRegularExpression *regular = [NSRegularExpression regularExpressionWithPattern:@"[\u4e00-\u9fa5]" options:options error:nil];
     if (!regular) return NO;

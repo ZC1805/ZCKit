@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCModel : NSObject
+@interface ZCModel : NSObject  /**< YYKit解析模型基类 */
 
 #pragma mark - build & extract
 /**

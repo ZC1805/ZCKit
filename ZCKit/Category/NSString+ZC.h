@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL isContainAlpha;  /**< 是否包含字母 */
 
-@property (nonatomic, readonly) BOOL isContainChinese;  /**< 是否包含字母 */
+@property (nonatomic, readonly) BOOL isContainChinese;  /**< 是否包含汉字 */
 
 @property (nonatomic, readonly) BOOL isContainEmoji;  /**< 是否有emoji */
 

@@ -50,14 +50,14 @@
     [self addSubview:self.eventButton];
 }
 
-- (void)setTouchAction:(void (^)(void))touchAction {
+- (void)setTouchAction:(void (^)(ZCSearchControl * _Nonnull))touchAction {
     _touchAction = touchAction;
     [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
 }
 
 - (void)onTouchAction:(id)sender {
-    if (_touchAction) _touchAction();
+    if (_touchAction) _touchAction(self);
 }
 
 #pragma mark - Setter

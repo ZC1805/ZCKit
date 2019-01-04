@@ -36,7 +36,7 @@
     }
 }
 
-- (void)setTouchAction:(void (^)(void))touchAction {
+- (void)setTouchAction:(void (^)(ZCAvatarControl * _Nonnull))touchAction {
     _touchAction = touchAction;
     [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
     [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -44,7 +44,7 @@
 
 #pragma mark - misc
 - (void)onTouchAction:(id)sender {
-    if (_touchAction) _touchAction();
+    if (_touchAction) _touchAction(self);
 }
 
 - (void)drawRect:(CGRect)rect {
