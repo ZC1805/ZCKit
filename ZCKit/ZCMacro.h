@@ -23,7 +23,8 @@
 #define ZCiOS10             (UIDevice.systemVersion >= 10.0)  /**< 版本>=10.0 */
 #define ZCiPad              (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)    /**< 是否是iPad */
 #define ZCiPhone            (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)  /**< 是否是iPhone */
-#define ZClandscape         [ZCGlobal isLandscape]                                    /**< 当前是否是横屏 */
+#define ZCIslandscape       [ZCGlobal isLandscape]   /**< 当前是否是横屏 */
+#define ZCIsiPhoneX         [ZCGlobal isiPhoneX]     /**< 当前是否是iPhoneX */
 
 
 /** --- color --- */
@@ -46,9 +47,11 @@
 
 
 /** --- string --- */
-#define ZCStrNonnil(str)    (str ? str : @"")              /**< 返回非nil字符串，用@""替换nil */
-#define ZCStrNonlen(str)    ([str length] ? str : @" ")    /**< 返回非空长度字符串, 用@" "替换nil、@"" */
-#define ZCStrIsValid(str)   [ZCGlobal isValidString:str]   /**< 返回布尔型，判断字符串是否有效 */
+#define ZCStrNonnil(str)    (str ? str : @"")                 /**< 返回非nil字符串，用@""替换nil */
+#define ZCStrNonlen(str)    ([str length] ? str : @" ")       /**< 返回非空长度字符串, 用@" "替换nil、@"" */
+#define ZCStrIsValid(str)   [ZCGlobal isValidString:str]      /**< 返回布尔型，判断字符串是否有效 */
+#define ZCArrIsValid(arr)   [ZCGlobal isValidArray:arr]       /**< 返回布尔型，判断数组是否有效 */
+#define ZCDicIsValid(dic)   [ZCGlobal isValidDictionary:dic]  /**< 返回布尔型，判断字典是否有效 */
 
 
 /** --- image --- */
@@ -65,7 +68,7 @@
 
 
 /** --- adapt 320 --- */
-#define zs_radix            (ZClandscape ? 568.0 : 320.0)   /**< 总基准点数，按照iPhone5设定 */
+#define zs_radix            (ZCIslandscape ? 568.0 : 320.0)   /**< 总基准点数，按照iPhone5设定 */
 #define zs_unit             (ZSWid / zs_radix)              /**< 单位基准相当于的实例点数 */
 #define zs_is320            (ZFEqual(ZSWid, zs_radix))      /**< 是否基准屏 */
 #define zs_to_radix(real)   (real / zs_unit)                /**< 将实例点转为基准点 */
@@ -130,4 +133,3 @@ _Pragma("clang diagnostic pop") \
 
 
 #endif /* ZCMacro_h */
-
