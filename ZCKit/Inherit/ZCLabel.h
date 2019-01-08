@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, strong) NSValue *fitSize;  /**< 自适应size大小，CGSize，默认nil */
 
-@property (nullable, nonatomic, copy) void(^textSetBlock)(void);  /**< 对text赋值回调 */
+@property (nullable, nonatomic, copy) void(^textSetBlock)(void);  /**< 对text赋值回调，默认nil */
 
 @end
 

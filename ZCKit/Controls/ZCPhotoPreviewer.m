@@ -31,7 +31,7 @@
 
 @property (nonatomic, assign) CGFloat originAlpha; //carrier初始的透明度
 
-@property (nonatomic, assign) BOOL originStatusBarHidden; //原本是否隐藏状态栏
+@property (nonatomic, assign) BOOL isOriginStatusBarHidden; //原本是否隐藏状态栏
 
 @property (nonatomic, assign) BOOL isInAnimation; //是否正在动画中
 
@@ -180,7 +180,7 @@ static void *imageObserveContext = @"imageObserveContext";
     if (self.carrier) self.originAlpha = self.carrier.alpha;
     if (self.radius) self.imageView.layer.cornerRadius = self.radius;
     if (self.carrier) self.carrier.alpha = 0;
-    self.originStatusBarHidden = [UIApplication sharedApplication].statusBarHidden;
+    self.isOriginStatusBarHidden = [UIApplication sharedApplication].statusBarHidden;
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut;
     [UIView animateWithDuration:0.28 delay:0 options:options animations:^{
@@ -210,7 +210,7 @@ static void *imageObserveContext = @"imageObserveContext";
     } completion:^(BOOL finished) {
         self.isInAnimation = NO;
         if (self.carrier) self.carrier.alpha = self.originAlpha;
-        [[UIApplication sharedApplication] setStatusBarHidden:self.originStatusBarHidden];
+        [[UIApplication sharedApplication] setStatusBarHidden:self.isOriginStatusBarHidden];
         [self removeFromSuperview];
     }];
 }

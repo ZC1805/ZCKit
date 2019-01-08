@@ -38,13 +38,13 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 @interface ZCCycleControl : UIView  /**< 循环page控件 */
 
 #pragma mark - 配置
-@property (nonatomic, assign) BOOL autoScroll;  /**< 是否自动滚动，默认YES */
+@property (nonatomic, assign) BOOL isAutoScroll;  /**< 是否自动滚动，默认YES */
 
-@property (nonatomic, assign) BOOL infiniteLoop;  /**< 是否无限循环，默认YES */
+@property (nonatomic, assign) BOOL isInfiniteLoop;  /**< 是否无限循环，默认YES */
 
-@property (nonatomic, assign) BOOL showPageControl;  /**< 是否显示分页控件，默认YES */
+@property (nonatomic, assign) BOOL isShowPageControl;  /**< 是否显示分页控件，默认YES */
 
-@property (nonatomic, assign) BOOL onlyDisplayText;  /**< 只展示文字轮播，默认NO */
+@property (nonatomic, assign) BOOL isOnlyDisplayText;  /**< 只展示文字轮播，默认NO */
 
 @property (nonatomic, assign) CGFloat autoScrollTimeInterval;  /**< 自动滚动间隔时间，默认4s */
 

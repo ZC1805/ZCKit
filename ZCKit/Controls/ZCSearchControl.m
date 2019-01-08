@@ -52,8 +52,12 @@
 
 - (void)setTouchAction:(void (^)(ZCSearchControl * _Nonnull))touchAction {
     _touchAction = touchAction;
-    [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+    if ([self.allTargets containsObject:self]) {
+        [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    if (touchAction) {
+        [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
 }
 
 - (void)onTouchAction:(id)sender {

@@ -269,9 +269,9 @@ static NSString *ident = @"cycleControlCell";
 
 @property (nonatomic, weak) UIImageView *imageView;
 
-@property (nonatomic, assign) BOOL hasConfigured;
+@property (nonatomic, assign) BOOL isHasConfigured;
 
-@property (nonatomic, assign) BOOL onlyDisplayText;
+@property (nonatomic, assign) BOOL isOnlyDisplayText;
 
 @end
 
@@ -313,7 +313,7 @@ static NSString *ident = @"cycleControlCell";
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    if (self.onlyDisplayText) {
+    if (self.isOnlyDisplayText) {
         _titleLabel.frame = self.bounds;
     } else {
         _imageView.frame = self.bounds;
@@ -365,7 +365,7 @@ static NSString *ident = @"cycleControlCell";
 
 - (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(NSArray *)imageGroup {
     if (self = [super initWithFrame:frame]) {
-        self.infiniteLoop = loop;
+        self.isInfiniteLoop = loop;
         if (imageGroup) {
             self.localizationImageGroup = [NSMutableArray arrayWithArray:imageGroup];
         }
@@ -382,10 +382,10 @@ static NSString *ident = @"cycleControlCell";
 }
 
 - (void)initialization {
-    _autoScroll = YES;
-    _infiniteLoop = YES;
-    _onlyDisplayText = NO;
-    _showPageControl = YES;
+    _isAutoScroll = YES;
+    _isInfiniteLoop = YES;
+    _isOnlyDisplayText = NO;
+    _isShowPageControl = YES;
     _autoScrollTimeInterval = 4.0;
     _imageViewContentMode = UIViewContentModeScaleToFill;
     _pageControlDotSize = kDefaultDotSize;
@@ -448,9 +448,9 @@ static NSString *ident = @"cycleControlCell";
     }
 }
 
-- (void)setShowPageControl:(BOOL)showPageControl {
-    _showPageControl = showPageControl;
-    _pageControl.hidden = !showPageControl;
+- (void)setIsShowPageControl:(BOOL)isShowPageControl {
+    _isShowPageControl = isShowPageControl;
+    _pageControl.hidden = !isShowPageControl;
 }
 
 - (void)setPageDotSelectColor:(UIColor *)pageDotSelectColor {
@@ -500,17 +500,17 @@ static NSString *ident = @"cycleControlCell";
     }
 }
 
-- (void)setInfiniteLoop:(BOOL)infiniteLoop {
-    _infiniteLoop = infiniteLoop;
+- (void)setIsInfiniteLoop:(BOOL)isInfiniteLoop {
+    _isInfiniteLoop = isInfiniteLoop;
     if (self.imagePathsGroup.count) {
         self.imagePathsGroup = self.imagePathsGroup;
     }
 }
 
-- (void)setAutoScroll:(BOOL)autoScroll {
-    _autoScroll = autoScroll;
+- (void)setIsAutoScroll:(BOOL)isAutoScroll {
+    _isAutoScroll = isAutoScroll;
     [self invalidateTimer];
-    if (_autoScroll) [self setupTimer];
+    if (_isAutoScroll) [self setupTimer];
 }
 
 - (void)setScrollDirection:(UICollectionViewScrollDirection)scrollDirection {
@@ -520,7 +520,7 @@ static NSString *ident = @"cycleControlCell";
 
 - (void)setAutoScrollTimeInterval:(CGFloat)autoScrollTimeInterval {
     _autoScrollTimeInterval = autoScrollTimeInterval;
-    [self setAutoScroll:self.autoScroll];
+    [self setIsAutoScroll:self.isAutoScroll];
 }
 
 - (void)setPageControlStyle:(ZCEnumCyclePageStyle)pageControlStyle {
@@ -531,10 +531,10 @@ static NSString *ident = @"cycleControlCell";
 - (void)setImagePathsGroup:(NSArray *)imagePathsGroup {
     [self invalidateTimer];
     _imagePathsGroup = imagePathsGroup;
-    _totalItemsCount = self.infiniteLoop ? self.imagePathsGroup.count * 100 : self.imagePathsGroup.count;
+    _totalItemsCount = self.isInfiniteLoop ? self.imagePathsGroup.count * 100 : self.imagePathsGroup.count;
     if (imagePathsGroup.count != 1) {
         self.mainView.scrollEnabled = YES;
-        [self setAutoScroll:self.autoScroll];
+        [self setIsAutoScroll:self.isAutoScroll];
     } else {
         self.mainView.scrollEnabled = NO;
     }
@@ -569,7 +569,7 @@ static NSString *ident = @"cycleControlCell";
 
 - (void)setTitlesGroup:(NSArray *)titlesGroup {
     _titlesGroup = titlesGroup;
-    if (self.onlyDisplayText) {
+    if (self.isOnlyDisplayText) {
         NSMutableArray *temp = [NSMutableArray array];
         for (int i = 0; i < _titlesGroup.count; i++) {
             [temp addObject:@""];
@@ -592,7 +592,7 @@ static NSString *ident = @"cycleControlCell";
 
 - (void)setupPageControl {
     if (_pageControl) [_pageControl removeFromSuperview]; //重新加载数据时调整
-    if (self.imagePathsGroup.count == 0 || self.onlyDisplayText) return;
+    if (self.imagePathsGroup.count == 0 || self.isOnlyDisplayText) return;
     if (self.imagePathsGroup.count == 1) return;
     int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
     switch (self.pageControlStyle) {
@@ -635,7 +635,7 @@ static NSString *ident = @"cycleControlCell";
 
 - (void)scrollToIndex:(int)targetIndex {
     if (targetIndex >= _totalItemsCount) {
-        if (!self.infiniteLoop) return;
+        if (!self.isInfiniteLoop) return;
         [_mainView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:(_totalItemsCount * 0.5) inSection:0] atScrollPosition:0 animated:NO];
         return;
     }
@@ -666,7 +666,7 @@ static NSString *ident = @"cycleControlCell";
     _mainView.frame = self.bounds;
     if (_mainView.contentOffset.x == 0 &&  _totalItemsCount) {
         int targetIndex = 0;
-        if (self.infiniteLoop) {
+        if (self.isInfiniteLoop) {
             targetIndex = _totalItemsCount * 0.5;
         } else {
             targetIndex = 0;
@@ -698,7 +698,7 @@ static NSString *ident = @"cycleControlCell";
     pageControlFrame.origin.y -= self.pageControlBottomOffset;
     pageControlFrame.origin.x -= self.pageControlRightOffset;
     self.pageControl.frame = pageControlFrame;
-    self.pageControl.hidden = !_showPageControl;
+    self.pageControl.hidden = !_isShowPageControl;
     if (self.backgroundImageView) {
         self.backgroundImageView.frame = self.bounds;
     }
@@ -736,7 +736,7 @@ static NSString *ident = @"cycleControlCell";
     ZCCycleCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ident forIndexPath:indexPath];
     long itemIndex = [self pageControlIndexWithCurrentCellIndex:indexPath.item];
     NSString *imagePath = self.imagePathsGroup[itemIndex];
-    if (!self.onlyDisplayText && [imagePath isKindOfClass:[NSString class]]) {
+    if (!self.isOnlyDisplayText && [imagePath isKindOfClass:[NSString class]]) {
         if ([imagePath hasPrefix:@"http"]) {
             [ZCKitBridge.realize imageViewWebCache:cell.imageView url:[NSURL URLWithString:imagePath] holder:self.placeholderImage];
         } else {
@@ -744,18 +744,18 @@ static NSString *ident = @"cycleControlCell";
             if (!image) [UIImage imageWithContentsOfFile:imagePath];
             cell.imageView.image = image;
         }
-    } else if (!self.onlyDisplayText && [imagePath isKindOfClass:[UIImage class]]) {
+    } else if (!self.isOnlyDisplayText && [imagePath isKindOfClass:[UIImage class]]) {
         cell.imageView.image = (UIImage *)imagePath;
     }
     if (_titlesGroup.count && itemIndex < _titlesGroup.count) {
         cell.title = _titlesGroup[itemIndex];
     }
-    if (!cell.hasConfigured) {
+    if (!cell.isHasConfigured) {
         if (self.titleLableSet) self.titleLableSet(cell.titleLabel);
-        cell.hasConfigured = YES;
+        cell.isHasConfigured = YES;
         cell.imageView.contentMode = self.imageViewContentMode;
         cell.clipsToBounds = YES;
-        cell.onlyDisplayText = self.onlyDisplayText;
+        cell.isOnlyDisplayText = self.isOnlyDisplayText;
     }
     return cell;
 }
@@ -784,11 +784,11 @@ static NSString *ident = @"cycleControlCell";
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (self.autoScroll) [self invalidateTimer];
+    if (self.isAutoScroll) [self invalidateTimer];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
-    if (self.autoScroll) [self setupTimer];
+    if (self.isAutoScroll) [self setupTimer];
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {

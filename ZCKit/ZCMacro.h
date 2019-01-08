@@ -21,9 +21,9 @@
 #define ZCiOS8              (UIDevice.systemVersion >= 8.0)   /**< 版本>=8.0 */
 #define ZCiOS9              (UIDevice.systemVersion >= 9.0)   /**< 版本>=9.0 */
 #define ZCiOS10             (UIDevice.systemVersion >= 10.0)  /**< 版本>=10.0 */
-#define ZCiPad              (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)         /**< 是否是iPad */
-#define ZCiPhone            (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)       /**< 是否是iPhone */
-#define ZClandscape         [ZCGlobal isLandscape]                                         /**< 当前是否是横屏 */
+#define ZCiPad              (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)    /**< 是否是iPad */
+#define ZCiPhone            (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)  /**< 是否是iPhone */
+#define ZClandscape         [ZCGlobal isLandscape]                                    /**< 当前是否是横屏 */
 
 
 /** --- color --- */

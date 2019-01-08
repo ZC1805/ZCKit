@@ -20,7 +20,7 @@ static CGFloat sheetFlagTag = 83803;
 
 @interface ZCSheetControl ()
 
-@property (nonatomic, assign) BOOL canTouch;
+@property (nonatomic, assign) BOOL isCanTouch;
 
 @property (nonatomic, copy  ) NSString *msgText;
 
@@ -54,9 +54,9 @@ static CGFloat sheetFlagTag = 83803;
 }
 
 - (void)initProperty {
-    self.maskHide = YES;
-    self.maskClear = NO;
-    self.canTouch = NO;
+    self.isMaskHide = YES;
+    self.isMaskClear = NO;
+    self.isCanTouch = NO;
     self.dangerous = nil;
     self.cancelTitle = @"取消";
     self.maxHeight = 383.0;
@@ -81,12 +81,12 @@ static CGFloat sheetFlagTag = 83803;
 
 #pragma mark - Display
 - (void)showItems {
-    [ZCWindowView display:self time:0.3 blur:NO clear:self.maskClear action:(self.maskHide ? (^{[self disappearItems:-1];}) : nil)];
+    [ZCWindowView display:self time:0.3 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{[self disappearItems:-1];}) : nil)];
     self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.frame.size.height);
     [UIView animateWithDuration:0.3 animations:^{
         self.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
-        self.canTouch = YES;
+        self.isCanTouch = YES;
     }];
 }
 
@@ -97,8 +97,8 @@ static CGFloat sheetFlagTag = 83803;
 }
 
 - (void)disappearItems:(NSInteger)selectIndex {
-    if (!self.canTouch) return;
-    self.canTouch = NO;
+    if (!self.isCanTouch) return;
+    self.isCanTouch = NO;
     [ZCWindowView dismissSubview];
     [UIView animateWithDuration:0.3 animations:^{
         self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.frame.size.height);
@@ -182,7 +182,7 @@ static CGFloat sheetFlagTag = 83803;
         msglabel.backgroundColor = [UIColor whiteColor];
         msglabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:msglabel];
-        if (self.maskClear) {
+        if (self.isMaskClear) {
             UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, 1.0 / [UIScreen mainScreen].scale)];
             line.backgroundColor = [UIColor colorFormHex:0xdcdcdc alpha:1.0];
             [msglabel addSubview:line];
@@ -214,7 +214,7 @@ static CGFloat sheetFlagTag = 83803;
                 isCancel = YES;
             } else {
                 itemBtn.frame = CGRectMake(0, i * sheetItemHei, initWid, sheetItemHei);
-                if (i != 0 || (!msgExist && self.maskClear)) {
+                if (i != 0 || (!msgExist && self.isMaskClear)) {
                     topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * sheetItemHei, initWid, 1.0 / [UIScreen mainScreen].scale)];
                     topSep.backgroundColor = [UIColor colorFormHex:0xdcdcdc alpha:1.0];
                 }
@@ -223,7 +223,7 @@ static CGFloat sheetFlagTag = 83803;
         if (isCancel) {
             itemBtn.titleEdgeInsets = UIEdgeInsetsMake(-safeHei, 0, 0, 0);
             itemBtn.responseAreaExtend = UIEdgeInsetsMake(0, 0, -safeHei, 0);
-            if (isOnly && self.maskClear) {
+            if (isOnly && self.isMaskClear) {
                 UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, 1.0 / [UIScreen mainScreen].scale)];
                 line.backgroundColor = [UIColor colorFormHex:0xdcdcdc alpha:1.0];
                 [itemBtn addSubview:line];

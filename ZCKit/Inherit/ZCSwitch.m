@@ -12,8 +12,12 @@
 
 - (void)setTouchAction:(void (^)(ZCSwitch * _Nonnull))touchAction {
     _touchAction = touchAction;
-    [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventValueChanged];
-    [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventValueChanged];
+    if ([self.allTargets containsObject:self]) {
+        [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventValueChanged];
+    }
+    if (touchAction) {
+        [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventValueChanged];
+    }
 }
 
 #pragma mark - misc
