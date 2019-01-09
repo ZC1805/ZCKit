@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCTableViewCell.h"
+#import "UINavigationItem+ZC.h"
 
 @interface ZCViewController : UIViewController  /**< 模型控制器 */
 

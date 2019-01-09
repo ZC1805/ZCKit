@@ -9,7 +9,46 @@
 #ifndef ZCKit_h
 #define ZCKit_h
 
-#import "Additional/ZCKitBridge.h"
+#import "ZCMacro.h"
+#import "ZCGlobal.h"
+#import "ZCPredefine.h"
 
+#import "ZCModel.h"
+#import "ZCLabel.h"
+#import "ZCButton.h"
+#import "ZCSwitch.h"
+#import "ZCTextField.h"
+#import "ZCImageView.h"
+
+#import "NSArray+ZC.h"
+#import "NSString+ZC.h"
+#import "NSDictionary+ZC.h"
+#import "UIView+ZCToast.h"
+#import "UIColor+ZC.h"
+#import "UIImage+ZC.h"
+#import "UIDevice+ZC.h"
+#import "UIView+ZC.h"
+#import "UILabel+ZC.h"
+#import "UIButton+ZC.h"
+#import "UITextField+ZC.h"
+
+
+//#import "CALayer+ZC.h"
+//#import "NSObject+ZC.h"
+//#import "NSNumber+ZC.h"
+//#import "NSData+ZC.h"
+//#import "NSDate+ZC.h"
+//#import "UIFont+ZC.h"
+
+//#import "UIScrollView+ZC.h"
+//#import "UITableView+ZC.h"
+//#import "UIResponder+ZC.h"
+//#import "UIBezierPath+ZC.h"
+//#import "UIApplication+ZC.h"
+
+//#import "ZCTableViewCell.h"
+//#import "ZCViewController.h"
+//#import "ZCTabBarController.h"
+//#import "ZCNavigationController.h"
 
 #endif /* ZCKit_h */

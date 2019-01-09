@@ -214,7 +214,7 @@ static NSString *layoutIdent = @"custom.layout.ident";
         left = _avatarCR;
     }
     if ([self isSeatView:_describeLabel]) {
-        left = [self resetLeftConstraint:_describeLabel left:left];
+        [self resetLeftConstraint:_describeLabel left:left];
         max = MAX(_describeLabel.height, max);
     }
     if ([self isSeatView:_bottomBadgeView]) {

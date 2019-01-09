@@ -42,7 +42,7 @@
     return back;
 }
 
-//#warning - x .h重写
+//#warning - x .h重写，抓取到popAction问题
 - (void)onManualPop:(id)sender {
     NSLog(@"%@", self.backBarButtonItem);
 }

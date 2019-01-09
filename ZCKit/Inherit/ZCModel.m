@@ -8,7 +8,7 @@
 
 #import "ZCModel.h"
 #import "NSObject+YYModel.h"
-//#warning - 解析协议
+
 @implementation ZCModel
 
 //json/dictionary中的对象类型与instance属性不一致时，将会进行自动转换。
