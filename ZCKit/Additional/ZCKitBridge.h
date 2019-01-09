@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic, copy) NSString *naviBackImageName;  /**< 导航的返回箭头图片，默认"zc_image_back_arrow" */
 
+@property (class, nonatomic, copy) NSString *naviBarImageOrColor;  /**< 导航栏背景图或者背景颜色，默认"0xffffff" */
+
 @property (class, nonatomic, copy) NSString *sideArrowImageName;  /**< 侧边箭头图片名字，默认"zc_image_side_accessory" */
 
 @property (class, nonatomic, strong) UIColor *toastBackGroundColor;  /**< toast背景颜色，默认@"0x000000 black" */
@@ -42,4 +44,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-

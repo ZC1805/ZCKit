@@ -55,6 +55,30 @@
             [UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight);
 }
 
++ (BOOL)isUseClearBar:(UIViewController *)controller {
+    BOOL use = NO;
+    SEL sel = NSSelectorFromString(@"isUseClearBar");
+    if ([controller respondsToSelector:sel]) {
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        use = (BOOL)[controller performSelector:sel];
+        #pragma clang diagnostic pop
+    }
+    return use;
+}
+
++ (BOOL)isShieldInteractivePop:(UIViewController *)controller {
+    BOOL use = NO;
+    SEL sel = NSSelectorFromString(@"isShieldInteractivePop");
+    if ([controller respondsToSelector:sel]) {
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        use = (BOOL)[controller performSelector:sel];
+        #pragma clang diagnostic pop
+    }
+    return use;
+}
+
 + (BOOL)isValidString:(NSString *)str {
     if (str && [str isKindOfClass:[NSString class]] && str.length) {
         if (![str isEqualToString:@"<null>"] && ![str isEqualToString:@"(null)"] &&

@@ -17,12 +17,13 @@
 @implementation ZCKitBridge
 
 @dynamic naviBackImageName, sideArrowImageName, isPrintLog, invalidStr;
-@dynamic toastTextColor, toastBackGroundColor, realize;
+@dynamic toastTextColor, toastBackGroundColor, realize, naviBarImageOrColor;
 
 static UIColor *_toastTextColor = nil;
 static UIColor *_toastBackGroundColor = nil;
 static NSString *_sideArrowImageName = nil;
 static NSString *_naviBackImageName = nil;
+static NSString *_naviBarImageOrColor = nil;
 static BOOL _isPrintLog = NO;
 
 + (instancetype)instance {
@@ -45,6 +46,19 @@ static BOOL _isPrintLog = NO;
 + (void)setNaviBackImageName:(NSString *)naviBackImageName {
     if (naviBackImageName) {
         _naviBackImageName = [naviBackImageName copy];
+    }
+}
+
++ (NSString *)naviBarImageOrColor {
+    if (_naviBarImageOrColor == nil) {
+        _naviBarImageOrColor = @"0xf6f5f7";
+    }
+    return _naviBarImageOrColor;
+}
+
++ (void)setNaviBarImageOrColor:(NSString *)naviBarImageOrColor {
+    if (naviBarImageOrColor) {
+        _naviBarImageOrColor = [naviBarImageOrColor copy];
     }
 }
 

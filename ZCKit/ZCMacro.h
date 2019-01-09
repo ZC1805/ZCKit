@@ -68,11 +68,11 @@
 
 
 /** --- adapt 320 --- */
-#define zs_radix            (ZCIslandscape ? 568.0 : 320.0)   /**< 总基准点数，按照iPhone5设定 */
-#define zs_unit             (ZSWid / zs_radix)              /**< 单位基准相当于的实例点数 */
-#define zs_is320            (ZFEqual(ZSWid, zs_radix))      /**< 是否基准屏 */
-#define zs_to_radix(real)   (real / zs_unit)                /**< 将实例点转为基准点 */
-#define zs_to_real(radix)   (radix * zs_unit)               /**< 将基准点转为实例点 */
+#define zs_radix            (ZCIslandscape ? 568.0 : 320.0)  /**< 总基准点数，按照iPhone5设定 */
+#define zs_unit             (ZSWid / zs_radix)               /**< 单位基准相当于的实例点数 */
+#define zs_is320            (ZFEqual(ZSWid, zs_radix))       /**< 是否基准屏 */
+#define zs_to_radix(real)   (real / zs_unit)                 /**< 将实例点转为基准点 */
+#define zs_to_real(radix)   (radix * zs_unit)                /**< 将基准点转为实例点 */
 
 
 /** --- layout cal --- */
@@ -98,6 +98,14 @@
 #define ZFNotEqual(a, b)    (fabs((a) - (b)) >= FLT_EPSILON)                /**< a != b */
 #define ZFAboveEqual(a, b)  (ZFAbove((a), (b)) || ZFEqual((a), (b)))        /**< a >= b */
 #define ZFBelowEqual(a, b)  (ZFBelow((a), (b)) || ZFEqual((a), (b)))        /**< a <= b */
+
+
+/** --- navi bar --- */
+#define ZC_USE_CLEAR_BAR           - (BOOL)isUseClearBar {return YES;}           /**< 使用全透明导航栏，可重写按需返回YES&NO */
+#define ZC_USE_CUSTOM_BAR          - (BOOL)isUseCustomBar {return YES;}          /**< 使用自定义导航栏 */
+#define ZC_SHIELD_BAR_SHADOW       - (BOOL)isShieldBarShadow {return YES;}       /**< 屏蔽导航栏阴影线 */
+#define ZC_USE_TRANSLUCENT_BAR     - (BOOL)isUseTranslucentBar {return YES;}     /**< 使用半透明导航栏 */
+#define ZC_SHIELD_INTERACTIVE_POP  - (BOOL)isShieldInteractivePop {return YES;}  /**< 屏蔽侧滑返回手势 */
 
 
 /** --- 文件路径 --- */

@@ -20,25 +20,25 @@ typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
 
 @interface UIScrollView (ZC)
 
-@property (nonatomic, assign) CGFloat offsetX;
+@property (nonatomic, assign) CGFloat offsetX;  /**< 水平偏移量 */
 
-@property (nonatomic, assign) CGFloat offsetY;
+@property (nonatomic, assign) CGFloat offsetY;  /**< 垂直偏移量 */
 
-@property (nonatomic, assign) CGFloat sizeWidth;
+@property (nonatomic, assign) CGFloat sizeWidth;  /**< size宽 */
 
-@property (nonatomic, assign) CGFloat sizeHeight;
+@property (nonatomic, assign) CGFloat sizeHeight;  /**< size高 */
 
-@property (nonatomic, assign) CGFloat insetTop;
+@property (nonatomic, assign) CGFloat insetTop;  /**< inset顶部 */
 
-@property (nonatomic, assign) CGFloat insetLeft;
+@property (nonatomic, assign) CGFloat insetLeft;  /**< inset左部 */
 
-@property (nonatomic, assign) CGFloat insetBottom;
+@property (nonatomic, assign) CGFloat insetBottom;  /**< inset底部 */
 
-@property (nonatomic, assign) CGFloat insetRight;
+@property (nonatomic, assign) CGFloat insetRight;  /**< inset右部 */
 
-@property (nonatomic, assign) CGFloat visualOffsetX;
+@property (nonatomic, assign) CGFloat visualOffsetX;  /**< 直观的水平偏移量 */
 
-@property (nonatomic, assign) CGFloat visualOffsetY;
+@property (nonatomic, assign) CGFloat visualOffsetY;  /**< 直观的垂直偏移量 */
 
 
 #pragma mark - misc

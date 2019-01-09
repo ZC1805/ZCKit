@@ -18,6 +18,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)isLandscape;
 
++ (BOOL)isUseClearBar:(UIViewController *)controller;  /**< 控制器是否使用透明导航栏 */
+
++ (BOOL)isShieldInteractivePop:(UIViewController *)controller;  /**< 控制器是否屏蔽滑动返回 */
+
 + (BOOL)isValidString:(nullable NSString *)str;  /**< 非空长度 & 不是只有空格和换行 & 非<null> */
 
 + (BOOL)isValidArray:(nullable NSArray *)array;  /**< 判断对象是否是有效的数组 & count不为零 */
