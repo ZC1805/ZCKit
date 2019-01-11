@@ -284,7 +284,8 @@ static void *directionContext = @"scrollViewDirectionContext";
 }
 
 - (void)setHorizontalScrollingDirection:(ZCEnumScrollViewDirection)horizontalScrollingDirection {
-    objc_setAssociatedObject(self, @selector(horizontalScrollingDirection), [NSNumber numberWithInteger:horizontalScrollingDirection], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(horizontalScrollingDirection),
+                             [NSNumber numberWithInteger:horizontalScrollingDirection], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (ZCEnumScrollViewDirection)verticalScrollingDirection {
@@ -292,7 +293,8 @@ static void *directionContext = @"scrollViewDirectionContext";
 }
 
 - (void)setVerticalScrollingDirection:(ZCEnumScrollViewDirection)verticalScrollingDirection {
-    objc_setAssociatedObject(self, @selector(verticalScrollingDirection), [NSNumber numberWithInteger:verticalScrollingDirection], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, @selector(verticalScrollingDirection),
+                             [NSNumber numberWithInteger:verticalScrollingDirection], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 @end

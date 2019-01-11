@@ -14,9 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface ZCGlobal : NSObject
 
 #pragma mark - misc
-+ (BOOL)isiPhoneX;
++ (BOOL)isiPhoneX;  /**< 是否是iPhoneX系列手机 */
 
-+ (BOOL)isLandscape;
++ (BOOL)isLandscape;  /**< 当前手机是否是横屏状态 */
 
 + (BOOL)isUseClearBar:(UIViewController *)controller;  /**< 控制器是否使用透明导航栏 */
 
