@@ -40,7 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCWindowView : UIView  /**< 自定义view，展示窗口和点击处理，仅透明度动画 */
 
-/** 添加子视图，time是动画时间，blur是否模糊，clear是mask是否透明，action点击mask回调，不会自动隐藏 (subview不要在外部被强引用，不是同一个window) */
+/** 添加子视图，view显示的动画在外部实现，time是动画时间，blur是否模糊，clear是mask是否透明，action点击mask回调，不会自动隐藏 (subview不要在外部被强引用) */
 + (void)display:(UIView *)subview time:(NSTimeInterval)time blur:(BOOL)blur clear:(BOOL)clear action:(nullable void(^)(void))action;
 
 /** 移除子视图，动画时间同上 (subview不要在外部被强引用，不是同一个window) */

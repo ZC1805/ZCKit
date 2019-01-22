@@ -85,7 +85,7 @@
 #define ZSNaviHei           ([ZCGlobal isiPhoneX] ? 88.0 : 44.0)        /**< 导航栏高，竖屏值 */
 #define ZSStuBarHei         ([ZCGlobal isiPhoneX] ? 44.0 : 20.0)        /**< 状态栏高，竖屏值 */
 #define ZSTabBarHei         ([ZCGlobal isiPhoneX] ? 83.0 : 49.0)        /**< 标签栏高，竖屏值 */
-#define ZSTopResHei         ([ZCGlobal isiPhoneX] ? 30.0 : 0)           /**< 顶预留高，竖屏值 */
+#define ZSTopResHei         ([ZCGlobal isiPhoneX] ? 44.0 : 20.0)        /**< 顶预留高，竖屏值 */
 #define ZSBomResHei         ([ZCGlobal isiPhoneX] ? 34.0 : 0)           /**< 底预留高，竖屏值 */
 #define ZSAvailableHei      (ZSHei - ZSNaviHei - ZSBomResHei)           /**< 内容高度，竖屏值 */
 
