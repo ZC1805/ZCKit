@@ -147,4 +147,109 @@
 
 
 
+
+
+//    static CGFloat minLineSpacing = 0.5;
+//    static CGFloat viewEdge = 10.0;
+//
+//    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+//    layout.headerReferenceSize = CGSizeMake(ZSWid, 35.0);
+//    layout.sectionInset = UIEdgeInsetsMake(ZSA(10), ZSA(10), ZSA(10), ZSA(10));
+//    layout.minimumInteritemSpacing = minLineSpacing;
+//    layout.minimumLineSpacing = minLineSpacing;
+//    CGFloat width = (ZSWid - 2 * viewEdge - minLineSpacing)/2;
+//    CGFloat height = (ZSAvailableHei - 2 * viewEdge - 5 * minLineSpacing) / 6;
+//    layout.itemSize = CGSizeMake(width, height);
+//
+//    self.collection = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+//    self.collection.frame = CGRectMake(0, self.header.bottom, ZSWid, ZSHei - self.header.bottom - ZSTabBarHei);
+//    _collection.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+//    _collection.showsVerticalScrollIndicator = NO;
+//    _collection.showsHorizontalScrollIndicator = NO;
+//    [_collection registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
+//    _collection.delegate   = self;
+//    _collection.dataSource = self;
+//    _collection.backgroundColor = ZCBlackA2;
+//    [self.view addSubview:self.collection];
+//    [_collection registerClass:[UICollectionReusableView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"section"];
+
+//#pragma mark --- UIcollectionDelegate
+//- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+//    return self.nameArr.count;
+//}
+//
+//- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+//    return 2;
+//}
+//
+//- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView
+//viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+//    if ([kind isEqualToString:UICollectionElementKindSectionHeader]) {
+//
+//        UICollectionReusableView *view = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"section" forIndexPath:indexPath];
+//        UILabel *label = [view viewWithTag:921];
+//        if (!label) {
+//            label = [[UILabel alloc] initWithFrame:view.bounds];
+//            label.textAlignment = NSTextAlignmentCenter;
+//            //label.font = DEFFontSize13;
+//            //label.textColor = DCRForBlackA0;
+//            label.tag = 921;
+//            [view addSubview:label];
+//        }
+//        label.text = indexPath.section == 0 ? @"年 份" : @"月 份";
+//        return view;
+//    }
+//    return nil;
+//}
+//
+//- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+//    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"cell" forIndexPath:indexPath];
+//
+//    UIView *view = [[UIView alloc] init];
+//    view.backgroundColor = [UIColor whiteColor];
+//    UIView *view1 = [[UIView alloc] init];
+//    view1.backgroundColor = [UIColor groupTableViewBackgroundColor];
+//    cell.backgroundView = view;
+//    cell.selectedBackgroundView = view1;
+//
+//    NSString *billid = @"123";
+//    NSString *itemName = @"456";
+//    NSString *str = @"单据_";
+//    NSString *imageName = [str stringByAppendingString:billid];
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    CGFloat width = 108.0;
+//    btn.frame = CGRectMake((cell.contentView.bounds.size.width - width)/2, (cell.contentView.bounds.size.height - 30)/2, width, 30);
+//    btn.backgroundColor = [UIColor clearColor];
+//    [btn setTitle:itemName forState:UIControlStateNormal];
+//    [btn setTitleColor:ZCBlack30 forState:UIControlStateNormal];
+//    [btn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];
+//    [btn setImage:[UIImage imageNamed:imageName] forState:UIControlStateDisabled];
+//    btn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+//    btn.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 10);
+//    btn.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+//    btn.titleLabel.font = [UIFont systemFontOfSize:15];
+//    btn.enabled = NO;
+//    [cell.contentView addSubview:btn];
+//
+//    return cell;
+//}
+//
+//- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+//    return YES;
+//}
+//
+//- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+//    //    NSDictionary *dic = self.billTypeListArray[indexPath.row];
+//    //    NSString *billId = [dic stringForColumn:AMPar_dm];
+//    //    if (![[[[AMDataProvider sharedObject] billidExplain] allKeys] containsObject:billId] || !billId.length) {
+//    //        [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+//    //        return;
+//    //    }
+//    //    AMBillListViewController *vc = [[AMBillListViewController alloc] initWithBillid:billId withBillName:dic[AMPar_name] parameters:[[NSDictionary alloc] init]];
+//    //    [self.navigationController pushViewController:vc animated:YES];
+//    //    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+//}
+
+
+
 @end
