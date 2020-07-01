@@ -22,7 +22,7 @@ typedef NS_ENUM(NSInteger, ZCEnumMonitorPriority) {
     ZCEnumMonitorPriorityHigh     = 3,  /**< 高优先级 */
 };
 
-static const ZCMonitorType ZCMonitorTypeNone;  /**< 用于获取监听类型等 */
+extern const ZCMonitorType ZCMonitorTypeNone;  /**< 用于获取监听类型等 */
 
 
 @interface ZCMonitorBroadcast : NSObject

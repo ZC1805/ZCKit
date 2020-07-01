@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCButton.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) UILabel *contentLabel;  /**< 懒加载，内容label */
 
-@property (nonatomic, strong, readonly) UIButton *handleButton;  /**< 懒加载，可点击的Button，不用添加Action */
+@property (nonatomic, strong, readonly) ZCButton *handleButton;  /**< 懒加载，可点击的Button，不用添加Action */
 
 @property (nonatomic, strong, readonly) UILabel *footerLabel;  /**< 懒加载，底部label */
 
@@ -31,6 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)resetImage:(nullable UIImage *)image handleText:(nullable NSString *)handleText;  /**< 重置image和button */
 
 - (void)setHidden:(BOOL)hidden animated:(BOOL)animated;  /**< 设置是否隐藏 */
+
+- (void)setInitHidden;  /**< 设置初始的空白样式 */
 
 - (void)resetSize;  /**< 调用此方法来重新布局 */
 

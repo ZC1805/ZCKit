@@ -18,13 +18,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) CGFloat cornerRadius;  /**< 圆角半径，默认0 */
 
-@property (nonatomic, strong) UILabel *descLabel;  /**< 提示视图，懒加载，默认nil */
+@property (null_resettable, nonatomic, strong) UILabel *descLabel;  /**< 提示视图，懒加载，默认nil */
 
 @property (nullable, nonatomic, strong) UIImage *localImage;  /**< 赋值显示本地图片，默认nil */
 
 @property (nullable, nonatomic, copy) void(^touchAction)(ZCAvatarControl *sender);  /**< 添加TouchUpInset回调，默认nil */
 
-- (void)imageUrl:(NSString *)url holder:(nullable UIImage *)holder;  /**< 加载网路图片 */
+- (void)imageUrl:(nullable NSString *)url holder:(nullable UIImage *)holder;  /**< 加载网路图片 */
 
 - (void)resetInitProperty;  /**< 重设到初始化属性值 */
 

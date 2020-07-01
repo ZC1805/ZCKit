@@ -10,6 +10,14 @@
 
 @implementation UILabel (ZC)
 
+- (instancetype)initWithFrame:(CGRect)frame font:(UIFont *)font color:(UIColor *)color {
+    if (self = [self initWithFrame:frame]) {
+        self.textColor = color;
+        self.font = font;
+    }
+    return self;
+}
+
 - (void)setText:(NSString *)text lineSpacing:(CGFloat)lineSpacing {
     if (lineSpacing < 0.01 || !text.length) {self.text = text; return;}
     NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:text];
@@ -24,21 +32,17 @@
 }
 
 + (CGFloat)heiText:(NSString *)text font:(UIFont *)font width:(CGFloat)width lineSpacing:(CGFloat)lineSpacing {
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, MAXFLOAT)];
-    label.numberOfLines = 0;
-    label.font = font;
-    [label setText:text lineSpacing:lineSpacing];
-    [label sizeToFit];
-    return label.frame.size.height;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame font:(UIFont *)font color:(UIColor *)color {
-    if (self = [self initWithFrame:frame]) {
-        self.textColor = color;
-        self.font = font;
-    }
-    return self;
+    static UILabel *kSpacLabel = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        kSpacLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        kSpacLabel.numberOfLines = 0;
+    });
+    kSpacLabel.font = font;
+    kSpacLabel.frame = CGRectMake(0, 0, width, MAXFLOAT);
+    [kSpacLabel setText:text lineSpacing:lineSpacing];
+    [kSpacLabel sizeToFit];
+    return kSpacLabel.frame.size.height;
 }
 
 @end
-

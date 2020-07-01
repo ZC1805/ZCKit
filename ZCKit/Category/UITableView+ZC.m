@@ -8,8 +8,25 @@
 
 #import "UITableView+ZC.h"
 #import <objc/runtime.h>
+#import "UIView+ZC.h"
+#import "ZCMacro.h"
 
 @implementation UITableView (ZC)
+
+- (CGFloat)bottomGroupStyleHei {
+    CGFloat resBottom = 0;
+    if ([self isKindOfClass:UITableView.class] && [(UITableView *)self style] == UITableViewStyleGrouped) {
+        if (self.currentViewController.automaticallyAdjustsScrollViewInsets) {
+            resBottom = 20.0;
+        }
+        if (@available(iOS 11.0, *)) {
+            if (self.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentAutomatic) {
+                resBottom = 20.0;
+            }
+        }
+    }
+    return resBottom;
+}
 
 - (void)clearSelectedRowsAnimated:(BOOL)animated {
     NSArray *indexs = [self indexPathsForSelectedRows];
@@ -45,4 +62,3 @@
 }
 
 @end
-

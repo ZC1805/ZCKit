@@ -38,25 +38,27 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) CGFloat bottomClickOffsetY;  /**< 底部点击按钮，与当前底部向下的偏移量，居中，默认0，即不偏移 */
 
-@property (nonatomic, assign) BOOL isSelectAvatarBeCenter;  /**< avatarControl和selectButton是否是垂直居中，与offsetY互斥，默认NO */
+@property (nonatomic, assign) BOOL isSelectAvatarBeCenter;  /**< avatarControl和selectButton是否是垂直居中，行高不会计算它，默认NO */
 
-@property (nonatomic, assign) BOOL isLeadingBeCenter;  /**< leadingLabel是否是垂直居中，与offsetY互斥，默认NO */
+@property (nonatomic, assign) BOOL isLeadingBeCenter;  /**< leadingLabel是否是垂直居中，自动行高不会拿leadingLabel计算最大高，默认NO */
+
+@property (nonatomic, assign) BOOL isAccessBeCenter;  /**< accessControl是否是垂直居中，自动行高不会拿accessControl计算最大高，默认NO */
 
 @property (nullable, nonatomic, strong) UIColor *separatorBKColor;  /**< 分离器颜色，默认ZCSPColor */
 
-@property (nullable, nonatomic, strong) UIColor *insideBKColor;  /**< 内侧背景视图颜色，默认0xEEEEEE */
+@property (nullable, nonatomic, strong) UIColor *insideBKColor;  /**< 内侧背景视图颜色，默认ZCSPColor */
 
 @property (nullable, nonatomic, strong) UIColor *selectBKColor;  /**< 选中状态下的背景颜色，默认nil，即无选中风格 */
 
 
 /** 子视图布局样式排列 */
-/** --------------------------------------- separator --------------------------------------------------------- */
-/** ⇠    ⇡        ⇡       ⇡      ⇡       ⇡     ⇡        ⇡           ⇡         ⇡        ⇡       ⇡        ⇡   ⇢ */
+/** ---------------------------------------------- separator --------------------------------------------------------- */
+/** ⇠    ⇡        ⇡       ⇡      ⇡       ⇡     ⇡        ⇡           ⇡         ⇡        ⇡       ⇡        ⇡        ⇡        ⇡        ⇡        ⇢ */
 /** ⇠ select - avatar - label - flag - field ~~~~~ label/field - container - click - switch - badge - access ⇢ */
-/** ⇠    |                                     |                                                         |   ⇢ */
-/** ⇠ +1level - describe/text ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ label - container - click - badge ⇢ */
-/** ⇠    ⇣            ⇣                        ⇣                             ⇣         ⇣         ⇣       ⇣   ⇢ */
-/** --------------------------------------- separator --------------------------------------------------------- */
+/** ⇠    |                                               |                                                  |                                                   ⇢ */
+/** ⇠ +1level - describe/text - flag - field ~~~~~ ~~~~~~ ~~~~~~ ~~  label - container - click - badge ⇢ */
+/** ⇠    ⇣            ⇣                        ⇣                             ⇣         ⇣         ⇣        ⇣         ⇣        ⇣          ⇣         ⇢ */
+/** ---------------------------------------------- separator --------------------------------------------------------- */
 
 /** 以下子视图只有创建且不隐藏的时候，才会显示出来从而为其分配位置，有需要特定大小的需要设置size */
 /** 以下子视图使用懒加载的模式，隐藏已经显示出来的子视图，可设置隐藏(此操作会重新布局，回收之前分配的位置)，或alpha改为0 */
@@ -95,6 +97,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) ZCTextView *bottomTextView;  /**< 会布局满行，默认size是auto */
 
+@property (nonatomic, strong, readonly) UIView *bottomFlagContainerView;  /**< 默认size(ZSA(20)*ZSA(20)) */
+
+@property (nonatomic, strong, readonly) ZCTextField *bottomTextField;  /**< 默认size(ZSA(160)*ZSA(30)) */
+
 @property (nonatomic, strong, readonly) ZCFixLabel *bottomAttachLabel;  /**< 第二行主，默认size是auto */
 
 @property (nonatomic, strong, readonly) UIView *bottomContainerView;  /**< 默认size(ZSA(30)*ZSA(30)) */
@@ -106,7 +112,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 额外添加的占位属性，初始化为空值，供外部使用 */
 @property (nullable, nonatomic, strong) UIView *holdView;  /**< 供外部持有的的视图，可设置独立的约束，默认nil */
-
 
 /** 供外部调用或子类需要重写的方法 */
 - (void)initComplete;  /**< 初始化完成，可在此懒加载生成子视图，子类重写此方法对属性赋值，可在此设置block */

@@ -17,13 +17,13 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         SEL sel1 = @selector(hitTest:withEvent:);
-        SEL sel1x = @selector(swizzle_hitTest:withEvent:);
+        SEL sel1x = @selector(swizzle1_hitTest:withEvent:);
         zc_swizzle_exchange_selector([UITableViewCell class], sel1, sel1x);
     });
 }
 
-- (UIView *)swizzle_hitTest:(CGPoint)point withEvent:(UIEvent *)event {
-    UIView *hit = [self swizzle_hitTest:point withEvent:event];
+- (UIView *)swizzle1_hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    UIView *hit = [self swizzle1_hitTest:point withEvent:event];
     if (hit) {
         UITableView *table = [self currentTableView];
         if (table) {

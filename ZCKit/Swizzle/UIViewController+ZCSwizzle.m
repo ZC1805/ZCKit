@@ -27,23 +27,27 @@
         SEL sel3x = @selector(swizzle_viewWillAppear:);
         SEL sel4 = @selector(viewDidLayoutSubviews);
         SEL sel4x = @selector(swizzle_viewDidLayoutSubviews);
+        SEL sel5 = @selector(viewWillDisappear:);
+        SEL sel5x = @selector(swizzle_viewWillDisappear:);
         zc_swizzle_exchange_selector([UIViewController class], sel1, sel1x);
         zc_swizzle_exchange_selector([UIViewController class], sel2, sel2x);
         zc_swizzle_exchange_selector([UIViewController class], sel3, sel3x);
         zc_swizzle_exchange_selector([UIViewController class], sel4, sel4x);
+        zc_swizzle_exchange_selector([UIViewController class], sel5, sel5x);
     });
 }
 
 - (instancetype)swizzle_initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     id instance = [self swizzle_initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (instance) self.hidesBottomBarWhenPushed = YES; //如果希望值为NO的话，需要在init之后设置hidesBottomBarWhenPushed为NO;
+    if (instance) self.modalPresentationStyle = UIModalPresentationFullScreen; //不显示层叠样式
     return instance;
 }
 
 - (void)swizzle_viewDidLoad {
-    if (self.navigationController) {
-        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem = backItem;
+    if (self.navigationController && self.parentViewController == self.navigationController) {
+        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        self.navigationItem.backBarButtonItem = item;
     }
     [self swizzle_viewDidLoad];
 }
@@ -55,37 +59,64 @@
         }
     }
     if (self.navigationController && self.parentViewController == self.navigationController) {
-        if ([self swizzle_isUseClearBar]) {
-            [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
-            [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-            [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
-        } else if ([self swizzle_isShieldBarShadow]) {
-            UIImage *imageBar = ZCIN(ZCKitBridge.naviBarImageOrColor);
-            if (!imageBar) imageBar = [UIImage imageWithColor:ZCCS(ZCKitBridge.naviBarImageOrColor)];
-            [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
-            [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-            [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
-        } else if ([self swizzle_isUseCustomBar]) {
+        if ([self swizzle_isHiddenNavigationBar]) {
             [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
         } else {
-            if (!self.navigationController.isNormalBar) {
+            if ([self swizzle_isUseClearBar]) {
+                [self.navigationController.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+                [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+                [self.navigationController.navigationBar setShadow:ZCClear offset:CGSizeZero radius:ZSA(1)];
+                [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
+            } else if ([self swizzle_isShieldBarShadow]) {
                 UIImage *imageBar = ZCIN(ZCKitBridge.naviBarImageOrColor);
                 if (!imageBar) imageBar = [UIImage imageWithColor:ZCCS(ZCKitBridge.naviBarImageOrColor)];
-                UIImage *imageShadow = [UIImage imageWithColor:ZCBlackC8 size:CGSizeMake(ZSSepHei, ZSSepHei)];
+                UIColor *shadowColor = [self swizzle_isUseNaviBarShadowColor] ? ZCSPColor : ZCClear;
                 [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
-                [self.navigationController.navigationBar setShadowImage:imageShadow];
-                [self.navigationController setValue:@(YES) forKey:@"isNormalBar"];
+                [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
+                [self.navigationController.navigationBar setShadow:shadowColor offset:CGSizeZero radius:ZSA(1)];
+                [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
+            } else if ([self swizzle_isUseCustomBar]) {
+                [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
+            } else {
+                if (!self.navigationController.isNormalBar) {
+                    UIImage *imageBar = ZCIN(ZCKitBridge.naviBarImageOrColor);
+                    if (!imageBar) imageBar = [UIImage imageWithColor:ZCCS(ZCKitBridge.naviBarImageOrColor)];
+                    UIImage *imageShadow = [UIImage imageWithColor:ZCSPColor size:CGSizeMake(ZSWid, ZSSepHei)];
+                    UIColor *shadowColor = [self swizzle_isUseNaviBarShadowColor] ? ZCSPColor : ZCClear;
+                    [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
+                    [self.navigationController.navigationBar setShadowImage:imageShadow];
+                    [self.navigationController.navigationBar setShadow:shadowColor offset:CGSizeZero radius:ZSA(1)];
+                    [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:NO];
+                    [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:NO];
+                    [self.navigationController setValue:@(![self swizzle_isUseNaviBarShadowColor]) forKey:@"isNormalBar"];
+                }
             }
-        }
-        if ([self swizzle_isUseTranslucentBar] || [self swizzle_isUseClearBar]) {
-            self.navigationController.navigationBar.translucent = YES;
-            self.extendedLayoutIncludesOpaqueBars = NO;
-        } else {
-            self.navigationController.navigationBar.translucent = NO;
-            self.extendedLayoutIncludesOpaqueBars = YES;
+            if ([self swizzle_isUseTranslucentBar] || [self swizzle_isUseClearBar]) {
+                self.navigationController.navigationBar.barTintColor = nil;
+                self.navigationController.navigationBar.translucent = YES;
+                self.extendedLayoutIncludesOpaqueBars = NO;
+            } else {
+                self.navigationController.navigationBar.barTintColor = nil;
+                self.navigationController.navigationBar.translucent = NO;
+                self.extendedLayoutIncludesOpaqueBars = YES;
+            }
         }
     }
     [self swizzle_viewWillAppear:animated];
+    for (UIView *view in self.view.containAllSubviews) {
+        if ([view respondsToSelector:@selector(onControllerViewWillAppear)]) {
+            [(id<ZCViewLayoutProtocol>)view onControllerViewWillAppear];
+        }
+    }
+}
+
+- (void)swizzle_viewWillDisappear:(BOOL)animated {
+    [self swizzle_viewWillDisappear:animated];
+    for (UIView *view in self.view.containAllSubviews) {
+        if ([view respondsToSelector:@selector(onControllerViewWillDisappear)]) {
+            [(id<ZCViewLayoutProtocol>)view onControllerViewWillDisappear];
+        }
+    }
 }
 
 - (void)swizzle_viewDidLayoutSubviews {
@@ -97,7 +128,7 @@
     }
 }
 
-#pragma mark - private
+#pragma mark - Private
 - (BOOL)swizzle_isUseCustomBar {
     SEL sel = @selector(isUseCustomBar);
     if ([self respondsToSelector:sel]) {
@@ -124,6 +155,22 @@
 
 - (BOOL)swizzle_isUseTranslucentBar {
     BOOL use = NO; SEL sel = @selector(isUseTranslucentBar);
+    if ([self respondsToSelector:sel]) {
+        zc_suppress_leak_warning(use = (BOOL)[self performSelector:sel]);
+    }
+    return use;
+}
+
+- (BOOL)swizzle_isUseNaviBarShadowColor {
+    BOOL use = NO; SEL sel = @selector(isUseNaviBarShadowColor);
+    if ([self respondsToSelector:sel]) {
+        zc_suppress_leak_warning(use = (BOOL)[self performSelector:sel]);
+    }
+    return use;
+}
+
+- (BOOL)swizzle_isHiddenNavigationBar {
+    BOOL use = NO; SEL sel = @selector(isHiddenNavigationBar);
     if ([self respondsToSelector:sel]) {
         zc_suppress_leak_warning(use = (BOOL)[self performSelector:sel]);
     }

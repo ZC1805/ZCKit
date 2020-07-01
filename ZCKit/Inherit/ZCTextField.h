@@ -24,13 +24,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) NSUInteger limitTextLength;  /**< 最大长度，默认0，即不限制输入长度 */
 
+@property (nullable, nonatomic, strong, readonly) UIView *underlineView;  /**< 当前下划线视图m，只有isShowUnderline为YES才有此View */
+
 @property (nullable, nonatomic, copy) BOOL(^limitTipBlock)(NSString *originText);  /**< 越界提示回调，返回是否舍去超出部分，默认nil */
 
-@property (nullable, nonatomic, copy) void(^textChangeBlock)(NSString *originText);  /**< 内容改变回调，默认nil */
+@property (nullable, nonatomic, copy) void(^textChangeBlock)(ZCTextField *field);  /**< 内容改变回调，默认nil */
 
 @property (nullable, nonatomic, copy) void(^touchAction)(ZCTextField *sender);  /**< 添加allEditEvent回调，默认nil */
 
-#pragma mark - delegate block
+#pragma mark - Delegate block
 /** 以下方法将会设置delegate为self */
 - (ZCTextField *)shouldBeginEdit:(nullable BOOL(^)(ZCTextField *field))block;
 
@@ -43,6 +45,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (ZCTextField *)didBeginEdit:(nullable void(^)(ZCTextField *field))block;
 
 - (ZCTextField *)didEndEdit:(nullable void(^)(ZCTextField *field))block;
+
+- (ZCTextField *)didTextChange:(nullable void(^)(ZCTextField *field))block;
 
 @end
 

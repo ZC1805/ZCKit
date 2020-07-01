@@ -11,7 +11,7 @@
 
 @implementation NSObject (ZC)
 
-#pragma mark - kvc
+#pragma mark - Kvc
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
     NSAssert(0, @"ZCKit: kvc set value for key fail -> key: %@", key);
 }
@@ -20,7 +20,7 @@
     NSAssert(0, @"ZCKit: kvc get value for key fail -> key: %@", key); return nil;
 }
 
-#pragma mark - misc
+#pragma mark - Misc
 - (id)performSelector:(SEL)selector arguments:(NSArray *)arguments { //执行顺序有问题，不立即返回
     NSMethodSignature *methodSignature = [[self class] instanceMethodSignatureForSelector:selector];
     if (methodSignature == nil) {
@@ -44,7 +44,7 @@
     }
 }
 
-#pragma mark - class
+#pragma mark - Class
 + (NSArray *)allProperiesName {
     unsigned int count;
     objc_property_t *proprties = class_copyPropertyList(self, &count);
@@ -112,4 +112,3 @@
 }
 
 @end
-

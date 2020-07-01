@@ -11,7 +11,7 @@
 #import "ZCMacro.h"
 #import <UIKit/UIKit.h>
 
-#pragma mark - ~~~~~~~~~~ ZCServiceImpl ~~~~~~~~~~
+#pragma mark - ~ ZCServiceImpl ~
 @interface ZCServiceImpl : NSObject
 
 @property (nonatomic, strong) NSMutableDictionary *singletons;
@@ -52,7 +52,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCServiceManager ~~~~~~~~~~
+#pragma mark - ~ ZCServiceManager ~
 @interface ZCServiceManager ()
 
 @property (nonatomic, strong) NSLock *lock;
@@ -63,7 +63,7 @@
 
 @implementation ZCServiceManager
 
-+ (instancetype)instance {
++ (instancetype)sharedManager {
     static ZCServiceManager *instance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -89,14 +89,14 @@
 }
 
 + (void)fire {
-    ZCServiceManager *manager = [ZCServiceManager instance];
+    ZCServiceManager *manager = [ZCServiceManager sharedManager];
     [manager.lock lock];
     manager.core = [ZCServiceImpl coreImpl];
     [manager.lock unlock];
 }
 
 + (void)destory {
-    ZCServiceManager *manager = [ZCServiceManager instance];
+    ZCServiceManager *manager = [ZCServiceManager sharedManager];
     [manager.lock lock];
     [manager callSingletonClean];
     [manager.core.singletons removeAllObjects];
@@ -118,7 +118,7 @@
     [_lock unlock];
 }
 
-#pragma mark - call
+#pragma mark - Call
 - (void)callSingletonClean {
     [self callSelector:@selector(serviceCleanData)];
 }
@@ -146,11 +146,11 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCService ~~~~~~~~~~
+#pragma mark - ~ ZCService ~
 @implementation ZCService
 
-+ (instancetype)instance {
-    return [[ZCServiceManager instance] singletonByClass:[self class]];
++ (instancetype)sharedService {
+    return [[ZCServiceManager sharedManager] singletonByClass:[self class]];
 }
 
 - (void)start {
@@ -159,7 +159,7 @@
 
 - (void)stop {
     if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: service %@ stop", self);
-    [[ZCServiceManager instance] stopSingletonByClass:[self class]];
+    [[ZCServiceManager sharedManager] stopSingletonByClass:[self class]];
 }
 
 @end

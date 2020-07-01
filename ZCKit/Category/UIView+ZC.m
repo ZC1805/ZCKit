@@ -13,7 +13,12 @@
 
 @implementation UIView (ZC)
 
-#pragma mark - prty
+#pragma mark - Override
+- (UIUserInterfaceStyle)overrideUserInterfaceStyle API_AVAILABLE(ios(13.0)){
+    return UIUserInterfaceStyleLight;
+}
+
+#pragma mark - Prty
 - (CGFloat)visibleAlpha {
     if ([self isKindOfClass:[UIWindow class]]) {
         if (self.hidden) return 0;
@@ -71,7 +76,17 @@
     return objc_getAssociatedObject(self, _cmd);
 }
 
-#pragma mark - func
+- (ZCBlankControl *)blankCoverView {
+    ZCBlankControl *blankCoverView = objc_getAssociatedObject(self, _cmd);
+    if (!blankCoverView) {
+        blankCoverView = [[ZCBlankControl alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height) color:self.backgroundColor];
+        objc_setAssociatedObject(self, _cmd, blankCoverView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        [self addSubview:blankCoverView];
+    }
+    return blankCoverView;
+}
+
+#pragma mark - Func
 - (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color {
     if (self = [self initWithFrame:frame]) {
         self.backgroundColor = color;
@@ -225,12 +240,12 @@
     self.layer.shadowColor = color.CGColor;
     self.layer.shadowOffset = offset;
     self.layer.shadowRadius = radius;
-    self.layer.shadowOpacity = 1;
+    self.layer.shadowOpacity = 1.0;
     self.layer.shouldRasterize = YES;
     self.layer.rasterizationScale = [UIScreen mainScreen].scale;
 }
 
-- (void)setCorner:(NSInteger)radius color:(UIColor *)color width:(CGFloat)width {
+- (void)setCorner:(CGFloat)radius color:(UIColor *)color width:(CGFloat)width {
     self.layer.masksToBounds = YES;
     self.layer.cornerRadius = radius;
     self.layer.borderWidth = width;
@@ -252,7 +267,7 @@
     return [self convertPoint:point toView:window];
 }
 
-#pragma mark - line
+#pragma mark - Line
 - (NSValue *)holderLineViewInsets {
     return objc_getAssociatedObject(self, _cmd);
 }
@@ -367,7 +382,7 @@
     return line;
 }
 
-#pragma mark - layout
+#pragma mark - Layout
 - (void)setTop:(CGFloat)top {
     CGRect rect = self.frame;
     rect.origin.y = top;
@@ -469,4 +484,3 @@
 }
 
 @end
-

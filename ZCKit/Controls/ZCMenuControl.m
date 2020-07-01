@@ -12,8 +12,6 @@
 #import "ZCButton.h"
 #import "ZCMacro.h"
 
-#define menu_flag_tag  73203
-
 @interface ZCMenuControl ()
 
 @property (nonatomic, assign) BOOL isCanTouch;
@@ -34,11 +32,12 @@
 
 + (void)display:(NSArray <NSString *>*)menus width:(CGFloat)width vertex:(CGPoint)vertex
             set:(void(^)(ZCMenuControl *menuControl))set
+         btnSet:(void(^)(NSInteger index, UIButton *btn, UIView *line))btnSet
           click:(void(^)(NSInteger selectIndex))click {
     ZCMenuControl *menuControl = [[ZCMenuControl alloc] initWithMenus:menus width:(CGFloat)width vertex:vertex click:click];
     [menuControl initProperty];
     if (set) set(menuControl);
-    [menuControl initialUI];
+    [menuControl initialUI:btnSet];
     [menuControl showItems];
 }
 
@@ -54,6 +53,7 @@
 }
 
 - (void)initProperty {
+    self.isShowShadow = NO;
     self.isMaskHide = YES;
     self.isMaskClear = YES;
     self.isCanTouch = NO;
@@ -63,9 +63,9 @@
     self.initArrowRect = CGRectMake(self.initWid * 2.0 / 3.0, 0, 13.0, 8.0);
 }
 
-#pragma mark - display
+#pragma mark - Display
 - (void)showItems {
-    [ZCWindowView display:self time:0.3 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{[self disappearItems:-1];}) : nil)];
+    [ZCWindowView display:self time:0.25 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{[self disappearItems:-1];}) : nil)];
     if (self.initArrowRect.size.height) {
         self.layer.opacity = 0;
         self.layer.anchorPoint = CGPointMake(1, 0);
@@ -77,7 +77,7 @@
         self.layer.position = CGPointMake(self.left + self.width / 2.0, self.top - self.height / 2.0);
         self.layer.transform = CATransform3DScale(CATransform3DIdentity, 1, 0, 1);
     }
-    [UIView animateWithDuration:0.3 animations:^{
+    [UIView animateWithDuration:0.25 animations:^{
         self.layer.opacity = 1;
         self.layer.transform = CATransform3DIdentity;
     } completion:^(BOOL finished) {
@@ -86,7 +86,7 @@
 }
 
 - (void)onItem:(ZCButton *)itemBtn {
-    NSInteger selectIndex = itemBtn.tag - menu_flag_tag;
+    NSInteger selectIndex = itemBtn.tag - 73203;
     [self disappearItems:selectIndex];
 }
 
@@ -94,7 +94,7 @@
     if (!self.isCanTouch) return;
     self.isCanTouch = NO;
     [ZCWindowView dismissSubview];
-    [UIView animateWithDuration:0.3 animations:^{
+    [UIView animateWithDuration:0.25 animations:^{
         self.layer.opacity = 0;
     } completion:^(BOOL finished) {
         [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -103,16 +103,16 @@
     }];
 }
 
-#pragma mark - build
-- (void)initialUI {
+#pragma mark - Build
+- (void)initialUI:(void(^)(NSInteger index, UIButton *btn, UIView *line))btnSet {
     CGFloat initHei = MIN(self.items.count * self.rowHeight, self.maxLine * self.rowHeight);
-    self.backgroundColor = [UIColor clearColor];
+    self.backgroundColor = ZCClear;
     self.size = CGSizeMake(self.initWid, initHei + 2.0 * self.topHeight + self.initArrowRect.size.height);
     self.origin = CGPointMake(self.initVertex.x - self.initArrowRect.origin.x - self.initArrowRect.size.width / 2.0, self.initVertex.y);
     [self initialBKlayer];
 
     self.contentView = [[UIScrollView alloc] initWithFrame:CGRectZero];
-    self.contentView.backgroundColor = [UIColor clearColor];
+    self.contentView.backgroundColor = ZCClear;
     self.contentView.showsVerticalScrollIndicator = NO;
     self.contentView.bounces = NO;
     self.contentView.delaysContentTouches = (self.items.count > self.maxLine);
@@ -123,9 +123,9 @@
     for (int i = 0; i < self.items.count; i ++) {
         UIView *topSep = nil;
         ZCButton *itemBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
-        UIColor *titleColor = [UIColor blackColor];
-        itemBtn.tag = menu_flag_tag + i;
-        itemBtn.backgroundColor = [UIColor whiteColor];
+        UIColor *titleColor = ZCBlack;
+        itemBtn.tag = 73203 + i;
+        itemBtn.backgroundColor = ZCWhite;
         itemBtn.titleLabel.font = [UIFont systemFontOfSize:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
         [itemBtn setTitleColor:titleColor forState:UIControlStateNormal];
@@ -133,9 +133,10 @@
         [itemBtn addTarget:self action:@selector(onItem:) forControlEvents:UIControlEventTouchUpInside];
         itemBtn.frame = CGRectMake(0, i * self.rowHeight, self.initWid, self.rowHeight);
         if (i != 0) topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * self.rowHeight, self.initWid, 0.35)];
-        if (topSep) topSep.backgroundColor = ZCRGB(0xDCDCDC);
+        if (topSep) topSep.backgroundColor = ZCBlackDC;
         [self.contentView addSubview:itemBtn];
         if (topSep) [self.contentView addSubview:topSep];
+        if (btnSet) btnSet(i, itemBtn, topSep);
     }
 }
 
@@ -143,21 +144,21 @@
     CGSize size = self.initArrowRect.size;
     CGPoint origin = self.initArrowRect.origin;
     CGRect rect = CGRectMake(0, size.height, self.width, self.height - size.height);
-    UIBezierPath *bkPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:5.0];
+    UIBezierPath *bkPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:6.0];
     [bkPath moveToPoint:CGPointMake(origin.x, size.height)];
     [bkPath addLineToPoint:CGPointMake(origin.x + size.width / 2.0, 0)];
     [bkPath addLineToPoint:CGPointMake(origin.x + size.width, size.height)];
     [bkPath closePath];
     CAShapeLayer *bkLayer = [CAShapeLayer layer];
     bkLayer.path = bkPath.CGPath;
-    bkLayer.fillColor = [UIColor whiteColor].CGColor;
-    bkLayer.strokeColor = [UIColor clearColor].CGColor;
+    bkLayer.fillColor = ZCWhite.CGColor;
+    bkLayer.strokeColor = ZCClear.CGColor;
     bkLayer.lineWidth = 0.35;
     bkLayer.lineJoin = @"round";
-    bkLayer.shadowColor = ZCRGB(0xC8C8C8).CGColor;
+    bkLayer.shadowColor = ZCBlackC8.CGColor;
     bkLayer.shadowOffset = CGSizeMake(0, 0);
     bkLayer.shadowRadius = 7.0;
-    bkLayer.shadowOpacity = 1.0;
+    bkLayer.shadowOpacity = self.isShowShadow ? 1.0 : 0;
     [self.layer addSublayer:bkLayer];
 }
 

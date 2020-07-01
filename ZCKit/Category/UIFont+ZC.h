@@ -56,8 +56,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIFont *)fontTITLESize:(CGFloat)size;  /**< HiraginoSansGB-W6字体 */
 
-+ (UIFont *)fontENLightSize:(CGFloat)size;  /**< HelveticaNeue-Light字体 */
-
 @end
 
 NS_ASSUME_NONNULL_END

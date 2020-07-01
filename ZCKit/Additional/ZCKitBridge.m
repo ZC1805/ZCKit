@@ -7,6 +7,7 @@
 //
 
 #import "ZCKitBridge.h"
+#import "ZCMacro.h"
 
 @interface ZCKitBridge ()
 
@@ -16,18 +17,18 @@
 
 @implementation ZCKitBridge
 
-@dynamic naviBackImageName, sideArrowImageName, isPrintLog, invalidStr;
+@dynamic naviBackImage, sideArrowImage, isPrintLog, invalidStr;
 @dynamic toastTextColor, toastBackGroundColor, realize, naviBarImageOrColor, naviBarTitleColor;
 
-static UIColor *_toastTextColor = nil;
 static UIColor *_toastBackGroundColor = nil;
-static NSString *_sideArrowImageName = nil;
-static NSString *_naviBackImageName = nil;
+static UIColor *_toastTextColor = nil;
+static UIImage *_sideArrowImage = nil;
+static UIImage *_naviBackImage = nil;
 static NSString *_naviBarImageOrColor = nil;
 static NSString *_naviBarTitleColor = nil;
 static BOOL _isPrintLog = NO;
 
-+ (instancetype)instance {
++ (instancetype)sharedBridge {
     static ZCKitBridge *instacne = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -36,23 +37,23 @@ static BOOL _isPrintLog = NO;
     return instacne;
 }
 
-#pragma mark - ivar
-+ (NSString *)naviBackImageName {
-    if (_naviBackImageName == nil) {
-        _naviBackImageName = @"zc_image_back_arrow";
+#pragma mark - Ivar
++ (UIImage *)naviBackImage {
+    if (_naviBackImage == nil) {
+        _naviBackImage = [ZCGlobal ZCImageName:@"zc_image_back_arrow"];
     }
-    return _naviBackImageName;
+    return _naviBackImage;
 }
 
-+ (void)setNaviBackImageName:(NSString *)naviBackImageName {
-    if (naviBackImageName) {
-        _naviBackImageName = [naviBackImageName copy];
++ (void)setNaviBackImage:(UIImage *)naviBackImage {
+    if (naviBackImage) {
+        _naviBackImage = naviBackImage;
     }
 }
 
 + (NSString *)naviBarImageOrColor {
     if (_naviBarImageOrColor == nil) {
-        _naviBarImageOrColor = @"0xF5F5F7";
+        _naviBarImageOrColor = ZCStrFormat(@"%06x", ZCBKColor.RGBValue);
     }
     return _naviBarImageOrColor;
 }
@@ -65,7 +66,7 @@ static BOOL _isPrintLog = NO;
 
 + (NSString *)naviBarTitleColor {
     if (_naviBarTitleColor == nil) {
-        _naviBarTitleColor = @"0x222222";
+        _naviBarTitleColor = ZCStrFormat(@"%06x", ZCBlack30.RGBValue);
     }
     return _naviBarTitleColor;
 }
@@ -76,22 +77,22 @@ static BOOL _isPrintLog = NO;
     }
 }
 
-+ (NSString *)sideArrowImageName {
-    if (_sideArrowImageName == nil) {
-        _sideArrowImageName = @"zc_image_side_accessory";
++ (UIImage *)sideArrowImage {
+    if (_sideArrowImage == nil) {
+        _sideArrowImage = [ZCGlobal ZCImageName:@"zc_image_common_side_arrow"];
     }
-    return _sideArrowImageName;
+    return _sideArrowImage;
 }
 
-+ (void)setSideArrowImageName:(NSString *)sideArrowImageName {
-    if (sideArrowImageName) {
-        _sideArrowImageName = sideArrowImageName;
++ (void)setSideArrowImage:(UIImage *)sideArrowImage {
+    if (sideArrowImage) {
+        _sideArrowImage = sideArrowImage;
     }
 }
 
 + (UIColor *)toastBackGroundColor {
     if (_toastBackGroundColor == nil) {
-        _toastBackGroundColor = [UIColor blackColor];
+        _toastBackGroundColor = ZCBlack;
     }
     return _toastBackGroundColor;
 }
@@ -104,7 +105,7 @@ static BOOL _isPrintLog = NO;
 
 + (UIColor *)toastTextColor {
     if (_toastTextColor == nil) {
-        _toastTextColor = [UIColor whiteColor];
+        _toastTextColor = ZCWhite;
     }
     return _toastTextColor;
 }
@@ -128,21 +129,20 @@ static BOOL _isPrintLog = NO;
 }
 
 + (id<ZCKitExternalRealize>)realize {
-    id <ZCKitExternalRealize> singleRealize = [ZCKitBridge instance].singleRealize;
+    id <ZCKitExternalRealize> singleRealize = [ZCKitBridge sharedBridge].singleRealize;
     if (!singleRealize) {if (self.isPrintLog) NSLog(@"ZCKit: kit manager delegate is nil");}
     return singleRealize;
 }
 
 + (void)setRealize:(id<ZCKitExternalRealize>)realize {
-    if ([ZCKitBridge instance].singleRealize) {
+    if ([ZCKitBridge sharedBridge].singleRealize) {
         if (self.isPrintLog) NSLog(@"ZCKit: single delegate only registration once");
     }
     if (realize) {
-        [ZCKitBridge instance].singleRealize = realize;
+        [ZCKitBridge sharedBridge].singleRealize = realize;
     } else {
         if (self.isPrintLog) NSLog(@"ZCKit: kit manager delegate is nil");
     }
 }
 
 @end
-

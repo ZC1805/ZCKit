@@ -7,14 +7,16 @@
 //
 
 #import "NSString+ZC.h"
-#import "NSData+ZC.h"
 #import "NSNumber+ZC.h"
+#import "NSData+ZC.h"
+#import "ZCMacro.h"
+#import "UILabel+ZC.h"
 
-NSString *const ZCFlagStr = @"^.~!*.^";
+NSString * const ZCFlagStr = @"^.~!*.^";
 
 @implementation NSString (ZC)
 
-#pragma mark - usually
+#pragma mark - Usually
 - (NSData *)dataObject {
     NSData *data = [self dataUsingEncoding:NSUTF8StringEncoding];
     return data ? data : [NSData data];
@@ -51,6 +53,21 @@ NSString *const ZCFlagStr = @"^.~!*.^";
     return ceilf(size.height);
 }
 
+- (CGFloat)heightForFont:(UIFont *)font maxWidth:(CGFloat)maxWidth lineSpacing:(CGFloat)lineSpacing {
+    static UILabel *kCalSpacLabel = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        kCalSpacLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        kCalSpacLabel.numberOfLines = 0;
+    });
+    NSString *text = self.copy;
+    kCalSpacLabel.font = font;
+    kCalSpacLabel.frame = CGRectMake(0, 0, maxWidth, MAXFLOAT);
+    [kCalSpacLabel setText:text lineSpacing:lineSpacing];
+    [kCalSpacLabel sizeToFit];
+    return kCalSpacLabel.frame.size.height;
+}
+
 - (NSUInteger)charCount {
     NSUInteger strlength = 0;
     char *p = (char *)[self cStringUsingEncoding:NSUnicodeStringEncoding];
@@ -70,7 +87,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
 }
 
 - (NSString *)preciseString {
-    if ([self isPureFloat]) {
+    if ([self isPureDouble]) {
         double doubleValue = [self doubleValue];
         NSString *doubleString = [NSString stringWithFormat:@"%lf", doubleValue];
         NSDecimalNumber *decNumber = [NSDecimalNumber decimalNumberWithString:doubleString];
@@ -80,7 +97,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
 }
 
 - (NSString *)formatterPrice {
-    if ([self isPureFloat]) {
+    if ([self isPureDouble]) {
         double doubleValue = [self doubleValue];
         NSString *doubleString = [NSString stringWithFormat:@"%.2lf", doubleValue];
         return doubleString;
@@ -94,7 +111,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
 }
 
 - (NSString *)stringByRemoveSpaceAndReturn {
-    NSString *str = [self copy];
+    NSString *str = self.copy;
     str = [str stringByReplacingOccurrencesOfString:@"\r" withString:@""];
     str = [str stringByReplacingOccurrencesOfString:@"\n" withString:@""];
     str = [str stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -102,7 +119,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
 }
 
 - (NSString *)stringByFormatSpace:(BOOL)ignoreLastSpace {
-    NSString *str = [self copy];
+    NSString *str = self.copy;
     NSString *lastSpace = nil;
     if (ignoreLastSpace && self.length > 1 && [str hasSuffix:@" "]) { //是否可以空格结尾且不能空格开头
         lastSpace = [str substringFromIndex:str.length - 1];
@@ -138,7 +155,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
     if (!self.length) return self;
     NSMutableString *note = [self mutableCopy];
     if (CFStringTransform((__bridge CFMutableStringRef)note, NULL, kCFStringTransformStripDiacritics, NO)) {
-        return [note copy];
+        return note.copy;
     }
     return self;
 }
@@ -180,7 +197,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
     NSString *doubleResolution = @"@2x";
     NSString *tribleResolution = @"@3x";
     NSString *fileName = self.stringByDeletingPathExtension;
-    NSString *res = [self copy];
+    NSString *res = self.copy;
     if ([fileName hasSuffix:doubleResolution] || [fileName hasSuffix:tribleResolution]) {
         res = [fileName substringToIndex:fileName.length - 3];
         if (self.pathExtension.length) {
@@ -192,6 +209,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
 
 - (NSString *)prefixForFlag:(NSString *)flag {
     if (self.length && flag.length) {
+        if ([self hasPrefix:flag]) return @"";
         NSRange range = [self rangeOfString:flag];
         if (range.length && range.location != NSNotFound) {
             return [self substringToIndex:range.location];
@@ -202,6 +220,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
 
 - (NSString *)suffixForFlag:(NSString *)flag {
     if (self.length && flag.length) {
+        if ([self hasSuffix:flag]) return @"";
         NSRange range = [self rangeOfString:flag];
         if (range.length && range.location != NSNotFound) {
             return [self substringFromIndex:(range.location + range.length)];
@@ -210,20 +229,102 @@ NSString *const ZCFlagStr = @"^.~!*.^";
     return @"";
 }
 
-#pragma mark - judge
-- (BOOL)isPureInteger { //是否是整形
+- (NSString *)matchString:(NSString *)matchString replace:(NSString *)replaceString {
+    if (self.length) {
+        if (!matchString.length) return self;
+        NSRange range = [self rangeOfString:matchString];
+        if (range.length && range.location != NSNotFound) {
+            if (!replaceString) replaceString = @"";
+            NSString *text = [self stringByReplacingCharactersInRange:range withString:replaceString];
+            return [text matchString:matchString replace:replaceString];
+        } else {
+            return self;
+        } 
+    } else {
+        if (!matchString.length) {
+            return replaceString ? replaceString : @"";
+        } else {
+            return self;
+        }
+    }
+}
+
+- (NSString *)replaceCharStrings:(NSString *)charStrings withString:(NSString *)aString reverse:(BOOL)isReverse {
+    if (!charStrings.length) return self;
+    if (!aString) aString = @"";
+    NSCharacterSet *cSet = [NSCharacterSet characterSetWithCharactersInString:charStrings];
+    if (isReverse) cSet = [cSet invertedSet];
+    return ZCStrNonnil([[self componentsSeparatedByCharactersInSet:cSet] componentsJoinedByString:aString]);
+}
+
+- (NSString *)regroupStringFromCharStrings:(NSString *)charStrings {
+    if (!self.length || !charStrings.length) return self;
+    NSCharacterSet *cSet = [[NSCharacterSet characterSetWithCharactersInString:charStrings] invertedSet];
+    return ZCStrNonnil([[self componentsSeparatedByCharactersInSet:cSet] componentsJoinedByString:@""]);
+}
+
+- (NSString *)replaceStringArray:(NSArray <NSString *>*)strings withString:(NSString *)aString {
+    if (!strings.count) return self;
+    if (!aString) aString = @"";
+    NSString *str = self.copy;
+    for (NSString *iStr in strings) {
+        if (iStr.length && str.length) {str = [str stringByReplacingOccurrencesOfString:iStr withString:aString];}
+    }
+    return ZCStrNonnil(str);
+}
+
+- (NSAttributedString *)attributedStringToMatch:(NSString *)match matchAtt:(NSDictionary *)matchAtt otherAtt:(NSDictionary *)otherAtt spc:(CGFloat)spc {
+    if (!self.length) return [[NSAttributedString alloc] initWithString:self attributes:otherAtt];
+    NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:self];
+    NSRange rang = [self rangeOfString:match];
+    if (spc > 0) {
+        NSMutableParagraphStyle *pStyle = [[NSMutableParagraphStyle alloc] init];
+        [pStyle setLineSpacing:spc];
+        [attStr addAttribute:NSParagraphStyleAttributeName value:pStyle range:NSMakeRange(0, attStr.length)];
+    }
+    if (match.length && rang.location != NSNotFound && rang.length != 0) {
+        NSRange rang1 = NSMakeRange(0, rang.location);
+        NSRange rang2 = NSMakeRange(rang.location + rang.length, attStr.length - rang.location - rang.length);
+        if (rang1.length != 0 && otherAtt.count) {
+            [attStr addAttributes:otherAtt range:rang1];
+        }
+        if (rang2.length != 0 && otherAtt.count) {
+            [attStr addAttributes:otherAtt range:rang2];
+        }
+        if (rang.length != 0 && matchAtt.count) {
+            [attStr addAttributes:matchAtt range:rang];
+        }
+    } else {
+        if (attStr.length && otherAtt.count) {
+            [attStr addAttributes:otherAtt range:NSMakeRange(0, attStr.length)];
+        }
+    }
+    return attStr;
+}
+
+- (NSArray <NSString *>*)charStrings {
+    NSMutableArray *charStrs = [NSMutableArray array];
+    for (NSInteger i = 0; i < self.length; i++) {
+        NSString *charStr = [self substringWithRange:NSMakeRange(i, 1)];
+        [charStrs addObject:charStr];
+    }
+    return charStrs.copy;
+}
+
+#pragma mark - Judge
+- (BOOL)isPureInteger { //是否是整形 (.1和1.都不属于，空字符串不属于，01属于)
     NSScanner *scan = [NSScanner scannerWithString:self];
     NSInteger val;
     return [scan scanInteger:&val] && [scan isAtEnd];
 }
 
-- (BOOL)isPureFloat { //是否是浮点型 (0.2f不属于，整形属于)
+- (BOOL)isPureFloat { //是否是浮点型 (0.2f不属于，.1和1.都属于，整形也属于)
     NSScanner *scan = [NSScanner scannerWithString:self];
     float val;
     return [scan scanFloat:&val] && [scan isAtEnd];
 }
 
-- (BOOL)isPureDouble { //是否是浮点型，经测试效果同上
+- (BOOL)isPureDouble { //是否是浮点型
     NSScanner *scan = [NSScanner scannerWithString:self];
     double val;
     return [scan scanDouble:&val] && [scan isAtEnd];
@@ -461,7 +562,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
     return NO;
 }
 
-#pragma mark - class
+#pragma mark - Class
 + (NSString *)stringWithUUID {
     CFUUIDRef uuid = CFUUIDCreate(NULL);
     CFStringRef string = CFUUIDCreateString(NULL, uuid);
@@ -472,7 +573,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
 + (NSString *)emojiWithIntCode:(int)intCode {
     int symbol = ((((0x808080F0 | (intCode & 0x3F000) >> 4) | (intCode & 0xFC0) << 10) | (intCode & 0x1C0000) << 18) | (intCode & 0x3F) << 24);
     NSString *string = [[NSString alloc] initWithBytes:&symbol length:sizeof(symbol) encoding:NSUTF8StringEncoding];
-    if (string == nil) string = [NSString stringWithFormat:@"%C", (unichar)intCode];
+    if (!string) string = [NSString stringWithFormat:@"%C", (unichar)intCode];
     return string;
 }
 
@@ -487,7 +588,7 @@ NSString *const ZCFlagStr = @"^.~!*.^";
     return [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
 }
 
-#pragma mark - private
+#pragma mark - Private
 - (CGSize)sizeForFont:(UIFont *)font size:(CGSize)size mode:(NSLineBreakMode)lineBreakMode {
     if (!font) font = [UIFont systemFontOfSize:12];
     NSMutableDictionary *attr = [NSMutableDictionary dictionary];
@@ -540,11 +641,11 @@ NSString *const ZCFlagStr = @"^.~!*.^";
     return NO;
 }
 
-#pragma mark - expand
+#pragma mark - Expand
 - (NSString *)stringByURLEncode {
     static NSString * const kAFCharactersGeneralDelimitersToEncode = @":#[]@";
     static NSString * const kAFCharactersSubDelimitersToEncode = @"!$&'()*+,;=";
-    NSMutableCharacterSet * allowedCharacterSet = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
+    NSMutableCharacterSet *allowedCharacterSet = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
     [allowedCharacterSet removeCharactersInString:[kAFCharactersGeneralDelimitersToEncode stringByAppendingString:kAFCharactersSubDelimitersToEncode]];
     static NSUInteger const batchSize = 50;
     NSUInteger index = 0;
@@ -594,4 +695,3 @@ NSString *const ZCFlagStr = @"^.~!*.^";
 }
 
 @end
-

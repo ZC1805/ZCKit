@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSDate (ZC)
 
-#pragma mark - usually
+#pragma mark - Usually
 @property (nonatomic, readonly) NSInteger year;  /**< 年 */
 
 @property (nonatomic, readonly) NSInteger month;  /**< 月 (1~12) */
@@ -49,11 +49,21 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL isThisYear;  /**< 是否是今年 (based on current locale) */
 
+@property (nonatomic, readonly) NSString *timestamp;  /**< 当前时间戳毫秒，精确到秒乘以1000 */
+
 @property (nonatomic, readonly) NSString *dateString;  /**< 日期年月日时分秒，2018-10-01 02:20:08 */
 
 @property (nonatomic, readonly) NSString *dateChinese;  /**< 中国农历日期，date时间为标准时区时间，戊戌年九月初八 */
 
-#pragma mark - adding
+@property (nonatomic, readonly) NSDate *startDayDate;  /**< 当前时间当天的开始时间 */
+
+@property (nonatomic, readonly) NSDate *startWeekDate;  /**< 当前时间当周的开始时间&从周一开始 */
+
+@property (nonatomic, readonly) NSDate *startMonthDate;  /**< 当前时间当月的开始时间 */
+
+@property (nonatomic, readonly) NSDate *startWeekEnglishDate;  /**< 当前时间当周的开始时间&从周日开始 */
+
+#pragma mark - Adding
 - (nullable NSDate *)dateByAddingYears:(NSInteger)years;
 
 - (nullable NSDate *)dateByAddingMonths:(NSInteger)months;
@@ -68,7 +78,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable NSDate *)dateByAddingSeconds:(NSInteger)seconds;
 
-#pragma mark - format
+#pragma mark - Format
 - (BOOL)isSameDayAsDate:(NSDate *)date;  /**< 是否是同年同月同日 */
 
 - (BOOL)isSameMonthAsDate:(NSDate *)date;  /**< 是否是同年同月 */

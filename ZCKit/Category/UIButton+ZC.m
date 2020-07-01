@@ -11,19 +11,23 @@
 
 @implementation UIButton (ZC)
 
-+ (instancetype)button:(CGRect)frame title:(NSString *)title image:(NSString *)image target:(id)target action:(SEL)action {
-    UIButton *btn = [self buttonWithType:UIButtonTypeCustom];
-    btn.backgroundColor = ZCClear;
-    btn.frame = frame;
-    if (title.length) [btn setTitle:title forState:UIControlStateNormal];
-    if (title.length) btn.titleLabel.font = ZCFS(15);
-    UIImage *im = image ? ZCIN(image) : nil;
-    if (im) [btn setImage:im forState:UIControlStateNormal];
-    if (target && action && [target respondsToSelector:action]) {
-        [btn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
++ (instancetype)customTitle:(NSString *)title font:(UIFont *)font color:(UIColor *)color image:(NSString *)image target:(id)target action:(SEL)action {
+    UIButton *cusBtn = [self buttonWithType:UIButtonTypeCustom];
+    cusBtn.backgroundColor = ZCClear;
+    cusBtn.adjustsImageWhenHighlighted = NO;
+    if (font) cusBtn.titleLabel.font = font;
+    if (title) {
+        [cusBtn setTitle:title forState:UIControlStateNormal];
+        cusBtn.titleLabel.adjustsFontSizeToFitWidth = YES;
+        cusBtn.titleLabel.minimumScaleFactor = 0.6;
     }
-    return btn;
+    if (color) [cusBtn setTitleColor:color forState:UIControlStateNormal];
+    UIImage *im = image ? ZCIN(image) : nil;
+    if (im) [cusBtn setImage:im forState:UIControlStateNormal];
+    if (target && action && [target respondsToSelector:action]) {
+        [cusBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    }
+    return cusBtn;
 }
 
 @end
-

@@ -28,7 +28,8 @@
 
 @implementation ZCPhotoZoomControl
 
-static float initAdditional = 30.0;
+static const float initAdditional = 30.0;
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _isUseBlur = NO;
@@ -52,7 +53,7 @@ static float initAdditional = 30.0;
     if (_touchAction) _touchAction(self);
 }
 
-#pragma mark - set
+#pragma mark - Set
 - (void)setFrame:(CGRect)frame {
     [super setFrame:frame];
     [self resetImage];
@@ -93,14 +94,16 @@ static float initAdditional = 30.0;
 - (void)setTouchAction:(void (^)(ZCPhotoZoomControl * _Nonnull))touchAction {
     _touchAction = touchAction;
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventTouchUpInside)) {
-        [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
+            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     if (touchAction) {
         [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
-#pragma mark - get
+#pragma mark - Get
 - (UIImageView *)headerIv {
     if (!_headerIv) {
         _headerIv = [[UIImageView alloc] initWithFrame:CGRectZero];
@@ -118,7 +121,7 @@ static float initAdditional = 30.0;
     return _headerMask;
 }
 
-#pragma mark - ctor
+#pragma mark - Ctor
 - (void)resetImage {
     CGFloat height = self.height;
     if (self.localImage && self.isAutoOfset && self.localImage.size.width) {

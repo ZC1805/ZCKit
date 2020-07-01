@@ -8,7 +8,7 @@
 
 #import "ZCExactTimer.h"
 
-#pragma mark - ~~~~~~~~~~ ZCExactTimerItem ~~~~~~~~~~
+#pragma mark - ~ ZCExactTimerItem ~
 @interface ZCExactTimerItem : NSObject
 
 @property (nonatomic, weak) id attach;  /**< 依附对象，对象为nil时候，timer_block不执行 */
@@ -36,7 +36,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCExactTimer ~~~~~~~~~~
+#pragma mark - ~ ZCExactTimer ~
 @interface ZCExactTimer ()
 
 @property (nonatomic, strong) NSMutableDictionary <NSString *, dispatch_source_t>*timerContainer;
@@ -47,8 +47,8 @@
 
 @implementation ZCExactTimer
 
-#pragma mark - public
-+ (ZCExactTimer *)instance {
+#pragma mark - Public
++ (ZCExactTimer *)sharedTimer {
     static ZCExactTimer *instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken,^{
@@ -84,7 +84,7 @@
     if (attach == nil) attach = [NSNull null];
     
     /** timer */
-    ZCExactTimer *handle = [ZCExactTimer instance];
+    ZCExactTimer *handle = [ZCExactTimer sharedTimer];
     dispatch_source_t timer = [handle.timerContainer objectForKey:timerName];
     if (!timer) {
         timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
@@ -95,60 +95,55 @@
     /** run */
     ZCExactTimerItem *item = [[ZCExactTimerItem alloc] initWithBlock:block repeat:repeat stop:NO attach:attach];
     dispatch_source_set_timer(timer, dispatch_time(DISPATCH_TIME_NOW, interval * NSEC_PER_SEC), interval * NSEC_PER_SEC, 0.01 * NSEC_PER_SEC);
-    switch (option) { //精度为0.01秒
-        case ZCEnumExactTimerOptionAbandon: //移除之前的block
-            [handle.timerMaps removeObjectForKey:timerName];
-        case ZCEnumExactTimerOptionMerge: { //存储本次的block
-            [handle cacheItem:item name:timerName];
-            dispatch_source_set_event_handler(timer, ^{
-                __block BOOL isInspect = NO;
-                NSMutableArray <ZCExactTimerItem *>*itemArr = [handle.timerMaps objectForKey:timerName];
-                [itemArr enumerateObjectsUsingBlock:^(ZCExactTimerItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                    BOOL timer_stop = NO;
-                    if (obj.attach && obj.timer_block) {
-                        obj.timer_block(&timer_stop);
-                    }
-                    if (timer_stop) {
-                        obj.isStop = timer_stop;
-                    }
-                    if (!isInspect && (obj.isStop || !obj.isRepeat || !obj.attach || !obj.timer_block)) {
-                        isInspect = YES;
-                    }
-                }];
-                if (isInspect) {
-                    [handle inspectItemArr:itemArr name:timerName];
-                }
-            });
-        } break;
-    }
+    if (option == ZCEnumExactTimerOptionAbandon) [handle.timerMaps removeObjectForKey:timerName]; //移除之前的block
+    [handle cacheItem:item name:timerName]; //存储本次block，精度为0.01秒
+    dispatch_source_set_event_handler(timer, ^{
+        __block BOOL isInspect = NO;
+        NSMutableArray <ZCExactTimerItem *>*itemArr = [handle.timerMaps objectForKey:timerName];
+        [itemArr enumerateObjectsUsingBlock:^(ZCExactTimerItem * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            BOOL timer_stop = NO;
+            if (obj.attach && obj.timer_block) {
+                obj.timer_block(&timer_stop);
+            }
+            if (timer_stop) {
+                obj.isStop = timer_stop;
+            }
+            if (!isInspect && (obj.isStop || !obj.isRepeat || !obj.attach || !obj.timer_block)) {
+                isInspect = YES;
+            }
+        }];
+        if (isInspect) {
+            [handle inspectItemArr:itemArr name:timerName];
+        }
+    });
 }
 
 + (BOOL)existTimer:(NSString *)timerName {
     if (!timerName) return NO;
-    if ([[ZCExactTimer instance].timerContainer objectForKey:timerName]) return YES;
+    if ([[ZCExactTimer sharedTimer].timerContainer objectForKey:timerName]) return YES;
     return NO;
 }
 
 + (void)pauseTimer:(NSString *)timerName {
     if (!timerName) return;
-    dispatch_source_t timer = [[ZCExactTimer instance].timerContainer objectForKey:timerName];
+    dispatch_source_t timer = [[ZCExactTimer sharedTimer].timerContainer objectForKey:timerName];
     if (!timer) return;
     dispatch_suspend(timer);
 }
 
 + (void)resumeTimer:(NSString *)timerName {
     if (!timerName) return;
-    dispatch_source_t timer = [[ZCExactTimer instance].timerContainer objectForKey:timerName];
+    dispatch_source_t timer = [[ZCExactTimer sharedTimer].timerContainer objectForKey:timerName];
     if (!timer) return;
     dispatch_resume(timer);
 }
 
 + (void)invalidateTimer:(NSString *)timerName {
     if (!timerName) return;
-    [[ZCExactTimer instance] invalidateTimerForName:timerName];
+    [[ZCExactTimer sharedTimer] invalidateTimerForName:timerName];
 }
 
-#pragma mark - private
+#pragma mark - Private
 - (void)invalidateTimerForName:(NSString *)timerName {
     if (timerName == nil) {
         NSArray *allNames = self.timerContainer.allKeys;
@@ -194,7 +189,7 @@
     }
 }
 
-#pragma mark - get
+#pragma mark - Get
 - (NSMutableDictionary <NSString *, dispatch_source_t>*)timerContainer {
     if (!_timerContainer) {
         _timerContainer = [[NSMutableDictionary alloc] init];
@@ -212,8 +207,8 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ NSObject (ZC_Timer) ~~~~~~~~~~
-static NSString *zc_global_timer = @"zc_global_timer";
+#pragma mark - ~ NSObject (ZC_Timer) ~
+static NSString * const zc_global_timer = @"zc_global_timer";
 @implementation NSObject (ZC_Timer)
 
 - (void)scheduledGlobalTimer:(void(^)(BOOL *stop))block {

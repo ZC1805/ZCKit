@@ -52,7 +52,7 @@
     [self layoutSubviews];
 }
 
-#pragma mark - override
+#pragma mark - Override
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
     if (UIEdgeInsetsEqualToEdgeInsets(_responseAreaExtend, UIEdgeInsetsZero)) {
         return [super pointInside:point withEvent:event];
@@ -106,7 +106,7 @@
     }
 }
 
-#pragma mark - set
+#pragma mark - Set
 - (void)setImageViewSize:(CGSize)imageViewSize {
     _imageViewSize = imageViewSize;
     _isManualSize = !(CGSizeEqualToSize(_imageViewSize, CGSizeZero));
@@ -126,14 +126,16 @@
 - (void)setTouchAction:(void (^)(ZCButton * _Nonnull))touchAction {
     _touchAction = touchAction;
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventTouchUpInside)) {
-        [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
+            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     if (touchAction) {
         [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
-#pragma mark - private
+#pragma mark - Private
 - (void)onTouchAction:(id)sender {
     if (_touchAction) _touchAction(self);
 }
@@ -142,7 +144,7 @@
     _isIgnoreTouch = NO;
 }
 
-#pragma mark - override
+#pragma mark - Override
 - (CGRect)imageRectForContentRect:(CGRect)contentRect {
     CGRect rect = [super imageRectForContentRect:contentRect];
     if (!self.isManualSize) {
@@ -197,4 +199,3 @@
 }
 
 @end
-

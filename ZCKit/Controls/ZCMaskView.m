@@ -7,9 +7,9 @@
 //
 
 #import "ZCMaskView.h"
-#import "ZCGlobal.h"
+#import "ZCMacro.h"
 
-#pragma mark - ~~~~~~~~~~ ZCFocusView ~~~~~~~~~~
+#pragma mark - ~ ZCFocusView ~
 @implementation ZCFocusView
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -28,7 +28,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCMaskView ~~~~~~~~~~
+#pragma mark - ~ ZCMaskView ~
 @interface ZCMaskView ()
 
 @property (nonatomic, assign) BOOL isShow;
@@ -43,11 +43,17 @@
 
 @property (nonatomic, copy) void(^hideAction)(void);
 
+@property (nonatomic, copy) void (^showAnimate)(UIView *displayView);
+
+@property (nonatomic, copy) void (^hideAnimate)(UIView *displayView);
+
+@property (nonatomic, weak) UIView *displayView;
+
 @end
 
 @implementation ZCMaskView
 
-+ (instancetype)instance {
++ (instancetype)sharedView {
     static ZCMaskView *mask = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -58,11 +64,11 @@
 }
 
 + (float)maskAlpha {
-    return [ZCMaskView instance].maskAlpha;
+    return [ZCMaskView sharedView].maskAlpha;
 }
 
 + (void)setMaskAlpha:(float)maskAlpha {
-    [ZCMaskView instance].maskAlpha = maskAlpha;
+    [ZCMaskView sharedView].maskAlpha = maskAlpha;
 }
 
 + (void)display:(UIView *)subview hideAction:(void (^)(void))hideAction {
@@ -70,8 +76,13 @@
 }
 
 + (void)display:(UIView *)subview autoHide:(BOOL)autoHide clearMask:(BOOL)clearMask hideAction:(void (^)(void))hideAction {
-    if (!subview || ![UIApplication sharedApplication].delegate.window) return;
-    ZCMaskView *mask = [ZCMaskView instance];
+    [self display:subview autoHide:autoHide clearMask:clearMask showAnimate:nil hideAnimate:nil hideAction:hideAction];
+}
+
++ (void)display:(UIView *)displayView autoHide:(BOOL)autoHide clearMask:(BOOL)clearMask showAnimate:(void (^)(UIView * _Nonnull))showAnimate
+    hideAnimate:(void (^)(UIView * _Nonnull))hideAnimate hideAction:(void (^)(void))hideAction {
+    if (!displayView || ![UIApplication sharedApplication].delegate.window) return;
+    ZCMaskView *mask = [ZCMaskView sharedView];
     __weak typeof(mask) weakMask = mask;
     if (mask.isAnimate) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -79,11 +90,14 @@
                 weakMask.isAutoHide = autoHide;
                 weakMask.isGreyMask = !clearMask;
                 weakMask.hideAction = hideAction;
+                weakMask.showAnimate = showAnimate;
+                weakMask.hideAnimate = hideAnimate;
+                weakMask.displayView = displayView;
                 weakMask.frame = [UIScreen mainScreen].bounds;
                 UIView *maskView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
                 [[UIApplication sharedApplication].delegate.window addSubview:maskView];
                 [maskView addSubview:weakMask];
-                [weakMask addSubview:subview];
+                [weakMask addSubview:displayView];
                 [weakMask show];
             }];
         });
@@ -92,18 +106,21 @@
             weakMask.isAutoHide = autoHide;
             weakMask.isGreyMask = !clearMask;
             weakMask.hideAction = hideAction;
+            weakMask.showAnimate = showAnimate;
+            weakMask.hideAnimate = hideAnimate;
+            weakMask.displayView = displayView;
             weakMask.frame = [UIScreen mainScreen].bounds;
             UIView *maskView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
             [[UIApplication sharedApplication].delegate.window addSubview:maskView];
             [maskView addSubview:weakMask];
-            [weakMask addSubview:subview];
+            [weakMask addSubview:displayView];
             [weakMask show];
         }];
     }
 }
 
 + (void)dismissSubview {
-    ZCMaskView *mask = [ZCMaskView instance];
+    ZCMaskView *mask = [ZCMaskView sharedView];
     if (mask.hideAction) {
         mask.hideAction();
         mask.hideAction = nil;
@@ -114,11 +131,15 @@
 - (void)show {
     self.isShow = YES;
     self.isAnimate = YES;
-    self.alpha = 0;
-    self.superview.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
-    [UIView animateWithDuration:0.3 animations:^{
-        self.alpha = 1;
-        self.superview.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:self.isGreyMask ? self.maskAlpha : 0];
+    if (!self.showAnimate) self.alpha = 0;
+    self.superview.backgroundColor = [ZCBlack colorWithAlphaComponent:0];
+    [UIView animateWithDuration:0.25 animations:^{
+        if (self.showAnimate) {
+            self.showAnimate(self.displayView);
+        } else {
+            self.alpha = 1;
+        }
+        self.superview.backgroundColor = [ZCBlack colorWithAlphaComponent:self.isGreyMask ? self.maskAlpha : 0];
     } completion:^(BOOL finished) {
         self.isAnimate = NO;
     }];
@@ -127,9 +148,13 @@
 - (void)hide:(void(^)(void))finish {
     if (self.isShow) {
         self.isAnimate = YES;
-        [UIView animateWithDuration:0.3 animations:^{
-            self.alpha = 0;
-            self.superview.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0];
+        [UIView animateWithDuration:0.25 animations:^{
+            if (self.hideAnimate) {
+                self.hideAnimate(self.displayView);
+            } else {
+                self.alpha = 0;
+            }
+            self.superview.backgroundColor = [ZCBlack colorWithAlphaComponent:0];
         } completion:^(BOOL finished) {
             [self hideFinish];
             if (finish) finish();
@@ -145,6 +170,9 @@
     [self removeFromSuperview];
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     if (self.hideAction) self.hideAction = nil;
+    if (self.showAnimate) self.showAnimate = nil;
+    if (self.hideAnimate) self.hideAnimate = nil;
+    if (self.displayView) self.displayView = nil;
     self.isShow = NO;
     self.isAnimate = NO;
 }
@@ -165,7 +193,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCMaskViewController ~~~~~~~~~~
+#pragma mark - ~ ZCMaskViewController ~
 @interface ZCMaskViewController : UIViewController
 
 @property (nonatomic, strong) UIView *contentView;
@@ -182,7 +210,7 @@
 
 @implementation ZCMaskViewController
 
-+ (instancetype)instance {
++ (instancetype)sharedController {
     static ZCMaskViewController *instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -198,13 +226,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.animationTime = 0;
-    self.view.backgroundColor = [UIColor clearColor];
+    self.view.backgroundColor = ZCClear;
     UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
     self.visualView = [[UIVisualEffectView alloc] initWithEffect:blur];
     self.contentView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.contentView.backgroundColor = [UIColor clearColor];
+    self.contentView.backgroundColor = ZCClear;
     self.maskView = [[ZCFocusView alloc] initWithFrame:CGRectZero];
-    self.maskView.backgroundColor = [UIColor clearColor];
+    self.maskView.backgroundColor = ZCClear;
     [self.view addSubview:self.visualView];
     [self.view addSubview:self.contentView];
     [self.contentView addSubview:self.maskView];
@@ -253,7 +281,7 @@
     self.maskWindow.hidden = NO;
     self.animationTime = time;
     self.visualView.hidden = !blur;
-    self.maskView.backgroundColor = clear ? [UIColor clearColor] : [UIColor blackColor];
+    self.maskView.backgroundColor = clear ? ZCClear : ZCBlack;
     self.maskView.isCanResponse = ^BOOL(CGPoint focus) {return !CGRectContainsPoint(view.frame, focus);};
     self.maskView.responseAction = action;
     [self.contentView addSubview:view];
@@ -261,8 +289,8 @@
     self.visualView.alpha = 0;
     self.maskView.alpha = 0;
     [UIView animateWithDuration:self.animationTime animations:^{
-        self.visualView.alpha = 1.0;
-        self.maskView.alpha = 0.3;
+        self.visualView.alpha = 1;
+        self.maskView.alpha = ZCMaskView.maskAlpha;
     } completion:nil];
 }
 
@@ -278,15 +306,15 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCWindowView ~~~~~~~~~~
+#pragma mark - ~ ZCWindowView ~
 @implementation ZCWindowView
 
 + (void)display:(UIView *)subview time:(NSTimeInterval)time blur:(BOOL)blur clear:(BOOL)clear action:(void (^)(void))action {
-    [[ZCMaskViewController instance] visibleSubview:subview time:time blur:blur clear:clear action:action];
+    [[ZCMaskViewController sharedController] visibleSubview:subview time:time blur:blur clear:clear action:action];
 }
 
 + (void)dismissSubview {
-    [[ZCMaskViewController instance] dismissSubview];
+    [[ZCMaskViewController sharedController] dismissSubview];
 }
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation ZCQueueHandler
 
-#pragma mark - dispatch
+#pragma mark - Dispatch
 void main_imp(dispatch_block_t block) {
     if ([NSThread isMainThread]) {
         block();
@@ -27,8 +27,8 @@ void main_delayPop(dispatch_block_t block) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5 * NSEC_PER_SEC)), dispatch_get_main_queue(), block);
 }
 
-#pragma mark - serial
-static const void *const serialSyncQueueKey = &serialSyncQueueKey;
+#pragma mark - Serial
+static const void * const serialSyncQueueKey = &serialSyncQueueKey;
 dispatch_queue_t dispatchSerialSyncQueue() {
     static dispatch_queue_t queue;
     static dispatch_once_t onceToken;
@@ -47,7 +47,7 @@ void sync_serial(dispatch_block_t block) {
     }
 }
 
-static const void *const serialAsyncQueueKey = &serialAsyncQueueKey;
+static const void * const serialAsyncQueueKey = &serialAsyncQueueKey;
 dispatch_queue_t dispatchSerialAsyncQueue() {
     static dispatch_queue_t queue;
     static dispatch_once_t onceToken;
@@ -66,8 +66,8 @@ void async_serial(dispatch_block_t block) {
     }
 }
 
-#pragma mark - concurrent
-static const void *const concurrentAsyncQueueKey = &concurrentAsyncQueueKey;
+#pragma mark - Concurrent
+static const void * const concurrentAsyncQueueKey = &concurrentAsyncQueueKey;
 dispatch_queue_t dispatchConcurrentAsyncQueue() {
     static dispatch_queue_t queue;
     static dispatch_once_t onceToken;
@@ -86,7 +86,7 @@ void async_concurrent(dispatch_block_t block) {
     }
 }
 
-#pragma mark - apply
+#pragma mark - Apply
 void apply_concurrent(int count, void(^operate)(int index)) {
     dispatch_queue_t queue = dispatch_queue_create("apply_concurrent_queue", DISPATCH_QUEUE_CONCURRENT);
     dispatch_apply(count, queue, ^(size_t i) {
@@ -94,7 +94,7 @@ void apply_concurrent(int count, void(^operate)(int index)) {
     });
 }
 
-#pragma mark - group
+#pragma mark - Group
 void group_concurrent(int operateCount, bool waitCompletion,
                       void(^operate)(int index, void(^operateCompletion)(void)),
                       void(^ _Nullable groupCompletion)(void)) {

@@ -11,7 +11,7 @@
 
 @implementation NSDate (ZC)
 
-#pragma mark - usually
+#pragma mark - Usually
 - (NSInteger)year {
     return [[[NSCalendar currentCalendar] components:NSCalendarUnitYear fromDate:self] year];
 }
@@ -88,6 +88,10 @@
     return nowCmps.year == selfCmps.year;
 }
 
+- (NSString *)timestamp {
+    return [[NSNumber numberWithLong:(long)([self timeIntervalSince1970] * 1000)] stringValue];
+}
+
 - (NSString *)dateString {
     return [[NSDate normalFormatter] stringFromDate:self];
 }
@@ -96,7 +100,35 @@
     return [ZCDateManager chineseDate:self];
 }
 
-#pragma mark - adding
+- (NSDate *)startDayDate {
+    NSCalendarUnit unit = kCFCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unit fromDate:self];
+    NSDate *start = [[NSCalendar currentCalendar] dateFromComponents:comps];
+    return start ? start : self;
+}
+
+- (NSDate *)startWeekDate {
+    NSCalendarUnit unit = kCFCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unit fromDate:self];
+    NSDate *start = [[[NSCalendar currentCalendar] dateFromComponents:comps] dateByAddingDays:(1-self.weekday)];
+    return start ? start : self;
+}
+
+- (NSDate *)startMonthDate {
+    NSCalendarUnit unit = kCFCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth;
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unit fromDate:self];
+    NSDate *start = [[NSCalendar currentCalendar] dateFromComponents:comps];
+    return start ? start : self;
+}
+
+- (NSDate *)startWeekEnglishDate {
+    NSCalendarUnit unit = kCFCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
+    NSDateComponents *comps = [[NSCalendar currentCalendar] components:unit fromDate:self];
+    NSDate *start = [[[NSCalendar currentCalendar] dateFromComponents:comps] dateByAddingDays:-self.weekday];
+    return start ? start : self;
+}
+
+#pragma mark - Adding
 - (NSDate *)dateByAddingYears:(NSInteger)years {
     NSCalendar *calendar = [NSCalendar currentCalendar];
     NSDateComponents *components = [[NSDateComponents alloc] init];
@@ -142,7 +174,7 @@
     return newDate;
 }
 
-#pragma mark - date format
+#pragma mark - Date format
 - (BOOL)isSameDayAsDate:(NSDate *)date {
     if (!date) return NO;
     return [[NSCalendar currentCalendar] isDate:self inSameDayAsDate:date];
@@ -211,4 +243,3 @@
 }
 
 @end
-

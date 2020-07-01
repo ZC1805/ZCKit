@@ -11,8 +11,6 @@
 
 @interface ZCTextField () <UITextFieldDelegate>
 
-@property (nonatomic, strong) UIView *underlineView;
-
 @property (nonatomic, copy) BOOL(^shouldChangeChar1)(ZCTextField *field, NSRange range, NSString *string);
 
 @property (nonatomic, copy) BOOL(^shouldBeginEdit1)(ZCTextField *field);
@@ -29,7 +27,7 @@
 
 @implementation ZCTextField
 
-#pragma mark - sys
+#pragma mark - Sys
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _fixSize = CGSizeZero;
@@ -92,7 +90,7 @@
     [self removeNotificationTextObserver];
 }
 
-#pragma mark - set
+#pragma mark - Set
 - (void)setIsShowUnderline:(BOOL)isShowUnderline {
     _isShowUnderline = isShowUnderline;
     if (isShowUnderline) {
@@ -105,7 +103,7 @@
     }
 }
 
-#pragma mark - limit
+#pragma mark - Limit
 - (void)setLimitTextLength:(NSUInteger)limitTextLength {
     [self removeNotificationObserver];
     _limitTextLength = limitTextLength;
@@ -131,8 +129,8 @@
     }
 }
 
-#pragma mark - change
-- (void)setTextChangeBlock:(void (^)(NSString * _Nonnull))textChangeBlock {
+#pragma mark - Change
+- (void)setTextChangeBlock:(void (^)(ZCTextField *field))textChangeBlock {
     [self removeNotificationTextObserver];
     _textChangeBlock = textChangeBlock;
     if (_textChangeBlock) {
@@ -149,14 +147,16 @@
 
 - (void)textFieldTextChange {
     if (_textChangeBlock) {
-        _textChangeBlock(self.text);
+        _textChangeBlock(self);
     }
 }
 
-#pragma mark - touch
+#pragma mark - Touch
 - (void)setTouchAction:(void (^)(ZCTextField * _Nonnull))touchAction {
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventAllEditingEvents)) {
-        [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventAllEditingEvents];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventAllEditingEvents] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
+            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventAllEditingEvents];
+        }
     }
     if (touchAction) {
         [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventAllEditingEvents];
@@ -167,7 +167,7 @@
     if (_touchAction) _touchAction(self);
 }
 
-#pragma mark - delegate
+#pragma mark - Delegate
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
     if (textField == self && self.shouldBeginEdit1) {
         return self.shouldBeginEdit1((ZCTextField *)textField);
@@ -209,7 +209,7 @@
     }
 }
 
-#pragma mark - set
+#pragma mark - Set
 - (ZCTextField *)shouldBeginEdit:(nullable BOOL(^)(ZCTextField *field))block {
     if (self.delegate != self) self.delegate = self;
     self.shouldBeginEdit1 = block; return self;
@@ -238,6 +238,10 @@
 - (ZCTextField *)didEndEdit:(nullable void(^)(ZCTextField *field))block {
     if (self.delegate != self) self.delegate = self;
     self.didEndEdit1 = block; return self;
+}
+
+- (ZCTextField *)didTextChange:(nullable void(^)(ZCTextField *field))block {
+    self.textChangeBlock = block; return self;
 }
 
 @end

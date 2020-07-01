@@ -7,13 +7,16 @@
 //
 
 #import "ZCSystemHandler.h"
+#import <AVFoundation/AVCaptureDevice.h>
+#import <CoreServices/CoreServices.h>
+#import <Photos/PHPhotoLibrary.h>
 #import <MessageUI/MessageUI.h>
+#import "ZCQueueHandler.h"
 #import "ZCKitBridge.h"
 #import "UIColor+ZC.h"
 #import "ZCGlobal.h"
 
-@interface ZCSystemHandler () <MFMessageComposeViewControllerDelegate,
-UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+@interface ZCSystemHandler () <MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic, copy) void(^messageResultBlock)(BOOL isSendSuccess, BOOL isCancelSend);
 
@@ -23,15 +26,11 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
 @property (nonatomic, assign) BOOL isEditedImage;
 
-@property (nonatomic, strong) UIColor *alertDoneColor;
-
-@property (nonatomic, strong) UIColor *alertCancelColor;
-
 @end
 
 @implementation ZCSystemHandler
 
-+ (instancetype)instance {
++ (instancetype)sharedHandler {
     static ZCSystemHandler *instacne = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -48,7 +47,7 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
     return _picker;
 }
 
-#pragma mark - photo pick
+#pragma mark - Photo pick
 + (BOOL)cameraAvailable {
     return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypeCamera];
 }
@@ -57,57 +56,98 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
     return [UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary];
 }
 
-+ (void)photoPicker:(UIImagePickerControllerSourceType)type edit:(BOOL)edit finish:(void(^)(UIImage *image, NSString *fail))finish {
++ (void)photoPicker:(UIImagePickerControllerSourceType)type edit:(BOOL)edit front:(BOOL)front finish:(void(^)(UIImage *image, NSString *fail))finish {
     if (!finish) return;
-    UIViewController *fromVc = [ZCGlobal currentController];
-    if (!fromVc) return;
-    ZCSystemHandler *handle = [ZCSystemHandler instance];
-    handle.pickerPhotoBlock = finish;
-    handle.isEditedImage = edit;
-    handle.picker.allowsEditing = edit;
-    handle.picker.sourceType = type;
-    [fromVc presentViewController:handle.picker animated:YES completion:nil];
+    if (type == UIImagePickerControllerSourceTypePhotoLibrary) {
+        PHAuthorizationStatus libAuthStatus = [PHPhotoLibrary authorizationStatus];
+        if (libAuthStatus == PHAuthorizationStatusAuthorized) {
+            [self pickerHandler:type edit:edit front:front finish:finish];
+        } else if (libAuthStatus == PHAuthorizationStatusRestricted || libAuthStatus == PHAuthorizationStatusDenied) {
+            finish(nil, NSLocalizedString(@"Please allow app access to album", nil));
+        } else {
+            [PHPhotoLibrary requestAuthorization:^(PHAuthorizationStatus status) {
+                main_imp(^{
+                    if (status == PHAuthorizationStatusAuthorized) {
+                        [self pickerHandler:type edit:edit front:front finish:finish];
+                    } else {
+                        finish(nil, NSLocalizedString(@"Failed to get photos", nil));
+                    }
+                });
+            }];
+        }
+    } else if (type == UIImagePickerControllerSourceTypeCamera) {
+        AVAuthorizationStatus cameraAuthStatus = [AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo];
+        if (cameraAuthStatus == AVAuthorizationStatusAuthorized) {
+            [self pickerHandler:type edit:edit front:front finish:finish];
+        } else if (cameraAuthStatus == AVAuthorizationStatusRestricted || cameraAuthStatus == AVAuthorizationStatusDenied) {
+            finish(nil, NSLocalizedString(@"Please allow app access to camera", nil));
+        } else {
+            [AVCaptureDevice requestAccessForMediaType:AVMediaTypeVideo completionHandler:^(BOOL granted) {
+                main_imp(^{
+                    if (granted) {
+                        [self pickerHandler:type edit:edit front:front finish:finish];
+                    } else {
+                        finish(nil, NSLocalizedString(@"Failed to get photos", nil));
+                    }
+                });
+            }];
+        }
+    }
 }
 
-+ (void)photoPicker:(NSString *)message mustCamera:(BOOL)mustCamera mustAlbum:(BOOL)mustAlbum edit:(BOOL)edit finish:(void(^)(UIImage *image, NSString *fail))done {
++ (void)photoPicker:(NSString *)message mustCamera:(BOOL)mustCamera mustAlbum:(BOOL)mustAlbum edit:(BOOL)edit front:(BOOL)front finish:(void(^)(UIImage *image, NSString *fail))done {
     if (mustCamera == mustAlbum) {
         BOOL camera = [self cameraAvailable];
         BOOL album = [self photoLibraryAvailable];
         NSMutableArray *items = [NSMutableArray array];
         NSMutableArray *sourceTypes = [NSMutableArray array];
-        if (camera) {[items addObject:NSLocalizedString(@"拍照", nil)]; [sourceTypes addObject:@(UIImagePickerControllerSourceTypeCamera)];}
-        if (album) {[items addObject:NSLocalizedString(@"从相册选取", nil)]; [sourceTypes addObject:@(UIImagePickerControllerSourceTypePhotoLibrary)];}
+        if (camera) {[items addObject:NSLocalizedString(@"Photograph", nil)]; [sourceTypes addObject:@(UIImagePickerControllerSourceTypeCamera)];} //拍照
+        if (album) {[items addObject:NSLocalizedString(@"Select from album", nil)]; [sourceTypes addObject:@(UIImagePickerControllerSourceTypePhotoLibrary)];} //从相册选取
         if (items.count == 2) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:message message:nil
-                                                                 preferredStyle:UIAlertControllerStyleActionSheet];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             UIAlertAction *ac1 = [UIAlertAction actionWithTitle:items[0] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self photoPicker:[sourceTypes[0] integerValue] edit:edit finish:done];
+                [self photoPicker:[sourceTypes[0] integerValue] edit:edit front:front finish:done];
             }];
             UIAlertAction *ac2 = [UIAlertAction actionWithTitle:items[1] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-                [self photoPicker:[sourceTypes[1] integerValue] edit:edit finish:done];
+                [self photoPicker:[sourceTypes[1] integerValue] edit:edit front:front finish:done];
             }];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"取消", nil) style:UIAlertActionStyleCancel handler:nil];
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]; //取消
             [alert addAction:ac1]; [alert addAction:ac2]; [alert addAction:cancel];
             UIViewController *fromVc = [ZCGlobal currentController];
             if (fromVc) [fromVc presentViewController:alert animated:YES completion:nil];
         } else if (items.count == 1) {
-            [self photoPicker:[sourceTypes[0] integerValue] edit:edit finish:done];
+            [self photoPicker:[sourceTypes[0] integerValue] edit:edit front:front finish:done];
         } else {
-            if (done) done(nil, NSLocalizedString(@"无法打开相册和相机", nil));
+            if (done) done(nil, NSLocalizedString(@"Can't open album and camera", nil)); //无法打开相册和相机
         }
     } else if (mustCamera) {
         if ([self cameraAvailable]) {
-            [self photoPicker:UIImagePickerControllerSourceTypeCamera edit:edit finish:done];
+            [self photoPicker:UIImagePickerControllerSourceTypeCamera edit:edit front:front finish:done];
         } else {
-            if (done) done(nil, NSLocalizedString(@"启用相机失败", nil));
+            if (done) done(nil, NSLocalizedString(@"Enable camera failed", nil)); //启用相机失败
         }
     } else if (mustAlbum) {
         if ([self photoLibraryAvailable]) {
-            [self photoPicker:UIImagePickerControllerSourceTypePhotoLibrary edit:edit finish:done];
+            [self photoPicker:UIImagePickerControllerSourceTypePhotoLibrary edit:edit front:front finish:done];
         } else {
-            if (done) done(nil, NSLocalizedString(@"打开相册失败", nil));
+            if (done) done(nil, NSLocalizedString(@"Failed to open album", nil)); //打开相册失败
         }
     }
+}
+
++ (void)pickerHandler:(UIImagePickerControllerSourceType)type edit:(BOOL)edit front:(BOOL)front finish:(void(^)(UIImage *image, NSString *fail))finish {
+    UIViewController *fromVc = [ZCGlobal currentController];
+    if (!fromVc) return;
+    ZCSystemHandler *handle = [ZCSystemHandler sharedHandler];
+    handle.pickerPhotoBlock = finish;
+    handle.isEditedImage = edit;
+    handle.picker.allowsEditing = edit;
+    handle.picker.sourceType = type;
+    if (type == UIImagePickerControllerSourceTypeCamera) {
+        handle.picker.cameraCaptureMode = UIImagePickerControllerCameraCaptureModePhoto;
+        handle.picker.cameraDevice = front ? UIImagePickerControllerCameraDeviceFront : UIImagePickerControllerCameraDeviceRear;
+    }
+    [fromVc presentViewController:handle.picker animated:YES completion:nil];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
@@ -117,7 +157,7 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
             if (image) {
                 self.pickerPhotoBlock(image, nil);
             } else {
-                self.pickerPhotoBlock(nil, NSLocalizedString(@"获取照片失败", nil));
+                self.pickerPhotoBlock(nil, NSLocalizedString(@"Failed to get photos", nil)); //获取照片失败
             }
             self.pickerPhotoBlock = nil;
         }
@@ -137,7 +177,7 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
     navigationController.navigationBar.tintColor = [UIColor colorFromHexString:ZCKitBridge.naviBarTitleColor];
 }
 
-#pragma mark - send message
+#pragma mark - Send message
 - (void)messageComposeViewController:(MFMessageComposeViewController *)controller didFinishWithResult:(MessageComposeResult)result {
     [controller.topViewController.view endEditing:YES];
     if (result == MessageComposeResultSent || result == MessageComposeResultFailed) {
@@ -161,26 +201,22 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
     UIViewController *fromVc = [ZCGlobal currentController];
     if (message && receivers.count && fromVc) {
         if ([MFMessageComposeViewController canSendText]) {
-            [ZCSystemHandler instance].messageResultBlock = finish;
+            [ZCSystemHandler sharedHandler].messageResultBlock = finish;
             MFMessageComposeViewController *mvc = [[MFMessageComposeViewController alloc] init];
-            mvc.messageComposeDelegate = [ZCSystemHandler instance];
+            mvc.messageComposeDelegate = [ZCSystemHandler sharedHandler];
             mvc.recipients = receivers;
             mvc.body = message;
             [fromVc presentViewController:mvc animated:YES completion:nil];
         } else {
-            UIAlertController *avc = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"提示", nil) message:NSLocalizedString(@"该设备不支持短信功能", nil) preferredStyle:UIAlertControllerStyleAlert];
-            [avc addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:nil]];
+            //提示 该设备不支持短信功能
+            UIAlertController *avc = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"The device does not support SMS function", nil) preferredStyle:UIAlertControllerStyleAlert];
+            [avc addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleCancel handler:nil]]; //确定
             [fromVc presentViewController:avc animated:YES completion:nil];
         }
     }
 }
 
-#pragma mark - system alert
-+ (void)customAlertDoneColor:(UIColor *)doneColor cancelColor:(nonnull UIColor *)cancelColor {
-    [ZCSystemHandler instance].alertDoneColor = doneColor;
-    [ZCSystemHandler instance].alertCancelColor = cancelColor;
-}
-
+#pragma mark - System alert
 + (void)alertChoice:(NSString *)title message:(NSString *)message ctor:(NSString * _Nullable (^)(BOOL, BOOL * _Nonnull))ctor action:(void (^)(BOOL))doAction {
     UIViewController *fromVc = [ZCGlobal currentController];
     if (!fromVc) return;
@@ -195,9 +231,6 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
                 if (doAction) doAction(YES);
             }];
             [alert addAction:action];
-            if ([ZCSystemHandler instance].alertCancelColor) {
-                [action setValue:[ZCSystemHandler instance].alertCancelColor forKey:@"_titleTextColor"];
-            }
         }
         destructive = NO;
         confirm = ctor(NO, &destructive);
@@ -207,27 +240,23 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
                 if (doAction) doAction(NO);
             }];
             [alert addAction:action];
-            if ([ZCSystemHandler instance].alertDoneColor) {
-                [action setValue:[ZCSystemHandler instance].alertDoneColor forKey:@"_titleTextColor"];
-            }
         }
     }
     if (!cancel.length && !confirm.length) {
-        UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"确定", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) { //确定
             if (doAction) doAction(YES);
         }];
         [alert addAction:action];
-        if ([ZCSystemHandler instance].alertDoneColor) {
-            [action setValue:[ZCSystemHandler instance].alertDoneColor forKey:@"_titleTextColor"];
-        }
     }
     [fromVc presentViewController:alert animated:YES completion:nil];
 }
 
-+ (void)alertSheet:(NSString *)title cancel:(NSString * _Nullable (^)(void))cancel ctor:(NSString * _Nonnull (^)(NSInteger, BOOL * _Nonnull))ctor action:(void (^)(NSInteger))doAction {
++ (void)alertSheet:(NSString *)title message:(nullable NSString *)message
+            cancel:(NSString * _Nullable (^)(void))cancel
+              ctor:(NSString * _Nonnull (^)(NSInteger, BOOL * _Nonnull))ctor action:(void (^)(NSInteger))doAction {
     UIViewController *fromVc = [ZCGlobal currentController];
     if (!fromVc || !ctor || !doAction) return;
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleActionSheet];
     BOOL isBreak = NO; NSInteger index = 0; NSMutableArray *sheets = [NSMutableArray array];
     do {
         BOOL destructive = NO;
@@ -251,7 +280,7 @@ UINavigationControllerDelegate, UIImagePickerControllerDelegate>
                 }]];
             }
         } else {
-            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"取消", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) { //取消
                 if (doAction) doAction(-1);
             }]];
         }

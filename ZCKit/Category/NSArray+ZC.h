@@ -1,4 +1,4 @@
-//
+   //
 //  NSArray+ZC.h
 //  ZCKit
 //
@@ -21,9 +21,34 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable id)objectForPropertyName:(NSString *)propertyName propertyValue:(id)propertyValue;  /**< 返回能匹配到成员的键值 */
 
-- (NSString *)jsonString;  /**< 返回json字符串 */
+- (NSArray *)objectValueArrayForKey:(NSString *)key defaultValue:(id)defaultValue;  /**< 返回成员对象按key取值得到的value的数组 */
 
-#pragma mark - misc
+- (NSString *)jsonFormatString;  /**< 返回json字符串，已经做格式化显示处理 */
+
+#pragma mark - Parse
+- (nullable ZCJsonValue)jsonValueForIndex:(NSInteger)index;
+
+- (NSArray *)arrayValueForIndex:(NSInteger)index;
+
+- (NSDictionary *)dictionaryValueForIndex:(NSInteger)index;
+
+- (NSString *)stringValueForIndex:(NSInteger)index;
+
+- (NSNumber *)numberValueForIndex:(NSInteger)index;
+
+- (NSDecimalNumber *)decimalValueForIndex:(NSInteger)index;
+
+- (NSString *)priceValueForIndex:(NSInteger)index;
+
+- (long)longValueForIndex:(NSInteger)index;
+
+- (float)floatValueForIndex:(NSInteger)index;
+
+- (BOOL)boolValueForIndex:(NSInteger)index;
+
+- (BOOL)boolValueForIndex:(NSInteger)index defaultValue:(BOOL)defalut;
+
+#pragma mark - Misc
 - (nullable NSData *)plistData;
 
 - (nullable NSString *)plistString;
@@ -45,11 +70,19 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)insertObjects:(NSArray *)objects atIndex:(NSUInteger)index;  /**< 插入数组 */
 
+- (void)insertObject:(id)object expectIndex:(NSUInteger)expectIndex;  /**< 插入数据，坐标匹配不上默认追加到末尾 */
+
 - (void)reverse;  /**< 首尾倒置排列 */
 
 - (void)shuffle;  /**< 重新乱序排列 */
 
-- (void)injectValue:(nullable ZCJsonValue)value;  /**< 插入数据 */
+- (void)injectBoolValue:(BOOL)value;  /**< 末尾添加数据 */
+
+- (void)injectLongValue:(long)value;  /**< 末尾添加数据 */
+
+- (void)injectFloatValue:(float)value;  /**< 末尾添加数据 */
+
+- (void)injectValue:(nullable ZCJsonValue)value;  /**< 末尾添加数据 */
 
 - (void)injectValue:(nullable ZCJsonValue)value forIndex:(NSUInteger)index;  /**< 插入数据 */
 

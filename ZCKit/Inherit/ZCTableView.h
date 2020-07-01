@@ -7,14 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZCBindHandler.h"
 #import "ZCTableViewCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @class ZCTableView;
 
-#pragma mark - ~~~~~~~~~~ ZCRowOperate ~~~~~~~~~~
+#pragma mark - ~ ZCRowOperate ~
 @interface ZCRowOperate : NSObject  /**< row相关操作 */
 
 @property (nullable, nonatomic, strong, readonly) id model;  /**< 保存的模型数据 */
@@ -45,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCSectionOperate ~~~~~~~~~~
+#pragma mark - ~ ZCSectionOperate ~
 @interface ZCSectionOperate : NSObject  /**< section相关操作 */
 
 @property (nullable, nonatomic, strong, readonly) id model;  /**< 保存的模型数据 */
@@ -61,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, strong, readonly) UIView *footer;  /**< 不使用下面block时将用此作为分区尾部视图，且不会重用 */
 
 /** 此初始化方法将以此高度初始化header&footer */
-- (instancetype)initWithHeaderHei:(CGFloat)headerHei footerHei:(CGFloat)footerHei color:(UIColor *)color;
+- (instancetype)initWithHeaderHei:(CGFloat)headerHei footerHei:(CGFloat)footerHei color:(nullable UIColor *)color;
 
 /** 此初始化方法将设置头部和尾部视图的identifier */
 - (instancetype)initWithHeaderIdent:(NSString *)headerIdent footerIdent:(NSString *)footerIdent;
@@ -126,17 +125,17 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCTableView ~~~~~~~~~~
+#pragma mark - ~ ZCTableView ~
 @interface ZCTableView : UITableView  /**< block控制代理，默认代理为self */
-
-/** 绑定处理类，子视图bindUnit设置此handler来检查取值 */
-@property (nonatomic, strong, readonly) ZCBindHandler *handler;
 
 /** 以下方法将会设置delegate和datasource为self，添加或者移除最后都要调用reloadData */
 @property (nonatomic, strong, readonly) NSMutableArray <ZCSectionOperate *>*sections;
 
 /** 返回一个标准配置的ZCTableView，其中register的key为cell的重用identifier，value为cell的类名字符串 */
 + (ZCTableView *)initialTable:(CGRect)frame style:(UITableViewStyle)style reuses:(NSDictionary <NSString *, NSString *>*)reuses;
+
+/** 返回一个标准配置的ZCTableView，style为UITableViewStyleGrouped，cell为ZCTableViewCell, isResueAllowResetCell是否自动重置cell属性 */
++ (ZCTableView *)basicTableZCCell:(CGRect)frame resetCell:(BOOL)isResueAllowResetCell;
 
 /** 返回一个标准配置的ZCTableView，style为UITableViewStyleGrouped，并且注册cellClass的重用identifier为@"cell" */
 + (ZCTableView *)basicTable:(CGRect)frame cellClass:(Class)cellClass;

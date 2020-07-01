@@ -12,7 +12,7 @@
 #define ZC_SPELL_UNIT_SHORTSPELL  @"s"
 #define ZC_SPELL_CACHE            @"sc"
 
-#pragma mark - ~~~~~~~~~~ ZCPinyinConverter ~~~~~~~~~~
+#pragma mark - ~ ZCPinyinConverter ~
 @interface ZCPinyinConverter : NSObject {
     BOOL _inited;
     char *_pinyin;
@@ -23,7 +23,7 @@
 
 @implementation ZCPinyinConverter
 
-+ (ZCPinyinConverter *)instance {
++ (ZCPinyinConverter *)sharedConverter {
     static dispatch_once_t onceToken;
     static ZCPinyinConverter *instance = nil;
     dispatch_once(&onceToken, ^{
@@ -43,7 +43,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCSpellUnit ~~~~~~~~~~
+#pragma mark - ~ ZCSpellUnit ~
 @interface ZCSpellUnit : NSObject <NSCoding>
 
 @property (nonatomic, copy) NSString *fullSpell;  /**< 全拼 */
@@ -70,7 +70,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCPinyinHandler ~~~~~~~~~~
+#pragma mark - ~ ZCPinyinHandler ~
 @interface ZCPinyinHandler () {
     NSMutableDictionary *_spellCache;
     NSString *_filePath;
@@ -80,7 +80,7 @@
 
 @implementation ZCPinyinHandler
 
-+ (ZCPinyinHandler *)instance {
++ (ZCPinyinHandler *)sharedHandler {
     static dispatch_once_t onceToken;
     static ZCPinyinHandler *instance = nil;
     dispatch_once(&onceToken, ^{
@@ -143,7 +143,7 @@
     NSMutableString *shortSpell = [[NSMutableString alloc] init];
     for (NSInteger i = 0; i < [source length]; i++) {
         NSString *word = [source substringWithRange:NSMakeRange(i, 1)];
-        NSString *pinyin = [[ZCPinyinConverter instance] toPinyin:word];
+        NSString *pinyin = [[ZCPinyinConverter sharedConverter] toPinyin:word];
         if ([pinyin length]) {
             [fullSpell appendString:pinyin];
             [shortSpell appendString:[pinyin substringToIndex:1]];
@@ -156,24 +156,24 @@
 }
 
 + (void)saveSpellCache {
-    [[ZCPinyinHandler instance] saveCache];
+    [[ZCPinyinHandler sharedHandler] saveCache];
 }
 
 + (NSString *)firstLetter:(NSString *)source {
-    ZCSpellUnit *unit = [[ZCPinyinHandler instance] spellForString:source];
+    ZCSpellUnit *unit = [[ZCPinyinHandler sharedHandler] spellForString:source];
     if (!unit) return @"";
     NSString *spell = unit.fullSpell;
     return spell.length ? [spell substringWithRange:NSMakeRange(0, 1)] : @"";
 }
 
 + (NSString *)fullSpell:(NSString *)source {
-    ZCSpellUnit *unit = [[ZCPinyinHandler instance] spellForString:source];
+    ZCSpellUnit *unit = [[ZCPinyinHandler sharedHandler] spellForString:source];
     if (!unit || !unit.fullSpell) return @"";
     return unit.fullSpell;
 }
 
 + (NSString *)shortSpell:(NSString *)source {
-    ZCSpellUnit *unit = [[ZCPinyinHandler instance] spellForString:source];
+    ZCSpellUnit *unit = [[ZCPinyinHandler sharedHandler] spellForString:source];
     if (!unit || !unit.shortSpell) return @"";
     return unit.shortSpell;
 }

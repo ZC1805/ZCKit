@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UITableView (ZC)
 
+@property (nonatomic, readonly) CGFloat bottomGroupStyleHei;  /**< groupe类型底部默认偏移高度 */
+
 @property (nullable, nonatomic, readonly) UIGestureRecognizer *panEventGesture;  /**< 表视图的点击手势 */
 
 @property (nullable, nonatomic, readonly) NSIndexPath *recentlyTouchIndexPath;  /**< 返回最近触摸的cell(或cell的子视图的响应)的indexPath */

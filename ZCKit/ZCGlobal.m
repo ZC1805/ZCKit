@@ -11,6 +11,8 @@
 
 @interface ZCGlobal ()
 
+@property (nonatomic, assign) CGFloat radio360; //比例
+
 @property (nonatomic, assign) BOOL isFullScreen; //全面屏
 
 @property (nonatomic, copy) NSString *imageSuffix; //exp@3x
@@ -21,13 +23,15 @@
 
 @implementation ZCGlobal
 
-+ (instancetype)instance {
++ (instancetype)sharedGlobal {
     static ZCGlobal *instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         instance = [[ZCGlobal alloc] init];
         CGFloat scale = [UIScreen mainScreen].bounds.size.height / [UIScreen mainScreen].bounds.size.width;
+        CGFloat minvl = MIN([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
         instance.isFullScreen = (scale > 2.0 || scale < 0.5);
+        instance.radio360 = minvl / 360.0;
     });
     return instance;
 }
@@ -46,9 +50,13 @@
     return _imageSuffixSmaller;
 }
 
-#pragma mark - misc
+#pragma mark - Misc
++ (CGFloat)ratio {
+    return [ZCGlobal sharedGlobal].radio360;
+}
+
 + (BOOL)isiPhoneX {
-    return [ZCGlobal instance].isFullScreen;
+    return [ZCGlobal sharedGlobal].isFullScreen;
 }
 
 + (BOOL)isLandscape {
@@ -59,11 +67,11 @@
 + (BOOL)isJsonValue:(ZCJsonValue)value {
     if (value == nil || value == NULL) {
         return YES;
-    } else if ([value isKindOfClass:[NSString class]]) {
+    } else if ([value isKindOfClass:NSString.class]) {
         return YES;
-    } else if ([value isKindOfClass:[NSNumber class]]) {
+    } else if ([value isKindOfClass:NSNumber.class]) {
         return YES;
-    } else if ([value isKindOfClass:[NSArray class]]) {
+    } else if ([value isKindOfClass:NSArray.class]) {
         BOOL isJsonValue = YES;
         for (ZCJsonValue item in value) {
             if (![self isJsonValue:item]) {
@@ -71,10 +79,10 @@
             }
         }
         return isJsonValue;
-    } else if ([value isKindOfClass:[NSDictionary class]]) {
+    } else if ([value isKindOfClass:NSDictionary.class]) {
         __block BOOL isJsonValue = YES;
         [value enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-            if (![key isKindOfClass:[NSString class]]) {
+            if (![key isKindOfClass:NSString.class]) {
                 isJsonValue = NO; *stop = YES;
             }
             if (![self isJsonValue:obj]) {
@@ -83,25 +91,23 @@
         }];
         return isJsonValue;
     } else {
+        if ([value conformsToProtocol:NSProtocolFromString(@"ZCJsonProtocol")]) {
+            return ((id<ZCJsonProtocol>)value).isJsonValue;
+        }
         return NO;
     }
 }
 
 + (BOOL)isEqualToJsonValue:(ZCJsonValue)value1 other:(ZCJsonValue)value2 {
-    if (value1 && value2) {
-        if ([value1 isKindOfClass:[value2 class]]) {
-            if ([value1 isKindOfClass:[NSString class]]) {
-                return [value1 isEqualToString:value2];
-            } else if ([value1 isKindOfClass:[NSNumber class]]) {
-                return [value1 isEqualToNumber:value2];
-            } else if ([value1 isKindOfClass:[NSArray class]]) {
-                return [value1 isEqualToArray:value2];
-            } else if ([value1 isKindOfClass:[NSDictionary class]]) {
-                return [value1 isEqualToDictionary:value2];
-            } else {
-                NSAssert(0, @"ZCKit: value1 value2 is not json value");
-                return NO;
-            }
+    if (value1 && value2 && [ZCGlobal isJsonValue:value1] && [ZCGlobal isJsonValue:value2]) {
+        if ([value1 isKindOfClass:NSString.class] && [value2 isKindOfClass:NSString.class]) {
+            return [value1 isEqualToString:value2];
+        } else if ([value1 isKindOfClass:NSNumber.class] && [value2 isKindOfClass:NSNumber.class]) {
+            return [value1 isEqualToNumber:value2];
+        } else if ([value1 isKindOfClass:NSArray.class] && [value2 isKindOfClass:NSArray.class]) {
+            return [value1 isEqualToArray:value2];
+        } else if ([value1 isKindOfClass:NSDictionary.class] && [value2 isKindOfClass:NSDictionary.class]) {
+            return [value1 isEqualToDictionary:value2];
         } else {
             return NO;
         }
@@ -113,7 +119,7 @@
 }
 
 + (BOOL)isValidString:(NSString *)str {
-    if (str && [str isKindOfClass:[NSString class]] && str.length) {
+    if (str && [str isKindOfClass:NSString.class] && str.length) {
         if (![str isEqualToString:@"<null>"] && ![str isEqualToString:@"(null)"] &&
             ![str isEqualToString:@"null"] && ![str isEqualToString:@"nil"] &&
             [str stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length) {
@@ -124,31 +130,31 @@
 }
 
 + (BOOL)isValidArray:(NSArray *)array {
-    if (array && [array isKindOfClass:[NSArray class]] && [array count]) {
+    if (array && [array isKindOfClass:NSArray.class] && array.count) {
         return YES;
     }
     return NO;
 }
 
 + (BOOL)isValidDictionary:(NSDictionary *)dictionary {
-    if (dictionary && [dictionary isKindOfClass:[NSDictionary class]] && [dictionary count]) {
+    if (dictionary && [dictionary isKindOfClass:NSDictionary.class] && dictionary.count) {
         return YES;
     }
     return NO;
 }
 
 + (nullable id)appointInvalid:(nullable id)originObj default:(nullable id)defaultObj {
-    if (originObj == nil || ([originObj isKindOfClass:[NSString class]] && [(NSString *)originObj length] == 0)) {
+    if (originObj == nil || ([originObj isKindOfClass:NSString.class] && [(NSString *)originObj length] == 0)) {
         return defaultObj;
     }
     if ([self isValidString:originObj] || [self isValidArray:originObj] || [self isValidDictionary:originObj]) {
         return originObj;
     }
-    if ([originObj isKindOfClass:[NSSet class]] && [(NSSet *)originObj count]) {
+    if ([originObj isKindOfClass:NSSet.class] && [(NSSet *)originObj count]) {
         return originObj;
     }
-    if ([originObj isKindOfClass:[NSString class]] || [originObj isKindOfClass:[NSArray class]] ||
-        [originObj isKindOfClass:[NSDictionary class]] || [originObj isKindOfClass:[NSSet class]]) {
+    if ([originObj isKindOfClass:NSString.class] || [originObj isKindOfClass:NSArray.class] ||
+        [originObj isKindOfClass:NSDictionary.class] || [originObj isKindOfClass:NSSet.class]) {
         return defaultObj;
     }
     return originObj;
@@ -160,12 +166,18 @@
     if (bundle.length) bdl = [NSBundle bundleWithURL:[bdl URLForResource:bundle withExtension:@"bundle"]];
     if (!bdl) return nil;
     NSString *path = [bdl pathForResource:name ofType:ext];
-    if (!path) path = [bdl pathForResource:[name stringByAppendingString:[ZCGlobal instance].imageSuffix] ofType:ext];
-    if (!path) path = [bdl pathForResource:[name stringByAppendingString:[ZCGlobal instance].imageSuffixSmaller] ofType:ext];
+    if (!path) path = [bdl pathForResource:[name stringByAppendingString:[ZCGlobal sharedGlobal].imageSuffix] ofType:ext];
+    if (!path) path = [bdl pathForResource:[name stringByAppendingString:[ZCGlobal sharedGlobal].imageSuffixSmaller] ofType:ext];
     return path;
 }
 
-#pragma mark - controller
++ (nullable UIImage *)ZCImageName:(NSString *)imageName {
+    NSString *path = [self resourcePath:@"ZCFiles" name:imageName ext:@"png"];
+    if (path) {return [UIImage imageWithContentsOfFile:path];}
+    return nil;
+}
+
+#pragma mark - Controller
 + (UIViewController *)rootController { //根控制器
     UIWindow *window = [UIApplication sharedApplication].delegate.window;
     if (!window || window.windowLevel != UIWindowLevelNormal) {
@@ -179,7 +191,7 @@
     }
     if (window && window.rootViewController) {
         id controller = [window.subviews.firstObject nextResponder];
-        if (controller && [controller isKindOfClass:[UIViewController class]]) {
+        if (controller && [controller isKindOfClass:UIViewController.class]) {
             return controller;
         } else {
             return window.rootViewController;
@@ -195,15 +207,15 @@
     }
     if (rootvc.presentedViewController) {
         return [self topController:rootvc.presentedViewController];
-    } else if ([rootvc isKindOfClass:[UITabBarController class]]) {
+    } else if ([rootvc isKindOfClass:UITabBarController.class]) {
         if ([(UITabBarController *)rootvc selectedViewController]) {
             return [self topController:[(UITabBarController *)rootvc selectedViewController]];
         }
-    } else if ([rootvc isKindOfClass:[UINavigationController class]]) {
+    } else if ([rootvc isKindOfClass:UINavigationController.class]) {
         if ([(UINavigationController *)rootvc visibleViewController]) {
             return [self topController:[(UINavigationController *)rootvc visibleViewController]];
         }
-    } else if ([rootvc isKindOfClass:[UISplitViewController class]]) {
+    } else if ([rootvc isKindOfClass:UISplitViewController.class]) {
         if ([(UISplitViewController *)rootvc viewControllers].count) {
             return [self topController:[(UISplitViewController *)rootvc viewControllers].lastObject];
         }
@@ -219,7 +231,7 @@
     return [self topController:[self rootController]];
 }
 
-#pragma mark - safe layout
+#pragma mark - Safe layout
 + (CGFloat)leadingSpacing { //左边距离 -> 0 / 44
     CGFloat height = [self safeLeft];
     if (height <= 0 && [self isLandscape]) { //暂时默认横屏左右都是44
@@ -245,7 +257,7 @@
 + (CGFloat)naviShadowHeight { //导航条阴影高度 -> 0 / 1
     UIViewController *topvc = [self currentController];
     UINavigationController *navvc = topvc.navigationController;
-    if ([topvc isKindOfClass:[UINavigationController class]]) {
+    if ([topvc isKindOfClass:UINavigationController.class]) {
         navvc = (UINavigationController *)topvc;
     }
     if (navvc && !navvc.navigationBarHidden && !navvc.navigationBar.hidden) {
@@ -260,7 +272,7 @@
 + (CGFloat)naviBarHeight { //导航条高度 -> 0 / 32 / 44 / 96
     UIViewController *topvc = [self currentController];
     UINavigationController *navvc = topvc.navigationController;
-    if ([topvc isKindOfClass:[UINavigationController class]]) {
+    if ([topvc isKindOfClass:UINavigationController.class]) {
         navvc = (UINavigationController *)topvc;
     }
     if (navvc && !navvc.navigationBarHidden && !navvc.navigationBar.hidden) {
@@ -308,7 +320,7 @@
     CGFloat bottom = 0;
     UIViewController *rootvc = [self rootController];
     UITabBarController *tabvc = rootvc.tabBarController;
-    if (rootvc && [rootvc isKindOfClass:[UITabBarController class]]) {
+    if (rootvc && [rootvc isKindOfClass:UITabBarController.class]) {
         tabvc = (UITabBarController *)rootvc;
     }
     if (tabvc && tabvc.view.subviews.count != 1 && !tabvc.tabBar.hidden) {
@@ -333,12 +345,12 @@
 + (CGFloat)tabBarHeight { //tabbar高度(暂时不适用于横竖屏交换) -> 值为:0 / 32 / 49 / 53 / 83
     UIViewController *topvc = [self currentController];
     UITabBarController *tabvc = topvc.tabBarController;
-    if (topvc && [topvc isKindOfClass:[UITabBarController class]]) {
+    if (topvc && [topvc isKindOfClass:UITabBarController.class]) {
         tabvc = (UITabBarController *)topvc;
     }
     if (tabvc && tabvc.view.subviews.count != 1 && !tabvc.tabBar.hidden) {
         if (topvc.hidesBottomBarWhenPushed) { //设置hides应在在此调用之前，导航推出第一个控制器tabbar没有迅速消失
-            if (topvc.navigationController && ![topvc isKindOfClass:[UINavigationController class]]) {
+            if (topvc.navigationController && ![topvc isKindOfClass:UINavigationController.class]) {
                 return 0;
             }
         }
@@ -377,4 +389,3 @@
 }
 
 @end
-

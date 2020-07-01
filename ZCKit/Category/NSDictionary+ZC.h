@@ -15,21 +15,29 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable id)randomValue;  /**< 随机值 */
 
-- (NSArray *)allKeysSorted;  /**< 返回排序好的所有键 */
+- (NSArray *)allKeysSorted;  /**< 返回排序好的所有键，忽略大小写 */
 
 - (NSArray *)allValuesSortedByKeys;  /**< 返回按键排序好的所有值 */
 
-- (NSDictionary *)dictionaryForKeys:(NSArray *)keys;  /**< 返回所有目标键组合的子字典 */
+- (NSDictionary *)dictionaryForKeysOrKeyReplaceKeys:(id)kvsOrKeys;  /**< 返回所有目标键或者替换目标键的键值对字典，没有查询到的键值对按NSNull值注入 */
+
+- (NSDictionary *)dictionaryForKeys:(NSArray *)keys;  /**< 返回所有目标键组合的子字典，没有查询到对应的值则不会将键值对加入到新字典中 */
 
 - (NSDictionary *)restExceptForKeys:(NSArray *)keys;  /**< 返回余下的键值对的字典 */
 
+- (nullable id)keyForJsonValue:(id)jsonValue;  /**< 返回根据值匹配到的第一个键值对的键 */
+
 - (BOOL)containsObjectForKey:(id)key;  /**< 是否包含某个键 */
+
+- (BOOL)containsValidObjectForKey:(id)key;  /**< 是否包含某个有效的键，nil 、null、@""都返回NO */
 
 - (BOOL)containsObjectForValue:(id)value;  /**< 是否包含某个值 */
 
-- (NSString *)jsonString;  /**< 返回json字符串 */
+- (NSString *)jsonFormatString;  /**< 返回json字符串，已经做格式化显示处理 */
 
-#pragma mark - parse
+#pragma mark - Parse
+- (nullable ZCJsonValue)jsonValueForKey:(NSString *)key;
+
 - (NSArray *)arrayValueForKey:(NSString *)key;
 
 - (NSDictionary *)dictionaryValueForKey:(NSString *)key;
@@ -50,9 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)boolValueForKey:(NSString *)key defaultValue:(BOOL)defalut;
 
-- (nullable NSArray *)checkInvalidKeys:(NSString *)firstKey,... __attribute__((sentinel));
-
-#pragma mark - misc
+#pragma mark - Misc
 - (nullable NSData *)plistData;
 
 - (nullable NSString *)plistString;
@@ -61,10 +67,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable NSDictionary *)dictionaryWithPlistString:(NSString *)plist;
 
+- (nullable NSArray *)checkInvalidKeys:(NSString *)firstKey,... __attribute__((sentinel));
+
 @end
 
 
 @interface NSMutableDictionary (ZC)
+
+- (void)replaceKey:(NSString *)originKey toKey:(NSString *)finalKey;
+
+- (void)extractKeyValueFromDictionary:(NSDictionary *)dictionary forKeys:(NSArray *)keys;
 
 - (void)injectBoolValue:(BOOL)value forKey:(NSString *)key;
 
@@ -74,7 +86,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)injectLongValue:(long)value forKey:(NSString *)key abnormalValue:(long)abnormalValue;
 
-- (void)injectValue:(ZCJsonValue)value forKey:(NSString *)key;
+- (void)injectValue:(nullable ZCJsonValue)value forKey:(NSString *)key;
 
 - (void)injectValue:(nullable ZCJsonValue)value forAutoKey:(NSString *)autoKey;
 

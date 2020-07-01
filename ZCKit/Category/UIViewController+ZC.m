@@ -7,10 +7,68 @@
 //
 
 #import "UIViewController+ZC.h"
+#import "ZCViewController.h"
 #import "ZCGlobal.h"
 
 @implementation UIViewController (ZC)
 
+#pragma mark - Func
+- (NSString *)hierarchicalRoute {
+    return [self routeVCNameForRank:0];
+}
+
+- (NSString *)routeVCNameForRank:(int)level {
+    UIViewController *aimVc = nil; BOOL isContainer = YES;
+    if ([self isKindOfClass:UITabBarController.class]) {
+        if (level) aimVc = ((UITabBarController *)self).selectedViewController;
+    } else if ([self isKindOfClass:UINavigationController.class]) {
+        if (level) aimVc = ((UINavigationController *)self).topViewController;
+    } else if ([self isKindOfClass:UISplitViewController.class]) {
+        if (level) aimVc = ((UISplitViewController *)self).viewControllers.lastObject;
+    } else if (self.childViewControllers.count && [self respondsToSelector:@selector(visibleChildViewController)]) {
+        if (level && [(id<ZCViewControllerPrivateProtocol>)self visibleChildViewController]) {
+            aimVc = [(id<ZCViewControllerPrivateProtocol>)self visibleChildViewController];
+        }
+    } else {
+        isContainer = NO;
+        if (aimVc == nil && self.navigationController && (self.parentViewController == self.navigationController) && self.navigationController.viewControllers.count > 1) {
+            NSInteger index = [self.navigationController.viewControllers indexOfObject:self];
+            if (index != NSNotFound && index > 0) {
+                index = index - 1;
+                aimVc = [self.navigationController.viewControllers objectAtIndex:index];
+            }
+        } else if (aimVc == nil && self.splitViewController && (self.parentViewController == self.splitViewController) && self.splitViewController.viewControllers.count > 1) {
+            NSInteger index = [self.splitViewController.viewControllers indexOfObject:self];
+            if (index != NSNotFound && index > 0) {
+                index = index - 1;
+                aimVc = [self.splitViewController.viewControllers objectAtIndex:index];
+            }
+        }
+        if (aimVc == nil && self.presentingViewController) {
+            aimVc = self.presentingViewController;
+        }
+    }
+    if (level < 20) {
+        NSString *aimStr = [aimVc routeVCNameForRank:(level + 1)];
+        NSString *claStr = [NSString stringWithFormat:@"/%@", NSStringFromClass(self.class)];
+        if ([claStr hasPrefix:@"/UIViewController"] || [claStr hasPrefix:@"/ZCViewController"] || [claStr hasPrefix:@"/TSViewController"]) claStr = @"";
+        if (![claStr hasPrefix:@"/TS"] && ![claStr hasPrefix:@"/TY"]) claStr = @"";
+        if (isContainer) claStr = @"";
+        if (aimStr.length) {
+            return [NSString stringWithFormat:@"%@%@", aimStr, claStr];
+        } else {
+            return [NSString stringWithFormat:@"%@", claStr];
+        }
+    }
+    return @"";
+}
+
+#pragma mark - Override
+- (UIUserInterfaceStyle)overrideUserInterfaceStyle API_AVAILABLE(ios(13.0)){
+    return UIUserInterfaceStyleLight;
+}
+
+#pragma mark - Misc
 - (UIViewController *)presentFromViewController {
     if (self.presentedViewController) {
         return [self.presentedViewController presentFromViewController];

@@ -9,7 +9,7 @@
 #import "ZCGrowView.h"
 #import "ZCMacro.h"
 
-#pragma mark - ~~~~~~~~~~ ZCGrowInternalTextView ~~~~~~~~~~
+#pragma mark - ~ ZCGrowInternalTextView ~
 @interface ZCGrowInternalTextView : UITextView
 
 @property (nonatomic, assign) BOOL displayPlaceholder;
@@ -32,7 +32,7 @@
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
 }
 
-#pragma mark - override
+#pragma mark - Override
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
     if (action == @selector(copy:) ||
         action == @selector(selectAll:)||
@@ -59,7 +59,7 @@
     [self setNeedsDisplay];
 }
 
-#pragma mark - private
+#pragma mark - Private
 - (void)setDisplayPlaceholder:(BOOL)displayPlaceholder {
     BOOL oldValue = _displayPlaceholder;
     _displayPlaceholder = displayPlaceholder;
@@ -91,7 +91,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCGrowView ~~~~~~~~~~
+#pragma mark - ~ ZCGrowView ~
 @interface ZCGrowView() <UITextViewDelegate>
 
 @property (nonatomic, assign) CGFloat maxHeight;
@@ -114,7 +114,7 @@
 
 @synthesize paragraphStyle = _paragraphStyle;
 
-#pragma mark - override
+#pragma mark - Override
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         CGRect rect = CGRectMake(0, 0, frame.size.width, frame.size.height);
@@ -150,7 +150,7 @@
 //    return [self.textView resignFirstResponder];
 //}
 
-#pragma mark - set & get
+#pragma mark - Set & Get
 //- (UIView *)inputView {
 //    return self.textView.inputView;
 //}
@@ -210,12 +210,12 @@
     return _myAttributes;
 }
 
-#pragma mark - public
+#pragma mark - Public
 - (void)updateTypingAttributes {
     self.textView.typingAttributes = self.myAttributes;
 }
 
-#pragma mark - private
+#pragma mark - Private
 - (void)setup {
     self.textView.bounces = NO;
     self.textView.delegate = self;
@@ -269,8 +269,7 @@
     self.minHeight = [self simulateHeight:self.minLines];
 }
 
-///!!!:超过4行时点击滑动&换行时不滑到最底端
-///!!!:输入框弹窗 & 两项选择框弹窗 & 最大输入设置ZDGuestBookView & NIMGrowingInternalTextView
+///!!!:超过4行时点击滑动 & 换行时不滑到最底端 & 输入框弹窗 & 两项选择框弹窗 & 最大输入设置ZDGuestBookView & NIMGrowingInternalTextView & 旋转 & 全屏手势返回
 - (void)fitToScrollView {
     //BOOL scrollToBottom = ZFNotEqual(self.contentOffset.y, self.contentSize.height - self.frame.size.height);
     CGSize actualTextViewSize = [self measureTextViewSize];
@@ -374,7 +373,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCGrowView(TextView) ~~~~~~~~~~
+#pragma mark - ~ ZCGrowView(TextView) ~
 @implementation ZCGrowView(TextView)
 
 - (NSString *)placeholderText {
@@ -384,7 +383,7 @@
 - (void)setPlaceholderText:(NSString *)placeholderText {
     if (!placeholderText) return;
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:self.myAttributes];
-    [dic setObject:ZCBlackA2 forKey:NSForegroundColorAttributeName];
+    [dic setObject:ZCBlackA8 forKey:NSForegroundColorAttributeName];
     NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:placeholderText attributes:dic];
     [self.textView setPlaceholderAttributedText:attributedText];
 }

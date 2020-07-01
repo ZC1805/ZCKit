@@ -19,7 +19,7 @@
                 self.leftView.width = leftSpace;
             }
         } else {
-            self.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftSpace, 1) color:[UIColor clearColor]];
+            self.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftSpace, 1) color:ZCClear];
             self.leftViewMode = UITextFieldViewModeAlways;
             self.leftView.tag = 189001;
         }
@@ -37,18 +37,10 @@
     return 0;
 }
 
-- (UIColor *)placeholderTextColor {
-    UIColor *color = [self valueForKeyPath:@"_placeholderLabel.textColor"];
-    return (color && [color isKindOfClass:[UIColor class]]) ? [color copy] : nil;
-}
-
-- (void)setPlaceholderTextColor:(UIColor *)placeholderTextColor {
-    [self setValue:[placeholderTextColor copy] forKeyPath:@"_placeholderLabel.textColor"];
-}
-
-- (UIButton *)rightClearBtn {
-    UIButton *button = [self valueForKey:@"_clearButton"];
-    return (button && [button isKindOfClass:[UIButton class]]) ? button : nil;
+- (void)setPlaceholderText:(NSString *)placeholderText color:(UIColor *)color font:(UIFont *)font {
+    NSDictionary *dic = @{NSFontAttributeName:(font?font:self.font?self.font:[UIFont systemFontOfSize:12]), NSForegroundColorAttributeName:(color?color:ZCPHColor)};
+    NSAttributedString *attStr = [[NSAttributedString alloc] initWithString:ZCStrNonnil(placeholderText) attributes:dic];
+    self.attributedPlaceholder = attStr;
 }
 
 - (UIImage *)leftImage {
@@ -132,4 +124,3 @@
 }
 
 @end
-

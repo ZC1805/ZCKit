@@ -57,20 +57,20 @@
 }
 
 - (CGFloat)fontHei {
-    static UILabel *label = nil;
+    static UILabel *kFontLabel = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        label = [[UILabel alloc] initWithFrame:CGRectZero]; label.text = @" ";
+        kFontLabel = [[UILabel alloc] initWithFrame:CGRectZero]; kFontLabel.text = @" ";
     });
-    label.font = self; [label sizeToFit];
-    return label.frame.size.height;
+    kFontLabel.font = self; [kFontLabel sizeToFit];
+    return kFontLabel.frame.size.height;
 }
 
 - (CGFloat)fontSize {
     return [[self.fontDescriptor objectForKey:UIFontDescriptorSizeAttribute] floatValue];
 }
 
-#pragma mark - class
+#pragma mark - Class
 + (UIFont *)fontSize:(CGFloat)size weight:(NSInteger)weight {
     return [UIFont fontFamily:@"Helvetica Neue" size:size weight:weight slant:0];
 }
@@ -102,9 +102,4 @@
     return [UIFont fontWithName:@"HiraginoSansGB-W6" size:size];
 }
 
-+ (UIFont *)fontENLightSize:(CGFloat)size {
-    return [UIFont fontWithName:@"HelveticaNeue-Light" size:size];
-}
-
 @end
-

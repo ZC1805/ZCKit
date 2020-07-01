@@ -70,7 +70,7 @@
     }
 }
 
-#pragma mark - set
+#pragma mark - Set
 - (void)setIsVagueBackground:(BOOL)isVagueBackground {
     _isVagueBackground = isVagueBackground;
     _effectView.hidden = !isVagueBackground;
@@ -90,7 +90,7 @@
     [self layoutIfNeeded];
 }
 
-#pragma mark - get
+#pragma mark - Get
 - (UIView *)topSepline1 {
     if (!_topSepline1) {
         _topSepline1 = [[UIView alloc] initWithFrame:CGRectZero color:ZCSPColor];

@@ -14,15 +14,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
-- (void)serviceCleanData;
+- (void)serviceCleanData;  /**< 销毁单例时候分发的回调 */
 
-- (void)serviceEnterBackground;
+- (void)serviceEnterBackground;  /**< 状态回调 */
 
-- (void)serviceEnterForeground;
+- (void)serviceEnterForeground;  /**< 状态回调 */
 
-- (void)serviceAppWillTerminate;
+- (void)serviceAppWillTerminate;  /**< 状态回调 */
 
-- (void)serviceReceiveMemoryWarning;
+- (void)serviceReceiveMemoryWarning;  /**< 状态回调 */
 
 @end
 
@@ -38,7 +38,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCService : NSObject <ZCService>  /**< 通用单例类，可供子类继承 */
 
-+ (instancetype)instance;  /**< 单例初始化方法 */
++ (instancetype)sharedService;  /**< 单例初始化方法 */
 
 - (void)start;  /**< 空方法，大部分的Service懒加载即可，但是有些因为业务需要在登录后就需要立马生成 */
 

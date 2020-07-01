@@ -50,7 +50,7 @@
     return [self modelDescription];
 }
 
-#pragma mark - optional (默认属性为自定义类的话会自动转)
+#pragma mark - Optional (默认属性为自定义类的话会自动转)
 //返回一个 dict，将实例属性名对映射到json的key。
 //expl return @{@"name" : @"n",
 //              @"page" : @"p",

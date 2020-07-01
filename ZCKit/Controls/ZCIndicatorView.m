@@ -7,6 +7,7 @@
 //
 
 #import "ZCIndicatorView.h"
+#import "ZCMacro.h"
 
 @interface ZCIndicatorView ()
 
@@ -27,9 +28,9 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _tintColor = [UIColor grayColor];
+        _tintColor = ZCBlack80;
         _diameter = frame.size.width / 9;
-        self.backgroundColor = [UIColor clearColor];
+        self.backgroundColor = ZCRed;
         [self indicatorSize:self.frame.size];
     }
     return self;

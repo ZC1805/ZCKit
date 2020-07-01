@@ -15,6 +15,8 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 
 @property (nonatomic, assign) BOOL isPushToPresent;
 
+@property (nonatomic, assign) CGFloat slipNaciBackAlpha;
+
 @property (nonatomic, weak) UIViewController *visibleChildVc;
 
 @property (nonatomic, copy) void(^willPush)(UIViewController *toVc);
@@ -35,6 +37,12 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 
 @implementation ZCViewController
 
+#pragma mark - ZCViewControllerBackProtocol
+- (BOOL)isHiddenNavigationBar {
+    return NO;
+}
+
+#pragma mark - System
 - (void)viewDidLoad {
     [super viewDidLoad];
     __weak typeof(self) wkself = self;
@@ -79,7 +87,7 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
     }
 }
 
-#pragma mark - override
+#pragma mark - Override
 - (void)willMoveToParentViewController:(UIViewController *)parent {
     [super willMoveToParentViewController:parent];
 }
@@ -96,7 +104,7 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
     }
 }
 
-#pragma mark - override
+#pragma mark - Override
 - (BOOL)prefersStatusBarHidden {
     return [super prefersStatusBarHidden]; //NO
 }
@@ -109,7 +117,7 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleLightContent; //return [super preferredStatusBarStyle]; //UIStatusBarStyleDefault
+    return UIStatusBarStyleDefault; //return [super preferredStatusBarStyle];
 }
 
 - (UIViewController *)childViewControllerForStatusBarStyle {
@@ -154,14 +162,8 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    if (self.isUsePushStyleToPresent) {
-        CATransition *transition = [CATransition animation];
-        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
-        transition.duration = 0.375;
-        transition.type = kCATransitionPush;
-        transition.subtype = kCATransitionFromLeft;
-        [self.view.layer addAnimation:transition forKey:nil];
-        [super dismissViewControllerAnimated:NO completion:completion];
+    if (self.isUsePushStyleToPresent) { //待实现
+        [super dismissViewControllerAnimated:flag completion:completion];
     } else {
         [super dismissViewControllerAnimated:flag completion:completion];
     }
@@ -172,14 +174,8 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
         [self.presentFromViewController presentViewController:viewControllerToPresent animated:flag completion:completion];
     } else {
         if ([viewControllerToPresent respondsToSelector:@selector(isUsePushStyleToPresent)] &&
-            [(id<ZCViewControllerPrivateProtocol>)viewControllerToPresent isUsePushStyleToPresent]) {
-            CATransition *transition = [CATransition animation];
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
-            transition.duration = 0.375;
-            transition.type = kCATransitionPush;
-            transition.subtype = kCATransitionFromRight;
-            [self.view.layer addAnimation:transition forKey:nil];
-            [super presentViewController:viewControllerToPresent animated:NO completion:completion];
+            [(id<ZCViewControllerPrivateProtocol>)viewControllerToPresent isUsePushStyleToPresent]) { //待实现
+            [super presentViewController:viewControllerToPresent animated:flag completion:completion];
         } else {
             [super presentViewController:viewControllerToPresent animated:flag completion:completion];
         }

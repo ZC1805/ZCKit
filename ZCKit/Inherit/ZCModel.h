@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCModel : NSObject  /**< YYKit解析模型基类，供子类继承 */
 
-#pragma mark - build & extract
+#pragma mark - Build & extract
 /**
  json数据构建对象
  1.This method is thread-safe.
@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)instanceForDescription;
 
-#pragma mark - subclass rewriting (not invocation)
+#pragma mark - Subclass rewriting (not invocation)
 //属性 -> key 的映射
 + (nullable NSDictionary<NSString *, id> *)transformPropertyToKeyMappingRelation;
 

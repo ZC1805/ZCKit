@@ -7,10 +7,11 @@
 //
 
 #import "ZCKeychain.h"
+#import "ZCKitBridge.h"
 
 @implementation ZCKeychain
 
-+ (NSMutableDictionary *)keyChainItemDictionaryWithService:(NSString*)service {
++ (NSMutableDictionary *)keyChainItemDictionaryWithService:(NSString *)service {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     [dic setObject:(__bridge id)kSecClassGenericPassword forKey:(__bridge id)kSecClass];
     if (service.length) {
@@ -52,7 +53,7 @@
             result = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
         }
         @catch (NSException *exception) {
-            NSLog(@"ZCKit: key chain no existent data");
+            if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: key chain no existent data");
         }
         @finally {
             

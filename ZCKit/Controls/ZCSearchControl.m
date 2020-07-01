@@ -54,7 +54,9 @@
 - (void)setTouchAction:(void (^)(ZCSearchControl * _Nonnull))touchAction {
     _touchAction = touchAction;
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventTouchUpInside)) {
-        [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
+            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     if (touchAction) {
         [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -65,7 +67,7 @@
     if (_touchAction) _touchAction(self);
 }
 
-#pragma mark - set
+#pragma mark - Set
 - (void)setBarColor:(UIColor *)barColor {
     _barColor = barColor;
     self.eventButton.backgroundColor = barColor;
@@ -93,9 +95,9 @@
 
 - (void)setIsGrayStyle:(BOOL)isGrayStyle {
     _isGrayStyle = isGrayStyle;
-    _barColor = _isGrayStyle ? ZCRGB(0xF5F5F7) : ZCClear;
-    _tintColor = _isGrayStyle ? ZCRGB(0xABABAB) : ZCWhite;
-    UIImage *image = ZCIN(self.isGrayStyle ? @"zc_image_search_grey" : @"zc_image_search_white");
+    _barColor = _isGrayStyle ? ZCBKColor : ZCClear;
+    _tintColor = _isGrayStyle ? ZCBlackA8 : ZCWhite;
+    UIImage *image = [ZCGlobal ZCImageName:(self.isGrayStyle ? @"zc_image_search_grey" : @"zc_image_search_white")];
     self.eventButton.titleLabel.font = ZCFS(self.isGrayStyle ? 13 : 15);
     self.eventButton.backgroundColor = _barColor;
     [self.eventButton setImage:image forState:UIControlStateNormal];

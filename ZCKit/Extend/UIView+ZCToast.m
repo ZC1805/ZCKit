@@ -18,7 +18,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
 
 @implementation UIView (ZCToast)
 
-#pragma mark - toast
+#pragma mark - Toast
 - (void)makeToast:(NSString *)message {
     [self makeToast:message duration:ZCToastDefaultDuration position:ZCEnumToastPositionCenter title:nil image:nil];
 }
@@ -40,7 +40,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
     [self showToast:toast duration:duration position:position action:nil];
 }
 
-#pragma mark - mine
+#pragma mark - Mine
 - (void)showToast:(UIView *)toast duration:(NSTimeInterval)duration position:(ZCEnumToastPosition)position action:(void (^)(void))action {
     if (toast == nil) return;
     if (duration < 0.5) duration = 0.5;
@@ -56,7 +56,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
         toast.exclusiveTouch = YES;
     }
     [UIView animateWithDuration:0.2 delay:0 options:(UIViewAnimationOptionCurveEaseOut|UIViewAnimationOptionAllowUserInteraction) animations:^{
-        toast.alpha = 1.0;
+        toast.alpha = 1;
     } completion:nil];
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self hideToast:toast tap:action];
@@ -81,7 +81,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
     [self hideToast:recognizer.view tap:action];
 }
 
-#pragma mark - helpers
+#pragma mark - Helpers
 - (CGPoint)centerPointForPosition:(ZCEnumToastPosition)position withToast:(UIView *)toast {
     if (position == ZCEnumToastPositionCenter) {
         return CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);

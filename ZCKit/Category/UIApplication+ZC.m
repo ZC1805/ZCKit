@@ -10,7 +10,7 @@
 
 @implementation UIApplication (ZC)
 
-#pragma mark - usually
+#pragma mark - Usually
 + (NSURL *)documentsURL {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
@@ -61,4 +61,3 @@
 }
 
 @end
-

@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIImage (ZC)
 
-#pragma mark - usually
+#pragma mark - Usually
 /** 从PDF文件数据或路径创建，只返回PDF第一页，大小等于原大小 */
 + (nullable UIImage *)imageWithPDF:(id)dataOrPath;
 
@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 //先压缩图片质量，如果已经小于指定大小，就可得到清晰的图片，否则再压缩图片尺寸。
 - (NSData *)imageCompress:(NSUInteger)maxLength;
 
-#pragma mark - image modify
+#pragma mark - Image modify
 /** 返回从该图像缩放的新图像，图像将根据需要拉伸 */
 - (UIImage *)imageByResizeToSize:(CGSize)size;
 
@@ -114,7 +114,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 水平翻转图像 ⇋ */
 - (nullable UIImage *)imageByFlipHorizontal;
 
-#pragma mark - image effect
+#pragma mark - Image effect
 /** 用给定颜色在alpha通道中着色图像 */
 - (nullable UIImage *)imageByTintColor:(UIColor *)color;
 

@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
 
 @property (nonatomic) CGFloat visualOffsetY;  /**< 直观的垂直偏移量 */
 
-#pragma mark - offset
+#pragma mark - Offset
 @property (nonatomic) CGPoint visualOffset;  /**< 肉眼直观偏移量，相对于初始位置目视滑动的距离 */
 
 @property (nonatomic, readonly) CGPoint relativeOffset;  /**< 相对与刚可反弹时零界点的偏移量 */
@@ -49,7 +49,11 @@ typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
 
 @property (nullable, nonatomic, strong) UIColor *bottomExpandColor;  /**< 底部偏移出来的颜色设置，在确定frame后再设置 */
 
-#pragma mark - direction
+#pragma mark - Basic
+/**< 初始化scrollView，别第一个加入到容器view中，可在addSubView之前加入一个一个无用的View(ios9.0的问题) */
+- (UIScrollView *)initWithFrame:(CGRect)frame isPaging:(BOOL)isPaging isBounces:(BOOL)isBounces;
+
+#pragma mark - Direction
 @property (nonatomic, assign, readonly) ZCEnumScrollViewDirection horizontalScrollingDirection;  /**< 水平滑动方向 */
 
 @property (nonatomic, assign, readonly) ZCEnumScrollViewDirection verticalScrollingDirection;  /**< 垂直滑动方向 */

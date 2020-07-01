@@ -49,7 +49,7 @@
     self.badgeValue = nil;
 }
 
-#pragma mark - set
+#pragma mark - Set
 - (void)setBadgeBKColor:(UIColor *)badgeBKColor {
     if (!badgeBKColor) badgeBKColor = ZCRed;
     _badgeBKColor = badgeBKColor;
@@ -89,7 +89,7 @@
     [self setNeedsDisplay];
 }
 
-#pragma mark - override
+#pragma mark - Override
 - (void)drawRect:(CGRect)rect {
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
@@ -101,7 +101,7 @@
     CGContextRestoreGState(context);
 }
 
-#pragma mark - misc
+#pragma mark - Misc
 - (CGSize)badgeSizeStr:(NSString *)badgeStr {
     CGSize size = [badgeStr sizeWithAttributes:@{NSFontAttributeName:self.badgeTextFont}];
     if (size.width < size.height) {

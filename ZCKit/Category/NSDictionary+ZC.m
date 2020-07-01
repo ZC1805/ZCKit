@@ -13,11 +13,11 @@
 #import "NSArray+ZC.h"
 #import "NSData+ZC.h"
 
-#pragma mark - ~~~~~~~~~~ NSDictionary ~~~~~~~~~~
+#pragma mark - ~ NSDictionary ~
 @implementation NSDictionary (ZC)
 
 - (NSString *)descriptionWithLocale:(id)locale {
-    if (self.jsonString.length) return self.jsonString;
+    if (self.jsonFormatString.length) return self.jsonFormatString;
     NSMutableString *str = [NSMutableString string];
     [str appendString:@"{\n"];
     [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
@@ -29,7 +29,7 @@
     return str;
 }
 
-#pragma mark - usually
+#pragma mark - Usually
 - (id)randomValue {
     return [self.allValues randomObject];
 }
@@ -42,17 +42,43 @@
     NSArray *sortedKeys = [self allKeysSorted];
     NSMutableArray *arr = [[NSMutableArray alloc] init];
     for (id key in sortedKeys) {
-        [arr addObject:self[key]];
+        [arr addObject:[self objectForKey:key]];
     }
     return [arr copy];
+}
+
+- (NSDictionary *)dictionaryForKeysOrKeyReplaceKeys:(id)kvsOrKeys {
+    NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+    if (kvsOrKeys && [kvsOrKeys isKindOfClass:NSArray.class] && ((NSArray *)kvsOrKeys).count) {
+        for (NSString *key in (NSArray *)kvsOrKeys) {
+            if ([key isKindOfClass:NSString.class]) {
+                id value = [self objectForKey:key];
+                if (!value) value = [NSNull null];
+                [dic setObject:value forKey:key];
+            } else {
+                NSAssert(0, @"ZCKit: dic key key is invalid");
+            }
+        }
+    } else if (kvsOrKeys && [kvsOrKeys isKindOfClass:NSDictionary.class] && ((NSDictionary *)kvsOrKeys).count) {
+        [(NSDictionary *)kvsOrKeys enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            if ([key isKindOfClass:NSString.class] && [obj isKindOfClass:NSString.class]) {
+                id value = [self objectForKey:key];
+                if (!value) value = [NSNull null];
+                [dic setObject:value forKey:obj];
+            } else {
+                NSAssert(0, @"ZCKit: dic key key is invalid");
+            }
+        }];
+    }
+    return [dic copy];
 }
 
 - (NSDictionary *)dictionaryForKeys:(NSArray *)keys {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     if (!keys || !keys.count) return [dic copy];
     for (id key in keys) {
-        id value = self[key];
-        if (value) dic[key] = value;
+        id value = [self objectForKey:key];
+        if (value) [dic setObject:value forKey:key];
     }
     return [dic copy];
 }
@@ -67,9 +93,31 @@
     return [rest copy];
 }
 
+- (id)keyForJsonValue:(id)jsonValue {
+    __block id finalKey = nil;
+    if (self.count && jsonValue && [ZCGlobal isJsonValue:jsonValue]) {
+        [self enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+            if ([ZCGlobal isEqualToJsonValue:jsonValue other:obj]) {
+                finalKey = key; *stop = YES;
+            }
+        }];
+    }
+    return finalKey;
+}
+
 - (BOOL)containsObjectForKey:(id)key {
     if (!key) return NO;
-    return self[key] != nil;
+    return ([self objectForKey:key] == nil ? NO : YES);
+}
+
+- (BOOL)containsValidObjectForKey:(id)key {
+    if (!key) return NO;
+    id obj = [self objectForKey:key];
+    if (obj == nil || obj == NULL || [obj isKindOfClass:[NSNull class]]) return NO;
+    if ([obj isKindOfClass:NSString.class]) {
+        if (![obj length] || [obj isEqualToString:@"<null>"] || [obj isEqualToString:@"(null)"]) return NO;
+    }
+    return YES;
 }
 
 - (BOOL)containsObjectForValue:(id)value {
@@ -77,17 +125,18 @@
     return [self.allValues containsObject:value];
 }
 
-- (NSString *)jsonString {
+- (NSString *)jsonFormatString {
     if ([NSJSONSerialization isValidJSONObject:self]) {
         NSError *error;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&error];
         NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         if (!error && jsonStr) return jsonStr;
     }
+    if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse to json string fail");
     return @"";
 }
 
-#pragma mark - misc
+#pragma mark - Misc
 - (NSData *)plistData {
     return [NSPropertyListSerialization dataWithPropertyList:self format:NSPropertyListBinaryFormat_v1_0 options:kNilOptions error:NULL];
 }
@@ -111,7 +160,25 @@
     return [self dictionaryWithPlistData:data];
 }
 
-#pragma mark - parse
+#pragma mark - Parse
+/** 键是否有效 */
+- (BOOL)keyIsInvalidKey:(NSString *)key {
+    if (key != nil && [key isKindOfClass:[NSString class]]) return NO;
+    NSAssert(0, @"ZCKit: parse dic for key is fail");
+    return YES;
+}
+
+/** 错误时候默认返回 nil*/
+- (ZCJsonValue)jsonValueForKey:(NSString *)key {
+    if ([self keyIsInvalidKey:key]) return nil;
+    id obj = [self objectForKey:key];
+    if (![ZCGlobal isJsonValue:obj]) {
+        NSAssert(0, @"ZCKit: parse json value is not json value");
+        return nil;
+    }
+    return obj;
+}
+
 /** 错误时候默认返回 @[] */
 - (NSArray *)arrayValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return [NSArray array];
@@ -119,7 +186,7 @@
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:[NSArray class]]) {
         arrvalue = (NSArray *)obj;
-    } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
+    } else if (obj == nil || obj == NULL || [obj isKindOfClass:[NSNull class]]) {
         if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse array obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse array obj is invalid");
@@ -135,7 +202,7 @@
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:[NSDictionary class]]) {
         dicvalue = (NSDictionary *)obj;
-    } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
+    } else if (obj == nil || obj == NULL || [obj isKindOfClass:[NSNull class]]) {
         if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse dict obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse dict obj is invalid");
@@ -175,7 +242,7 @@
         } else {
             NSAssert(0, @"ZCKit: parse string obj is invalid string");
         }
-    } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
+    } else if (obj == nil || obj == NULL || [obj isKindOfClass:[NSNull class]]) {
         if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse string obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse string obj is invalid string");
@@ -198,7 +265,7 @@
         } else {
             NSAssert(0, @"ZCKit: parse number obj is invalid number");
         }
-    } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
+    } else if (obj == nil || obj == NULL || [obj isKindOfClass:[NSNull class]]) {
         if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse number obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse number obj is invalid");
@@ -216,7 +283,7 @@
         decvalue = [NSDecimalNumber decimalNumber:obj];
     } else if ([obj isKindOfClass:[NSString class]]) {
         decvalue = [NSDecimalNumber decimalString:obj];
-    } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
+    } else if (obj == nil || obj == NULL || [obj isKindOfClass:[NSNull class]]) {
         if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse decimal obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse decimal obj is invalid");
@@ -247,7 +314,7 @@
         } else {
             NSAssert(0, @"ZCKit: parse price obj is invalid price");
         }
-    } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
+    } else if (obj == nil || obj == NULL || [obj isKindOfClass:[NSNull class]]) {
         if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse price obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse price obj is invalid");
@@ -277,7 +344,7 @@
             NSAssert(0, @"ZCKit: parse long obj is invalid integer");
             intvalue = [obj longValue];
         }
-    } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
+    } else if (obj == nil || obj == NULL || [obj isKindOfClass:[NSNull class]]) {
         if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse long obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse long obj is invalid");
@@ -304,7 +371,7 @@
         } else {
             NSAssert(0, @"ZCKit: parse float obj is invalid number");
         }
-    } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
+    } else if (obj == nil || obj == NULL || [obj isKindOfClass:[NSNull class]]) {
         if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse float obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse float obj is invalid");
@@ -318,23 +385,23 @@
     BOOL boolvalue = defalut;
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:[NSNumber class]]) {
-        if ([[obj stringValue] isEqualToString:@"1"]) {
+        if ([obj isEqualToNumber:@(1)] || [[obj stringValue] isEqualToString:@"1"]) {
             boolvalue = YES;
-        } else if ([[obj stringValue] isEqualToString:@"0"]) {
+        } else if ([obj isEqualToNumber:@(0)] || [[obj stringValue] isEqualToString:@"0"]) {
             boolvalue = NO;
         } else {
             boolvalue = [obj boolValue];
             NSAssert(0, @"ZCKit: parse bool obj is invalid bool");
         }
     } else if ([obj isKindOfClass:[NSString class]]) {
-        if ([obj isEqualToString:@"true"] || [obj isEqualToString:@"YES"] || [obj isEqualToString:@"yes"]) {
+        if ([obj isEqualToString:@"true"] || [obj isEqualToString:@"YES"] || [obj isEqualToString:@"yes"] || [obj isEqualToString:@"1"]) {
             boolvalue = YES;
-        } else if ([obj isEqualToString:@"false"] || [obj isEqualToString:@"NO"] || [obj isEqualToString:@"no"]) {
+        } else if ([obj isEqualToString:@"false"] || [obj isEqualToString:@"NO"] || [obj isEqualToString:@"no"] || [obj isEqualToString:@"0"]) {
             boolvalue = NO;
         } else {
             NSAssert(0, @"ZCKit: parse bool obj is invalid bool");
         }
-    } else if ([obj isKindOfClass:[NSNull class]] || obj == nil || obj == NULL) {
+    } else if (obj == nil || obj == NULL || [obj isKindOfClass:[NSNull class]]) {
         if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse bool obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse bool obj is invalid");
@@ -347,7 +414,7 @@
     return [self boolValueForKey:key defaultValue:NO];
 }
 
-#pragma mark - check
+#pragma mark - Check
 /** 判断字典是否含有指定的键，存在未知键则返回nil，否则返回key对应value的数组 */
 - (NSArray *)checkInvalidKeys:(NSString *)firstKey,... __attribute__((sentinel)) {
     if (self.count && firstKey) {
@@ -373,18 +440,30 @@
     return nil;
 }
 
-#pragma mark - private
-- (BOOL)keyIsInvalidKey:(NSString *)key {
-    if (key != nil && [key isKindOfClass:[NSString class]]) return NO;
-    NSAssert(0, @"ZCKit: parse dic or key is fail");
-    return YES;
-}
-
 @end
 
 
-#pragma mark - ~~~~~~~~~~ NSMutableDictionary ~~~~~~~~~~
+#pragma mark - ~ NSMutableDictionary ~
 @implementation NSMutableDictionary (ZC)
+
+/** 替换键，若传入空键或没有值将按不做处理 */
+- (void)replaceKey:(NSString *)originKey toKey:(NSString *)finalKey {
+    if (!originKey) return;
+    id value = [self objectForKey:originKey];
+    if (!value) return;
+    [self removeObjectForKey:originKey];
+    if (!finalKey) return;
+    [self setObject:value forKey:finalKey];
+}
+
+/** 当从dict按keys取值然后按keys注入到self字典中，为nil则不注入 */
+- (void)extractKeyValueFromDictionary:(NSDictionary *)dictionary forKeys:(NSArray *)keys {
+    if (!keys.count || !dictionary.count) return;
+    for (NSString *key in keys) {if (key && [key isKindOfClass:NSString.class]) {
+        id object = [dictionary objectForKey:key];
+        if (object) [self setObject:object forKey:key];
+    }}
+}
 
 /** 注入布尔值(会转换为NSNumber存储) */
 - (void)injectBoolValue:(BOOL)value forKey:(NSString *)key {
@@ -471,4 +550,3 @@
 }
 
 @end
-

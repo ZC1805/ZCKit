@@ -31,7 +31,7 @@
         titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:ZSA(18)];
+        titleLabel.font = ZCFMS(16);
         titleLabel.textColor = [UIColor colorFromHexString:ZCKitBridge.naviBarTitleColor];
         self.titleView = titleLabel;
     }

@@ -34,7 +34,7 @@
     [self setNeedsDisplay];
 }
 
-#pragma mark - override
+#pragma mark - Override
 - (CGSize)sizeThatFits:(CGSize)size {
     if (_descLabel) {
         return [_descLabel sizeThatFits:size];
@@ -49,7 +49,7 @@
     }
 }
 
-#pragma mark - set
+#pragma mark - Set
 - (void)setLocalImage:(UIImage *)localImage {
     if (_localImage != localImage) {
         _localImage = localImage;
@@ -78,10 +78,17 @@
     }
 }
 
+- (void)setHidden:(BOOL)hidden {
+    [super setHidden:hidden];
+    [self setNeedsDisplay];
+}
+
 - (void)setTouchAction:(void (^)(ZCAvatarControl * _Nonnull))touchAction {
     _touchAction = touchAction;
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventTouchUpInside)) {
-        [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
+            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     if (touchAction) {
         [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -99,7 +106,7 @@
     return _descLabel;
 }
 
-#pragma mark - misc
+#pragma mark - Misc
 - (void)onTouchAction:(id)sender {
     if (_touchAction) _touchAction(self);
 }
@@ -138,7 +145,7 @@
 }
 
 - (void)imageUrl:(NSString *)url holder:(UIImage *)holder {
-    [ZCKitBridge.realize imageWebCache:self url:[NSURL URLWithString:url] holder:holder
+    [ZCKitBridge.realize imageWebCache:self url:[NSURL URLWithString:ZCStrNonnil(url)] holder:holder
                             assignment:^(UIImage * _Nullable image, NSData * _Nullable imageData,
                                          NSInteger cacheType, NSURL * _Nullable imageURL) {
                                 self.localImage = image;

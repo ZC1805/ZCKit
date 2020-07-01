@@ -17,29 +17,31 @@
 
 @implementation UINavigationItem (ZC)
 
-- (ZCButton *)itemCustomBackTitle:(NSString *)title image:(UIImage *)image {
-    if (title == nil) title = @"";
-    CGFloat height = 32.0, offset = 6.0;
+- (ZCButton *)itemCustomBackTitle:(NSString *)title color:(UIColor *)color image:(UIImage *)image {
+    CGFloat offset = 8.0;
+    CGFloat height = 32.0;
     UIImage *iamgeIm = image;
-    if (!iamgeIm) iamgeIm = ZCIN(ZCKitBridge.naviBackImageName);
+    if (title == nil) title = @"";
+    if (color == nil) color = ZCWhite;
+    if (!iamgeIm) iamgeIm = ZCKitBridge.naviBackImage;
     iamgeIm = [iamgeIm imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     ZCButton *back = [ZCButton buttonWithType:UIButtonTypeCustom];
     [back setTitle:title forState:UIControlStateNormal];
     [back setTitle:title forState:UIControlStateHighlighted];
-    [back setTitleColor:ZCRGB(0xFFFFFF) forState:UIControlStateNormal];
-    [back setTitleColor:ZCRGBA(0xFFFFFF, 0.3) forState:UIControlStateHighlighted];
+    [back setTitleColor:color forState:UIControlStateNormal];
+    [back setTitleColor:ZCCA(color, 0.3) forState:UIControlStateHighlighted];
     [back setImage:iamgeIm forState:UIControlStateNormal];
     [back setImage:[iamgeIm imageWithAlpha:0.3] forState:UIControlStateHighlighted];
     [back addTarget:self action:@selector(onManualPop:) forControlEvents:UIControlEventTouchUpInside];
     back.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     back.adjustsImageWhenHighlighted = YES;
-    back.titleLabel.font = ZCFS(16);
+    back.titleLabel.font = ZCFS(15);
     CGSize size = [back.titleLabel sizeThatFits:CGSizeMake(100.0, height)];
     back.size = CGSizeMake(MAX(size.width + 18.0, height), height);
     back.responseTouchInterval = 0.3;
-    back.delayResponseTime = 0.2;
-    back.imageEdgeInsets = UIEdgeInsetsMake(0, -offset, 0, 0);
-    back.titleEdgeInsets = UIEdgeInsetsMake(0, -offset, 0, 0);
+    back.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
+    back.imageEdgeInsets = UIEdgeInsetsMake(-ZSSepHei, -offset, 0, 0);
+    back.titleEdgeInsets = UIEdgeInsetsMake(-ZSSepHei, -offset, 0, 0);
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithCustomView:back];
     self.leftItemsSupplementBackButton = NO;
     self.leftBarButtonItem = item;
@@ -65,9 +67,10 @@
     }
 }
 
-- (ZCButton *)itemRightOneItem:(NSString *)item target:(id)target action:(SEL)action {
+- (ZCButton *)itemRightOneItem:(NSString *)item color:(UIColor *)color target:(id)target action:(SEL)action {
     CGFloat height = 32.0;
     if (item == nil) item = @"";
+    if (color == nil) color = ZCWhite;
     ZCButton *rightBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
     UIImage *iamgeIm = [ZCIN(item) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     if (iamgeIm) {
@@ -76,19 +79,20 @@
     } else {
         [rightBtn setTitle:item forState:UIControlStateNormal];
         [rightBtn setTitle:item forState:UIControlStateHighlighted];
-        [rightBtn setTitleColor:ZCRGB(0xFFFFFF) forState:UIControlStateNormal];
-        [rightBtn setTitleColor:ZCRGBA(0xFFFFFF, 0.3) forState:UIControlStateHighlighted];
+        [rightBtn setTitleColor:color forState:UIControlStateNormal];
+        [rightBtn setTitleColor:ZCCA(color, 0.3) forState:UIControlStateHighlighted];
     }
     if (target && action && [target respondsToSelector:action]) {
         [rightBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     }
     rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     rightBtn.adjustsImageWhenHighlighted = YES;
-    rightBtn.titleLabel.font = ZCFS(16);
+    rightBtn.titleLabel.font = ZCFS(15);
+    rightBtn.titleLabel.numberOfLines =0;
     CGSize size = [rightBtn.titleLabel sizeThatFits:CGSizeMake(100.0, height)];
     rightBtn.size = CGSizeMake(MAX(size.width, 30.0), height);
     rightBtn.responseTouchInterval = 0.3;
-    rightBtn.delayResponseTime = 0.2;
+    rightBtn.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     self.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     return rightBtn;
 }
@@ -105,7 +109,7 @@
     rightBtn.adjustsImageWhenHighlighted = YES;
     rightBtn.size = CGSizeMake(width, height);
     rightBtn.responseTouchInterval = 0.3;
-    rightBtn.delayResponseTime = 0.2;
+    rightBtn.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     CGFloat edgeLeft = width - (height - 2.0 * offset), edgeRight = 0;
     if (self.rightBarButtonItems.count) {edgeLeft = edgeLeft / 2.0; edgeRight = edgeLeft;}
     rightBtn.imageView.contentMode = UIViewContentModeScaleToFill;
@@ -125,4 +129,3 @@
 }
 
 @end
-

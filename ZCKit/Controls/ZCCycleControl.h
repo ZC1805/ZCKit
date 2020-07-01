@@ -24,6 +24,15 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @class ZCCycleControl;
 
+@interface ZCCycleCell : UICollectionViewCell
+
+@property (nonatomic, weak, readonly) UILabel *titleLabel;  /**< 显示的文字 */
+
+@property (nonatomic, weak, readonly) UIImageView *imageView;  /**< 显示的图片 */
+
+@end
+
+
 @protocol ZCCycleControlDelegate <NSObject>  /**< 回调可实现的方法 */
 
 @optional
@@ -32,12 +41,14 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 - (void)cycleControl:(ZCCycleControl *)cycleControl didSelectAtIndex:(NSInteger)index;  /**< 点击图片 */
 
+- (void)cycleControl:(ZCCycleControl *)cycleControl cell:(ZCCycleCell *)cell indexPath:(NSIndexPath *)indexPath;  /**< 代理返回的cell，在此可对Cell再加工 */
+
 @end
 
 
 @interface ZCCycleControl : UIView  /**< 循环page控件 */
 
-#pragma mark - set
+#pragma mark - Set
 @property (nonatomic, assign) BOOL isAutoScroll;  /**< 是否自动滚动，默认YES */
 
 @property (nonatomic, assign) BOOL isInfiniteLoop;  /**< 是否无限循环，默认YES */
@@ -74,7 +85,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @property (nullable, nonatomic, strong) UIImage *pageDotImage;  /**< 其他分页控件小圆标图片，nil */
 
-#pragma mark - call
+#pragma mark - Call
 @property (nullable, nonatomic, strong) NSArray *titlesGroup;  /**< 每张图片对应要显示的文字数组，默认nil */
 
 @property (nullable, nonatomic, strong) NSArray *imageURLStringsGroup;  /**< 网络图片 url string 数组，默认nil */
@@ -89,12 +100,12 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @property (nullable, nonatomic, copy) void (^scrollAction)(NSInteger currentIndex);  /**< block方式监听滚动回调，默认nil */
 
-#pragma mark - init
+#pragma mark - Init
 /** Url初始化，数组内可为NSUrl或NSString */
 - (instancetype)initWithFrame:(CGRect)frame imageUrlGroup:(NSArray *)imageUrlGroup;
 
-/** 本地图片初始化，loop是否循环 */
-- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(NSArray <UIImage *>*)imageGroup;
+/** 本地图片初始化，loop是否循环，space是否有水平间距布局 */
+- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(NSArray <UIImage *>*)imageGroup itemHorSpace:(CGFloat)itemHorSpace isShowMultiple:(BOOL)isShowMultiple;
 
 /** 代理初始化，holders占位image */
 - (instancetype)initWithFrame:(CGRect)frame delegate:(nullable id<ZCCycleControlDelegate>)delegate holder:(nullable UIImage *)holder;

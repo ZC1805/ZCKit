@@ -11,7 +11,7 @@
 
 @implementation UISearchBar (ZC)
 
-- (void)setRightCancelText:(NSString *)rightCancelText {
+- (void)setRightCancelText:(NSString *)rightCancelText { //iOS13问题
     [self setValue:[rightCancelText copy] forKey:@"_cancelButtonText"];
 }
 
@@ -21,7 +21,7 @@
 }
 
 - (void)setLeftSearchIcon:(UIImage *)leftSearchIcon {
-    [self setImage:ZCIN(@"i_side_search")  forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
+    [self setImage:leftSearchIcon forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
 }
 
 - (UIImage *)leftSearchIcon {

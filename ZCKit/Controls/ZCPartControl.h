@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class ZCButton;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCPartSet : NSObject  /**< 通用设置 */
@@ -22,9 +24,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UIFont *selectTitleFont;  /**< 默认system15 */
 
-@property (nonatomic, assign) int normalColorRGB;  /**< 默认0x303030 */
+@property (nonatomic, assign) uint32_t normalColorRGB;  /**< 默认0x303030 */
 
-@property (nonatomic, assign) int selectColorRGB;  /**< 默认0xff0000 */
+@property (nonatomic, assign) uint32_t selectColorRGB;  /**< 默认0xFF0000 */
 
 @property (nonatomic, assign) CGFloat spaceHeight;  /**< 分割线高度，默认20 */
 
@@ -44,11 +46,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
-/** 点击触发selectIndex值改变在此回调 */
-- (void)partControl:(ZCPartControl *)partControl didSelectItemAtIndex:(NSUInteger)index;
+/** 用户点击触发barBtn在此回调，可能为-1 */
+- (void)partControl:(ZCPartControl *)partControl didSelectItemAtIndex:(NSUInteger)aimIndex fromIndex:(NSUInteger)fromIndex;
 
-/** selectIndexd发生改变(index有可能会等于-1)，关联scroll view时候，可能会3->2->1->0，而不是3->0 */
-- (void)partControl:(ZCPartControl *)partControl selectIndexDidChange:(NSInteger)index;
+/** selectIndexd发生改变(index有可能会等于-1)，关联scroll view时候，可能会3->2->1->0，而不是3->0，isTouchTrigger是非滑动触发 */
+- (void)partControl:(ZCPartControl *)partControl selectIndexDidChange:(NSInteger)index isTouchTrigger:(BOOL)isTouchTrigger isActiveSlid:(BOOL)isActiveSlid;
 
 /** 在此回调可以设置ZCPartSet属性 */
 - (void)partControl:(ZCPartControl *)partControl didInitialPartSet:(ZCPartSet *)partSet index:(NSInteger)index;
@@ -76,6 +78,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, strong) UIImage *alphaImage;  /**< 两头半透明视图，默认nil */
 
+@property (nonatomic, strong, readonly) UIView *backgroundView;  /**< 背景视图，默认为透明的view */
+
 @property (nonatomic, readonly) NSInteger currentSelectIndex;  /**< 当前选择index，默认-1 */
 
 @property (nonatomic, weak) id <ZCPartControlDelegate> delegate;  /**< 代理，默认nil */
@@ -88,14 +92,20 @@ NS_ASSUME_NONNULL_BEGIN
 /** selectIndex == -1时，即一个都不选择，其余超出范围或者不规范的selectIndex将置0 */
 - (void)selectToIndex:(NSInteger)selectIndex animated:(BOOL)animated;
 
+/** 屏蔽一次selectIndexDidChange的回调，一般用于在associate前屏蔽第一次回调 */
+- (void)shieldOnceSelectIndexDidChange;
+
 /** 载入内容，items成员可以是NSString或者ZCPartSet对象 */
 - (void)reloadItems:(NSArray *)items;
 
-/** 关联滑动的scroll view，最好在reloadItems后设置 */
+/** 关联滑动的scroll view，会校验下设置的index，最好在reloadItems后设置 */
 - (void)associateScrollView:(UIScrollView *)scrollView;
 
-/** 释放滑动的scroll view，适当时候手动释放 */
+/** 释放滑动的scroll view，适当时候手动释放(注意:如果不是添加在当前控制器的View上需要在dealloc中手动调用此方法) */
 - (void)releaseAssociateScrollView;
+
+/** 按index获取bar上面的button */
+- (nullable ZCButton *)barButtonWithIndex:(NSInteger)index;
 
 @end
 

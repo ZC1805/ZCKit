@@ -9,10 +9,11 @@
 #import "UIScrollView+ZC.h"
 #import <objc/runtime.h>
 #import "UIView+ZC.h"
+#import "ZCMacro.h"
 
 @implementation UIScrollView (ZC)
 
-#pragma mark - usually
+#pragma mark - Usually
 - (void)setOffsetX:(CGFloat)offsetX {
     CGPoint offset = self.contentOffset;
     offset.x = offsetX;
@@ -113,7 +114,7 @@
     return self.visualOffset.y;
 }
 
-#pragma mark - offset
+#pragma mark - Offset
 - (void)setVisualOffset:(CGPoint)visualOffset {
     self.contentOffset = [self convertToContentOffsetFromVisualOffset:visualOffset];
 }
@@ -172,27 +173,39 @@
     }
 }
 
-#pragma mark - offset
-- (UIView *)topExpandOffsetView { //frame变化不联动
+#pragma mark - Offset
+- (UIView *)topExpandOffsetView { //frame&contentSize变化不联动
     UIView *topv = objc_getAssociatedObject(self, _cmd);
     if (!topv) {
         topv = [[UIView alloc] initWithFrame:CGRectZero color:self.backgroundColor];
         objc_setAssociatedObject(self, _cmd, topv, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self addSubview:topv];
     }
-    topv.frame = CGRectMake(-150.0, -self.height, MAX(self.height, self.sizeWidth) + 300.0, self.height);
+    topv.frame = CGRectMake(-200.0, -self.height, MAX(self.height, self.sizeWidth) + 400.0, self.height);
     [self sendSubviewToBack:topv];
     return topv;
 }
 
-- (UIView *)bottomExpandOffsetView { //frame变化不联动
+- (UIView *)bottomExpandOffsetView { //frame&contentSize变化不联动
     UIView *bottomv = objc_getAssociatedObject(self, _cmd);
     if (!bottomv) {
         bottomv = [[UIView alloc] initWithFrame:CGRectZero color:self.backgroundColor];
         objc_setAssociatedObject(self, _cmd, bottomv, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self addSubview:bottomv];
     }
-    bottomv.frame = CGRectMake(-150.0, MAX(self.height, self.sizeHeight), MAX(self.height, self.sizeWidth) + 300.0, self.height);
+    CGFloat resBottom = 0;
+    if ([self isKindOfClass:UITableView.class] && [(UITableView *)self style] == UITableViewStyleGrouped) {
+        if (self.currentViewController.automaticallyAdjustsScrollViewInsets) {
+            resBottom = 20.0;
+        }
+        if (@available(iOS 11.0, *)) {
+            if (self.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentAutomatic) {
+                resBottom = 20.0;
+            }
+        }
+    }
+    CGFloat top = self.sizeHeight - self.insetBottom - resBottom;
+    bottomv.frame = CGRectMake(-200.0, top, MAX(self.height, self.sizeWidth) + 400.0, self.height + 500);
     [self sendSubviewToBack:bottomv];
     return bottomv;
 }
@@ -213,8 +226,24 @@
     return self.bottomExpandOffsetView.backgroundColor;
 }
 
-#pragma mark - direction
-static NSString *directionOffset = @"contentOffset";
+#pragma mark - Basic
+- (UIScrollView *)initWithFrame:(CGRect)frame isPaging:(BOOL)isPaging isBounces:(BOOL)isBounces {
+    if (self = [self initWithFrame:frame]) {
+        self.showsHorizontalScrollIndicator = NO;
+        self.showsVerticalScrollIndicator = NO;
+        self.backgroundColor = ZCClear;
+        self.directionalLockEnabled = YES;
+        self.pagingEnabled = isPaging;
+        self.bounces = isBounces;
+        if (frame.size.height > 0) {
+            self.contentSize = CGSizeMake(frame.size.width, frame.size.height + ZSSepHei);
+        }
+    }
+    return self;
+}
+
+#pragma mark - Direction
+static NSString * const directionOffset = @"contentOffset";
 static void *directionContext = @"scrollViewDirectionContext";
 - (void)startObservingDirection {
     [self addObserver:self forKeyPath:directionOffset options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:directionContext];
@@ -263,24 +292,26 @@ static void *directionContext = @"scrollViewDirectionContext";
                              [NSNumber numberWithInteger:verticalScrollingDirection], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-#pragma mark - private
+#pragma mark - Private
 - (void)shieldNavigationInteractivePop { //使系统导航手势失效，不可逆
     UIViewController *controller = self.currentViewController;
-    if (controller && controller.navigationController) {
+    if (controller && controller.navigationController && controller.parentViewController == controller.navigationController) {
         [self.panGestureRecognizer requireGestureRecognizerToFail:controller.navigationController.interactivePopGestureRecognizer];
     }
 }
 
-- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer //返回手势和表视图手势互斥
-shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    if ([otherGestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]] &&
-        [otherGestureRecognizer.view isKindOfClass:NSClassFromString(@"UILayoutContainerView")]) {
-        if (otherGestureRecognizer.state == UIGestureRecognizerStateBegan && self.contentOffset.x == 0) {
-            return YES;
-        }
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if ([otherGestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]] && [otherGestureRecognizer.view isKindOfClass:NSClassFromString(@"UILayoutContainerView")]) {
+        if (otherGestureRecognizer.state == UIGestureRecognizerStateBegan && self.contentOffset.x == 0) return YES;
+    }
+    return NO;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if ([otherGestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]] && [otherGestureRecognizer.view isKindOfClass:NSClassFromString(@"UILayoutContainerView")]) {
+        if (otherGestureRecognizer.state == UIGestureRecognizerStateBegan && self.contentOffset.x == 0) return YES;
     }
     return NO;
 }
 
 @end
-

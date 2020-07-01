@@ -7,9 +7,16 @@
 //
 
 #import "ZCBlankControl.h"
+#import "UIImage+ZC.h"
 #import "UILabel+ZC.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
+
+@interface ZCBlankControl ()
+
+@property (nonatomic, strong) UIImageView *originImageView;
+
+@end
 
 @implementation ZCBlankControl
 
@@ -18,14 +25,17 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    CGFloat allHei = 0, space = ZSA(20);
+    if ([self isSeatView:_originImageView]) {
+        _originImageView.frame = self.bounds;
+    }
+    CGFloat allHei = 0, space = ZSA(23);
     if ([self isSeatView:_headerLabel]) {
         _headerLabel.size = [_headerLabel sizeThatFits:CGSizeMake(self.width - 2 * ZSMInvl, MAXFLOAT)];
         _headerLabel.centerX = self.width / 2.0;
         allHei = allHei + _headerLabel.height + space;
     }
     if ([self isSeatView:_imageView]) {
-        _imageView.size = _imageView.image.size;
+        if (CGSizeEqualToSize(_imageView.size, CGSizeZero)) _imageView.size = _imageView.image.size;
         _imageView.centerX = self.width / 2.0;
         allHei = allHei + _imageView.height + space;
     }
@@ -35,14 +45,16 @@
         allHei = allHei + _contentLabel.height + space;
     }
     if ([self isSeatView:_handleButton]) {
-        CGFloat height = _handleButton.imageView.image.size.height;
-        CGFloat width = _handleButton.imageView.image.size.width;
-        width = width + ZSA(20);
-        CGFloat calwid = self.width - 2 * ZSMInvl - width;
-        CGSize size = [_handleButton.titleLabel sizeThatFits:CGSizeMake(calwid, MAXFLOAT)];
-        width = width + size.width;
-        height = MAX(height, size.height) + ZSA(20);
-        _handleButton.size = CGSizeMake(width, height);
+        if (CGSizeEqualToSize(_handleButton.size, CGSizeZero)) {
+            CGFloat height = _handleButton.imageView.image.size.height;
+            CGFloat width = _handleButton.imageView.image.size.width;
+            width = width + ZSA(20);
+            CGFloat calwid = self.width - 2 * ZSMInvl - width;
+            CGSize size = [_handleButton.titleLabel sizeThatFits:CGSizeMake(calwid, MAXFLOAT)];
+            width = width + size.width;
+            height = MAX(height, size.height) + ZSA(20);
+            _handleButton.size = CGSizeMake(width, height);
+        }
         _handleButton.centerX = self.width / 2.0;
         allHei = allHei + _handleButton.height + space;
     }
@@ -83,7 +95,7 @@
     }
 }
 
-#pragma mark - get
+#pragma mark - Get
 - (UILabel *)headerLabel {
     if (!_headerLabel) {
         _headerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:ZCFS(16) color:ZCBlack30];
@@ -115,12 +127,10 @@
     return _contentLabel;
 }
 
-- (UIButton *)handleButton {
+- (ZCButton *)handleButton {
     if (!_handleButton) {
-        _handleButton = [UIButton buttonWithType:UIButtonTypeCustom];
+        _handleButton = [ZCButton buttonWithType:UIButtonTypeCustom];
         _handleButton.titleLabel.font = ZCFS(15);
-        [_handleButton setBackgroundImage:ZCIC(0xEEEEEE) forState:UIControlStateNormal];
-        [_handleButton setBackgroundImage:ZCIA(ZCIC(0xEEEEEE), 0.3) forState:UIControlStateHighlighted];
         [_handleButton setCorner:ZSA(3) color:ZCClear width:ZSA(0)];
         [self addSubview:_handleButton];
     }
@@ -146,24 +156,39 @@
     return _containerView;
 }
 
-#pragma mark - set
+- (UIImageView *)originImageView {
+    if (!_originImageView) {
+        _originImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _originImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _originImageView.userInteractionEnabled = NO;
+        _originImageView.backgroundColor = self.backgroundColor;
+        [self addSubview:_originImageView];
+    }
+    return _originImageView;
+}
+
+#pragma mark - Set
 - (void)setTouchAction:(void (^)(BOOL))touchAction {
     _touchAction = touchAction;
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventTouchUpInside)) {
-        [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
+            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     if (_touchAction) {
         [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     if ([_handleButton.allTargets containsObject:self] && (_handleButton.allControlEvents & UIControlEventTouchUpInside)) {
-        [_handleButton removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[_handleButton actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
+            [_handleButton removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        }
     }
     if (_touchAction) {
         [_handleButton addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
-#pragma mark - misc
+#pragma mark - Misc
 - (void)onTouchAction:(id)sender {
     if (_touchAction) _touchAction(sender == self ? NO : YES);
 }
@@ -175,11 +200,14 @@
     return NO;
 }
 
-#pragma mark - api
+#pragma mark - Api
 - (void)resetSize {
     [self layoutSubviews];
     if (self.superview && !self.hidden) {
         [self.superview bringSubviewToFront:self];
+    }
+    if ([self isSeatView:_originImageView]) {
+        [self bringSubviewToFront:_originImageView];
     }
 }
 
@@ -188,18 +216,38 @@
 }
 
 - (void)setHidden:(BOOL)hidden animated:(BOOL)animated {
-    if (animated) {
-        [UIView animateWithDuration:0.3 animations:^{
+    BOOL isShowHiddenAnim = YES;
+    if ([self isSeatView:_originImageView]) {
+        if (hidden && !_originImageView.hidden) isShowHiddenAnim = NO;
+        if (isShowHiddenAnim) _originImageView.hidden = YES;
+    }
+    if (self.hidden != hidden) {
+        if (animated) {
+            [UIView animateWithDuration:0.25 animations:^{
+                self.alpha = hidden ? 0 : 1;
+            } completion:^(BOOL finished) {
+                [super setHidden:hidden];
+                [self resetSize];
+                if (!isShowHiddenAnim) {
+                    self->_originImageView.hidden = YES;
+                }
+            }];
+        } else {
             self.alpha = hidden ? 0 : 1;
-        } completion:^(BOOL finished) {
             [super setHidden:hidden];
             [self resetSize];
-        }];
-    } else {
-        self.alpha = hidden ? 0 : 1;
-        [super setHidden:hidden];
-        [self resetSize];
+            if (!isShowHiddenAnim) {
+                _originImageView.hidden = YES;
+            }
+        }
     }
+}
+
+- (void)setInitHidden {
+    self.originImageView.hidden = NO;
+    self.alpha = 1;
+    [super setHidden:NO];
+    [self resetSize];
 }
 
 - (void)resetImage:(UIImage *)image message:(NSString *)message {

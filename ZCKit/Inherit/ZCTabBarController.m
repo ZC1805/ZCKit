@@ -32,7 +32,7 @@
     self.view.frame = [UIScreen mainScreen].bounds; //会话界面发送拍摄的视频，拍摄结束后点击发送后可能顶部会有红条，导致的界面错位。
 }
 
-#pragma mark - override
+#pragma mark - Override
 - (BOOL)prefersStatusBarHidden {
     if (self.selectedViewController) {
         return [self.selectedViewController prefersStatusBarHidden];
@@ -130,14 +130,8 @@
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    if (self.isUsePushStyleToPresent) {
-        CATransition *transition = [CATransition animation];
-        transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
-        transition.duration = 0.375;
-        transition.type = kCATransitionPush;
-        transition.subtype = kCATransitionFromLeft;
-        [self.view.layer addAnimation:transition forKey:nil];
-        [super dismissViewControllerAnimated:NO completion:completion];
+    if (self.isUsePushStyleToPresent) { //待实现
+        [super dismissViewControllerAnimated:flag completion:completion];
     } else {
         [super dismissViewControllerAnimated:flag completion:completion];
     }
@@ -148,14 +142,8 @@
         [self.presentFromViewController presentViewController:viewControllerToPresent animated:flag completion:completion];
     } else {
         if ([viewControllerToPresent respondsToSelector:@selector(isUsePushStyleToPresent)] &&
-            [(id<ZCViewControllerPrivateProtocol>)viewControllerToPresent isUsePushStyleToPresent]) {
-            CATransition *transition = [CATransition animation];
-            transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionDefault];
-            transition.duration = 0.375;
-            transition.type = kCATransitionPush;
-            transition.subtype = kCATransitionFromRight;
-            [self.view.layer addAnimation:transition forKey:nil];
-            [super presentViewController:viewControllerToPresent animated:NO completion:completion];
+            [(id<ZCViewControllerPrivateProtocol>)viewControllerToPresent isUsePushStyleToPresent]) { //待实现
+            [super presentViewController:viewControllerToPresent animated:flag completion:completion];
         } else {
             [super presentViewController:viewControllerToPresent animated:flag completion:completion];
         }

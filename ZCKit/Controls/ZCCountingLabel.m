@@ -10,7 +10,7 @@
 #import "ZCMacro.h"
 #import <QuartzCore/QuartzCore.h>
 
-#pragma mark - ~~~~~~~~~~ UILabelCounterAnim ~~~~~~~~~~
+#pragma mark - ~ UILabelCounterAnim ~
 @interface UILabelCounterLinear : NSObject
 
 @end
@@ -65,7 +65,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCCountingLabel ~~~~~~~~~~
+#pragma mark - ~ ZCCountingLabel ~
 @interface ZCCountingLabel ()
 
 @property (nonatomic, assign) CGFloat startingValue;
@@ -210,4 +210,3 @@
 }
 
 @end
-

@@ -20,23 +20,23 @@
 
 @implementation UIDevice (ZC)
 
-#pragma mark - usually
+#pragma mark - Usually
 + (double)systemVersion {
-    static double version;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        version = [UIDevice currentDevice].systemVersion.doubleValue;
+    static double kDeviceVersion;
+    static dispatch_once_t onceToken1;
+    dispatch_once(&onceToken1, ^{
+        kDeviceVersion = [UIDevice currentDevice].systemVersion.doubleValue;
     });
-    return version;
+    return kDeviceVersion;
 }
 
 + (BOOL)isPad {
-    static dispatch_once_t one;
-    static BOOL pad;
-    dispatch_once(&one, ^{
-        pad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
+    static BOOL kDeviceIsPad;
+    static dispatch_once_t onceToken2;
+    dispatch_once(&onceToken2, ^{
+        kDeviceIsPad = UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad;
     });
-    return pad;
+    return kDeviceIsPad;
 }
 
 + (BOOL)isSimulator {
@@ -49,12 +49,12 @@
 
 #ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
 + (BOOL)isCanMakePhoneCalls {
-    __block BOOL can;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        can = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]];
+    static BOOL kDeviceIsCall;
+    static dispatch_once_t onceToken3;
+    dispatch_once(&onceToken3, ^{
+        kDeviceIsCall = [[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:@"tel://"]];
     });
-    return can;
+    return kDeviceIsCall;
 }
 #endif
 
@@ -105,7 +105,7 @@
     return [NSProcessInfo processInfo].systemUptime;
 }
 
-#pragma mark - misc
+#pragma mark - Misc
 + (int64_t)diskSpace {
     NSError *error = nil;
     NSDictionary *attrs = [[NSFileManager defaultManager] attributesOfFileSystemForPath:NSHomeDirectory() error:&error];
@@ -121,11 +121,11 @@
     return mem;
 }
 
-#pragma mark - other
+#pragma mark - Other
 + (NSString *)iphoneDeviceName {
+    NSString *iphoneType = nil;
     struct utsname systemInfo; uname(&systemInfo);
     NSString *platform = [NSString stringWithCString:systemInfo.machine encoding:NSASCIIStringEncoding];
-    NSString *iphoneType = platform ? platform : @"";
     if ([platform isEqualToString:@"iPhone1,1"]) iphoneType = @"iPhone 2G";
     else if ([platform isEqualToString:@"iPhone1,2"]) iphoneType = @"iPhone 3G";
     else if ([platform isEqualToString:@"iPhone2,1"]) iphoneType = @"iPhone 3GS";
@@ -159,8 +159,12 @@
     else if ([platform isEqualToString:@"iPhone11,3"]) iphoneType = @"iPhone XS Max";
     else if ([platform isEqualToString:@"iPhone11,6"]) iphoneType = @"iPhone XS Max";
     else if ([platform isEqualToString:@"iPhone11,8"]) iphoneType = @"iPhone XR";
+    else if ([platform isEqualToString:@"iPhone12,1"]) iphoneType = @"iPhone 11";
+    else if ([platform isEqualToString:@"iPhone12,3"]) iphoneType = @"iPhone 11 Pro";
+    else if ([platform isEqualToString:@"iPhone12,5"]) iphoneType = @"iPhone 11 Pro Max";
     else if ([platform isEqualToString:@"i386"]) iphoneType = @"iPhone Simulator";
     else if ([platform isEqualToString:@"x86_64"]) iphoneType = @"iPhone Simulator";
+    else iphoneType = @"iPhone";
     return iphoneType;
 }
 

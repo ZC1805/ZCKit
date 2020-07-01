@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, ZCEnumRoundType) {
 
 @interface ZCDecimalManager : NSObject <NSDecimalNumberBehaviors>  /**< 浮点数计算类 */
 
-#pragma mark - decimal number
+#pragma mark - Decimal number
 /** 获取DecimalHandler，来处理四舍五入 */
 + (NSDecimalNumberHandler *)decimalHandler:(int)decimal type:(ZCEnumRoundType)type;
 
@@ -37,9 +37,9 @@ typedef NS_ENUM(NSInteger, ZCEnumRoundType) {
 /** 保留指定位数有效小数，后面舍去 */
 + (nullable NSString *)formatFloorNumber:(NSNumber *)number digits:(int)digits;
 
-#pragma mark - number function
+#pragma mark - Number function
 /** 唯一实例 */
-+ (instancetype)instance;
++ (instancetype)sharedManager;
 
 /** 去除无效数字，只对浮点数有用 */
 + (NSString *)stringDisposeWithFloatString:(NSString *)floatString;

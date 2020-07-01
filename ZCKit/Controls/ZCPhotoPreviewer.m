@@ -53,7 +53,7 @@
 - (void)initialSet {
     self.backgroundColor = ZCClear;
     self.frame = [UIScreen mainScreen].bounds;
-    self.textOriginColor = ZCRGB(0xF8F8F8);
+    self.textOriginColor = ZCBKColor;
     self.isAllowDoubleTap = NO;
     self.isUseDarkStyle = YES;
     self.isInAnimation = NO;
@@ -92,7 +92,7 @@
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero color:ZCClear];
         _titleLabel.font = ZCFS(16);
         _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.textColor = self.isUseDarkStyle ? self.textOriginColor : ZCRGB(0x303030);
+        _titleLabel.textColor = self.isUseDarkStyle ? self.textOriginColor : ZCBlack30;
         _titleLabel.frame = CGRectMake(30.0, ZSStuBarHei, self.width - 60.0, ZSNaviBarHei);
         [self addSubview:self.titleLabel];
     }
@@ -112,12 +112,12 @@
 - (void)setIsUseDarkStyle:(BOOL)isUseDarkStyle {
     _isUseDarkStyle = isUseDarkStyle;
     if (_titleLabel && [_titleLabel.textColor isEqual:self.textOriginColor]) {
-        _titleLabel.textColor = ZCRGB(0x303030);
+        _titleLabel.textColor = ZCBlack30;
     }
 }
 
-#pragma mark - kvo
-static NSString *observeImageKey = @"image";
+#pragma mark - Kvo
+static NSString * const observeImageKey = @"image";
 static void *imageObserveContext = @"imageObserveContext";
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:observeImageKey] && object == self.carrier && context == imageObserveContext) {
@@ -144,7 +144,7 @@ static void *imageObserveContext = @"imageObserveContext";
     }
 }
 
-#pragma mark - func
+#pragma mark - Func
 + (void)display:(UIImage *)image ctor:(void (^)(ZCPhotoPreviewer * _Nonnull))ctor {
     ZCPhotoPreviewer *previewer = [[ZCPhotoPreviewer alloc] initWithFrame:CGRectZero];
     if (ctor) ctor(previewer);
@@ -190,12 +190,12 @@ static void *imageObserveContext = @"imageObserveContext";
     [[UIApplication sharedApplication] setStatusBarHidden:YES];
     #pragma clang diagnostic pop
     UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut;
-    [UIView animateWithDuration:0.28 delay:0 options:options animations:^{
+    [UIView animateWithDuration:0.25 delay:0 options:options animations:^{
         self.isInAnimation = YES;
-        self.blurBKView.alpha = 1.0;
+        self.blurBKView.alpha = 1;
         self.imageView.frame = self.containerView.bounds;
-        if (!self.carrier) self.imageView.alpha = 1.0;
-        if (self->_titleLabel) self->_titleLabel.alpha = 1.0;
+        if (!self.carrier) self.imageView.alpha = 1;
+        if (self->_titleLabel) self->_titleLabel.alpha = 1;
         if (self.radius) self.imageView.layer.cornerRadius = 0;
     } completion:^(BOOL finished) {
         self.isInAnimation = NO;
@@ -206,7 +206,7 @@ static void *imageObserveContext = @"imageObserveContext";
 
 - (void)dismiss {
     UIViewAnimationOptions options = UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionCurveEaseOut;
-    [UIView animateWithDuration:0.28 delay:0 options:options animations:^{
+    [UIView animateWithDuration:0.25 delay:0 options:options animations:^{
         self.isInAnimation = YES;
         self.blurBKView.alpha = 0;
         self.imageView.frame = self.fromRect;
@@ -225,7 +225,7 @@ static void *imageObserveContext = @"imageObserveContext";
     }];
 }
 
-#pragma mark - misc
+#pragma mark - Misc
 - (void)layoutFrame:(CGSize)imageSize {
     if (@available(iOS 11.0, *)) {
         self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;

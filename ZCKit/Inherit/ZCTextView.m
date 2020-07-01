@@ -7,12 +7,13 @@
 //
 
 #import "ZCTextView.h"
+#import "ZCMacro.h"
 
 @interface ZCTextView () <UITextViewDelegate>
 
 @property (nonatomic, strong) UILabel *placeholderLabel;
 
-@property (nonatomic, copy) BOOL(^shouldChangeText1)(ZCTextView *textView, NSRange range, NSString *text);
+@property (nonatomic, copy) BOOL(^shouldChangeText1)(ZCTextView *textView, NSRange range, NSString *string);
 
 @property (nonatomic, copy) BOOL(^shouldBeginEdit1)(ZCTextView *textView);
 
@@ -46,6 +47,26 @@
     return self;
 }
 
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender {
+    if (_isForbidVisibleMenu) {
+        if ([UIMenuController sharedMenuController]) {
+            [UIMenuController sharedMenuController].menuVisible = NO;
+        }
+        return NO;
+    } else {
+        if (_isOnlyAllowCopyPasteSelect) {
+            NSString *selector = NSStringFromSelector(action);
+            if ([selector isEqualToString:@"copy:"]) return YES;
+            if ([selector isEqualToString:@"paste:"]) return YES;
+            if ([selector isEqualToString:@"select:"]) return YES;
+            if ([selector isEqualToString:@"selectAll:"]) return YES;
+            return NO;
+        } else {
+            return [super canPerformAction:action withSender:sender];
+        }
+    }
+}
+
 - (void)refreshPlaceholder {
     if (self.text.length || self.attributedText.length) {
         [_placeholderLabel setAlpha:0];
@@ -56,7 +77,7 @@
     [self layoutIfNeeded];
 }
 
-#pragma mark - override
+#pragma mark - Override
 - (void)setText:(NSString *)text {
     [super setText:text];
     [self refreshPlaceholder];
@@ -94,7 +115,7 @@
     }
 }
 
-#pragma mark - set
+#pragma mark - Set
 - (void)setPlaceholder:(NSString *)placeholder {
     _placeholder = placeholder;
     self.placeholderLabel.text = placeholder;
@@ -108,12 +129,12 @@
 }
 
 - (void)setPlaceholderTextColor:(UIColor *)placeholderTextColor {
-    if (!placeholderTextColor) placeholderTextColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+    if (!placeholderTextColor) placeholderTextColor = ZCCA(ZCBlackA8, 0.7);
     _placeholderTextColor = placeholderTextColor;
     self.placeholderLabel.textColor = placeholderTextColor;
 }
 
-#pragma mark - location
+#pragma mark - Location
 - (UIEdgeInsets)placeholderInsets {
     return UIEdgeInsetsMake(self.textContainerInset.top,
                             self.textContainerInset.left + self.textContainer.lineFragmentPadding,
@@ -137,8 +158,8 @@
         _placeholderLabel.numberOfLines = 0;
         _placeholderLabel.font = self.font;
         _placeholderLabel.textAlignment = self.textAlignment;
-        _placeholderLabel.backgroundColor = [UIColor clearColor];
-        _placeholderLabel.textColor = [UIColor colorWithWhite:0.7 alpha:1.0];
+        _placeholderLabel.backgroundColor = ZCClear;
+        _placeholderLabel.textColor = ZCCA(ZCBlackA8, 0.7);
         _placeholderLabel.alpha = 0;
         [self addSubview:_placeholderLabel];
     }
@@ -158,8 +179,8 @@
     return newSize;
 }
 
-#pragma mark - change
-- (void)setTextChangeBlock:(void (^)(NSString * _Nonnull))textChangeBlock {
+#pragma mark - Change
+- (void)setTextChangeBlock:(void (^)(ZCTextView *textView))textChangeBlock {
     [self removeNotificationTextObserver];
     _textChangeBlock = textChangeBlock;
     if (_textChangeBlock) {
@@ -176,11 +197,11 @@
 
 - (void)textViewTextChange {
     if (_textChangeBlock) {
-        _textChangeBlock(self.text);
+        _textChangeBlock(self);
     }
 }
 
-#pragma mark - delegate
+#pragma mark - Delegate
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
     if (textView == self && self.shouldBeginEdit1) {
         return self.shouldBeginEdit1((ZCTextView *)textView);
@@ -197,7 +218,7 @@
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     if (textView == self && self.shouldChangeText1) {
-        self.shouldChangeText1((ZCTextView *)textView, range, text);
+        return self.shouldChangeText1((ZCTextView *)textView, range, text);
     }
     return YES;
 }
@@ -226,7 +247,7 @@
     }
 }
 
-#pragma mark - set
+#pragma mark - Set
 - (ZCTextView *)shouldBeginEdit:(nullable BOOL(^)(ZCTextView *textView))block {
     if (self.delegate != self) self.delegate = self;
     self.shouldBeginEdit1 = block; return self;
@@ -237,7 +258,7 @@
     self.shouldEndEdit1 = block; return self;
 }
 
-- (ZCTextView *)shouldChangeText:(nullable BOOL(^)(ZCTextView *textView, NSRange range, NSString *text))block {
+- (ZCTextView *)shouldChangeText:(nullable BOOL(^)(ZCTextView *textView, NSRange range, NSString *string))block {
     if (self.delegate != self) self.delegate = self;
     self.shouldChangeText1 = block; return self;
 }
@@ -252,12 +273,12 @@
     self.didEndEdit1 = block; return self;
 }
 
-- (ZCTextView *)DidChangeText:(nullable void(^)(ZCTextView *textView))block {
+- (ZCTextView *)didChangeText:(nullable void(^)(ZCTextView *textView))block {
     if (self.delegate != self) self.delegate = self;
     self.didChangeText1 = block; return self;
 }
 
-- (ZCTextView *)DidChangeSelect:(nullable void(^)(ZCTextView *textView))block {
+- (ZCTextView *)didChangeSelect:(nullable void(^)(ZCTextView *textView))block {
     if (self.delegate != self) self.delegate = self;
     self.didChangeSelect1 = block; return self;
 }

@@ -11,7 +11,7 @@
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
 
-#pragma mark - ~~~~~~~~~~ ZCRowOperate ~~~~~~~~~~
+#pragma mark - ~ ZCRowOperate ~
 @interface ZCRowOperate ()
 
 @property (nonatomic, copy) CGFloat(^heightForRowAtIndexPath)(ZCTableView *table, NSIndexPath *idxp, id _Nullable model);
@@ -48,7 +48,7 @@
     _model = model; return self;
 }
 
-#pragma mark - get
+#pragma mark - Get
 - (NSString *)identifier {
     if (!_identifier) {
         _identifier = @"cell";
@@ -56,7 +56,7 @@
     return _identifier;
 }
 
-#pragma mark - func
+#pragma mark - Func
 - (ZCRowOperate *)height:(nullable CGFloat(^)(ZCTableView *table, NSIndexPath *idxp, id _Nullable model))block {
     self.heightForRowAtIndexPath = block; return self;
 }
@@ -80,7 +80,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCSectionOperate ~~~~~~~~~~
+#pragma mark - ~ ZCSectionOperate ~
 @interface ZCSectionOperate ()
 
 @property (nonatomic, copy) CGFloat(^heightForHeaderInSection)(ZCTableView *table, NSInteger sect, id _Nullable model);
@@ -114,8 +114,6 @@
 
 - (instancetype)initWithHeaderHei:(CGFloat)headerHei footerHei:(CGFloat)footerHei color:(UIColor *)color {
     if (self = [super init]) {
-        if (headerHei < 0.01) headerHei = 0.01;
-        if (footerHei < 0.01) footerHei = 0.01;
         [self buildHeaderView:headerHei color:color];
         [self buildFooterView:footerHei color:color];
     }
@@ -141,10 +139,10 @@
     _model = model; return self;
 }
 
-#pragma mark - misc
+#pragma mark - Misc
 - (void)buildHeaderView:(CGFloat)hei color:(UIColor *)color {
     _header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, hei)];
-    _header.backgroundColor = color;
+    _header.backgroundColor = color ? color : ZCClear;
 }
 
 - (void)buildFooterView:(CGFloat)hei color:(UIColor *)color {
@@ -152,7 +150,7 @@
     _footer.backgroundColor = color;
 }
 
-#pragma mark - get
+#pragma mark - Get
 - (NSMutableArray <ZCRowOperate *>*)rows {
     if (!_rows) {
         _rows = [NSMutableArray array];
@@ -174,7 +172,7 @@
     return _footerIdentifier;
 }
 
-#pragma mark - func
+#pragma mark - Func
 - (ZCSectionOperate *)removeAllRows {
     if (self.rows.count) {
         [self.rows removeAllObjects];
@@ -217,7 +215,7 @@
     return self;
 }
 
-#pragma mark - func
+#pragma mark - Func
 - (ZCSectionOperate *)headerHeight:(nullable CGFloat(^)(ZCTableView *table, NSInteger sect, id _Nullable model))block {
     self.heightForHeaderInSection = block; return self;
 }
@@ -265,7 +263,7 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCTableView ~~~~~~~~~~
+#pragma mark - ~ ZCTableView ~
 @interface ZCTableView () <UITableViewDelegate, UITableViewDataSource>
 
 @property (nonatomic, copy) void(^didZoom1)(ZCTableView *table);
@@ -276,25 +274,30 @@
 
 @property (nonatomic, copy) void(^didEndDecelerate1)(ZCTableView *table);
 
+@property (nonatomic, assign) BOOL isShieldResetZCCell;
+
 @end
 
 @implementation ZCTableView
 
-@synthesize sections = _sections, handler = _handler;
+@synthesize sections = _sections;
 
 + (ZCTableView *)initialTable:(CGRect)frame style:(UITableViewStyle)style reuses:(NSDictionary <NSString *, NSString *>*)reuses {
+    BOOL isGroup = style == UITableViewStyleGrouped;
     ZCTableView *table = [[ZCTableView alloc] initWithFrame:frame style:style];
     table.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    table.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0.01)];
-    table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0.01)];
+    table.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, isGroup ? 0.01 : 0)];
+    table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, isGroup ? 0.01 : 0)];
     table.separatorStyle = UITableViewCellSeparatorStyleNone;
-    table.backgroundColor = [UIColor clearColor];
-    table.separatorInset = UIEdgeInsetsZero;
+    table.estimatedSectionFooterHeight = 0;
+    table.estimatedSectionHeaderHeight = 0;
+    table.estimatedRowHeight = 100;
+    table.sectionHeaderHeight = 0;
+    table.sectionFooterHeight = 0;
     table.rowHeight = UITableViewAutomaticDimension;
-    table.estimatedSectionFooterHeight = 0.01;
-    table.estimatedSectionHeaderHeight = 0.01;
-    table.estimatedRowHeight = 50;
+    table.backgroundColor = ZCClear;
     table.showsHorizontalScrollIndicator = NO;
+    table.separatorInset = UIEdgeInsetsZero;
     table.directionalLockEnabled = YES;
     table.bounces = YES;
     [reuses enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
@@ -308,13 +311,18 @@
     return [self initialTable:frame style:UITableViewStyleGrouped reuses:@{@"cell":NSStringFromClass(cellClass)}];
 }
 
-#pragma mark - misc
++ (ZCTableView *)basicTableZCCell:(CGRect)frame resetCell:(BOOL)isResueAllowResetCell {
+    ZCTableView *table = [self initialTable:frame style:UITableViewStyleGrouped reuses:@{@"cell":@"ZCTableViewCell"}];
+    table.isShieldResetZCCell = !isResueAllowResetCell; return table;
+}
+
+#pragma mark - Misc
 - (void)delegateAndDataSourceToSelf {
     if (self.delegate != self) self.delegate = self;
     if (self.dataSource != self) self.dataSource = self;
 }
 
-#pragma mark - get
+#pragma mark - Get
 - (NSMutableArray <ZCSectionOperate *>*)sections {
     if (!_sections) {
         [self delegateAndDataSourceToSelf];
@@ -323,14 +331,7 @@
     return _sections;
 }
 
-- (ZCBindHandler *)handler {
-    if (_handler) {
-        _handler = [[ZCBindHandler alloc] init];
-    }
-    return _handler;
-}
-
-#pragma mark - func
+#pragma mark - Func
 - (ZCTableView *)removeAllSections {
     if (self.sections.count) {
         [self.sections removeAllObjects];
@@ -373,7 +374,7 @@
     return self;
 }
 
-#pragma mark - func
+#pragma mark - Func
 - (ZCTableView *)didScroll:(nullable void(^)(ZCTableView *table))block {
     [self delegateAndDataSourceToSelf];
     self.didScroll1 = block; return self;
@@ -481,7 +482,7 @@
         if (block) {return block((ZCTableView *)tableView, section, slice.model);}
         if (slice.header) {return slice.header.height;}
     }
-    return 0.01;
+    return 0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -515,7 +516,7 @@
         if (block) {return block((ZCTableView *)tableView, section, slice.model);}
         if (slice.footer) {return slice.footer.height;}
     }
-    return 0.01;
+    return 0;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
@@ -563,7 +564,7 @@
         ZCRowOperate *unit = slice.rows[indexPath.row];
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:unit.identifier forIndexPath:indexPath];
         if ([cell isKindOfClass:[ZCTableViewCell class]]) {
-            [((ZCTableViewCell *)cell) resetAllItemHiddenAndProperty];
+            if (!self.isShieldResetZCCell) [((ZCTableViewCell *)cell) resetAllItemHiddenAndProperty];
             BOOL islast = indexPath.row == slice.rows.count - 1;
             ((ZCTableViewCell *)cell).topSeparatorInset = UIEdgeInsetsMake(0, 0, indexPath.row ? 0 : ZSSepHei, 0);
             ((ZCTableViewCell *)cell).bottomSeparatorInset = UIEdgeInsetsMake(ZSSepHei, islast ? 0 : ZSMInvl, 0, 0);

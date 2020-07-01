@@ -16,10 +16,6 @@
 
 @property (nonatomic, strong) NSMutableAttributedString *attriStr;
 
-//@property (nonatomic, assign) CGFloat verticalAlignmentOffset; //水平对齐缩进量
-//
-//@property (nonatomic, assign) int verticalAlignmentType; //0.水平居中对齐 1.水平居上s对齐 2.水平居下对齐
-
 @end
 
 @implementation ZCLabel
@@ -37,41 +33,11 @@
     _rowSpacing = 0;
     _wordSpacing = 0;
     _headTailIndent = 0;
-//    _verticalAlignmentType = 0;
-//    _verticalAlignmentOffset = 0;
     _isSelfSetAttriStr = NO;
     self.numberOfLines = 0;
 }
 
-//#pragma mark - override
-//- (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines {
-//    CGRect textRect = [super textRectForBounds:bounds limitedToNumberOfLines:numberOfLines];
-//    switch (self.verticalAlignmentType) {
-//        case 1:{
-//            textRect.origin.y = bounds.origin.y - (bounds.size.height - textRect.size.height) / 2.0;
-//        } break;
-//        case 2:{
-//            textRect.origin.y = bounds.origin.y + bounds.size.height - textRect.size.height - self.verticalAlignmentOffset;
-//        } break;
-//        default:{
-//            textRect.origin.y = bounds.origin.y + (bounds.size.height - textRect.size.height) / 2.0 - self.verticalAlignmentOffset;
-//        } break;
-//    }
-//    return textRect;
-//}
-//
-//- (void)drawTextInRect:(CGRect)requestedRect {
-//    CGRect actualRect = [self textRectForBounds:requestedRect limitedToNumberOfLines:self.numberOfLines];
-//    [super drawTextInRect:actualRect];
-//}
-//
-//- (void)resetVerticalCenterAlignmentOffset:(CGFloat)offset {
-//    _verticalAlignmentType = 1;
-//    _verticalAlignmentOffset = 0;
-//    [self setNeedsDisplay];
-//}
-
-#pragma mark - pubilc
+#pragma mark - Pubilc
 - (CGFloat)calculateTextHeight:(CGFloat)maxWidth {
     return [self calculateSize:CGSizeMake(maxWidth, MAXFLOAT)].height;
 }
@@ -91,7 +57,7 @@
     [self resetAttriStr:self.attriStr.string];
 }
 
-#pragma mark - private
+#pragma mark - Private
 - (void)resetAttriStr:(NSString *)text {
     NSAttributedStringEnumerationOptions ops = NSAttributedStringEnumerationLongestEffectiveRangeNotRequired;
     NSMutableAttributedString *attriStr = [[NSMutableAttributedString alloc] initWithString:ZCStrNonnil(text)];
@@ -125,7 +91,7 @@
     self.attributedText = attriStr;
 }
 
-#pragma mark - get
+#pragma mark - Get
 - (NSAttributedString *)attributedText {
     return nil;
 }
@@ -164,7 +130,7 @@
     return _pStyle;
 }
 
-#pragma mark - set1
+#pragma mark - Set1
 - (void)setText:(NSString *)text {
     [self resetAttriStr:text];
 }
@@ -203,7 +169,7 @@
     [self updateTextAttributeOrParagraphStyle];
 }
 
-#pragma mark - set2
+#pragma mark - Set2
 - (void)setWordSpacing:(CGFloat)wordSpacing {
     if (wordSpacing < 0) wordSpacing = 0;
     _wordSpacing = wordSpacing;
@@ -226,7 +192,7 @@
     [self updateTextAttributeOrParagraphStyle];
 }
 
-#pragma mark - set3
+#pragma mark - Set3
 - (void)setNumberOfLines:(NSInteger)numberOfLines {
     [super setNumberOfLines:numberOfLines];
     [self updateTextAttributeOrParagraphStyle];

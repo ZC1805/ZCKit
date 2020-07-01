@@ -7,6 +7,7 @@
 //
 
 #import "UIView+ZCSwizzle.h"
+#import "UIViewController+ZC.h"
 #import "ZCSwizzleHeader.h"
 #import "UIView+ZC.h"
 
@@ -15,9 +16,15 @@
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        SEL sel1 = @selector(pointInside:withEvent:);
+        SEL sel1x = @selector(swizzle_pointInside:withEvent:);
         SEL sel2 = @selector(layoutSubviews);
         SEL sel2x = @selector(swizzle_layoutSubviews);
+        SEL sel3 = @selector(hitTest:withEvent:);
+        SEL sel3x = @selector(swizzle_hitTest:withEvent:);
+        zc_swizzle_exchange_selector([UIView class], sel1, sel1x);
         zc_swizzle_exchange_selector([UIView class], sel2, sel2x);
+        zc_swizzle_exchange_selector([UIView class], sel3, sel3x);
     });
 }
 
@@ -63,6 +70,26 @@
         return [value UIEdgeInsetsValue];
     }
     return UIEdgeInsetsZero;
+}
+
+- (BOOL)swizzle_pointInside:(CGPoint)point withEvent:(UIEvent *)event {
+    id <ZCViewControllerViewProtocol> currentVc = self.currentViewController;
+    if ([currentVc respondsToSelector:@selector(isHandlePointInside:point:event:)] && [currentVc isHandlePointInside:self point:point event:event]) {
+        if ([currentVc respondsToSelector:@selector(pointInside:view:event:)]) {
+            return [currentVc pointInside:point view:self event:event];
+        }
+    }
+    return [self swizzle_pointInside:point withEvent:event];
+}
+
+- (UIView *)swizzle_hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    id <ZCViewControllerViewProtocol> currentVc = self.currentViewController;
+    if ([currentVc respondsToSelector:@selector(isHandleHitView:point:event:)] && [currentVc isHandleHitView:self point:point event:event]) {
+        if ([currentVc respondsToSelector:@selector(hitTest:view:event:)]) {
+            return [currentVc hitTest:point view:self event:event];
+        }
+    }
+    return [self swizzle_hitTest:point withEvent:event];
 }
 
 @end

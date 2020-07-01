@@ -9,9 +9,9 @@
 #import "ZCTimerHolder.h"
 #import <UIKit/UIKit.h>
 
-static long zc_max_allow_cache_count = 100;
+static const long zc_max_allow_cache_count = 100;
 
-#pragma mark - ~~~~~~~~~~ ZCTimerHolder ~~~~~~~~~~
+#pragma mark - ~ ZCTimerHolder ~
 @interface ZCTimerHolder () {
     NSTimer *_timer;
     BOOL _sleep;
@@ -79,7 +79,7 @@ static long zc_max_allow_cache_count = 100;
     _timerDelegate = nil;
 }
 
-#pragma mark - get
+#pragma mark - Get
 - (BOOL)isSleeping {
     return _sleep;
 }
@@ -95,7 +95,7 @@ static long zc_max_allow_cache_count = 100;
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCAssemblePart ~~~~~~~~~~
+#pragma mark - ~ ZCAssemblePart ~
 @interface ZCAssemblePart ()
 
 @property (nonatomic, strong) NSMutableArray <id>*contents;
@@ -140,7 +140,7 @@ static long zc_max_allow_cache_count = 100;
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCAssembleFirer ~~~~~~~~~~
+#pragma mark - ~ ZCAssembleFirer ~
 @interface ZCAssembleFirer () <ZCTimerHolderDelegate>
 
 @property (nonatomic, strong) NSMutableDictionary <NSNumber *, NSMutableArray <ZCAssemblePart *>*>*cachePool;
@@ -203,7 +203,7 @@ static long zc_max_allow_cache_count = 100;
     self.isActive = YES;
 }
 
-#pragma mark - api
+#pragma mark - Api
 - (void)fireAssemblePart:(ZCMonitorType)type fireId:(NSString *)fireId content:(id)content {
     NSAssert([NSThread currentThread].isMainThread, @"ZCKit: info must be fired in main thread");
     if (type == ZCMonitorTypeNone) return;
@@ -233,7 +233,7 @@ static long zc_max_allow_cache_count = 100;
     }
 }
 
-#pragma mark - private
+#pragma mark - Private
 - (void)fire:(ZCMonitorType)type fireId:(NSString *)fireId content:(id)content {
     NSUInteger n = type; NSUInteger i = 0;
     while (n > 0) {

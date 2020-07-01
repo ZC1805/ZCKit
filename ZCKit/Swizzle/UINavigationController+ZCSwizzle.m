@@ -7,8 +7,11 @@
 //
 
 #import "UINavigationController+ZCSwizzle.h"
+#import "UINavigationController+ZC.h"
+#import "UINavigationItem+ZC.h"
 #import "ZCSwizzleHeader.h"
 #import "ZCKitBridge.h"
+#import "UIColor+ZC.h"
 
 @implementation UINavigationController (ZCSwizzle)
 
@@ -25,20 +28,31 @@
 }
 
 - (void)swizzle_navi_viewDidLoad {
-    UIImage *image = [[UIImage imageNamed:ZCKitBridge.naviBackImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    self.view.backgroundColor = [UIColor whiteColor];
+    UIImage *image = [ZCKitBridge.naviBackImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    self.view.backgroundColor = [UIColor colorFormHex:0xFFFFFF alpha:1.0];
     self.navigationBar.backIndicatorImage = image;
     self.navigationBar.backIndicatorTransitionMaskImage = image;
     [self swizzle_navi_viewDidLoad];
 }
 
 - (void)swizzle_navi_viewWillAppear:(BOOL)animated {
+    if (self.backArrowImage) {
+        UIImage *image = [self.backArrowImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+        self.navigationBar.backIndicatorImage = image;
+        self.navigationBar.backIndicatorTransitionMaskImage = image;
+    }
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationBar.topItem.backBarButtonItem = item;
+    if (self.isShowRootControllerBackArrow && self.viewControllers.count) {
+        UIViewController *rootVc = self.viewControllers.firstObject;
+        if (!rootVc.navigationItem.leftBarButtonItem) {
+            [rootVc.navigationItem itemCustomBackTitle:nil color:nil image:self.navigationBar.backIndicatorImage];
+        }
+    }
     [self swizzle_navi_viewWillAppear:animated];
 }
 
-#pragma mark - set & get
+#pragma mark - Set & Get
 - (void)setIsNormalBar:(BOOL)isNormalBar {
     objc_setAssociatedObject(self, @selector(isNormalBar), [NSNumber numberWithBool:isNormalBar], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
@@ -53,4 +67,3 @@
 }
 
 @end
-

@@ -13,9 +13,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef id ZCJsonValue;  /**< 只可为 nil & NSString & NSNumber & NSArray & NSDictionary 这五种 */
 
+@protocol ZCJsonProtocol <NSObject>
+
+@property (nonatomic, assign) BOOL isJsonValue;
+
+@end
+
+
 @interface ZCGlobal : NSObject  /**< 全局管理类 */
 
-#pragma mark - misc
+#pragma mark - Misc
++ (CGFloat)ratio;  /**< 按360适配的单位比例点 */
+
 + (BOOL)isiPhoneX;  /**< 是否是iPhoneX系列手机 */
 
 + (BOOL)isLandscape;  /**< 当前手机是否是横屏状态 */
@@ -34,14 +43,16 @@ typedef id ZCJsonValue;  /**< 只可为 nil & NSString & NSNumber & NSArray & NS
 
 + (nullable NSString *)resourcePath:(nullable NSString *)bundle name:(NSString *)name ext:(NSString *)ext;  /**< 资源文件路径 */
 
-#pragma mark - misc
++ (nullable UIImage *)ZCImageName:(NSString *)imageName;  /**< ZCBundle中图片资源 */
+
+#pragma mark - Misc
 + (nullable UIViewController *)topController:(nullable UIViewController *)rootvc;  /**< 顶控制器，初始rootvc可为nil */
 
 + (nullable UIViewController *)currentController;  /**< 当前控制器 */
 
 + (nullable UIViewController *)rootController;  /**< 根控制器 */
 
-#pragma mark - layout
+#pragma mark - Layout
 + (CGFloat)leadingSpacing;  /**< 到屏幕安全左边距离 -> 0、44 */
 
 + (CGFloat)trailingSpacing;  /**< 到屏幕安全右边距离 -> 0、44 */

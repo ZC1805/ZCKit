@@ -9,7 +9,7 @@
 #import "NSNumber+ZC.h"
 #import "NSString+ZC.h"
 
-#pragma mark - ~~~~~~~~~~ NSNumber ~~~~~~~~~~
+#pragma mark - ~ NSNumber ~
 @implementation NSNumber (ZC)
 
 + (NSString *)stringByMyTrim:(NSString *)string {
@@ -22,18 +22,18 @@
     NSString *str = [[self stringByMyTrim:string] lowercaseString];
     if (!str || !str.length) return nil;
     
-    static NSDictionary *dic;
+    static NSDictionary *kNumberMapDic;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        dic = @{@"true"     : @(YES),
-                @"yes"      : @(YES),
-                @"false"    : @(NO),
-                @"no"       : @(NO),
-                @"nil"      : [NSNull null],
-                @"null"     : [NSNull null],
-                @"<null>"   : [NSNull null]};
+        kNumberMapDic = @{@"true"   : @(YES),
+                          @"yes"    : @(YES),
+                          @"false"  : @(NO),
+                          @"no"     : @(NO),
+                          @"nil"    : [NSNull null],
+                          @"null"   : [NSNull null],
+                          @"<null>" : [NSNull null]};
     });
-    id num = dic[str];
+    id num = kNumberMapDic[str];
     if (num) {
         if (num == [NSNull null]) {return nil;}
         return num;
@@ -61,18 +61,18 @@
 @end
 
 
-#pragma mark - ~~~~~~~~~~ NSDecimalNumber ~~~~~~~~~~
+#pragma mark - ~ NSDecimalNumber ~
 @implementation NSDecimalNumber (ZC)
 
-#pragma mark - class func
+#pragma mark - Class func
 /** -1 */
 + (NSDecimalNumber *)nOne {
     return [self decimalNumberWithMantissa:1 exponent:0 isNegative:YES];
 }
 
-/** string初始化，能规避精度问题，六位小数精度，string为nil或不规范格式时都返回notANumber */
+/** string初始化，能规避精度问题，六位小数精度，string为nil或非浮点型时都返回notANumber */
 + (NSDecimalNumber *)decimalString:(NSString *)strValue {
-    if (!strValue) return [NSDecimalNumber notANumber];
+    if (!strValue || !strValue.isPureDouble) return [NSDecimalNumber notANumber];
     double douValue = [strValue doubleValue];
     NSString *doubleStr = [NSString stringWithFormat:@"%lf", douValue];
     return [NSDecimalNumber decimalNumberWithString:doubleStr]; //以这种初始化方法测试结果表明只会保留6位小数精度
@@ -96,7 +96,7 @@
     return [NSDecimalNumber decimalNumberWithDecimal:[number decimalValue]];
 }
 
-#pragma mark - instance func
+#pragma mark - Instance func
 /** decimal的最精度，最小返回值为0.000001 */
 - (NSDecimalNumber *)decimalPrecise {
     int dec = [ZCDecimalManager calculateDecimalDigitFromString:[self stringValue]];
@@ -109,42 +109,42 @@
     return [self decimalNumberByRoundingAccordingToBehavior:handler];
 }
 
-#pragma mark - calculate func
+#pragma mark - Calculate func
 /** 加 */
 - (NSDecimalNumber *)plus:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) decimalNumber = [NSDecimalNumber zero];
-    return [self decimalNumberByAdding:decimalNumber withBehavior:[ZCDecimalManager instance]];
+    return [self decimalNumberByAdding:decimalNumber withBehavior:[ZCDecimalManager sharedManager]];
 }
 
 /** 减 */
 - (NSDecimalNumber *)minus:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) decimalNumber = [NSDecimalNumber zero];
-    return [self decimalNumberBySubtracting:decimalNumber withBehavior:[ZCDecimalManager instance]];
+    return [self decimalNumberBySubtracting:decimalNumber withBehavior:[ZCDecimalManager sharedManager]];
 }
 
 /** 乘 */
 - (NSDecimalNumber *)mltiply:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) decimalNumber = [NSDecimalNumber one];
-    return [self decimalNumberByMultiplyingBy:decimalNumber withBehavior:[ZCDecimalManager instance]];
+    return [self decimalNumberByMultiplyingBy:decimalNumber withBehavior:[ZCDecimalManager sharedManager]];
 }
 
 /** 除 */
 - (NSDecimalNumber *)divide:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) decimalNumber = [NSDecimalNumber one];
-    return [self decimalNumberByDividingBy:decimalNumber withBehavior:[ZCDecimalManager instance]];
+    return [self decimalNumberByDividingBy:decimalNumber withBehavior:[ZCDecimalManager sharedManager]];
 }
 
 /** 幂 */
 - (NSDecimalNumber *)raisingToPower:(NSUInteger)power {
-    return [self decimalNumberByRaisingToPower:power withBehavior:[ZCDecimalManager instance]];
+    return [self decimalNumberByRaisingToPower:power withBehavior:[ZCDecimalManager sharedManager]];
 }
 
 /** 乘10^x方 */
 - (NSDecimalNumber *)mltiplyPower10:(short)power {
-    return [self decimalNumberByMultiplyingByPowerOf10:power withBehavior:[ZCDecimalManager instance]];
+    return [self decimalNumberByMultiplyingByPowerOf10:power withBehavior:[ZCDecimalManager sharedManager]];
 }
 
-#pragma mark - compare func
+#pragma mark - Compare func
 /** 小于 */
 - (BOOL)less:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) return NO;
@@ -182,4 +182,3 @@
 }
 
 @end
-

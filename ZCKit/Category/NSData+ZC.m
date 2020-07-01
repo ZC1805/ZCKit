@@ -7,6 +7,7 @@
 //
 
 #import "NSData+ZC.h"
+#import "ZCKitBridge.h"
 #include <CommonCrypto/CommonCrypto.h>
 
 @implementation NSData (ZC)
@@ -36,6 +37,7 @@
     NSError *error = nil;
     id object = [NSJSONSerialization JSONObjectWithData:self options:NSJSONReadingAllowFragments error:&error];
     if (object && !error) return object;
+    if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse to json object fail");
     return nil;
 }
 
@@ -43,7 +45,7 @@
     if (self.length > 0) {
         return [[NSString alloc] initWithData:self encoding:NSUTF8StringEncoding];
     }
-    return @"";
+    return nil;
 }
 
 static const char base64EncodingTable[64] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -132,4 +134,3 @@ static const short base64DecodingTable[256] = {
 }
 
 @end
-

@@ -20,10 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSRange currentSelectRange;  /**< 计算当前选择的Range */
 
-@property (nullable, nonatomic, copy) UIColor *placeholderTextColor;  /**< 可设置占位字符串的颜色 */
-
-@property (nullable, nonatomic, strong, readonly) UIButton *rightClearBtn;  /**< 可对清除按钮属性做一些更改 */
-
+/**< 设置站位文字颜色*/
+- (void)setPlaceholderText:(NSString *)placeholderText color:(nullable UIColor *)color font:(nullable UIFont *)font;
 
 /**< 带字体的初始化和占位文字的初始化，color为textColor */
 - (instancetype)initWithFrame:(CGRect)frame holder:(nullable NSString *)holder font:(UIFont *)font color:(nullable UIColor *)color;

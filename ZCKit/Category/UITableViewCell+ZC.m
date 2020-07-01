@@ -24,7 +24,7 @@
 
 - (UITableView *)currentTableView {
     UIView *view = self.superview;
-    for (int i = 0; (view && i < 3); i ++) { //最多循环3次，没拿到返回nil
+    for (int i = 0; (view && i < 5); i ++) { //最多循环5次，没拿到返回nil
         if ([view isKindOfClass:[UITableView class]]) {
             return (UITableView *)view;
         } else {

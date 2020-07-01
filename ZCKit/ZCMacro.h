@@ -17,9 +17,6 @@
 
 
 /** --- normal --- */
-#define ZCIsiOS8            ([UIDevice currentDevice].systemVersion.doubleValue >= 8.0)   /**< 版本>=8.0 */
-#define ZCIsiOS9            ([UIDevice currentDevice].systemVersion.doubleValue >= 9.0)   /**< 版本>=9.0 */
-#define ZCIsiOS10           ([UIDevice currentDevice].systemVersion.doubleValue >= 10.0)  /**< 版本>=10.0 */
 #define ZCIsiPad            (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)    /**< 是否是iPad */
 #define ZCIsiPhone          (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)  /**< 是否是iPhone */
 #define ZCIsiPhoneX         [ZCGlobal isiPhoneX]    /**< 当前是否是iPhoneX */
@@ -27,28 +24,30 @@
 
 
 /** --- misc --- */
-#define ZCStrNonnil(str)    (str ? str : @"")                 /**< 返回非nil字符串，用@""替换nil */
-#define ZCStrIsValid(str)   [ZCGlobal isValidString:str]      /**< 返回布尔型，判断字符串是否有效 & 非空格 */
-#define ZCArrIsValid(arr)   [ZCGlobal isValidArray:arr]       /**< 返回布尔型，判断数组是否有效 & 有count */
-#define ZCDicIsValid(dic)   [ZCGlobal isValidDictionary:dic]  /**< 返回布尔型，判断字典是否有效 & 有count */
-#define ZCStrFormat(format, ...) [NSString stringWithFormat:format, ##__VA_ARGS__]  /**< 返回格式化字符串 */
+#define ZCStrNonnil(str)    ((str && [str isKindOfClass:NSString.class]) ? str : @"")   /**< 返回非nil字符串类型，用@""替换nil或非str类型数据 */
+#define ZCStrIsValid(str)   [ZCGlobal isValidString:str]                                /**< 返回布尔型，判断字符串是否有效 & 非空格 */
+#define ZCArrIsValid(arr)   [ZCGlobal isValidArray:arr]                                 /**< 返回布尔型，判断数组是否有效 & 有count */
+#define ZCDicIsValid(dic)   [ZCGlobal isValidDictionary:dic]                            /**< 返回布尔型，判断字典是否有效 & 有count */
+#define ZCStrFormat(format, ...) [NSString stringWithFormat:format, ##__VA_ARGS__]      /**< 返回格式化字符串 */
 #define ZCObjAppoint(origin, appoint) [ZCGlobal appointInvalid:origin default:appoint]  /**< 对无效对象替换 */
 
 
 /** --- color --- */
-#define ZCBlack30           [UIColor colorFormHex:0x303030 alpha:1.0]  /**< 0x30灰 */
-#define ZCBlack50           [UIColor colorFormHex:0x555555 alpha:1.0]  /**< 0x50灰 */
-#define ZCBlack80           [UIColor colorFormHex:0x808080 alpha:1.0]  /**< 0x80灰 */
-#define ZCBlackA2           [UIColor colorFormHex:0xA2A2A2 alpha:1.0]  /**< 0xA2灰 */
-#define ZCBlackC8           [UIColor colorFormHex:0xC8C8C8 alpha:1.0]  /**< 0xC8灰 */
-#define ZCSPColor           [UIColor colorFormHex:0xEAEAEA alpha:1.0]  /**< 交线颜色 */
-#define ZCBKColor           [UIColor colorFormHex:0xF7F7F8 alpha:1.0]  /**< 背景颜色 */
+#define ZCBlack30           [UIColor colorFormHex:0x303030 alpha:1.00]  /**< 0x30灰 */
+#define ZCBlack50           [UIColor colorFormHex:0x555555 alpha:1.00]  /**< 0x50灰 */
+#define ZCBlack80           [UIColor colorFormHex:0x808080 alpha:1.00]  /**< 0x80灰 */
+#define ZCBlackA8           [UIColor colorFormHex:0xA8A8A8 alpha:1.00]  /**< 0xA8灰 */
+#define ZCBlackC8           [UIColor colorFormHex:0xC8C8C8 alpha:1.00]  /**< 0xC8灰 */
+#define ZCBlackDC           [UIColor colorFormHex:0xDCDCDC alpha:1.00]  /**< 0xDC灰 */
+#define ZCSPColor           [UIColor colorFormHex:0xEAEAEA alpha:1.00]  /**< 交线颜色 */
+#define ZCBKColor           [UIColor colorFormHex:0xF7F7F8 alpha:1.00]  /**< 背景颜色 */
+#define ZCPHColor           [UIColor colorFormHex:0xFFFFFF alpha:0.33]  /**< 占位颜色 */
+#define ZCWhite             [UIColor colorFormHex:0xFFFFFF alpha:1.00]  /**< 白色 */
+#define ZCBlack             [UIColor colorFormHex:0x000000 alpha:1.00]  /**< 黑色 */
+#define ZCGreen             [UIColor colorFormHex:0x00FF00 alpha:1.00]  /**< 绿色 */
+#define ZCBlue              [UIColor colorFormHex:0x0000FF alpha:1.00]  /**< 蓝色 */
+#define ZCRed               [UIColor colorFormHex:0xFF0000 alpha:1.00]  /**< 红色 */
 #define ZCClear             [UIColor clearColor]  /**< 透明 */
-#define ZCWhite             [UIColor whiteColor]  /**< 白色 */
-#define ZCBlack             [UIColor blackColor]  /**< 黑色 */
-#define ZCGreen             [UIColor greenColor]  /**< 绿色 */
-#define ZCBlue              [UIColor blueColor]   /**< 蓝色 */
-#define ZCRed               [UIColor redColor]    /**< 红色 */
 
 
 /** --- color --- */
@@ -67,19 +66,21 @@
 
 
 /** --- font --- */
-#define ZCFS(font_size)         [UIFont systemFontOfSize:ZSA(font_size)]      /**< 适配了的系统字体 */
-#define ZCFBS(font_size)        [UIFont boldSystemFontOfSize:ZSA(font_size)]  /**< 适配了的粗体系统字体 */
+#define ZCFS(adt_size)          [UIFont fontWithName:@"HelveticaNeue" size:ZSA(adt_size)]        /**< 适配了的系统字体 */
+#define ZCFBS(adt_size)         [UIFont fontWithName:@"HelveticaNeue-Bold" size:ZSA(adt_size)]   /**< 适配了的粗体系统bold字体 */
+#define ZCFLS(adt_size)         [UIFont fontWithName:@"HelveticaNeue-Light" size:ZSA(adt_size)]  /**< 适配了的粗体系统light字体 */
+#define ZCFMS(adt_size)         [UIFont fontWithName:@"HelveticaNeue-Medium" size:ZSA(adt_size)] /**< 适配了的粗体系统medium字体 */
 
 
-/** --- adapt 375 --- */
-#define ZSRadix             375.0                                      /**< 适配竖屏750px */
-#define ZSMInvl             ZSA(15.0)                                  /**< 标准边距值 */
-#define ZSA(radix)          ((radix) * (MIN(ZSWid, ZSHei) / ZSRadix))  /**< 适配比例计算值 */
+/** --- adapt 360 --- */
+#define ZSMInvl             ZSA(15.0)                     /**< 按比例标准边距值 */
+#define ZSA(radix)          ((radix) * [ZCGlobal ratio])  /**< 按比例适配计算值 */
 
 
 /** --- layout cal --- */
 #define ZSWid               ([UIScreen mainScreen].bounds.size.width)   /**< 屏幕宽 */
 #define ZSHei               ([UIScreen mainScreen].bounds.size.height)  /**< 屏幕高 */
+#define ZSScreen            (CGRectMake(0, 0, ZSWid, ZSHei))            /**< 全屏幕 */
 #define ZSSepHei            (1.0 / [UIScreen mainScreen].scale)         /**< 最小显示点 */
 #define ZSNaviSowHei        ([ZCGlobal naviShadowHeight])               /**< 导航阴影高 */
 #define ZSNaviBarHei        ([ZCGlobal isiPhoneX] ? 44.0 : 44.0)        /**< 导航栏高，竖屏值 */
@@ -88,8 +89,8 @@
 #define ZSTabHei            ([ZCGlobal isiPhoneX] ? 83.0 : 49.0)        /**< 标签栏高，竖屏值 */
 #define ZSStuBarHei         ([ZCGlobal isiPhoneX] ? 44.0 : 20.0)        /**< 状态栏高，竖屏值 */
 #define ZSTopResHei         ([ZCGlobal isiPhoneX] ? 44.0 : 20.0)        /**< 顶预留高，竖屏值 */
-#define ZSBomResHei         ([ZCGlobal isiPhoneX] ? 34.0 : 0)           /**< 底预留高，竖屏值 */
-#define ZSAvailableHei      (ZSHei - ZSNaviHei - ZSBomResHei)           /**< 内容高度，竖屏值 */
+#define ZSBomResHei         ([ZCGlobal isiPhoneX] ? 34.0 : 0.0)         /**< 底预留高，竖屏值 */
+#define ZSBomSafeHei        ([ZCGlobal isiPhoneX] ? 34.0 : 20.0)        /**< 底安全高，竖屏值 */
 
 
 /** --- float --- */

@@ -137,10 +137,10 @@
     return nil;
 }
 
-#pragma mark - class decimal number
+#pragma mark - Class decimal number
 /** 获取DecimalHandler，来处理四舍五入 */
 + (NSDecimalNumberHandler *)decimalHandler:(int)decimal type:(ZCEnumRoundType)type {
-    return [[ZCDecimalManager instance] handlerForDecimalPoint:decimal mode:type];
+    return [[ZCDecimalManager sharedManager] handlerForDecimalPoint:decimal mode:type];
 }
 
 /** 转化成->NSDecimalNumber，在此会稍微转换，返回数据都是6位精度 */
@@ -198,12 +198,12 @@
 /** 保留指定位数有效小数，后面舍去 */
 + (NSString *)formatFloorNumber:(NSNumber *)number digits:(int)digits {
     if (number == nil) return nil;
-    NSNumberFormatter *formatter = [[ZCDecimalManager instance] handlerFormatNumberDigits:digits];
+    NSNumberFormatter *formatter = [[ZCDecimalManager sharedManager] handlerFormatNumberDigits:digits];
     return [formatter stringFromNumber:number];
 }
 
-#pragma mark - class misc function
-+ (instancetype)instance {
+#pragma mark - Class misc function
++ (instancetype)sharedManager {
     static ZCDecimalManager *instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -273,7 +273,7 @@
     return min;
 }
 
-#pragma mark - class switch judge
+#pragma mark - Class switch judge
 + (NSString *)preciseString:(NSString *)strvalue {
     if (!strvalue) return strvalue;
     double douvalue = [strvalue doubleValue];
@@ -289,4 +289,3 @@
 }
 
 @end
-

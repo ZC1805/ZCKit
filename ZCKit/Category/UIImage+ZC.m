@@ -9,6 +9,7 @@
 #import "UIImage+ZC.h"
 #import "ZCPredefine.h"
 #import "ZCKitBridge.h"
+#import "UIColor+ZC.h"
 #import "ZCGlobal.h"
 #import <ImageIO/ImageIO.h>
 #import <Accelerate/Accelerate.h>
@@ -16,7 +17,7 @@
 
 @implementation UIImage (ZC)
 
-#pragma mark - usually
+#pragma mark - Usually
 + (UIImage *)imageWithPDF:(id)dataOrPath {
     return [self zc_imageWithPDF:dataOrPath resize:NO size:CGSizeZero];
 }
@@ -31,7 +32,7 @@
 }
 
 + (UIImage *)imageWithClear {
-    return [UIImage imageNamed:@"zc_image_clear_color"];
+    return [ZCGlobal ZCImageName:@"zc_image_clear_color"];
 }
 
 + (UIImage *)imageWithColor:(UIColor *)color {
@@ -39,7 +40,7 @@
 }
 
 + (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size {
-    if (!color) color = [UIColor whiteColor];
+    if (!color) color = [UIColor colorFormHex:0xFFFFFF alpha:1.0];
     if (size.width <= 0 || size.height <= 0) size = CGSizeMake(MAX(1.0, size.width), MAX(1.0, size.height));
     CGRect rect = CGRectMake(0, 0, size.width, size.height);
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
@@ -74,8 +75,8 @@
 }
 
 + (UIImage *)imageWithColor1:(UIColor *)color1 color2:(UIColor *)color2 size:(CGSize)size isHorizontal:(BOOL)isHorizontal {
-    if (!color1) color1 = [UIColor whiteColor];
-    if (!color2) color2 = [UIColor whiteColor];
+    if (!color1) color1 = [UIColor colorFormHex:0xFFFFFF alpha:1.0];
+    if (!color2) color2 = [UIColor colorFormHex:0xFFFFFF alpha:1.0];
     if (size.width <= 0 || size.height <= 0) size = CGSizeMake(MAX(1.0, size.width), MAX(1.0, size.height));
     CGRect rect = CGRectMake(0, 0, size.width, size.height);
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
@@ -339,7 +340,7 @@
     return (data ? data : [NSData data]);
 }
 
-#pragma mark - misc
+#pragma mark - Misc
 + (UIImage *)zc_imageWithPDF:(id)dataOrPath resize:(BOOL)resize size:(CGSize)size {
     if (!dataOrPath) return nil;
     CGPDFDocumentRef pdf = NULL;
@@ -425,7 +426,7 @@
     return frameDuration;
 }
 
-#pragma mark - image modify
+#pragma mark - Image modify
 - (UIImage *)imageByResizeToSize:(CGSize)size {
     if (size.width <= 0 || size.height <= 0) size = CGSizeMake(MAX(1.0, size.width), MAX(1.0, size.height));
     UIGraphicsBeginImageContextWithOptions(size, NO, self.scale);
@@ -512,20 +513,19 @@
     CGContextTranslateCTM(context, 0, -rect.size.height);
     
     CGFloat minSize = MIN(self.size.width, self.size.height);
-    if (borderWidth < minSize / 2) {
+    if (borderWidth < minSize / 2.0) {
         UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:CGRectInset(rect, borderWidth, borderWidth) byRoundingCorners:corners cornerRadii:CGSizeMake(radius, borderWidth)];
         [path closePath];
-        
         CGContextSaveGState(context);
         [path addClip];
         CGContextDrawImage(context, rect, self.CGImage);
         CGContextRestoreGState(context);
     }
     
-    if (borderColor && borderWidth < minSize / 2 && borderWidth > 0) {
+    if (borderColor && borderWidth < minSize / 2.0 && borderWidth > 0) {
         CGFloat strokeInset = (floor(borderWidth * self.scale) + 0.5) / self.scale;
         CGRect strokeRect = CGRectInset(rect, strokeInset, strokeInset);
-        CGFloat strokeRadius = radius > self.scale / 2 ? radius - self.scale / 2 : 0;
+        CGFloat strokeRadius = radius > self.scale / 2.0 ? radius - self.scale / 2.0 : 0;
         UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:strokeRect byRoundingCorners:corners cornerRadii:CGSizeMake(strokeRadius, borderWidth)];
         [path closePath];
         path.lineWidth = borderWidth;
@@ -618,7 +618,7 @@
     return [self zc_flipHorizontal:YES vertical:NO];
 }
 
-#pragma mark - image effect
+#pragma mark - Image effect
 - (UIImage *)imageByTintColor:(UIColor *)color {
     UIGraphicsBeginImageContextWithOptions(self.size, NO, self.scale);
     CGRect rect = CGRectMake(0, 0, self.size.width, self.size.height);
@@ -635,36 +635,23 @@
 }
 
 - (UIImage *)imageByBlurSoft {
-    return [self imageByBlurRadius:60 tintColor:[UIColor colorWithWhite:0.84 alpha:0.36] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
+    return [self imageByBlurRadius:60 tintColor:[UIColor colorFormHex:0xD6D6D6 alpha:0.36] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
 }
 
 - (UIImage *)imageByBlurLight {
-    return [self imageByBlurRadius:60 tintColor:[UIColor colorWithWhite:1.0 alpha:0.3] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
+    return [self imageByBlurRadius:60 tintColor:[UIColor colorFormHex:0xFFFFFF alpha:0.3] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
 }
 
 - (UIImage *)imageByBlurExtraLight {
-    return [self imageByBlurRadius:40 tintColor:[UIColor colorWithWhite:0.97 alpha:0.82] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
+    return [self imageByBlurRadius:40 tintColor:[UIColor colorFormHex:0xF7F7F7 alpha:0.82] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
 }
 
 - (UIImage *)imageByBlurDark {
-    return [self imageByBlurRadius:40 tintColor:[UIColor colorWithWhite:0.11 alpha:0.73] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
+    return [self imageByBlurRadius:40 tintColor:[UIColor colorFormHex:0x1C1C1C alpha:0.73] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
 }
 
 - (UIImage *)imageByBlurWithTint:(UIColor *)tintColor {
-    const CGFloat EffectColorAlpha = 0.6;
-    UIColor *effectColor = tintColor;
-    size_t componentCount = CGColorGetNumberOfComponents(tintColor.CGColor);
-    if (componentCount == 2) {
-        CGFloat b;
-        if ([tintColor getWhite:&b alpha:NULL]) {
-            effectColor = [UIColor colorWithWhite:b alpha:EffectColorAlpha];
-        }
-    } else {
-        CGFloat r, g, b;
-        if ([tintColor getRed:&r green:&g blue:&b alpha:NULL]) {
-            effectColor = [UIColor colorWithRed:r green:g blue:b alpha:EffectColorAlpha];
-        }
-    }
+    UIColor *effectColor = [UIColor colorFormHex:tintColor.RGBValue alpha:0.6];
     return [self imageByBlurRadius:20 tintColor:effectColor tintMode:kCGBlendModeNormal saturation:-1.0 maskImage:nil];
 }
 
@@ -857,4 +844,3 @@ static void _yy_cleanupBuffer(void *userData, void *buf_data) {
 }
 
 @end
-

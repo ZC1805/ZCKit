@@ -12,8 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIButton (ZC)
 
-/** 初始化一个Button，可是设置title和image，默认字体FZCFS(15) */
-+ (instancetype)button:(CGRect)frame title:(nullable NSString *)title image:(nullable NSString *)image target:(nullable id)target action:(nullable SEL)action;
+/** 初始化一个SystemButton，可是设置title和image，默认字体FZCFS(15) */
++ (instancetype)customTitle:(nullable NSString *)title font:(nullable UIFont *)font color:(nullable UIColor *)color image:(nullable NSString *)image target:(nullable id)target action:(nullable SEL)action;
 
 @end
 

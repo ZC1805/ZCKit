@@ -7,6 +7,7 @@
 //
 
 #import "ZCRotateView.h"
+#import "ZCMacro.h"
 
 @interface ZCRotateView ()
 
@@ -20,7 +21,7 @@
     if (self = [super initWithFrame:frame]) {
         _strokeRadius = 15.0;
         _strokeThickness = 3.5;
-        _strokeColor = [UIColor redColor];
+        _strokeColor = ZCRed;
     }
     return self;
 }
@@ -52,7 +53,7 @@
         _indefiniteAnimatedLayer = [CAShapeLayer layer];
         _indefiniteAnimatedLayer.contentsScale = [[UIScreen mainScreen] scale];
         _indefiniteAnimatedLayer.frame = rect;
-        _indefiniteAnimatedLayer.fillColor = [UIColor clearColor].CGColor;
+        _indefiniteAnimatedLayer.fillColor = ZCClear.CGColor;
         _indefiniteAnimatedLayer.strokeColor = self.strokeColor.CGColor;
         _indefiniteAnimatedLayer.lineWidth = self.strokeThickness;
         _indefiniteAnimatedLayer.lineCap = kCALineCapRound;
@@ -60,7 +61,7 @@
         _indefiniteAnimatedLayer.path = smoothedPath.CGPath;
         
         CALayer *maskLayer = [CALayer layer];
-        maskLayer.contents = (id)[[UIImage imageNamed:@"zc_image_angle_mask"] CGImage];
+        maskLayer.contents = (id)[[ZCGlobal ZCImageName:@"zc_image_angle_mask"] CGImage];
         maskLayer.frame = _indefiniteAnimatedLayer.bounds;
         _indefiniteAnimatedLayer.mask = maskLayer;
         

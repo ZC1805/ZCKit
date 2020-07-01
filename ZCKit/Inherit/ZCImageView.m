@@ -17,5 +17,18 @@
     return self;
 }
 
-@end
+- (instancetype)initWithImage:(UIImage *)image {
+    if (self = [super initWithImage:image]) {
+        self.userInteractionEnabled = YES;
+    }
+    return self;
+}
 
+- (instancetype)initWithImage:(UIImage *)image highlightedImage:(UIImage *)highlightedImage {
+    if (self = [super initWithImage:image highlightedImage:highlightedImage]) {
+        self.userInteractionEnabled = YES;
+    }
+    return self;
+}
+
+@end

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCBlankControl.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -15,6 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 
 - (void)onControllerDidLayout;  /**< 所在的controller调用viewDidLayoutSubviews时触发此回调 */
+
+- (void)onControllerViewWillAppear;  /**< 所在的controller调用viewWillAppear时触发此回调 */
+
+- (void)onControllerViewWillDisappear;  /**< 所在的controller调用viewWillDisappear时触发此回调 */
 
 @end
 
@@ -49,6 +54,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, readonly) UIViewController *currentViewController;  /**< 返回当前所在最近的controller */
 
+@property (nonatomic, strong, readonly) ZCBlankControl *blankCoverView;  /**< 懒加载生成当前空覆盖视图 */
+
 @property (nullable, nonatomic, copy) NSString *flagStr;  /**< 类似tag的标识，默认nil */
 
 
@@ -76,7 +83,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setShadow:(UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius;  /**< 阴影 */
 
-- (void)setCorner:(NSInteger)radius color:(nullable UIColor *)color width:(CGFloat)width;  /**< 圆角 & 描边 */
+- (void)setCorner:(CGFloat)radius color:(nullable UIColor *)color width:(CGFloat)width;  /**< 圆角 & 描边 */
 
 - (void)setCorner:(UIRectCorner)corner radius:(CGSize)radius;  /**< 设置部分圆角 */
 

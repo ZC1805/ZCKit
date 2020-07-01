@@ -15,14 +15,14 @@ extern NSString * const ZCFlagStr;
 
 @interface NSString (ZC)
 
-#pragma mark - usually
+#pragma mark - Usually
 - (nullable NSString *)base64EncodedString;  /**< base64数据 */
 
 - (nullable NSNumber *)numberObject;  /**< number数据 */
 
 - (const char *)charString;  /**< 转换为C字符串 */
 
-- (nullable id)jsonObject;  /**< json数据 */
+- (nullable id)jsonObject;  /**< json数据，可能为dictionary、array、string、number等 */
 
 - (NSString *)md5String;  /**< md5大写加密 */
 
@@ -31,6 +31,8 @@ extern NSString * const ZCFlagStr;
 - (CGFloat)widthForFont:(UIFont *)font;  /**< 计算宽度，NSLineBreakByWordWrapping */
 
 - (CGFloat)heightForFont:(UIFont *)font width:(CGFloat)width;  /**< 计算高度，NSLineBreakByWordWrapping */
+
+- (CGFloat)heightForFont:(UIFont *)font maxWidth:(CGFloat)maxWidth lineSpacing:(CGFloat)lineSpacing;  /**< 计算Label高度 */
 
 - (NSUInteger)charCount;  /**< 字符长度 */
 
@@ -52,11 +54,23 @@ extern NSString * const ZCFlagStr;
 
 - (NSString *)deletePictureResolution;  /**< 删除图片尾缀@2x、@3x */
 
-- (NSString *)prefixForFlag:(NSString *)flag;  /**< 返回标记符前面字符串，flag不为空且只含有一个，否则返回@"" */
+- (NSString *)prefixForFlag:(NSString *)flag;  /**< 返回匹配到的第一个标记符前面字符串，flag不为空且至少包含有一个匹配结果，否则返回@"" */
 
-- (NSString *)suffixForFlag:(NSString *)flag;  /**< 返回标记符后面字符串，flag不为空且只含有一个，否则返回@"" */
+- (NSString *)suffixForFlag:(NSString *)flag;  /**< 返回匹配到的第一个标记符后面字符串，flag不为空且至少包含有一个匹配结果，否则返回@"" */
 
-#pragma mark - judge
+- (NSString *)matchString:(NSString *)matchString replace:(NSString *)replaceString;  /**< 替换字符串，递归处理 */
+
+- (NSString *)replaceCharStrings:(NSString *)charStrings withString:(NSString *)aString reverse:(BOOL)isReverse;  /**< 使用字符串替换字符集中的每项 */
+
+- (NSString *)regroupStringFromCharStrings:(NSString *)charStrings;  /**< 返回由当前字符集合按顺序组成的字符串，其余都替换成@"" */
+
+- (NSString *)replaceStringArray:(NSArray <NSString *>*)strings withString:(NSString *)aString;  /**< 将数组中字符串都匹配替换 */
+
+- (NSAttributedString *)attributedStringToMatch:(NSString *)match matchAtt:(nullable NSDictionary *)matchAtt otherAtt:(nullable NSDictionary *)otherAtt spc:(CGFloat)spc;  /**< 富文本 */
+
+- (NSArray <NSString *>*)charStrings;
+
+#pragma mark - Judge
 @property (nonatomic, readonly) BOOL isPureInteger;  /**< 是否是整形 */
 
 @property (nonatomic, readonly) BOOL isPureFloat;  /**< 是否是浮点型 */
@@ -109,7 +123,7 @@ extern NSString * const ZCFlagStr;
 - (BOOL)isPasswordAllowAdmitSpecialCharacter:(BOOL)specialChar mustAllContain:(BOOL)allContain allowSimple:(BOOL)allowSimple
                                    shieldStr:(nullable NSString *)shieldStr min:(int)min max:(int)max;  /**< 是否是规范的密码 */
 
-#pragma mark - class
+#pragma mark - Class
 + (NSString *)stringWithUUID;  /**< 生成唯一个的UUID */
 
 + (NSString *)emojiWithIntCode:(int)intCode;  /**< 将十六进制的编码转为emoji字符 */
@@ -118,7 +132,7 @@ extern NSString * const ZCFlagStr;
 
 + (nullable NSString *)stringWithBase64EncodedString:(nullable NSString *)base64EncodedString;  /**< 转换base64字符串 */
 
-#pragma mark - expand
+#pragma mark - Expand
 - (NSString *)stringByURLEncode;
 
 - (NSString *)stringByURLDecode;

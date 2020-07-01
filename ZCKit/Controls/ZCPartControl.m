@@ -10,10 +10,9 @@
 #import "ZCButton.h"
 #import "ZCMacro.h"
 #import "UIView+ZC.h"
+#import "NSArray+ZC.h"
 
-#define def_normal_mark_hei (2.0)
-
-#pragma mark - ~~~~~~~~~~ ZCPartSet ~~~~~~~~~~
+#pragma mark - ~ ZCPartSet ~
 @interface ZCPartSet ()
 
 @property (nonatomic, strong) NSArray *nca;
@@ -39,19 +38,19 @@
         self.selectImage = nil;
         self.normalTitleFont = ZCFS(15);
         self.selectTitleFont = ZCFS(15);
-        self.normalColorRGB = 0x303030;
-        self.selectColorRGB = 0xFF0000;
+        self.normalColorRGB = ZCBlack30.RGBValue;
+        self.selectColorRGB = ZCRed.RGBValue;
         self.spaceHeight = 20.0;
         self.imageSize = CGSizeMake(20.0, 20.0);
         self.imageTitleSpace = 5.0;
         self.isVerticalAlignment = YES;
         self.itemSelCalwid = 20.0;
-        self.itemSelMarkSize = CGSizeMake(6.0, def_normal_mark_hei);
+        self.itemSelMarkSize = CGSizeMake(6.0, 2.0);
     }
     return self;
 }
 
-- (void)setNormalColorRGB:(int)normalColorRGB {
+- (void)setNormalColorRGB:(uint32_t)normalColorRGB {
     _normalColorRGB = normalColorRGB;
     _normalColor = ZCRGB(normalColorRGB);
     _nca = @[@((CGFloat)((normalColorRGB & 0xFF0000) >> 16)),
@@ -59,7 +58,7 @@
              @((CGFloat)(normalColorRGB & 0x0000FF))];
 }
 
-- (void)setSelectColorRGB:(int)selectColorRGB {
+- (void)setSelectColorRGB:(uint32_t)selectColorRGB {
     _selectColorRGB = selectColorRGB;
     _selectColor = ZCRGB(selectColorRGB);
     _sca = @[@((CGFloat)((selectColorRGB & 0xFF0000) >> 16)),
@@ -70,21 +69,21 @@
 - (void)calcelateSelectWidth {
     if (self.title) {
         NSDictionary *att = @{NSFontAttributeName : self.selectTitleFont};
-        NSStringDrawingOptions ops = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
+        NSStringDrawingOptions ops = NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading;
         CGFloat wid = [self.title boundingRectWithSize:CGSizeMake(MAXFLOAT, 30.0) options:ops attributes:att context:nil].size.width;
         self.itemSelCalwid = MAX(self.itemSelCalwid, wid + 12.0);
     }
     if (self.selectImage) {
         self.itemSelCalwid = MAX(self.itemSelCalwid, self.selectImage.size.width + 12.0);
     }
-    self.itemSelMarkSize = CGSizeMake(self.itemSelCalwid - 14.0, def_normal_mark_hei);
+    self.itemSelMarkSize = CGSizeMake(self.itemSelCalwid - 14.0, 2.0);
 }
 
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCPartControl ~~~~~~~~~~
-static NSString* const kvo_observe_offset = @"contentOffset";
+#pragma mark - ~ ZCPartControl ~
+static NSString * const kvo_observe_offset = @"contentOffset";
 static void *kvo_context_offset = @"segmentViewScrollView_context";
 typedef void(^block)(NSInteger touchIndex);
 
@@ -115,7 +114,13 @@ typedef void(^block)(NSInteger touchIndex);
 
 @property (nonatomic, assign) BOOL isFixItemWid;
 
+@property (nonatomic, assign) BOOL isShieldSelect;
+
 @property (nonatomic, assign) NSInteger selectItemIndex;
+
+@property (nonatomic, assign) NSInteger targetScrollIndex;
+
+@property (nonatomic, assign) NSInteger currentTapIndex;
 
 @end
 
@@ -141,10 +146,13 @@ typedef void(^block)(NSInteger touchIndex);
     _barColor = ZCClear;
     _markSize = CGSizeZero;
     _contentEdge = UIEdgeInsetsZero;
-    _allBtns = [NSMutableArray array];
-    _allSpaces = [NSMutableArray array];
-    _markColor = ZCRGB(0xDCDCDC);
+    _allBtns = NSMutableArray.array;
+    _allSpaces = NSMutableArray.array;
+    _markColor = ZCBlackDC;
+    _currentTapIndex = -1;
     _selectItemIndex = -1;
+    _targetScrollIndex = -1;
+    _isShieldSelect = NO;
 }
 
 - (void)initialload {
@@ -184,7 +192,7 @@ typedef void(^block)(NSInteger touchIndex);
     [self selectToIndex:self.selectItemIndex animated:YES];
 }
 
-#pragma mark - system func
+#pragma mark - System func
 - (void)dealloc {
     [self releaseAssociateScrollView];
 }
@@ -205,12 +213,13 @@ typedef void(^block)(NSInteger touchIndex);
     }
 }
 
-#pragma mark - private func
+#pragma mark - Private func
 - (void)selectToIndex:(NSInteger)selectIndex animated:(BOOL)animated {
     BOOL change = self.selectItemIndex != selectIndex;
     if (selectIndex == -1) {
         if (self.isObserver) {
             if (self.items.count) {
+                self.currentTapIndex = 0;
                 [self selectToIndex:0 animated:animated];
             }
         } else {
@@ -219,6 +228,7 @@ typedef void(^block)(NSInteger touchIndex);
         }
     } else {
         if (self.items.count == 0) {
+            self.currentTapIndex = -1;
             [self selectToIndex:-1 animated:animated]; return;
         }
         _markView.hidden = NO;
@@ -235,9 +245,6 @@ typedef void(^block)(NSInteger touchIndex);
         }
     }
     if (change && selectIndex != -1) {
-        if (self.delegate && [self.delegate respondsToSelector:@selector(partControl:didSelectItemAtIndex:)]) {
-            [self.delegate partControl:self didSelectItemAtIndex:selectIndex];
-        }
         if (self.onSelectIndex) {
             self.onSelectIndex(selectIndex);
         }
@@ -250,10 +257,13 @@ typedef void(^block)(NSInteger touchIndex);
     [scrollView addObserver:self forKeyPath:kvo_observe_offset options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:kvo_context_offset];
     self.isObserver = YES;
     if (self.selectItemIndex >= 0 && self.selectItemIndex < self.items.count) {
+        self.currentTapIndex = self.selectItemIndex;
         [self selectToIndex:self.selectItemIndex animated:NO];
     } else if (self.items.count) {
+        self.currentTapIndex = 0;
         [self selectToIndex:0 animated:NO];
     } else {
+        self.currentTapIndex = -1;
         [self selectToIndex:-1 animated:NO];
     }
 }
@@ -265,13 +275,21 @@ typedef void(^block)(NSInteger touchIndex);
     }
 }
 
-#pragma mark - tool func
+- (void)shieldOnceSelectIndexDidChange {
+    self.isShieldSelect = YES;
+}
+
+- (nullable ZCButton *)barButtonWithIndex:(NSInteger)index {
+    return [self.allBtns objectOrNilAtIndex:index];
+}
+
+#pragma mark - Tool func
 - (void)barScrollToIndex:(NSInteger)index animated:(BOOL)animate {
     if (index != -1) {
         CGFloat setx = self.barView.contentOffset.x;
         CGFloat offx = [self totalWidthToIndex:index];
         CGFloat barHalf = self.barView.width / 2.0;
-        CGFloat itemHalf = self.items[index].itemSelCalwid / 2.0;
+        CGFloat itemHalf = self.items[index].itemSelCalwid / 2.0 + _interval;
         if ((offx + _alphaOffset + itemHalf > barHalf) && (offx + _alphaOffset + itemHalf + barHalf < self.barView.contentSize.width)) {
             setx = offx + _alphaOffset + itemHalf - barHalf;
         } else if (offx + _alphaOffset + itemHalf + barHalf >= self.barView.contentSize.width) {
@@ -298,7 +316,7 @@ typedef void(^block)(NSInteger touchIndex);
         CGFloat setx = self.barView.contentOffset.x;
         CGFloat offx = [self totalWidthToIndex:page];
         CGFloat barHalf = self.barView.width / 2.0;
-        CGFloat itemHalf = self.items[page].itemSelCalwid / 2.0;
+        CGFloat itemHalf = self.items[page].itemSelCalwid / 2.0 + _interval;
         if ((offx + _alphaOffset + itemHalf > barHalf) && (offx + _alphaOffset + itemHalf + barHalf < self.barView.contentSize.width)) {
             setx = offx + _alphaOffset + itemHalf - barHalf;
         } else if (offx + _alphaOffset + itemHalf + barHalf >= self.barView.contentSize.width) {
@@ -307,7 +325,9 @@ typedef void(^block)(NSInteger touchIndex);
             setx = 0;
         }
         if (setx < 0) setx = 0;
-        [self.barView setContentOffset:CGPointMake(setx, 0) animated:YES];
+        if (self.targetScrollIndex == -1 || self.targetScrollIndex == page) {
+            [self.barView setContentOffset:CGPointMake(setx, 0) animated:YES]; self.targetScrollIndex = -1;
+        }
         [self buttonSelect:NO index:self.selectItemIndex touch:NO resetColor:NO];
         self.selectItemIndex = page;
         [self buttonSelect:YES index:self.selectItemIndex touch:NO resetColor:NO];
@@ -419,12 +439,18 @@ typedef void(^block)(NSInteger touchIndex);
     return nil;
 }
 
-#pragma mark - set & get
+#pragma mark - Set & Get
 - (void)setSelectItemIndex:(NSInteger)selectItemIndex {
+    BOOL isTap = (_currentTapIndex != -1) && (_currentTapIndex == selectItemIndex);
+    BOOL isSlid = !isTap && (_currentTapIndex == -1);
+    if (_currentTapIndex == selectItemIndex) _currentTapIndex = -1;
     BOOL change = _selectItemIndex != selectItemIndex;
     _selectItemIndex = selectItemIndex;
-    if (change && self.delegate && [self.delegate respondsToSelector:@selector(partControl:selectIndexDidChange:)]) {
-        [self.delegate partControl:self selectIndexDidChange:_selectItemIndex];
+    if (change) {
+        if (!self.isShieldSelect && self.delegate && [self.delegate respondsToSelector:@selector(partControl:selectIndexDidChange:isTouchTrigger:isActiveSlid:)]) {
+            [self.delegate partControl:self selectIndexDidChange:_selectItemIndex isTouchTrigger:isTap isActiveSlid:isSlid];
+        }
+        if (self.isShieldSelect) self.isShieldSelect = NO;
     }
 }
 
@@ -444,6 +470,11 @@ typedef void(^block)(NSInteger touchIndex);
 
 - (void)setContentEdge:(UIEdgeInsets)contentEdge {
     _contentEdge = contentEdge;
+    if (UIEdgeInsetsEqualToEdgeInsets(UIEdgeInsetsZero, contentEdge)) {
+        if (_barView) _barView.clipsToBounds = YES;
+    } else {
+        if (_barView) _barView.clipsToBounds = NO;
+    }
     [self reloadLayout];
 }
 
@@ -474,15 +505,18 @@ typedef void(^block)(NSInteger touchIndex);
     [self reloadLayout];
 }
 
-#pragma mark - interface
+#pragma mark - Interface
 - (void)initBarUI {
+    _backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
+    _backgroundView.backgroundColor = ZCClear;
+    
     _barView = [[UIScrollView alloc] init];
     _barView.backgroundColor = _barColor;
     _barView.showsHorizontalScrollIndicator = NO;
     _barView.showsVerticalScrollIndicator = NO;
+    _barView.directionalLockEnabled = YES;
     
     _markView = [[UIView alloc] init];
-    _markView.layer.cornerRadius = 1.0;
     _markView.backgroundColor = _markColor;
     
     _rightAlphaView = [[UIImageView alloc] init];
@@ -494,6 +528,7 @@ typedef void(^block)(NSInteger touchIndex);
 }
 
 - (void)joinSubview {
+    [self addSubview:_backgroundView];
     [self addSubview:_barView];
     [self addSubview:_leftAlphaView];
     [self addSubview:_rightAlphaView];
@@ -506,12 +541,17 @@ typedef void(^block)(NSInteger touchIndex);
     for (NSInteger i = 0; i < self.items.count; i ++) {
         ZCPartSet *item = self.items[i];
         ZCButton *button = [ZCButton buttonWithType:UIButtonTypeCustom];
+        button.adjustsImageWhenDisabled = NO;
+        button.adjustsImageWhenHighlighted = NO;
         [button setTitle:item.title forState:UIControlStateNormal];
         [button setTitleColor:item.normalColor forState:UIControlStateNormal];
         [button setTitleColor:item.selectColor forState:UIControlStateSelected];
-        [button setTitleColor:[item.selectColor colorWithAlphaComponent:0.3] forState:UIControlStateHighlighted | UIControlStateSelected];
+        [button setTitleColor:item.normalColor forState:UIControlStateHighlighted|UIControlStateNormal];
+        [button setTitleColor:item.selectColor forState:UIControlStateHighlighted|UIControlStateSelected];
         if (item.normalImage) [button setImage:item.normalImage forState:UIControlStateNormal];
+        if (item.normalImage) [button setImage:item.normalImage forState:UIControlStateHighlighted|UIControlStateNormal];
         if (item.selectImage) [button setImage:item.selectImage forState:UIControlStateSelected];
+        if (item.selectImage) [button setImage:item.selectImage forState:UIControlStateHighlighted|UIControlStateSelected];
         button.responseTouchInterval = 0.35;
         if (item.normalImage) {
             button.imageViewSize = item.imageSize;
@@ -526,7 +566,7 @@ typedef void(^block)(NSInteger touchIndex);
         button.titleLabel.textAlignment = NSTextAlignmentCenter;
         [button addTarget:self action:@selector(onItemBar:) forControlEvents:UIControlEventTouchUpInside];
         UIView *spaceline = [[UIView alloc] init];
-        spaceline.backgroundColor = ZCRGB(0xDCDCDC);
+        spaceline.backgroundColor = ZCBlackDC;
         [self.barView addSubview:button];
         [self.barView addSubview:spaceline];
         [self.allBtns addObject:button];
@@ -560,7 +600,7 @@ typedef void(^block)(NSInteger touchIndex);
         if (_markSize.width && _markSize.height) {
             itemSize = _markSize;
         } else if (_markSize.width) {
-            itemSize = CGSizeMake(_markSize.width, _isBottomMark ? def_normal_mark_hei : (height - _markOffset));
+            itemSize = CGSizeMake(_markSize.width, _isBottomMark ? 2.0 : (height - _markOffset));
         } else if (_markSize.height) {
             if (_isBottomMark) {
                 itemSize = (count <= 3) ? CGSizeMake(itemwid, _markSize.height) : CGSizeMake(itemwid - _markOffset, _markSize.height);
@@ -569,7 +609,7 @@ typedef void(^block)(NSInteger touchIndex);
             }
         } else {
             if (_isBottomMark) {
-                itemSize = (count <= 3) ? CGSizeMake(itemwid, def_normal_mark_hei) : CGSizeMake(itemwid - _markOffset, def_normal_mark_hei);
+                itemSize = (count <= 3) ? CGSizeMake(itemwid, 2.0) : CGSizeMake(itemwid - _markOffset, 2.0);
             } else {
                 itemSize = CGSizeMake(itemwid - _markOffset, height - _markOffset);
             }
@@ -585,6 +625,7 @@ typedef void(^block)(NSInteger touchIndex);
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self layoutItemSAI11];
+    self.backgroundView.frame = CGRectMake(0, 0, self.width, self.height);
     CGFloat bar_h = self.height - _contentEdge.top - _contentEdge.bottom;
     CGFloat bar_w = self.width - _contentEdge.left - _contentEdge.right;
     self.barView.frame = CGRectMake(_contentEdge.left, _contentEdge.top, bar_w, bar_h);
@@ -608,10 +649,17 @@ typedef void(^block)(NSInteger touchIndex);
     }
 }
 
-#pragma mark - action
+#pragma mark - Action
 - (void)onItemBar:(ZCButton *)btn {
-    NSInteger index = [self.allBtns indexOfObject:btn];
-    [self selectToIndex:index animated:YES];
+    btn.highlighted = NO;
+    NSInteger fromIdex = self.selectItemIndex;
+    NSInteger aimIndex = [self.allBtns indexOfObject:btn];
+    self.currentTapIndex = aimIndex;
+    self.targetScrollIndex = aimIndex;
+    [self selectToIndex:aimIndex animated:YES];
+    if (self.delegate && [self.delegate respondsToSelector:@selector(partControl:didSelectItemAtIndex:fromIndex:)]) {
+        [self.delegate partControl:self didSelectItemAtIndex:aimIndex fromIndex:fromIdex];
+    }
 }
 
 @end

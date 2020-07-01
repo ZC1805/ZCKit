@@ -9,11 +9,12 @@
 #import "ZCCycleControl.h"
 #import "ZCKitBridge.h"
 #import "UIView+ZC.h"
+#import "ZCMacro.h"
 
-static CGSize const kDefaultDotSize = {6.0, 6.0};
-static NSString *ident = @"cycleControlCell";
+static const CGSize kDefaultDotSize = {6.0, 6.0};
+static NSString * const ident = @"cycleControlCell";
 
-#pragma mark - ~~~~~~~~~~ ZCCycleAnimatedDot ~~~~~~~~~~
+#pragma mark - ~ ZCCycleAnimatedDot ~
 @interface ZCCycleAnimatedDot : UIView
 
 @property (nonatomic, strong) UIColor *dotColor;
@@ -35,10 +36,10 @@ static NSString *ident = @"cycleControlCell";
 }
 
 - (void)initialization {
-    _dotColor = [UIColor whiteColor];
-    self.backgroundColor = [UIColor clearColor];
-    self.layer.cornerRadius = CGRectGetWidth(self.frame) / 2.0;
-    self.layer.borderColor = [UIColor whiteColor].CGColor;
+    _dotColor = ZCWhite;
+    self.backgroundColor = ZCClear;
+    self.layer.cornerRadius = self.width / 2.0;
+    self.layer.borderColor = ZCWhite.CGColor;
     self.layer.borderWidth = 1.0;
 }
 
@@ -52,14 +53,14 @@ static NSString *ident = @"cycleControlCell";
 
 - (void)animateToActiveState {
     self.backgroundColor = _dotColor;
-    [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:-20 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:1.0 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:-20 options:UIViewAnimationOptionCurveLinear animations:^{
         self.transform = CGAffineTransformMakeScale(1.3, 1.3);
     } completion:nil];
 }
 
 - (void)animateToDeactiveState {
-    self.backgroundColor = [UIColor clearColor];
-    [UIView animateWithDuration:1 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveLinear animations:^{
+    self.backgroundColor = ZCClear;
+    [UIView animateWithDuration:1.0 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.transform = CGAffineTransformIdentity;
     } completion:nil];
 }
@@ -67,7 +68,7 @@ static NSString *ident = @"cycleControlCell";
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCCyclePageControl ~~~~~~~~~~
+#pragma mark - ~ ZCCyclePageControl ~
 @class ZCCyclePageControl;
 
 @protocol ZCCyclePageControlDelegate <NSObject>  //点击回调
@@ -114,7 +115,7 @@ static NSString *ident = @"cycleControlCell";
     self.spacingBetweenDots = 7.0;
     self.numberOfPages = 0;
     self.currentPage = 0;
-    self.backgroundColor = [UIColor clearColor];
+    self.backgroundColor = ZCClear;
 }
 
 - (void)sizeToFit {
@@ -250,14 +251,10 @@ static NSString *ident = @"cycleControlCell";
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCCycleCell ~~~~~~~~~~
-@interface ZCCycleCell : UICollectionViewCell
+#pragma mark - ~ ZCCycleCell ~
+@interface ZCCycleCell ()
 
 @property (nonatomic, copy) NSString *title;
-
-@property (nonatomic, weak) UILabel *titleLabel;
-
-@property (nonatomic, weak) UIImageView *imageView;
 
 @property (nonatomic, assign) BOOL isHasConfigured;
 
@@ -284,9 +281,9 @@ static NSString *ident = @"cycleControlCell";
 - (void)setupTitleLabel {
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _titleLabel = titleLabel;
-    _titleLabel.textColor = [UIColor whiteColor];
+    _titleLabel.textColor = ZCWhite;
     _titleLabel.font = [UIFont systemFontOfSize:14];
-    _titleLabel.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4];
+    _titleLabel.backgroundColor = [ZCBlack colorWithAlphaComponent:0.4];
     _titleLabel.textAlignment = NSTextAlignmentLeft;
     _titleLabel.height = 30.0;
     _titleLabel.hidden = YES;
@@ -314,7 +311,56 @@ static NSString *ident = @"cycleControlCell";
 @end
 
 
-#pragma mark - ~~~~~~~~~~ ZCCycleControl ~~~~~~~~~~
+#pragma mark - ~ ZCCycleFlowLayout ~
+@interface ZCCycleHorizontalFlowLayout : UICollectionViewFlowLayout
+
+@property (nonatomic, assign) CGFloat itemHorSpace; //横向滚动时，每张轮播图的间距
+
+@property (nonatomic, assign) CGFloat itemMinScale; //前后2张图的缩小比例 (0.1 ~ 1.0)
+
+@property (nonatomic, assign) BOOL isMultiple; //是否同时显示两张图
+
+@end
+
+@implementation ZCCycleHorizontalFlowLayout
+
+- (instancetype)initWithItemHorSpace:(CGFloat)itemHorSpace isMultiple:(BOOL)isMultiple {
+    if (self = [super init]) {
+        self.isMultiple = isMultiple;
+        self.itemMinScale = 0.8;
+        self.itemHorSpace = itemHorSpace;
+    }
+    return self;
+}
+
+- (BOOL)shouldInvalidateLayoutForBoundsChange:(CGRect)newBounds {
+    return YES;
+}
+
+- (void)prepareLayout {
+    [super prepareLayout];
+    CGFloat offset = self.isMultiple ? (self.itemHorSpace / 2.0 + 0.5) : 0;
+    self.sectionInset = UIEdgeInsetsMake(0, self.itemHorSpace / 2.0, 0, self.itemHorSpace / 2.0);
+    self.itemSize = CGSizeMake(self.collectionView.width - self.itemHorSpace - offset, self.collectionView.height);
+    self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    self.minimumLineSpacing = self.itemHorSpace;
+}
+
+- (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {
+    NSArray<UICollectionViewLayoutAttributes *>*atts = [super layoutAttributesForElementsInRect:rect];
+    CGFloat centerX = self.collectionView.contentOffset.x + self.collectionView.width * 0.5;
+    for (UICollectionViewLayoutAttributes *attri in atts) {
+        CGFloat delta = ABS(attri.center.x - centerX);
+        CGFloat scale = 1.0 - delta / self.collectionView.width * (1.0 - self.itemMinScale);
+        attri.transform = CGAffineTransformMakeScale(1.0, scale);
+    }
+    return atts;
+}
+
+@end
+
+
+#pragma mark - ~ ZCCycleControl ~
 @interface ZCCycleControl () <UICollectionViewDataSource, UICollectionViewDelegate, ZCCyclePageControlDelegate>
 
 @property (nonatomic, weak) UICollectionView *mainView;
@@ -324,6 +370,10 @@ static NSString *ident = @"cycleControlCell";
 @property (nonatomic, weak) NSTimer *timer;
 
 @property (nonatomic, weak) UIControl *pageControl;
+
+@property (nonatomic, assign) CGFloat itemHorSpace;
+
+@property (nonatomic, assign) BOOL isShowMultiple;
 
 @property (nonatomic, strong) NSArray *imagePathsGroup;
 
@@ -335,10 +385,10 @@ static NSString *ident = @"cycleControlCell";
 
 @implementation ZCCycleControl
 
-#pragma mark - initial
+#pragma mark - Initial
 - (instancetype)initWithFrame:(CGRect)frame imageUrlGroup:(NSArray *)imageUrlGroup {
     if (self = [super initWithFrame:frame]) {
-        [self initialization];
+        [self initialization:0 multiple:NO];
         [self setupMainView];
         if (imageUrlGroup) {
             self.imageURLStringsGroup = [NSMutableArray arrayWithArray:imageUrlGroup];
@@ -349,7 +399,7 @@ static NSString *ident = @"cycleControlCell";
 
 - (instancetype)initWithFrame:(CGRect)frame delegate:(id<ZCCycleControlDelegate>)delegate holder:(nullable UIImage *)holder {
     if (self = [super initWithFrame:frame]) {
-        [self initialization];
+        [self initialization:0 multiple:NO];
         [self setupMainView];
         self.delegate = delegate;
         if (holder) self.placeholderImage = holder;
@@ -357,9 +407,9 @@ static NSString *ident = @"cycleControlCell";
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(NSArray *)imageGroup {
+- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(NSArray *)imageGroup itemHorSpace:(CGFloat)itemHorSpace isShowMultiple:(BOOL)isShowMultiple {
     if (self = [super initWithFrame:frame]) {
-        [self initialization];
+        [self initialization:itemHorSpace multiple:isShowMultiple];
         [self setupMainView];
         self.isInfiniteLoop = loop;
         if (imageGroup) {
@@ -371,13 +421,15 @@ static NSString *ident = @"cycleControlCell";
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self initialization];
+        [self initialization:0 multiple:NO];
         [self setupMainView];
     }
     return self;
 }
 
-- (void)initialization {
+- (void)initialization:(CGFloat)space multiple:(BOOL)multiple {
+    _isShowMultiple = multiple;
+    _itemHorSpace = space;
     _isAutoScroll = YES;
     _isInfiniteLoop = YES;
     _isOnlyDisplayText = NO;
@@ -390,23 +442,29 @@ static NSString *ident = @"cycleControlCell";
     _pageControlSpacing = 7.0;
     _pageControlAliment = ZCEnumCycleAlimentCenter;
     _pageControlStyle = ZCEnumCyclePageStyleAnimated;
-    _pageDotSelectColor = [UIColor whiteColor];
-    _pageDotColor = [UIColor lightGrayColor];
+    _pageDotSelectColor = ZCWhite;
+    _pageDotColor = ZCBlackA8;
 }
 
 - (void)setupMainView {
-    self.backgroundColor = [UIColor whiteColor];
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    flowLayout.minimumLineSpacing = 0;
-    flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    self.backgroundColor = ZCWhite;
+    UICollectionViewFlowLayout *flowLayout = nil;
+    if (_itemHorSpace > 0) {
+        flowLayout = [[ZCCycleHorizontalFlowLayout alloc] initWithItemHorSpace:_itemHorSpace isMultiple:_isShowMultiple];
+    } else {
+        flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        flowLayout.minimumLineSpacing = 0;
+    }
     _flowLayout = flowLayout;
-    UICollectionView *mainView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:flowLayout];
-    mainView.backgroundColor = [UIColor clearColor];
+    _flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    UICollectionView *mainView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:_flowLayout];
+    mainView.backgroundColor = ZCClear;
     mainView.pagingEnabled = YES;
     mainView.showsHorizontalScrollIndicator = NO;
     mainView.showsVerticalScrollIndicator = NO;
     mainView.directionalLockEnabled = YES;
-    [mainView registerClass:[ZCCycleCell class] forCellWithReuseIdentifier:ident];
+    [mainView registerClass:ZCCycleCell.class forCellWithReuseIdentifier:ident];
+    mainView.clipsToBounds = _itemHorSpace <= 0;
     mainView.dataSource = self;
     mainView.delegate = self;
     mainView.scrollsToTop = NO;
@@ -414,7 +472,7 @@ static NSString *ident = @"cycleControlCell";
     _mainView = mainView;
 }
 
-#pragma mark - property
+#pragma mark - Property
 - (void)setPlaceholderImage:(UIImage *)placeholderImage {
     _placeholderImage = placeholderImage;
     if (!_backgroundImageView) {
@@ -511,7 +569,9 @@ static NSString *ident = @"cycleControlCell";
 
 - (void)setScrollDirection:(UICollectionViewScrollDirection)scrollDirection {
     _scrollDirection = scrollDirection;
-    _flowLayout.scrollDirection = scrollDirection;
+    if (_itemHorSpace <= 0) {
+        _flowLayout.scrollDirection = scrollDirection;
+    }
 }
 
 - (void)setAutoScrollTimeInterval:(CGFloat)autoScrollTimeInterval {
@@ -574,7 +634,7 @@ static NSString *ident = @"cycleControlCell";
     }
 }
 
-#pragma mark - actions
+#pragma mark - Actions
 - (void)setupTimer {
     NSTimer *timer = [NSTimer scheduledTimerWithTimeInterval:self.autoScrollTimeInterval target:self selector:@selector(automaticScroll) userInfo:nil repeats:YES];
     _timer = timer;
@@ -643,10 +703,14 @@ static NSString *ident = @"cycleControlCell";
         return 0;
     }
     int index = 0;
-    if (_flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
-        index = (_mainView.contentOffset.x + _flowLayout.itemSize.width * 0.5) / _flowLayout.itemSize.width;
+    if (_itemHorSpace <= 0) {
+        if (_flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
+            index = (_mainView.contentOffset.x + _flowLayout.itemSize.width * 0.5) / _flowLayout.itemSize.width;
+        } else {
+            index = (_mainView.contentOffset.y + _flowLayout.itemSize.height * 0.5) / _flowLayout.itemSize.height;
+        }
     } else {
-        index = (_mainView.contentOffset.y + _flowLayout.itemSize.height * 0.5) / _flowLayout.itemSize.height;
+        index = (_mainView.contentOffset.x + self.width * 0.5) / self.width;
     }
     return MAX(0, index);
 }
@@ -655,10 +719,12 @@ static NSString *ident = @"cycleControlCell";
     return (int)index % self.imagePathsGroup.count;
 }
 
-#pragma mark - circles
+#pragma mark - Circles
 - (void)layoutSubviews {
     [super layoutSubviews];
-    _flowLayout.itemSize = self.frame.size;
+    if (_itemHorSpace <= 0) {
+        _flowLayout.itemSize = self.frame.size;
+    }
     _mainView.frame = self.bounds;
     if (_mainView.contentOffset.x == 0 &&  _totalItemsCount) {
         int targetIndex = 0;
@@ -710,7 +776,7 @@ static NSString *ident = @"cycleControlCell";
     [self invalidateTimer];
 }
 
-#pragma mark - public actions
+#pragma mark - Public actions
 - (void)adjustWhenControllerViewWillAppera {
     long targetIndex = [self currentIndex];
     if (targetIndex < _totalItemsCount) {
@@ -752,6 +818,9 @@ static NSString *ident = @"cycleControlCell";
         cell.imageView.contentMode = self.imageViewContentMode;
         cell.clipsToBounds = YES;
         cell.isOnlyDisplayText = self.isOnlyDisplayText;
+    }
+    if ([self.delegate respondsToSelector:@selector(cycleControl:cell:indexPath:)]) {
+        [self.delegate cycleControl:self cell:cell indexPath:indexPath];
     }
     return cell;
 }
@@ -803,4 +872,3 @@ static NSString *ident = @"cycleControlCell";
 }
 
 @end
-

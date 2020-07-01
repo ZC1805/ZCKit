@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-UIKIT_EXTERN NSNotificationName const ZCViewControllerDidBeGesPopNotification;  /**< 手动侧滑返回成功Pop事件通知，object为当前top控制器 */
+extern NSNotificationName const ZCViewControllerDidBeGesPopNotification;  /**< 系统手动侧滑返回成功Pop事件通知，object为当前top控制器 */
 
 @protocol ZCViewControllerBackProtocol <NSObject>  /**< 关于导航的设置协议 */
 
