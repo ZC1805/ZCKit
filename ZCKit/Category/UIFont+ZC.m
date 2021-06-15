@@ -89,17 +89,4 @@
     return [UIFont fontWithDescriptor:descriptor size:0];
 }
 
-#pragma mark - name
-+ (UIFont *)fontCNSize:(CGFloat)size {
-    return [UIFont fontWithName:@"HiraginoSansGB-W3" size:size];
-}
-
-+ (UIFont *)fontENSize:(CGFloat)size {
-    return [UIFont fontWithName:@"HelveticaNeue" size:size];
-}
-
-+ (UIFont *)fontTITLESize:(CGFloat)size {
-    return [UIFont fontWithName:@"HiraginoSansGB-W6" size:size];
-}
-
 @end

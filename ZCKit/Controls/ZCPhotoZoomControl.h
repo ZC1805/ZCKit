@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCPhotoZoomControl : UIControl  /**< 头部缩放视图，显示模式是按比例铺满，可自己添加Action */
+@interface ZCPhotoZoomControl : UIControl  /**< 加在滑动视图头部的缩放视图，显示模式是按比例铺满，可自己添加Action */
 
 @property (nonatomic, assign) BOOL isUseBlur;  /**< 是否使用模糊，默认NO */
 

@@ -16,10 +16,11 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = ZCClear;
         self.layer.geometryFlipped = YES;
+        _alignment = 0;
+        _descLabel = nil;
         _cornerRadius = 0;
         _localImage = nil;
         _isAspectFit = NO;
-        _alignment = 0;
     }
     return self;
 }
@@ -86,12 +87,12 @@
 - (void)setTouchAction:(void (^)(ZCAvatarControl * _Nonnull))touchAction {
     _touchAction = touchAction;
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventTouchUpInside)) {
-        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
-            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchActionZC:))]) {
+            [self removeTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
         }
     }
     if (touchAction) {
-        [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self addTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
@@ -100,14 +101,14 @@
         _descLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _descLabel.textAlignment = NSTextAlignmentCenter;
         _descLabel.textColor = ZCBlack30;
-        _descLabel.font = ZCFS(15);
+        _descLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         [self addSubview:_descLabel];
     }
     return _descLabel;
 }
 
 #pragma mark - Misc
-- (void)onTouchAction:(id)sender {
+- (void)onTouchActionZC:(id)sender {
     if (_touchAction) _touchAction(self);
 }
 

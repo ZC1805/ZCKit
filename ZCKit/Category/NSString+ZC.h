@@ -24,7 +24,13 @@ extern NSString * const ZCFlagStr;
 
 - (nullable id)jsonObject;  /**< json数据，可能为dictionary、array、string、number等 */
 
+- (NSDictionary *)jsonDictionaryObject;  /**< jsos字符串转dict，可能为空dictionary */
+
+- (NSArray *)jsonArrayObject;  /**<jsos字符串转arr，可能为空array */
+
 - (NSString *)md5String;  /**< md5大写加密 */
+
+- (NSString *)URLAllowString;  /**< Get请求参数编码 */
 
 - (NSData *)dataObject;  /**< data数据 */
 
@@ -32,7 +38,9 @@ extern NSString * const ZCFlagStr;
 
 - (CGFloat)heightForFont:(UIFont *)font width:(CGFloat)width;  /**< 计算高度，NSLineBreakByWordWrapping */
 
-- (CGFloat)heightForFont:(UIFont *)font maxWidth:(CGFloat)maxWidth lineSpacing:(CGFloat)lineSpacing;  /**< 计算Label高度 */
+- (CGFloat)heightForFont:(UIFont *)font width:(CGFloat)width spacing:(CGFloat)spacing;  /**< 取Label自适应高度 */
+
+- (CGSize)sizeForFont:(UIFont *)font width:(CGFloat)width alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing;  /**< 计算Label的Size */
 
 - (NSUInteger)charCount;  /**< 字符长度 */
 
@@ -66,7 +74,7 @@ extern NSString * const ZCFlagStr;
 
 - (NSString *)replaceStringArray:(NSArray <NSString *>*)strings withString:(NSString *)aString;  /**< 将数组中字符串都匹配替换 */
 
-- (NSAttributedString *)attributedStringToMatch:(NSString *)match matchAtt:(nullable NSDictionary *)matchAtt otherAtt:(nullable NSDictionary *)otherAtt spc:(CGFloat)spc;  /**< 富文本 */
+- (NSMutableAttributedString *)attriToMatch:(nullable NSString *)match matchAtt:(nullable NSDictionary *)matchAtt otherAtt:(nullable NSDictionary *)otherAtt alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing;  /**< 富文本 */
 
 - (NSArray <NSString *>*)charStrings;
 

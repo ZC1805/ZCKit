@@ -80,6 +80,36 @@
     return nil;
 }
 
+- (NSInteger)indexForPropertyName:(NSString *)propertyName propertyValue:(id)propertyValue {
+    if (!propertyName || !propertyValue) return -1;
+    for (NSInteger i = 0; i < self.count; i++) {
+        id obj = [self objectAtIndex:i];
+        id value = [obj valueForKey:propertyName];
+        if (value) {
+            if ([value isKindOfClass:NSString.class] && [propertyValue isKindOfClass:NSString.class]) {
+                if ([value isEqualToString:propertyValue]) {
+                    return i;
+                }
+            } else if ([value isKindOfClass:NSDictionary.class] && [propertyValue isKindOfClass:NSDictionary.class]) {
+                if ([value isEqualToDictionary:propertyValue]) {
+                    return i;
+                }
+            } else if ([value isKindOfClass:NSArray.class] && [propertyValue isKindOfClass:NSArray.class]) {
+                if ([value isEqualToArray:propertyValue]) {
+                    return i;
+                }
+            } else if ([value isKindOfClass:NSNumber.class] && [propertyValue isKindOfClass:NSNumber.class]) {
+                if ([value isEqualToNumber:propertyValue]) {
+                    return i;
+                }
+            } else if ([value isEqual:propertyValue]) {
+                return i;
+            }
+        }
+    }
+    return -1;
+}
+
 - (NSArray *)objectValueArrayForKey:(NSString *)key defaultValue:(id)defaultValue {
     if (!key) key = @""; if (!defaultValue) defaultValue = [NSNull null];
     NSMutableArray *subArray = [NSMutableArray array];
@@ -93,13 +123,24 @@
 
 - (NSString *)jsonFormatString {
     if ([NSJSONSerialization isValidJSONObject:self]) {
-        NSError *error = nil;
+        NSError *error = nil; NSString *jsonStr = nil;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&error];
-        NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        if (!error && jsonStr) return jsonStr;
+        if (!error && jsonData) jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        if (jsonStr.length) return jsonStr;
     }
     if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse to json string fail");
     return @"";
+}
+
+- (NSString *)jsonString {
+    if ([NSJSONSerialization isValidJSONObject:self]) {
+        NSError *error = nil; NSString *jsonStr = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:kNilOptions error:&error];
+        if (!error && jsonData) jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        if (jsonStr.length) return jsonStr;
+    }
+    if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse to json string fail");
+    return nil;
 }
 
 - (NSData *)plistData {
@@ -426,7 +467,7 @@
 - (void)reverse {
     if (self.count < 2) return;
     NSUInteger count = self.count;
-    int mid = floor(count / 2.0);
+    int mid = floorf(count / 2.0);
     for (NSUInteger i = 0; i < mid; i++) {
         [self exchangeObjectAtIndex:i withObjectAtIndex:(count - (i + 1))];
     }

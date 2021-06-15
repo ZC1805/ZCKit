@@ -27,11 +27,16 @@
 
 @implementation ZCTextField
 
+@synthesize underlineView = _underlineView;
+
 #pragma mark - Sys
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _fixSize = CGSizeZero;
+        _cursorSize = CGSizeZero;
+        _cursorOffset = UIOffsetZero;
         _responseAreaExtend = UIEdgeInsetsZero;
+        _underlineEdgeInsets = UIEdgeInsetsZero;
     }
     return self;
 }
@@ -73,7 +78,10 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     if (_underlineView) {
-        _underlineView.frame = CGRectMake(0, self.frame.size.height - ZSSepHei, self.frame.size.width, ZSSepHei);
+        _underlineView.frame = CGRectMake(_underlineEdgeInsets.left,
+                                          self.frame.size.height - _underlineEdgeInsets.top - _underlineEdgeInsets.bottom,
+                                          self.frame.size.width - _underlineEdgeInsets.left - _underlineEdgeInsets.right,
+                                          _underlineEdgeInsets.top);
     }
 }
 
@@ -90,17 +98,43 @@
     [self removeNotificationTextObserver];
 }
 
+#pragma mark - override
+- (CGRect)caretRectForPosition:(UITextPosition *)position {
+    if (CGSizeEqualToSize(_cursorSize, CGSizeZero) && UIOffsetEqualToOffset(_cursorOffset, UIOffsetZero)) {
+        return [super caretRectForPosition:position];
+    } else {
+        CGRect or = [super caretRectForPosition:position];
+        if (CGSizeEqualToSize(_cursorSize, CGSizeZero)) {
+            return CGRectMake(or.origin.x + _cursorOffset.horizontal, or.origin.y + _cursorOffset.vertical, or.size.width, or.size.height);
+        } else if (UIOffsetEqualToOffset(_cursorOffset, UIOffsetZero)) {
+            return CGRectMake(or.origin.x + (or.size.width - _cursorSize.width)/2.0, or.origin.y + (or.size.height - _cursorSize.height)/2.0, _cursorSize.width, _cursorSize.height);
+        } else {
+            CGFloat x = or.origin.x + _cursorOffset.horizontal + (or.size.width - _cursorSize.width)/2.0;
+            CGFloat y = or.origin.y + _cursorOffset.vertical + (or.size.height - _cursorSize.height)/2.0;
+            return CGRectMake(x, y, _cursorSize.width, _cursorSize.height);
+        }
+    }
+}
+
 #pragma mark - Set
-- (void)setIsShowUnderline:(BOOL)isShowUnderline {
-    _isShowUnderline = isShowUnderline;
-    if (isShowUnderline) {
+- (void)setUnderlineEdgeInsets:(UIEdgeInsets)underlineEdgeInsets {
+    if (!UIEdgeInsetsEqualToEdgeInsets(underlineEdgeInsets, _underlineEdgeInsets)) {
+        _underlineEdgeInsets = underlineEdgeInsets;
+        if (UIEdgeInsetsEqualToEdgeInsets(underlineEdgeInsets, UIEdgeInsetsZero)) {
+            [_underlineView removeFromSuperview];
+        } else {
+            if (![self.underlineView isDescendantOfView:self]) [self addSubview:_underlineView];
+            [self setNeedsLayout];
+        }
+    }
+}
+
+- (UIView *)underlineView {
+    if (!_underlineView) {
         _underlineView = [[UIView alloc] initWithFrame:CGRectZero];
         _underlineView.backgroundColor = ZCSPColor;
-        [self addSubview:_underlineView];
-    } else {
-        [_underlineView removeFromSuperview];
-        _underlineView = nil;
     }
+    return _underlineView;
 }
 
 #pragma mark - Limit
@@ -134,8 +168,7 @@
     [self removeNotificationTextObserver];
     _textChangeBlock = textChangeBlock;
     if (_textChangeBlock) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldTextChange)
-                                                     name:UITextFieldTextDidChangeNotification object:self];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textFieldTextChange) name:UITextFieldTextDidChangeNotification object:self];
     }
 }
         
@@ -154,16 +187,16 @@
 #pragma mark - Touch
 - (void)setTouchAction:(void (^)(ZCTextField * _Nonnull))touchAction {
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventAllEditingEvents)) {
-        if ([[self actionsForTarget:self forControlEvent:UIControlEventAllEditingEvents] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
-            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventAllEditingEvents];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventAllEditingEvents] containsObject:NSStringFromSelector(@selector(onTouchActionZC:))]) {
+            [self removeTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventAllEditingEvents];
         }
     }
     if (touchAction) {
-        [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventAllEditingEvents];
+        [self addTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventAllEditingEvents];
     }
 }
 
-- (void)onTouchAction:(id)sender {
+- (void)onTouchActionZC:(id)sender {
     if (_touchAction) _touchAction(self);
 }
 

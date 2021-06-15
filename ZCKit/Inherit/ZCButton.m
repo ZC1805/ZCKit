@@ -7,6 +7,7 @@
 //
 
 #import "ZCButton.h"
+#import "UIImage+ZC.h"
 
 @interface ZCButton ()
 
@@ -27,32 +28,40 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _isManualSize = NO;
+        _isUseGrayImage = NO;
+        _fixSize = CGSizeZero;
         _centerAlignmentSpace = 0;
         _imageViewSize = CGSizeZero;
         _isVerticalCenterAlignment = NO;
         _responseAreaExtend = UIEdgeInsetsZero;
         _responseTouchInterval = 0.3;
-        _fixSize = CGSizeZero;
+        _delayResponseTime = 0;
     }
     return self;
 }
 
 - (void)resetInitProperty {
     _isManualSize = NO;
+    _isUseGrayImage = NO;
     _fixSize = CGSizeZero;
     _imageViewSize = CGSizeZero;
     _centerAlignmentSpace = 0;
     _isVerticalCenterAlignment = NO;
     _responseAreaExtend = UIEdgeInsetsZero;
-    _ignoreConstraintSelector = nil;
     _responseTouchInterval = 0.3;
     _delayResponseTime = 0;
     _ignoreFlagSelector = nil;
+    _ignoreConstraintSelector = nil;
     self.touchAction = nil;
     [self layoutSubviews];
 }
 
 #pragma mark - Override
+- (void)setImage:(UIImage *)image forState:(UIControlState)state {
+    if (self.isUseGrayImage && image) image = [image imageToGray];
+    [super setImage:image forState:state];
+}
+
 - (BOOL)pointInside:(CGPoint)point withEvent:(UIEvent *)event {
     if (UIEdgeInsetsEqualToEdgeInsets(_responseAreaExtend, UIEdgeInsetsZero)) {
         return [super pointInside:point withEvent:event];
@@ -126,17 +135,17 @@
 - (void)setTouchAction:(void (^)(ZCButton * _Nonnull))touchAction {
     _touchAction = touchAction;
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventTouchUpInside)) {
-        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
-            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchActionZC:))]) {
+            [self removeTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
         }
     }
     if (touchAction) {
-        [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self addTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
 #pragma mark - Private
-- (void)onTouchAction:(id)sender {
+- (void)onTouchActionZC:(id)sender {
     if (_touchAction) _touchAction(self);
 }
 

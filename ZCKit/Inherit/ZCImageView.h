@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSString *linkUrl;
 
+- (instancetype)initWithFrame:(CGRect)frame image:(nullable UIImage *)image interact:(BOOL)interact;  /**< 要父视图有交互则interact为NO，子视图有交互则interact为YES */
+
 @end
 
 NS_ASSUME_NONNULL_END

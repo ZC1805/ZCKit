@@ -94,9 +94,9 @@
     
     /** run */
     ZCExactTimerItem *item = [[ZCExactTimerItem alloc] initWithBlock:block repeat:repeat stop:NO attach:attach];
-    dispatch_source_set_timer(timer, dispatch_time(DISPATCH_TIME_NOW, interval * NSEC_PER_SEC), interval * NSEC_PER_SEC, 0.01 * NSEC_PER_SEC);
+    dispatch_source_set_timer(timer, dispatch_time(DISPATCH_TIME_NOW, interval * NSEC_PER_SEC), interval * NSEC_PER_SEC, 0.001 * NSEC_PER_SEC);
     if (option == ZCEnumExactTimerOptionAbandon) [handle.timerMaps removeObjectForKey:timerName]; //移除之前的block
-    [handle cacheItem:item name:timerName]; //存储本次block，精度为0.01秒
+    [handle cacheItem:item name:timerName]; //存储本次block，精度为毫秒
     dispatch_source_set_event_handler(timer, ^{
         __block BOOL isInspect = NO;
         NSMutableArray <ZCExactTimerItem *>*itemArr = [handle.timerMaps objectForKey:timerName];

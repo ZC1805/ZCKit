@@ -42,8 +42,8 @@
     _badgeCircleWidth = 2.0;
     _badgeBKColor = ZCRed;
     _badgeTextColor = ZCWhite;
-    _badgeTextFont = ZCFBS(12);
     _badgeBorderColor = ZCWhite;
+    _badgeTextFont = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12];
     self.backgroundColor = ZCClear;
     self.userInteractionEnabled = NO;
     self.badgeValue = nil;
@@ -63,7 +63,7 @@
 }
 
 - (void)setBadgeTextFont:(UIFont *)badgeTextFont {
-    if (!badgeTextFont) badgeTextFont = ZCFBS(12);
+    if (!badgeTextFont) badgeTextFont = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12];
     _badgeTextFont = badgeTextFont;
     self.badgeValue = _badgeValue;
 }

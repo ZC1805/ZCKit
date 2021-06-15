@@ -49,7 +49,7 @@ static const float initAdditional = 30.0;
                             }];
 }
 
-- (void)onTouchAction:(id)sender {
+- (void)onTouchActionZC:(id)sender {
     if (_touchAction) _touchAction(self);
 }
 
@@ -94,12 +94,12 @@ static const float initAdditional = 30.0;
 - (void)setTouchAction:(void (^)(ZCPhotoZoomControl * _Nonnull))touchAction {
     _touchAction = touchAction;
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventTouchUpInside)) {
-        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
-            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchActionZC:))]) {
+            [self removeTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
         }
     }
     if (touchAction) {
-        [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self addTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
@@ -123,17 +123,17 @@ static const float initAdditional = 30.0;
 
 #pragma mark - Ctor
 - (void)resetImage {
-    CGFloat height = self.height;
+    CGFloat height = self.zc_height;
     if (self.localImage && self.isAutoOfset && self.localImage.size.width) {
-        height = self.width * self.localImage.size.height / self.localImage.size.width + (self.isNeedNarrow ? initAdditional : 0);
-        if (height < self.height) height = self.height;
-        _originOffset = CGPointMake(0, (self.height - height) / 2.0);
+        height = self.zc_width * self.localImage.size.height / self.localImage.size.width + (self.isNeedNarrow ? initAdditional : 0);
+        if (height < self.zc_height) height = self.zc_height;
+        _originOffset = CGPointMake(0, (self.zc_height - height) / 2.0);
     }
     BOOL isMask = self.originOffset.y < 0;
-    self.originFrame = CGRectMake(self.originOffset.x, self.originOffset.y, self.width, height);
+    self.originFrame = CGRectMake(self.originOffset.x, self.originOffset.y, self.zc_width, height);
     self.headerIv.image = self.localImage;
     self.headerIv.frame = self.originFrame;
-    self.headerMask.frame = CGRectMake(0, -self.originOffset.y, self.width, MAX(height + 2.0 * self.originOffset.y, 0));
+    self.headerMask.frame = CGRectMake(0, -self.originOffset.y, self.zc_width, MAX(height + 2.0 * self.originOffset.y, 0));
     self.blurBKView.frame = isMask ? self.headerMask.frame : self.headerIv.bounds;
     self.headerIv.maskView = isMask ? self.headerMask : nil;
     [self updateHeaderImageFrame:self.scrollView];

@@ -480,7 +480,7 @@
         ZCSectionOperate *slice = _sections[section];
         CGFloat(^block)(ZCTableView *, NSInteger, id _Nullable) = [slice valueForKey:@"heightForHeaderInSection"];
         if (block) {return block((ZCTableView *)tableView, section, slice.model);}
-        if (slice.header) {return slice.header.height;}
+        if (slice.header) {return slice.header.zc_height;}
     }
     return 0;
 }
@@ -498,7 +498,7 @@
         if (slice.header) {return slice.header;}
     }
     CGFloat hei = [self tableView:tableView heightForHeaderInSection:section];
-    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.width, hei)];
+    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.zc_width, hei)];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section {
@@ -514,7 +514,7 @@
         ZCSectionOperate *slice = _sections[section];
         CGFloat(^block)(ZCTableView *, NSInteger, id _Nullable) = [slice valueForKey:@"heightForFooterInSection"];
         if (block) {return block((ZCTableView *)tableView, section, slice.model);}
-        if (slice.footer) {return slice.footer.height;}
+        if (slice.footer) {return slice.footer.zc_height;}
     }
     return 0;
 }
@@ -532,7 +532,7 @@
         if (slice.footer) {return slice.footer;}
     }
     CGFloat hei = [self tableView:tableView heightForFooterInSection:section];
-    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.width, hei)];
+    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.zc_width, hei)];
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section {

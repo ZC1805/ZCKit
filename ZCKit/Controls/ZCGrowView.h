@@ -58,7 +58,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCGrowView(TextView)
 
-@property (nonatomic, strong) UIFont *font;  /**< 默认ZCFS(16) */
+@property (nonatomic, strong) UIFont *font;  /**< 默认16s */
 
 @property (nonatomic, strong) UIColor *textColor;  /**< 默认Black30 */
 

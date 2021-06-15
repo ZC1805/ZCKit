@@ -92,7 +92,7 @@
     if (self = [super initWithFrame:frame]) {
         self.textAlignment = NSTextAlignmentCenter;
         self.backgroundColor = ZCClear;
-        self.font = ZCFS(15);
+        self.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     }
     return self;
 }

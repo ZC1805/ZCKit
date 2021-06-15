@@ -1,5 +1,5 @@
 //
-//  ZCModel.h
+//  ZCYYModel.h
 //  ZCKit
 //
 //  Created by admin on 2018/10/12.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCModel : NSObject  /**< YYKit解析模型基类，供子类继承 */
+@interface ZCYYModel : NSObject  /**< YYKit解析模型基类，供子类继承 */
 
 #pragma mark - Build & extract
 /**

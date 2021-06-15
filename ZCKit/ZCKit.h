@@ -13,9 +13,9 @@
 #import "ZCGlobal.h"
 #import "ZCPredefine.h"
 
+#import "ZCLabel.h"
 #import "ZCButton.h"
 #import "ZCSwitch.h"
-#import "ZCFixLabel.h"
 #import "ZCTextView.h"
 #import "ZCTextField.h"
 #import "ZCImageView.h"
@@ -48,17 +48,17 @@
 #import "UIViewController+ZC.h"
 #import "UINavigationController+ZC.h"
 
+#import "ZCModel.h"
 #import "ZCService.h"
 #import "ZCMiscTool.h"
 #import "ZCTimerHolder.h"
+#import "ZCDateManager.h"
 #import "ZCStreamCenter.h"
 #import "ZCQueueHandler.h"
 #import "ZCSystemHandler.h"
 #import "ZCMonitorService.h"
 
-//#import "ZCLabel.h"
-//#import "ZCModel.h"
-
+//#import "ZCYYModel.h"
 //#import "NSDate+ZC.h"
 //#import "CALayer+ZC.h"
 //#import "NSObject+ZC.h"
@@ -70,7 +70,6 @@
 //#import "ZCKitBridge.h"
 //#import "ZCKeychain.h"
 //#import "ZCExactTimer.h"
-//#import "ZCDateManager.h"
 //#import "ZCPinyinHandler.h"
 //#import "ZCDecimalManager.h"
 

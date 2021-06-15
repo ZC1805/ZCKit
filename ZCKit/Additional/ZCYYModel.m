@@ -1,15 +1,15 @@
 //
-//  ZCModel.m
+//  ZCYYModel.m
 //  ZCKit
 //
 //  Created by admin on 2018/10/12.
 //  Copyright © 2018 Squat in house. All rights reserved.
 //
 
-#import "ZCModel.h"
+#import "ZCYYModel.h"
 #import "NSObject+YYModel.h"
 
-@implementation ZCModel
+@implementation ZCYYModel
 
 //json/dictionary中的对象类型与instance属性不一致时，将会进行自动转换。
 //自动转换不支持的值将会被忽略，以避免各种潜在的崩溃问题。

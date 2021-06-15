@@ -35,9 +35,10 @@
     [back addTarget:self action:@selector(onManualPop:) forControlEvents:UIControlEventTouchUpInside];
     back.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     back.adjustsImageWhenHighlighted = YES;
-    back.titleLabel.font = ZCFS(15);
+    back.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     CGSize size = [back.titleLabel sizeThatFits:CGSizeMake(100.0, height)];
-    back.size = CGSizeMake(MAX(size.width + 18.0, height), height);
+    size = CGSizeMake(ceilf(size.width), ceilf(size.height));
+    back.zc_size = CGSizeMake(MAX(size.width + 18.0, height), height);
     back.responseTouchInterval = 0.3;
     back.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     back.imageEdgeInsets = UIEdgeInsetsMake(-ZSSepHei, -offset, 0, 0);
@@ -58,8 +59,8 @@
     }
     if (isCanBack) {
         main_imp(^{
-            if ([vc respondsToSelector:@selector(onCustomBackAction)]) {
-                [(id<ZCViewControllerBackProtocol>)vc onCustomBackAction];
+            if ([vc respondsToSelector:@selector(onCustomTapBackAction)]) {
+                [(id<ZCViewControllerBackProtocol>)vc onCustomTapBackAction];
             } else {
                 [vc backToUpControllerAnimated:YES];
             }
@@ -87,10 +88,11 @@
     }
     rightBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     rightBtn.adjustsImageWhenHighlighted = YES;
-    rightBtn.titleLabel.font = ZCFS(15);
-    rightBtn.titleLabel.numberOfLines =0;
+    rightBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+    rightBtn.titleLabel.numberOfLines = 0;
     CGSize size = [rightBtn.titleLabel sizeThatFits:CGSizeMake(100.0, height)];
-    rightBtn.size = CGSizeMake(MAX(size.width, 30.0), height);
+    size = CGSizeMake(ceilf(size.width), ceilf(size.height));
+    rightBtn.zc_size = CGSizeMake(MAX(size.width, 30.0), height);
     rightBtn.responseTouchInterval = 0.3;
     rightBtn.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     self.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
@@ -107,7 +109,7 @@
         [rightBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     }
     rightBtn.adjustsImageWhenHighlighted = YES;
-    rightBtn.size = CGSizeMake(width, height);
+    rightBtn.zc_size = CGSizeMake(width, height);
     rightBtn.responseTouchInterval = 0.3;
     rightBtn.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     CGFloat edgeLeft = width - (height - 2.0 * offset), edgeRight = 0;

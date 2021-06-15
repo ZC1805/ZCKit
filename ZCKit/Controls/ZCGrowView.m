@@ -22,14 +22,13 @@
 
 - (instancetype)initWithFrame:(CGRect)frame textContainer:(NSTextContainer *)textContainer {
     if (self = [super initWithFrame:frame textContainer:textContainer]) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveTextDidChangeNotify)
-                                                     name:UITextViewTextDidChangeNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updatePlaceholder) name:UITextViewTextDidChangeNotification object:self];
     }
     return self;
 }
 
 - (void)dealloc {
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:self];
 }
 
 #pragma mark - Override
@@ -72,25 +71,21 @@
     self.displayPlaceholder = self.text.length == 0;
 }
 
-- (void)receiveTextDidChangeNotify {
-    [self updatePlaceholder];
-}
-
 - (void)drawRect:(CGRect)rect {
     [super drawRect:rect];
     if (!self.displayPlaceholder) return;
     CGFloat wid = self.contentInset.left + self.contentInset.right + self.textContainerInset.left + self.textContainerInset.right;
     CGFloat hei = self.contentInset.top + self.contentInset.bottom + self.textContainerInset.top + self.textContainerInset.bottom;
-    CGRect inRect = CGRectMake(self.contentInset.left + self.textContainerInset.left + ZSA(5),
+    CGRect inRect = CGRectMake(self.contentInset.left + self.textContainerInset.left + 5,
                                self.contentInset.top + self.textContainerInset.top,
-                               self.frame.size.width - wid - ZSA(10),
+                               self.frame.size.width - wid - 10,
                                self.frame.size.height - hei);
     [self.placeholderAttributedText drawInRect:inRect];
 }
 
 @end
 
-
+//问题:超过4行时点击滑动 & 换行时不滑到最底端 & 输入框弹窗 & 最大输入设置ZDGuestBookView & NIMGrowingInternalTextView
 #pragma mark - ~ ZCGrowView ~
 @interface ZCGrowView() <UITextViewDelegate>
 
@@ -104,7 +99,7 @@
 
 @property (nonatomic, strong) NSMutableDictionary *myAttributes;
 
-@property (nonatomic, strong, readonly) NSMutableParagraphStyle *paragraphStyle;  /**< 段落样式 */
+@property (nonatomic, strong, readonly) NSMutableParagraphStyle *paragraphStyle;
 
 - (void)updateTypingAttributes;  /**< 更新typingAttributes */
 
@@ -118,7 +113,10 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         CGRect rect = CGRectMake(0, 0, frame.size.width, frame.size.height);
-        self.textView = [[ZCGrowInternalTextView alloc] initWithFrame:rect];
+        self.directionalLockEnabled = YES;
+        self.showsVerticalScrollIndicator = NO;
+        self.showsHorizontalScrollIndicator = NO;
+        self.textView = [[ZCGrowInternalTextView alloc] initWithFrame:rect textContainer:nil];
         self.previousFrame = frame;
         [self setup];
     }
@@ -183,13 +181,13 @@
 - (NSMutableParagraphStyle *)paragraphStyle {
     if (!_paragraphStyle) {
         _paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        _paragraphStyle.lineSpacing = ZSA(3); //行间距
+        _paragraphStyle.lineSpacing = 3; //行间距
         _paragraphStyle.lineHeightMultiple = 0; //行倍数间距(设置0无效，总间距为行间距+行倍数间距)
-        _paragraphStyle.paragraphSpacing = ZSA(0); //段间距(\n换行)(总间距为行间距+段间距)
+        _paragraphStyle.paragraphSpacing = 0; //段间距(\n换行)(总间距为行间距+段间距)
         _paragraphStyle.paragraphSpacingBefore = 0; //段首留空白(\n换行)
-        _paragraphStyle.firstLineHeadIndent = ZSA(0); //首行缩进
-        _paragraphStyle.headIndent = ZSA(0); //整体缩进(首行除外)
-        _paragraphStyle.tailIndent = ZSA(0); //尾部缩进(右侧缩进或显示宽度)
+        _paragraphStyle.firstLineHeadIndent = 0; //首行缩进
+        _paragraphStyle.headIndent = 0; //整体缩进(首行除外)
+        _paragraphStyle.tailIndent = 0; //尾部缩进(右侧缩进或显示宽度)
         _paragraphStyle.hyphenationFactor = 0.3; //连字符属性
         _paragraphStyle.minimumLineHeight = 0; //最低行高
         _paragraphStyle.maximumLineHeight = 0; //最大行高
@@ -203,8 +201,8 @@
 
 - (NSMutableDictionary *)myAttributes {
     if (!_myAttributes) {
-        NSDictionary *dic = @{NSFontAttributeName:ZCFS(16), NSForegroundColorAttributeName:ZCBlack30,
-                              NSKernAttributeName:@(ZSA(0)), NSParagraphStyleAttributeName:self.paragraphStyle};
+        NSDictionary *dic = @{NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue" size:16], NSForegroundColorAttributeName:ZCBlack30,
+                              NSKernAttributeName:@(0), NSParagraphStyleAttributeName:self.paragraphStyle};
         _myAttributes = [NSMutableDictionary dictionaryWithDictionary:dic];
     }
     return _myAttributes;
@@ -231,7 +229,7 @@
     self.textView.enablesReturnKeyAutomatically = YES; //输入框有内容时候才能点击return
     self.textView.textAlignment = NSTextAlignmentLeft; //文本使用左侧对齐
     self.textView.dataDetectorTypes = UIDataDetectorTypeNone; //不检测输入的文本
-    self.textView.textContainerInset = UIEdgeInsetsMake(ZSA(0), ZSA(3), ZSA(0), ZSA(3)); //内间距
+    self.textView.textContainerInset = UIEdgeInsetsMake(0, 3, 0, 3); //内间距
     self.textView.typingAttributes = self.myAttributes;
     [self addSubview:self.textView];
     self.maxLines = 3;
@@ -260,7 +258,7 @@
 
 - (void)resetTextInset {
     CGFloat dif = (self.previousFrame.size.height - self.minHeight) / 2.0;
-    if (dif < ZSA(2)) return;
+    if (dif < 2) return;
     UIEdgeInsets textInset = self.textView.textContainerInset;
     textInset.bottom = textInset.bottom + dif;
     textInset.top = textInset.top + dif;
@@ -269,7 +267,6 @@
     self.minHeight = [self simulateHeight:self.minLines];
 }
 
-///!!!:超过4行时点击滑动 & 换行时不滑到最底端 & 输入框弹窗 & 两项选择框弹窗 & 最大输入设置ZDGuestBookView & NIMGrowingInternalTextView & 旋转 & 全屏手势返回
 - (void)fitToScrollView {
     //BOOL scrollToBottom = ZFNotEqual(self.contentOffset.y, self.contentSize.height - self.frame.size.height);
     CGSize actualTextViewSize = [self measureTextViewSize];

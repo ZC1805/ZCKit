@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCScrollView : UIScrollView
+@interface ZCScrollView : UIScrollView  /**< 好用的ScrollView控件 */
 
 @property (nonatomic, assign) BOOL isShieldPriorityEditGestures;  /**< 屏蔽优先识别子TableView侧滑编辑手势 */
 

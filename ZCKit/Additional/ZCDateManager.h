@@ -10,6 +10,14 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface NSCalendar (ZC)  /**< 日历处理类 */
+
+@property (class, nonatomic, readonly) NSCalendar *gregorianCalendar;  /**< 公历 */
+
+@end
+
+
+
 @interface ZCDateManager : NSObject  /**< 日期处理类 */
 
 @property (class, nonatomic, readonly) NSString *today;  /**< 今天的年月日，2018-09-30 */
@@ -18,9 +26,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic, readonly) NSTimeZone *beijingTimeZone;  /**< 东八时区 */
 
-@property (class, nonatomic, readonly) NSCalendar *gregorianCalendar;  /**< 中国公历，使用的中国时区 */
-
 @property (class, nonatomic, readonly) NSCalendar *chineseCalendar;  /**< 中国农历，使用的中国时区 */
+
+@property (class, nonatomic, readonly) NSCalendar *chineseGregorianCalendar;  /**< 中国公历，使用的中国时区 */
 
 
 + (NSDateFormatter *)dateFormatter:(NSString *)format;  /**< 此处拿到的DateFormatter有缓存，外部不可对其属性赋值 */

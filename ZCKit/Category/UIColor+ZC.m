@@ -7,6 +7,7 @@
 //
 
 #import "UIColor+ZC.h"
+#import "UIImage+ZC.h"
 #import <objc/runtime.h>
 
 @implementation UIColor (ZC)
@@ -44,7 +45,7 @@
     } else {
         aimColor = [UIColor colorWithRed:intR/255.0 green:intG/255.0 blue:intB/255.0 alpha:alpha];
     }
-    int intA = MIN(MAX((int)floor(alpha * 255), 255), 0);
+    int intA = MIN(MAX((int)floorf(alpha * 255), 255), 0);
     aimColor.cRGBHexValue = (intR << 24) + (intG << 16) + (intB << 8) + (intA << 0);
     return aimColor;
 }
@@ -62,7 +63,7 @@
                                     blue:((float)((hexValue & 0xFF) >> 0))/255.0
                                    alpha:alpha];
     }
-    int intA = MIN(MAX((int)floor(alpha * 255), 255), 0);
+    int intA = MIN(MAX((int)floorf(alpha * 255), 255), 0);
     aimColor.cRGBHexValue = (((hexValue & 0xFF0000) >> 16) << 24) + (((hexValue & 0xFF00) >> 8) << 16) + (((hexValue & 0xFF) >> 0) << 8) + (intA << 0);
     return aimColor;
 }
@@ -90,6 +91,17 @@
     } else {
         return [UIColor colorFormHex:0x000000 alpha:1.0];
     }
+}
+
++ (UIColor *)colorFromGradientColors:(NSArray <UIColor *>*)colors isHorizontal:(BOOL)isHorizontal {
+    UIImage *image = [UIImage imageWithGradientColors:colors size:CGSizeMake(100.0, 100.0) isHorizontal:isHorizontal];
+    UIColor *color = [UIColor colorWithPatternImage:image];
+    if (colors.firstObject) {
+        color.cRGBHexValue = colors.firstObject.cRGBHexValue;
+    } else {
+        color.cRGBHexValue = 0xFFFFFF00;
+    }
+    return color;
 }
 
 #pragma mark - Instance

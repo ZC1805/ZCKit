@@ -181,7 +181,7 @@
         objc_setAssociatedObject(self, _cmd, topv, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self addSubview:topv];
     }
-    topv.frame = CGRectMake(-200.0, -self.height, MAX(self.height, self.sizeWidth) + 400.0, self.height);
+    topv.frame = CGRectMake(-200.0, -self.zc_height, MAX(self.zc_height, self.sizeWidth) + 400.0, self.zc_height);
     [self sendSubviewToBack:topv];
     return topv;
 }
@@ -205,7 +205,7 @@
         }
     }
     CGFloat top = self.sizeHeight - self.insetBottom - resBottom;
-    bottomv.frame = CGRectMake(-200.0, top, MAX(self.height, self.sizeWidth) + 400.0, self.height + 500);
+    bottomv.frame = CGRectMake(-200.0, top, MAX(self.zc_height, self.sizeWidth) + 400.0, self.zc_height + 500);
     [self sendSubviewToBack:bottomv];
     return bottomv;
 }
@@ -236,7 +236,7 @@
         self.pagingEnabled = isPaging;
         self.bounces = isBounces;
         if (frame.size.height > 0) {
-            self.contentSize = CGSizeMake(frame.size.width, frame.size.height + ZSSepHei);
+            self.contentSize = CGSizeMake(frame.size.width, frame.size.height + (isBounces ? ZSSepHei : 0));
         }
     }
     return self;

@@ -69,15 +69,15 @@
     if (self.initArrowRect.size.height) {
         self.layer.opacity = 0;
         self.layer.anchorPoint = CGPointMake(1, 0);
-        self.layer.position = CGPointMake(self.left + self.width + self.width / 2.0, self.top - self.height / 2.0);
+        self.layer.position = CGPointMake(self.zc_left + self.zc_width + self.zc_width / 2.0, self.zc_top - self.zc_height / 2.0);
         self.layer.transform = CATransform3DScale(CATransform3DIdentity, 0, 0, 1);
     } else {
         self.layer.opacity = 0;
         self.layer.anchorPoint = CGPointMake(0.5, 0);
-        self.layer.position = CGPointMake(self.left + self.width / 2.0, self.top - self.height / 2.0);
+        self.layer.position = CGPointMake(self.zc_left + self.zc_width / 2.0, self.zc_top - self.zc_height / 2.0);
         self.layer.transform = CATransform3DScale(CATransform3DIdentity, 1, 0, 1);
     }
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.layer.opacity = 1;
         self.layer.transform = CATransform3DIdentity;
     } completion:^(BOOL finished) {
@@ -94,7 +94,7 @@
     if (!self.isCanTouch) return;
     self.isCanTouch = NO;
     [ZCWindowView dismissSubview];
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.layer.opacity = 0;
     } completion:^(BOOL finished) {
         [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -107,8 +107,8 @@
 - (void)initialUI:(void(^)(NSInteger index, UIButton *btn, UIView *line))btnSet {
     CGFloat initHei = MIN(self.items.count * self.rowHeight, self.maxLine * self.rowHeight);
     self.backgroundColor = ZCClear;
-    self.size = CGSizeMake(self.initWid, initHei + 2.0 * self.topHeight + self.initArrowRect.size.height);
-    self.origin = CGPointMake(self.initVertex.x - self.initArrowRect.origin.x - self.initArrowRect.size.width / 2.0, self.initVertex.y);
+    self.zc_size = CGSizeMake(self.initWid, initHei + 2.0 * self.topHeight + self.initArrowRect.size.height);
+    self.zc_origin = CGPointMake(self.initVertex.x - self.initArrowRect.origin.x - self.initArrowRect.size.width / 2.0, self.initVertex.y);
     [self initialBKlayer];
 
     self.contentView = [[UIScrollView alloc] initWithFrame:CGRectZero];
@@ -126,7 +126,7 @@
         UIColor *titleColor = ZCBlack;
         itemBtn.tag = 73203 + i;
         itemBtn.backgroundColor = ZCWhite;
-        itemBtn.titleLabel.font = [UIFont systemFontOfSize:17];
+        itemBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
         [itemBtn setTitleColor:titleColor forState:UIControlStateNormal];
         [itemBtn setTitleColor:[titleColor colorWithAlphaComponent:0.25] forState:UIControlStateHighlighted];
@@ -143,7 +143,7 @@
 - (void)initialBKlayer {
     CGSize size = self.initArrowRect.size;
     CGPoint origin = self.initArrowRect.origin;
-    CGRect rect = CGRectMake(0, size.height, self.width, self.height - size.height);
+    CGRect rect = CGRectMake(0, size.height, self.zc_width, self.zc_height - size.height);
     UIBezierPath *bkPath = [UIBezierPath bezierPathWithRoundedRect:rect cornerRadius:6.0];
     [bkPath moveToPoint:CGPointMake(origin.x, size.height)];
     [bkPath addLineToPoint:CGPointMake(origin.x + size.width / 2.0, 0)];

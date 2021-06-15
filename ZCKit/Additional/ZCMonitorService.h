@@ -25,7 +25,7 @@ typedef NS_ENUM(NSInteger, ZCEnumMonitorPriority) {
 extern const ZCMonitorType ZCMonitorTypeNone;  /**< 用于获取监听类型等 */
 
 
-@interface ZCMonitorBroadcast : NSObject
+@interface ZCMonitorBroadcast : NSObject  /**< 广播对象 */
 
 @property (nonatomic, assign, readonly) int rank;  /**< 广播接收者先后排名，从0开始 */
 

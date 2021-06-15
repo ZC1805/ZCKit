@@ -16,19 +16,19 @@
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
-    if (frame.size.width == 0 && frame.size.height == 0) frame.size = CGSizeMake(ZSA(15) * 4 + ZSA(5), ZSA(20));
+    if (frame.size.width == 0 && frame.size.height == 0) frame.size = CGSizeMake(15 * 4 + 5, 20);
     if (self = [super initWithFrame:frame]) {
         self.textAlignment = NSTextAlignmentCenter;
         self.userInteractionEnabled = NO;
         self.backgroundColor = ZCClear;
         self.textColor = ZCRed;
-        self.font = ZCFS(15);
+        self.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     }
     return self;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake(ZSA(15) * 4 + ZSA(5), ZSA(20));
+    return CGSizeMake(15 * 4 + 5, 20);
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview {

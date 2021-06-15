@@ -54,16 +54,16 @@
 - (void)setTouchAction:(void (^)(ZCSearchControl * _Nonnull))touchAction {
     _touchAction = touchAction;
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventTouchUpInside)) {
-        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
-            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchActionZC:))]) {
+            [self removeTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
         }
     }
     if (touchAction) {
-        [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self addTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
-- (void)onTouchAction:(id)sender {
+- (void)onTouchActionZC:(id)sender {
     if (_touchAction) _touchAction(self);
 }
 
@@ -98,7 +98,7 @@
     _barColor = _isGrayStyle ? ZCBKColor : ZCClear;
     _tintColor = _isGrayStyle ? ZCBlackA8 : ZCWhite;
     UIImage *image = [ZCGlobal ZCImageName:(self.isGrayStyle ? @"zc_image_search_grey" : @"zc_image_search_white")];
-    self.eventButton.titleLabel.font = ZCFS(self.isGrayStyle ? 13 : 15);
+    self.eventButton.titleLabel.font = self.isGrayStyle ? [UIFont fontWithName:@"HelveticaNeue" size:13] : [UIFont fontWithName:@"HelveticaNeue" size:15];
     self.eventButton.backgroundColor = _barColor;
     [self.eventButton setImage:image forState:UIControlStateNormal];
     [self.eventButton setTitleColor:_tintColor forState:UIControlStateNormal];
@@ -107,7 +107,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.eventButton.frame = CGRectMake(self.itemE, (self.height - self.itemH) / 2.0, self.width - 2.0 * self.itemE, self.itemH);
+    self.eventButton.frame = CGRectMake(self.itemE, (self.zc_height - self.itemH) / 2.0, self.zc_width - 2.0 * self.itemE, self.itemH);
 }
 
 @end

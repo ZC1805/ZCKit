@@ -31,4 +31,12 @@
     return self;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image interact:(BOOL)interact {
+    if (self = [super initWithFrame:frame]) {
+        self.userInteractionEnabled = interact;
+        self.image = image;
+    }
+    return self;
+}
+
 @end

@@ -30,7 +30,7 @@
 
 - (void)clearSelectedRowsAnimated:(BOOL)animated {
     NSArray *indexs = [self indexPathsForSelectedRows];
-    [indexs enumerateObjectsUsingBlock:^(NSIndexPath* path, NSUInteger idx, BOOL *stop) {
+    [indexs enumerateObjectsUsingBlock:^(NSIndexPath *path, NSUInteger idx, BOOL *stop) {
         [self deselectRowAtIndexPath:path animated:animated];
     }];
 }

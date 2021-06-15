@@ -175,7 +175,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     
     [self initZCButtonProperty:_selectButton];
     [self initZCAvatarControlProperty:_avatarControl];
-    [self initZCFixLabelProperty:_leadingLabel];
+    [self initZCLabelProperty:_leadingLabel];
     [self initUIViewProperty:_flagContainerView];
     [self initZCTextFieldProperty:_inputTextField];
     [self initZCAvatarControlProperty:_accessControl];
@@ -184,12 +184,12 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     [self initZCButtonProperty:_clickButton];
     [self initUIViewProperty:_containerView];
     [self initZCTextFieldProperty:_fitTextField];
-    [self initZCFixLabelProperty:_trailingLabel];
-    [self initZCFixLabelProperty:_bottomDescLabel];
+    [self initZCLabelProperty:_trailingLabel];
+    [self initZCLabelProperty:_bottomDescLabel];
     [self initZCTextViewProperty:_bottomTextView];
     [self initUIViewProperty:_bottomFlagContainerView];
     [self initZCTextFieldProperty:_bottomTextField];
-    [self initZCFixLabelProperty:_bottomAttachLabel];
+    [self initZCLabelProperty:_bottomAttachLabel];
     [self initUIViewProperty:_bottomContainerView];
     [self initZCButtonProperty:_bottomClickButton];
     [self initZCBadgeViewProperty:_bottomBadgeView];    
@@ -201,20 +201,20 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     if ([self isSeatView:_topSeparator]) {
         _topSeparator.frame = CGRectMake(_topSeparatorInset.left,
                                          _topSeparatorInset.top,
-                                         self.width - _topSeparatorInset.left - _topSeparatorInset.right,
+                                         self.zc_width - _topSeparatorInset.left - _topSeparatorInset.right,
                                          _topSeparatorInset.bottom);
     }
     if ([self isSeatView:_bottomSeparator]) {
         _bottomSeparator.frame = CGRectMake(_bottomSeparatorInset.left,
-                                            self.height - _bottomSeparatorInset.bottom - _bottomSeparatorInset.top,
-                                            self.width - _bottomSeparatorInset.left - _bottomSeparatorInset.right,
+                                            self.zc_height - _bottomSeparatorInset.bottom - _bottomSeparatorInset.top,
+                                            self.zc_width - _bottomSeparatorInset.left - _bottomSeparatorInset.right,
                                             _bottomSeparatorInset.top);
     }
     if ([self isSeatView:_insideView]) {
         _insideView.frame = CGRectMake(_insideMargin.left,
                                        _insideMargin.top,
-                                       self.width - _insideMargin.left - _insideMargin.right,
-                                       self.height - _insideMargin.top - _insideMargin.bottom);
+                                       self.zc_width - _insideMargin.left - _insideMargin.right,
+                                       self.zc_height - _insideMargin.top - _insideMargin.bottom);
     }
     if ([self isSeatView:_coverMaskView]) {
         _coverMaskView.frame = self.bounds;
@@ -232,11 +232,11 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         if (_lyBottomClickCx && [self isSeatView:_bottomClickButton]) {
             if (maxTwo == rowHideHei) {
                 extra = _bottomClickOffsetY; spac = 0; calTwo = 0;
-                maxTwo = MAX(maxTwo, _bottomClickButton.height);
+                maxTwo = MAX(maxTwo, _bottomClickButton.zc_height);
                 _lyBottomClickCx.constant = _bottomClickOffsetY;
             } else if (_bottomClickOffsetY) {
-                extra = _bottomClickOffsetY + _bottomClickButton.height;
-                _lyBottomClickCx.constant = maxTwo / 2.0 + _bottomClickOffsetY + _bottomClickButton.height / 2.0;
+                extra = _bottomClickOffsetY + _bottomClickButton.zc_height;
+                _lyBottomClickCx.constant = maxTwo / 2.0 + _bottomClickOffsetY + _bottomClickButton.zc_height / 2.0;
             } else {
                 _lyBottomClickCx.constant = 0;
             }
@@ -245,9 +245,9 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         _lyTop1.active = YES;
         _lyTop2.active = YES;
         _lyBottom2.active = YES;
-        _lyTop1.constant = _marginInset.top + (maxOne - _lineOneReferView.height) / 2.0;
-        _lyTop2.constant = _marginInset.top + maxOne + spac + (maxTwo - _lineTwoReferView.height) / 2.0;
-        _lyBottom2.constant = -(_marginInset.bottom + extra + (maxTwo - _lineTwoReferView.height) / 2.0);
+        _lyTop1.constant = _marginInset.top + (maxOne - _lineOneReferView.zc_height) / 2.0;
+        _lyTop2.constant = _marginInset.top + maxOne + spac + (maxTwo - _lineTwoReferView.zc_height) / 2.0;
+        _lyBottom2.constant = -(_marginInset.bottom + extra + (maxTwo - _lineTwoReferView.zc_height) / 2.0);
         if (_lySelectCx && [self isSeatView:_selectButton]) {
             _lySelectCx.constant = _isSelectAvatarBeCenter ? ((maxOne + calTwo + spac) / 2.0 - maxOne / 2.0) : 0;
         }
@@ -263,35 +263,35 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     } else if (maxOne > 0) {
         if (_lySelectCx && [self isSeatView:_selectButton]) {
             _lySelectCx.constant = 0;
-            if (maxOne == rowHideHei) maxOne = MAX(maxOne, _selectButton.height);
+            if (maxOne == rowHideHei) maxOne = MAX(maxOne, _selectButton.zc_height);
         }
         if (_lyAvatarCx && [self isSeatView:_avatarControl]) {
             _lyAvatarCx.constant = 0;
-            if (maxOne == rowHideHei) maxOne = MAX(maxOne, _avatarControl.height);
+            if (maxOne == rowHideHei) maxOne = MAX(maxOne, _avatarControl.zc_height);
         }
         if (_lyLeadingCx && [self isSeatView:_leadingLabel]) {
             _lyLeadingCx.constant = 0;
-            if (maxOne == rowHideHei) maxOne = MAX(maxOne, _leadingLabel.height);
+            if (maxOne == rowHideHei) maxOne = MAX(maxOne, _leadingLabel.zc_height);
         }
         if (_lyAccessCx && [self isSeatView:_accessControl]) {
             _lyAccessCx.constant = 0;
-            if (maxOne == rowHideHei) maxOne = MAX(maxOne, _accessControl.height);
+            if (maxOne == rowHideHei) maxOne = MAX(maxOne, _accessControl.zc_height);
         }
         _lyTop2.active = NO;
         _lyBottom2.active = NO;
         _lyTop1.active = YES;
         _lyBottom1.active = YES;
-        _lyTop1.constant = _marginInset.top + (maxOne - _lineOneReferView.height) / 2.0;
-        _lyBottom1.constant = -(_marginInset.bottom + (maxOne - _lineOneReferView.height) / 2.0);
+        _lyTop1.constant = _marginInset.top + (maxOne - _lineOneReferView.zc_height) / 2.0;
+        _lyBottom1.constant = -(_marginInset.bottom + (maxOne - _lineOneReferView.zc_height) / 2.0);
     } else if (maxTwo > 0) {
         CGFloat extra = 0;
         if (_lyBottomClickCx && [self isSeatView:_bottomClickButton]) {
             if (maxTwo == rowHideHei) {
-                maxTwo = MAX(maxTwo, _bottomClickButton.height);
+                maxTwo = MAX(maxTwo, _bottomClickButton.zc_height);
                 _lyBottomClickCx.constant = 0;
             } else if (_bottomClickOffsetY) {
-                extra = _bottomClickOffsetY + _bottomClickButton.height;
-                _lyBottomClickCx.constant = maxTwo / 2.0 + _bottomClickOffsetY + _bottomClickButton.height / 2.0;
+                extra = _bottomClickOffsetY + _bottomClickButton.zc_height;
+                _lyBottomClickCx.constant = maxTwo / 2.0 + _bottomClickOffsetY + _bottomClickButton.zc_height / 2.0;
             } else {
                 _lyBottomClickCx.constant = 0;
             }
@@ -300,8 +300,8 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         _lyBottom1.active = NO;
         _lyTop2.active = YES;
         _lyBottom2.active = YES;
-        _lyTop2.constant = _marginInset.top + (maxTwo - _lineTwoReferView.height) / 2.0;
-        _lyBottom2.constant = -(_marginInset.bottom + extra + (maxTwo - _lineTwoReferView.height) / 2.0);
+        _lyTop2.constant = _marginInset.top + (maxTwo - _lineTwoReferView.zc_height) / 2.0;
+        _lyBottom2.constant = -(_marginInset.bottom + extra + (maxTwo - _lineTwoReferView.zc_height) / 2.0);
     } else {
         [self setCoverMaskHidden:NO];
         if (_lineOneReferView) {
@@ -309,15 +309,15 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
             _lyBottom2.active = NO;
             _lyTop1.active = YES;
             _lyBottom1.active = YES;
-            _lyTop1.constant = 0.3 - _lineOneReferView.height / 2.0;
-            _lyBottom1.constant = _lineOneReferView.height / 2.0 - 0.3;
+            _lyTop1.constant = 0.3 - _lineOneReferView.zc_height / 2.0;
+            _lyBottom1.constant = _lineOneReferView.zc_height / 2.0 - 0.3;
         } else if (_lineTwoReferView) {
             _lyTop1.active = NO;
             _lyBottom1.active = NO;
             _lyTop2.active = YES;
             _lyBottom2.active = YES;
-            _lyTop2.constant = 0.3 - _lineTwoReferView.height / 2.0;
-            _lyBottom2.constant = _lineTwoReferView.height / 2.0 - 0.3;
+            _lyTop2.constant = 0.3 - _lineTwoReferView.zc_height / 2.0;
+            _lyBottom2.constant = _lineTwoReferView.zc_height / 2.0 - 0.3;
         } else {
             NSAssert(0, @"ZCKit: not container subviews");
         }
@@ -332,128 +332,131 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     CGFloat leftMax = left; CGFloat rightMax = right;
     //左侧最小宽度
     if ([self isSeatView:_selectButton]) {
-        leftMax = leftMax + _selectButton.width + _horizontalSpacing;
+        leftMax = leftMax + _selectButton.zc_width + _horizontalSpacing;
     }
     if ([self isSeatView:_avatarControl]) {
-        leftMax = leftMax + _avatarControl.width + _horizontalSpacing;
+        leftMax = leftMax + _avatarControl.zc_width + _horizontalSpacing;
     }
     if ([self isSeatView:_leadingLabel]) {
         leftMax = leftMax + _lineOneMinLeft + _horizontalSpacing;
     }
     if ([self isSeatView:_flagContainerView]) {
-        leftMax = leftMax + _flagContainerView.width + _horizontalSpacing;
+        leftMax = leftMax + _flagContainerView.zc_width + _horizontalSpacing;
     }
     if ([self isSeatView:_inputTextField]) {
-        leftMax = leftMax + _inputTextField.width + _horizontalSpacing;
+        leftMax = leftMax + _inputTextField.zc_width + _horizontalSpacing;
     }
     //右侧最大宽度
     if ([self isSeatView:_accessControl]) {
-        rightMax = rightMax + _accessControl.width + _horizontalSpacing;
+        rightMax = rightMax + _accessControl.zc_width + _horizontalSpacing;
     }
     if ([self isSeatView:_badgeView]) {
-        rightMax = rightMax + _badgeView.width + _horizontalSpacing;
+        rightMax = rightMax + _badgeView.zc_width + _horizontalSpacing;
     }
     if ([self isSeatView:_switchControl]) {
-        rightMax = rightMax + _switchControl.width + _horizontalSpacing;
+        rightMax = rightMax + _switchControl.zc_width + _horizontalSpacing;
     }
     if ([self isSeatView:_clickButton]) {
-        rightMax = rightMax + _clickButton.width + _horizontalSpacing;
+        rightMax = rightMax + _clickButton.zc_width + _horizontalSpacing;
     }
     if ([self isSeatView:_containerView]) {
-        rightMax = rightMax + _containerView.width + _horizontalSpacing;
+        rightMax = rightMax + _containerView.zc_width + _horizontalSpacing;
     }
     if ([self isSeatView:_trailingLabel]) {
-        CGFloat maxWid = self.width - rightMax - leftMax;
+        CGFloat maxWid = self.zc_width - rightMax - leftMax;
         CGSize size = [_trailingLabel sizeThatFits:CGSizeMake(maxWid, MAXFLOAT)];
+        size = CGSizeMake(ceilf(size.width), ceilf(size.height));
         size.width = MIN(maxWid, size.width);
         rightMax = rightMax + size.width + _horizontalSpacing;
-        _trailingLabel.size = size;
+        _trailingLabel.zc_size = size;
         if ([self isSeatView:_fitTextField]) {
             NSAssert(0, @"ZCKit: trailingLabel and fitTextField coexistence");
         }
     } else if ([self isSeatView:_fitTextField]) {
-        CGFloat fitMaxWid = self.width - rightMax - leftMax;
+        CGFloat fitMaxWid = self.zc_width - rightMax - leftMax;
         if ([self isSeatView:_leadingLabel]) {
             CGFloat rightMax1 = rightMax + _lineOneMinRight + _horizontalSpacing;
-            CGFloat maxWid1 = self.width - rightMax1 - leftMax + _lineOneMinLeft + _horizontalSpacing;
+            CGFloat maxWid1 = self.zc_width - rightMax1 - leftMax + _lineOneMinLeft + _horizontalSpacing;
             CGSize size = [_leadingLabel sizeThatFits:CGSizeMake(maxWid1, MAXFLOAT)];
-            fitMaxWid = self.width - rightMax - leftMax + _lineOneMinLeft - MIN(maxWid1, size.width);
+            size = CGSizeMake(ceilf(size.width), ceilf(size.height));
+            fitMaxWid = self.zc_width - rightMax - leftMax + _lineOneMinLeft - MIN(maxWid1, size.width);
         }
         rightMax = rightMax + fitMaxWid + _horizontalSpacing;
-        _fitTextField.size = CGSizeMake(fitMaxWid, _fitTextField.font.fontSize + ZSA(4));
+        _fitTextField.zc_size = CGSizeMake(fitMaxWid, _fitTextField.font.fontSize + ZSA(4));
     }
     //重算左侧宽度
     if ([self isSeatView:_leadingLabel]) {
-        CGFloat maxWid = self.width - rightMax - leftMax + _lineOneMinLeft + _horizontalSpacing;
+        CGFloat maxWid = self.zc_width - rightMax - leftMax + _lineOneMinLeft + _horizontalSpacing;
         CGSize size = [_leadingLabel sizeThatFits:CGSizeMake(maxWid, MAXFLOAT)];
+        size = CGSizeMake(ceilf(size.width), ceilf(size.height));
         size.width = MIN(maxWid, size.width);
-        _leadingLabel.size = size;
+        _leadingLabel.zc_size = size;
     }
     
     //重新布局位置
     if ([self isSeatView:_selectButton]) {
         [self resetLeftConstraint:_selectButton left:left];
-        left = left + _selectButton.width + _horizontalSpacing;
-        if (!_isSelectAvatarBeCenter) max = MAX(_selectButton.height, max);
+        left = left + _selectButton.zc_width + _horizontalSpacing;
+        if (!_isSelectAvatarBeCenter) max = MAX(_selectButton.zc_height, max);
         else {_selectAvatarCR = left; max = MAX(rowHideHei, max);}
     }
     if ([self isSeatView:_avatarControl]) {
         [self resetLeftConstraint:_avatarControl left:left];
-        left = left + _avatarControl.width + _horizontalSpacing;
-        if (!_isSelectAvatarBeCenter) max = MAX(_avatarControl.height, max);
+        left = left + _avatarControl.zc_width + _horizontalSpacing;
+        if (!_isSelectAvatarBeCenter) max = MAX(_avatarControl.zc_height, max);
         else {_selectAvatarCR = left; max = MAX(rowHideHei, max);}
     }
     if ([self isSeatView:_leadingLabel]) {
         [self resetLeftConstraint:_leadingLabel left:left];
-        left = left + _leadingLabel.width + _horizontalSpacing;
-        if (!_isLeadingBeCenter) max = MAX(_leadingLabel.height, max);
+        left = left + _leadingLabel.zc_width + _horizontalSpacing;
+        if (!_isLeadingBeCenter) max = MAX(_leadingLabel.zc_height, max);
         else {_leadingCR = left; max = MAX(rowHideHei, max);}
     }
     if ([self isSeatView:_flagContainerView]) {
         [self resetLeftConstraint:_flagContainerView left:left];
-        left = left + _flagContainerView.width + _horizontalSpacing;
-        max = MAX(_flagContainerView.height, max);
+        left = left + _flagContainerView.zc_width + _horizontalSpacing;
+        max = MAX(_flagContainerView.zc_height, max);
     }
     if ([self isSeatView:_inputTextField]) {
         [self resetLeftConstraint:_inputTextField left:left];
         //left = left + _inputTextField.width + _horizontalSpacing;
-        max = MAX(_inputTextField.height, max);
+        max = MAX(_inputTextField.zc_height, max);
     }
     
     if ([self isSeatView:_accessControl]) {
         [self resetRightConstraint:_accessControl right:right];
-        right = right + _accessControl.width + _horizontalSpacing;
-        if (!_isAccessBeCenter) max = MAX(_accessControl.height, max);
+        right = right + _accessControl.zc_width + _horizontalSpacing;
+        if (!_isAccessBeCenter) max = MAX(_accessControl.zc_height, max);
         else {_accessCR = right; max = MAX(rowHideHei, max);}
     }
     if ([self isSeatView:_badgeView]) {
         [self resetRightConstraint:_badgeView right:right];
-        right = right + _badgeView.width + _horizontalSpacing;
-        max = MAX(_badgeView.height, max);
+        right = right + _badgeView.zc_width + _horizontalSpacing;
+        max = MAX(_badgeView.zc_height, max);
     }
     if ([self isSeatView:_switchControl]) {
         [self resetRightConstraint:_switchControl right:right];
-        right = right + _switchControl.width + _horizontalSpacing;
-        max = MAX(_switchControl.height, max);
+        right = right + _switchControl.zc_width + _horizontalSpacing;
+        max = MAX(_switchControl.zc_height, max);
     }
     if ([self isSeatView:_clickButton]) {
         [self resetRightConstraint:_clickButton right:right];
-        right = right + _clickButton.width + _horizontalSpacing;
-        max = MAX(_clickButton.height, max);
+        right = right + _clickButton.zc_width + _horizontalSpacing;
+        max = MAX(_clickButton.zc_height, max);
     }
     if ([self isSeatView:_containerView]) {
         [self resetRightConstraint:_containerView right:right];
-        right = right + _containerView.width + _horizontalSpacing;
-        max = MAX(_containerView.height, max);
+        right = right + _containerView.zc_width + _horizontalSpacing;
+        max = MAX(_containerView.zc_height, max);
     }
     if ([self isSeatView:_trailingLabel]) {
         [self resetRightConstraint:_trailingLabel right:right];
-        //right = right + _trailingLabel.width + _horizontalSpacing;
-        max = MAX(_trailingLabel.height, max);
+        //right = right + _trailingLabel.zc_width + _horizontalSpacing;
+        max = MAX(_trailingLabel.zc_height, max);
     } else if ([self isSeatView:_fitTextField]) {
         [self resetRightConstraint:_fitTextField right:right];
-        //right = right + _fitTextField.width + _horizontalSpacing;
-        max = MAX(_fitTextField.height, max);
+        //right = right + _fitTextField.zc_width + _horizontalSpacing;
+        max = MAX(_fitTextField.zc_height, max);
     }
     
     //重新刷新参照视图约束
@@ -487,71 +490,75 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         leading = leading + _lineTwoMinLeft + _horizontalSpacing;
     }
     if ([self isSeatView:_bottomFlagContainerView]) {
-        leading = leading + _bottomFlagContainerView.width + _horizontalSpacing;
+        leading = leading + _bottomFlagContainerView.zc_width + _horizontalSpacing;
     }
     if ([self isSeatView:_bottomTextField]) {
-        leading = leading + _bottomTextField.width + _horizontalSpacing;
+        leading = leading + _bottomTextField.zc_width + _horizontalSpacing;
     }
     
     if ([self isSeatView:_bottomBadgeView]) {
         [self resetRightConstraint:_bottomBadgeView right:right];
-        right = right + _bottomBadgeView.width + _horizontalSpacing;
-        max = MAX(_bottomBadgeView.height, max);
+        right = right + _bottomBadgeView.zc_width + _horizontalSpacing;
+        max = MAX(_bottomBadgeView.zc_height, max);
     }
     if ([self isSeatView:_bottomClickButton]) {
         if (_bottomClickOffsetY) {
-            [self resetRightConstraint:_bottomClickButton right:(self.width - _bottomClickButton.width) / 2.0];
+            [self resetRightConstraint:_bottomClickButton right:(self.zc_width - _bottomClickButton.zc_width) / 2.0];
             max = MAX(rowHideHei, max);
         } else {
             [self resetRightConstraint:_bottomClickButton right:right];
-            right = right + _bottomClickButton.width + _horizontalSpacing;
-            max = MAX(_bottomClickButton.height, max);
+            right = right + _bottomClickButton.zc_width + _horizontalSpacing;
+            max = MAX(_bottomClickButton.zc_height, max);
         }
     }
     if ([self isSeatView:_bottomContainerView]) {
         [self resetRightConstraint:_bottomContainerView right:right];
-        right = right + _bottomContainerView.width + _horizontalSpacing;
-        max = MAX(_bottomContainerView.height, max);
+        right = right + _bottomContainerView.zc_width + _horizontalSpacing;
+        max = MAX(_bottomContainerView.zc_height, max);
     }
     if ([self isSeatView:_bottomAttachLabel]) {
-        CGFloat maxWid = self.width - right - leading;
+        CGFloat maxWid = self.zc_width - right - leading;
         CGSize size = [_bottomAttachLabel sizeThatFits:CGSizeMake(maxWid, MAXFLOAT)];
+        size = CGSizeMake(ceilf(size.width), ceilf(size.height));
         size.width = MIN(maxWid, size.width);
-        _bottomAttachLabel.size = size;
+        _bottomAttachLabel.zc_size = size;
         [self resetRightConstraint:_bottomAttachLabel right:right];
-        right = right + _bottomAttachLabel.width + _horizontalSpacing;
-        max = MAX(_bottomAttachLabel.height, max);
+        right = right + _bottomAttachLabel.zc_width + _horizontalSpacing;
+        max = MAX(_bottomAttachLabel.zc_height, max);
     }
     
     if ([self isSeatView:_bottomDescLabel]) {
-        CGFloat maxWid = self.width - right - leading + _lineTwoMinLeft + _horizontalSpacing;
+        CGFloat maxWid = self.zc_width - right - leading + _lineTwoMinLeft + _horizontalSpacing;
         CGSize size = [_bottomDescLabel sizeThatFits:CGSizeMake(maxWid, MAXFLOAT)];
+        size = CGSizeMake(ceilf(size.width), ceilf(size.height));
         size.width = MIN(maxWid, size.width);
-        _bottomDescLabel.size = size;
+        _bottomDescLabel.zc_size = size;
         [self resetLeftConstraint:_bottomDescLabel left:left];
-        left = left + _bottomDescLabel.width + _horizontalSpacing;
-        max = MAX(_bottomDescLabel.height, max);
+        left = left + _bottomDescLabel.zc_width + _horizontalSpacing;
+        max = MAX(_bottomDescLabel.zc_height, max);
     } else if ([self isSeatView:_bottomTextView]) {
-        CGFloat maxWid = self.width - right - leading + _lineTwoMinLeft + _horizontalSpacing;
+        CGFloat maxWid = self.zc_width - right - leading + _lineTwoMinLeft + _horizontalSpacing;
         CGSize size1 = [_bottomTextView sizeThatFits:CGSizeMake(maxWid, MAXFLOAT)];
+        size1 = CGSizeMake(ceilf(size1.width), ceilf(size1.height));
         NSString *tempText = _bottomTextView.text;
         _bottomTextView.text = _textViewCalText;
         CGSize size2 = [_bottomTextView sizeThatFits:CGSizeMake(maxWid, MAXFLOAT)];
+        size2 = CGSizeMake(ceilf(size2.width), ceilf(size2.height));
         _bottomTextView.text = tempText;
-        _bottomTextView.size = CGSizeMake(maxWid, MAX(size1.height, size2.height));
+        _bottomTextView.zc_size = CGSizeMake(maxWid, MAX(size1.height, size2.height));
         [self resetLeftConstraint:_bottomTextView left:left];
-        left = left + _bottomTextView.width + _horizontalSpacing;
-        max = MAX(_bottomTextView.height, max);
+        left = left + _bottomTextView.zc_width + _horizontalSpacing;
+        max = MAX(_bottomTextView.zc_height, max);
     }
     if ([self isSeatView:_bottomFlagContainerView]) {
         [self resetLeftConstraint:_bottomFlagContainerView left:left];
-        left = left + _bottomFlagContainerView.width + _horizontalSpacing;
-        max = MAX(_bottomFlagContainerView.height, max);
+        left = left + _bottomFlagContainerView.zc_width + _horizontalSpacing;
+        max = MAX(_bottomFlagContainerView.zc_height, max);
     }
     if ([self isSeatView:_bottomTextField]) {
         [self resetLeftConstraint:_bottomTextField left:left];
-        //left = left + _bottomTextField.width + _horizontalSpacing;
-        max = MAX(_bottomTextField.height, max);
+        //left = left + _bottomTextField.zc_width + _horizontalSpacing;
+        max = MAX(_bottomTextField.zc_height, max);
     }
     
     if (_lineTwoReferView && ![self isSeatView:_lineTwoReferView]) {
@@ -599,7 +606,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     if (subview == _switchControl) {
         [subview layoutIfNeeded]; return;
     }
-    CGSize size = subview.size;
+    CGSize size = subview.zc_size;
     NSLayoutConstraint *widly = nil, *heily = nil;
     for (NSLayoutConstraint *layout in subview.constraints) {
         if ([layout.identifier isEqualToString:layoutIdent]) {
@@ -835,7 +842,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     if (!_selectButton) {
         if (!_lineOneReferView && !_trailingLabel) {self.trailingLabel.hidden = YES; _isTrailingLabel = YES;}
         _selectButton = [ZCButton buttonWithType:UIButtonTypeCustom];
-        _selectButton.size = CGSizeMake(ZSA(20), ZSA(20));
+        _selectButton.zc_size = CGSizeMake(ZSA(20), ZSA(20));
         _selectButton.titleLabel.font = ZCFS(16);
         _selectButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         _selectButton.titleLabel.minimumScaleFactor = 0.5;
@@ -857,7 +864,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         if (!_lineOneReferView && !_trailingLabel) {self.trailingLabel.hidden = YES; _isTrailingLabel = YES;}
         _avatarControl = [[ZCAvatarControl alloc] initWithFrame:CGRectZero];
         _avatarControl.translatesAutoresizingMaskIntoConstraints = NO;
-        _avatarControl.size = CGSizeMake(ZSA(40), ZSA(40));
+        _avatarControl.zc_size = CGSizeMake(ZSA(40), ZSA(40));
         _avatarControl.userInteractionEnabled = YES;
         [self.contentView addSubview:_avatarControl];
         [self injectBasicConstraint:_avatarControl lineOne:YES];
@@ -869,10 +876,10 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     return _avatarControl;
 }
 
-- (ZCFixLabel *)leadingLabel {
+- (ZCLabel *)leadingLabel {
     if (!_leadingLabel) {
         if (!_lineOneReferView && !_trailingLabel) {self.trailingLabel.hidden = YES; _isTrailingLabel = YES;}
-        _leadingLabel = [[ZCFixLabel alloc] initWithFrame:CGRectZero];
+        _leadingLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _leadingLabel.textAlignment = NSTextAlignmentLeft;
         _leadingLabel.textColor = ZCBlack30;
         _leadingLabel.numberOfLines = 0;
@@ -891,7 +898,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (UIView *)flagContainerView {
     if (!_flagContainerView) {
         _flagContainerView = [[UIView alloc] initWithFrame:CGRectZero];
-        _flagContainerView.size = CGSizeMake(ZSA(20), ZSA(20));
+        _flagContainerView.zc_size = CGSizeMake(ZSA(20), ZSA(20));
         _flagContainerView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_flagContainerView];
         [self injectBasicConstraint:_flagContainerView lineOne:YES];
@@ -906,7 +913,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (ZCTextField *)inputTextField {
     if (!_inputTextField) {
         _inputTextField = [[ZCTextField alloc] initWithFrame:CGRectZero];
-        _inputTextField.size = CGSizeMake(ZSA(160), ZSA(30));
+        _inputTextField.zc_size = CGSizeMake(ZSA(160), ZSA(30));
         _inputTextField.textAlignment = NSTextAlignmentLeft;
         _inputTextField.keyboardType = UIKeyboardTypeDefault;
         _inputTextField.borderStyle = UITextBorderStyleNone;
@@ -934,7 +941,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         _accessControl = [[ZCAvatarControl alloc] initWithFrame:CGRectZero];
         _accessControl.translatesAutoresizingMaskIntoConstraints = NO;
         _accessControl.localImage = ZCKitBridge.sideArrowImage;
-        _accessControl.size = CGSizeMake(ZSA(6), ZSA(12));
+        _accessControl.zc_size = CGSizeMake(ZSA(6), ZSA(12));
         _accessControl.userInteractionEnabled = NO;
         [self.contentView addSubview:_accessControl];
         [self injectBasicConstraint:_accessControl lineOne:YES];
@@ -977,7 +984,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (ZCButton *)clickButton {
     if (!_clickButton) {
         _clickButton = [ZCButton buttonWithType:UIButtonTypeCustom];
-        _clickButton.size = CGSizeMake(ZSA(30), ZSA(30));
+        _clickButton.zc_size = CGSizeMake(ZSA(30), ZSA(30));
         _clickButton.titleLabel.font = ZCFS(16);
         _clickButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         _clickButton.titleLabel.minimumScaleFactor = 0.5;
@@ -997,7 +1004,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (UIView *)containerView {
     if (!_containerView) {
         _containerView = [[UIView alloc] initWithFrame:CGRectZero];
-        _containerView.size = CGSizeMake(ZSA(30), ZSA(30));
+        _containerView.zc_size = CGSizeMake(ZSA(30), ZSA(30));
         _containerView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_containerView];
         [self injectBasicConstraint:_containerView lineOne:YES];
@@ -1032,13 +1039,13 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     return _fitTextField;
 }
 
-- (ZCFixLabel *)trailingLabel {
+- (ZCLabel *)trailingLabel {
     if (_isTrailingLabel) {
         _isTrailingLabel = NO;
         _trailingLabel.hidden = NO;
     }
     if (!_trailingLabel) {
-        _trailingLabel = [[ZCFixLabel alloc] initWithFrame:CGRectZero];
+        _trailingLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _trailingLabel.textAlignment = NSTextAlignmentRight;
         _trailingLabel.textColor = ZCBlackA8;
         _trailingLabel.numberOfLines = 0;
@@ -1054,9 +1061,9 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     return _trailingLabel;
 }
 
-- (ZCFixLabel *)bottomDescLabel {
+- (ZCLabel *)bottomDescLabel {
     if (!_bottomDescLabel) {
-        _bottomDescLabel = [[ZCFixLabel alloc] initWithFrame:CGRectZero];
+        _bottomDescLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _bottomDescLabel.textAlignment = NSTextAlignmentLeft;
         _bottomDescLabel.textColor = ZCBlack80;
         _bottomDescLabel.numberOfLines = 0;
@@ -1100,7 +1107,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (UIView *)bottomFlagContainerView {
     if (!_bottomFlagContainerView) {
         _bottomFlagContainerView = [[UIView alloc] initWithFrame:CGRectZero];
-        _bottomFlagContainerView.size = CGSizeMake(ZSA(20), ZSA(20));
+        _bottomFlagContainerView.zc_size = CGSizeMake(ZSA(20), ZSA(20));
         _bottomFlagContainerView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_bottomFlagContainerView];
         [self injectBasicConstraint:_bottomFlagContainerView lineOne:NO];
@@ -1115,7 +1122,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (ZCTextField *)bottomTextField {
     if (!_bottomTextField) {
         _bottomTextField = [[ZCTextField alloc] initWithFrame:CGRectZero];
-        _bottomTextField.size = CGSizeMake(ZSA(160), ZSA(30));
+        _bottomTextField.zc_size = CGSizeMake(ZSA(160), ZSA(30));
         _bottomTextField.textAlignment = NSTextAlignmentLeft;
         _bottomTextField.keyboardType = UIKeyboardTypeDefault;
         _bottomTextField.borderStyle = UITextBorderStyleNone;
@@ -1137,13 +1144,13 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     return _bottomTextField;
 }
 
-- (ZCFixLabel *)bottomAttachLabel {
+- (ZCLabel *)bottomAttachLabel {
     if (_isAttachLabel) {
         _isAttachLabel = NO;
         _bottomAttachLabel.hidden = NO;
     }
     if (!_bottomAttachLabel) {
-        _bottomAttachLabel = [[ZCFixLabel alloc] initWithFrame:CGRectZero];
+        _bottomAttachLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _bottomAttachLabel.textAlignment = NSTextAlignmentRight;
         _bottomAttachLabel.textColor = ZCBlackA8;
         _bottomAttachLabel.numberOfLines = 0;
@@ -1162,7 +1169,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (UIView *)bottomContainerView {
     if (!_bottomContainerView) {
         _bottomContainerView = [[UIView alloc] initWithFrame:CGRectZero];
-        _bottomContainerView.size = CGSizeMake(ZSA(30), ZSA(30));
+        _bottomContainerView.zc_size = CGSizeMake(ZSA(30), ZSA(30));
         _bottomContainerView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_bottomContainerView];
         [self injectBasicConstraint:_bottomContainerView lineOne:NO];
@@ -1178,7 +1185,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     if (!_bottomClickButton) {
         if (!_lineTwoReferView && !_bottomAttachLabel) {self.bottomAttachLabel.hidden = YES; _isAttachLabel = YES;}
         _bottomClickButton = [ZCButton buttonWithType:UIButtonTypeCustom];
-        _bottomClickButton.size = CGSizeMake(ZSA(30), ZSA(30));
+        _bottomClickButton.zc_size = CGSizeMake(ZSA(30), ZSA(30));
         _bottomClickButton.titleLabel.font = ZCFS(16);
         _bottomClickButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         _bottomClickButton.titleLabel.minimumScaleFactor = 0.5;
@@ -1216,13 +1223,13 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         [view removeAllSubviews];
         
         if (view == _flagContainerView) {
-            view.size = CGSizeMake(ZSA(20), ZSA(20));
+            view.zc_size = CGSizeMake(ZSA(20), ZSA(20));
         } else if (view == _containerView) {
-            view.size = CGSizeMake(ZSA(30), ZSA(30));
+            view.zc_size = CGSizeMake(ZSA(30), ZSA(30));
         } else if (view == _bottomContainerView) {
-            view.size = CGSizeMake(ZSA(30), ZSA(30));
+            view.zc_size = CGSizeMake(ZSA(30), ZSA(30));
         } else if (view == _bottomFlagContainerView) {
-            view.size = CGSizeMake(ZSA(20), ZSA(20));
+            view.zc_size = CGSizeMake(ZSA(20), ZSA(20));
         }
     }
 }
@@ -1265,16 +1272,16 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         
         if (avatar == _avatarControl) {
             avatar.userInteractionEnabled = YES;
-            avatar.size = CGSizeMake(ZSA(40), ZSA(40));
+            avatar.zc_size = CGSizeMake(ZSA(40), ZSA(40));
         } else if (avatar == _accessControl) {
             avatar.userInteractionEnabled = NO;
-            avatar.size = CGSizeMake(ZSA(6), ZSA(12));
+            avatar.zc_size = CGSizeMake(ZSA(6), ZSA(12));
             avatar.localImage = ZCKitBridge.sideArrowImage;
         }
     }
 }
 
-- (void)initZCFixLabelProperty:(ZCFixLabel *)label {
+- (void)initZCLabelProperty:(ZCLabel *)label {
     if (label) {
         [self resetViewBaseProperty:label];
         [label resetInitProperty];
@@ -1338,21 +1345,21 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         
         if (button == _selectButton) {
             button.titleLabel.font = ZCFS(16);
-            button.size = CGSizeMake(ZSA(20), ZSA(20));
+            button.zc_size = CGSizeMake(ZSA(20), ZSA(20));
             button.titleLabel.adjustsFontSizeToFitWidth = YES;
             button.titleLabel.minimumScaleFactor = 0.5;
             button.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
             [button setTitleColor:ZCBlack30 forState:UIControlStateNormal];
         } else if (button == _clickButton) {
             button.titleLabel.font = ZCFS(16);
-            button.size = CGSizeMake(ZSA(30), ZSA(30));
+            button.zc_size = CGSizeMake(ZSA(30), ZSA(30));
             button.titleLabel.adjustsFontSizeToFitWidth = YES;
             button.titleLabel.minimumScaleFactor = 0.5;
             button.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
             [button setTitleColor:ZCBlack30 forState:UIControlStateNormal];
         } else if (button == _bottomClickButton) {
             button.titleLabel.font = ZCFS(16);
-            button.size = CGSizeMake(ZSA(30), ZSA(30));
+            button.zc_size = CGSizeMake(ZSA(30), ZSA(30));
             button.titleLabel.adjustsFontSizeToFitWidth = YES;
             button.titleLabel.minimumScaleFactor = 0.5;
             button.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
@@ -1398,9 +1405,9 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         field.leftSpace = 0;
         field.leftImage = nil;
         field.fixSize = CGSizeZero;
-        field.isShowUnderline = NO;
         field.isForbidVisibleMenu = NO;
         field.responseAreaExtend = UIEdgeInsetsZero;
+        field.underlineEdgeInsets = UIEdgeInsetsZero;
         field.isOnlyAllowCopyPasteSelect = NO;
         field.limitTextLength = 0;
         field.textChangeBlock = nil;
@@ -1415,7 +1422,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         #pragma clang diagnostic pop
         
         if (field == _inputTextField) {
-            field.size = CGSizeMake(ZSA(160), ZSA(30));
+            field.zc_size = CGSizeMake(ZSA(160), ZSA(30));
             field.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
             field.textAlignment = NSTextAlignmentLeft;
             field.keyboardType = UIKeyboardTypeDefault;
@@ -1437,7 +1444,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
             field.textColor = ZCBlack30;
             field.font = ZCFS(16);
         } else if (field == _bottomTextField) {
-            field.size = CGSizeMake(ZSA(160), ZSA(30));
+            field.zc_size = CGSizeMake(ZSA(160), ZSA(30));
             field.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
             field.textAlignment = NSTextAlignmentLeft;
             field.keyboardType = UIKeyboardTypeDefault;

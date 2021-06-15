@@ -7,215 +7,298 @@
 //
 
 #import "ZCLabel.h"
-#import "ZCMacro.h"
-#import "UIFont+ZC.h"
+#import "UILabel+ZC.h"
+#import "UIColor+ZC.h"
 
 @interface ZCLabel ()
 
-@property (nonatomic, assign) BOOL isSelfSetAttriStr;
+@property (nonatomic, assign) CGFloat verticalAlignmentOffset; //水平对齐缩进量
 
-@property (nonatomic, strong) NSMutableAttributedString *attriStr;
+@property (nonatomic, assign) int verticalAlignmentType; //0.水平居中对齐 1.水平居上对齐 2.水平居下对齐
+
+@property (nonatomic, strong) UITapGestureRecognizer *zcTapGes; //点击手势
+
+@property (nonatomic, strong) UIFont *manualFont; //手动设置的font
+
+@property (nonatomic, strong) UIColor *manualColor; //手动设置的color
 
 @end
 
 @implementation ZCLabel
 
-@synthesize pStyle = _pStyle;
-
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self initAttriSet];
+        [self resetInitProperty];
     }
     return self;
 }
 
-- (void)initAttriSet {
-    _rowSpacing = 0;
-    _wordSpacing = 0;
-    _headTailIndent = 0;
-    _isSelfSetAttriStr = NO;
-    self.numberOfLines = 0;
-}
-
-#pragma mark - Pubilc
-- (CGFloat)calculateTextHeight:(CGFloat)maxWidth {
-    return [self calculateSize:CGSizeMake(maxWidth, MAXFLOAT)].height;
-}
-
-- (CGFloat)calculateTextWidth {
-    return [self calculateSize:CGSizeMake(MAXFLOAT, MAXFLOAT)].width;
-}
-
-- (CGSize)calculateSize:(CGSize)size {
-    NSRange range = NSMakeRange(0, self.attriStr.length);
-    NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
-    NSDictionary *att = [self.attriStr attributesAtIndex:0 effectiveRange:&range];
-    return [self.attriStr.string boundingRectWithSize:size options:options attributes:att context:nil].size;
-}
-
-- (void)updateTextAttributeOrParagraphStyle {
-    [self resetAttriStr:self.attriStr.string];
-}
-
-#pragma mark - Private
-- (void)resetAttriStr:(NSString *)text {
-    NSAttributedStringEnumerationOptions ops = NSAttributedStringEnumerationLongestEffectiveRangeNotRequired;
-    NSMutableAttributedString *attriStr = [[NSMutableAttributedString alloc] initWithString:ZCStrNonnil(text)];
-    NSRange oriRange = NSMakeRange(0, self.attriStr.length);
-    NSRange newRange = NSMakeRange(0, attriStr.length);
-    
-    [self.attriStr removeAttribute:NSKernAttributeName range:oriRange];
-    [self.attriStr removeAttribute:NSFontAttributeName range:oriRange];
-    [self.attriStr removeAttribute:NSParagraphStyleAttributeName range:oriRange];
-    [self.attriStr removeAttribute:NSForegroundColorAttributeName range:oriRange];
-    [self.attriStr removeAttribute:NSBaselineOffsetAttributeName range:oriRange];
-    
-    [self.attriStr enumerateAttributesInRange:oriRange options:ops
-                                   usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
-                                       if (attrs.count && (range.location + range.length <= newRange.location + newRange.length)) {
-                                           [attriStr addAttributes:attrs range:range];
-                                       }
-    }];
-    
-    UIFont *font = self.font ? self.font : ZCFS(16);
-    UIColor *color = self.textColor ? self.textColor : ZCBlack30;
-    CGFloat lineOffset = font.fontSize * (self.pStyle.lineHeightMultiple - 1) / 2;
-    [attriStr addAttribute:NSKernAttributeName value:@(self.wordSpacing) range:newRange];
-    [attriStr addAttribute:NSFontAttributeName value:font range:newRange];
-    [attriStr addAttribute:NSParagraphStyleAttributeName value:self.pStyle range:newRange];
-    [attriStr addAttribute:NSForegroundColorAttributeName value:color range:newRange];
-    [attriStr addAttribute:NSBaselineOffsetAttributeName value:@(lineOffset) range:newRange];
-    
-    self.attriStr = attriStr;
-    self.isSelfSetAttriStr = YES;
-    self.attributedText = attriStr;
-}
-
-#pragma mark - Get
-- (NSAttributedString *)attributedText {
-    return nil;
-}
-
-- (NSMutableAttributedString *)attriStr {
-    if (!_attriStr) {
-        _attriStr = [[NSMutableAttributedString alloc] initWithString:@""];
-        [_attriStr addAttribute:NSKernAttributeName value:@(0) range:NSMakeRange(0, 0)];
-        [_attriStr addAttribute:NSFontAttributeName value:ZCFS(16) range:NSMakeRange(0, 0)];
-        [_attriStr addAttribute:NSParagraphStyleAttributeName value:self.pStyle range:NSMakeRange(0, 0)];
-        [_attriStr addAttribute:NSForegroundColorAttributeName value:ZCBlack30 range:NSMakeRange(0, 0)];
-        [_attriStr addAttribute:NSBaselineOffsetAttributeName value:@(ZSA(2)) range:NSMakeRange(0, 0)];
+- (instancetype)initWithColor:(UIColor *)color font:(UIFont *)font alignment:(NSTextAlignment)alignment adjustsSize:(BOOL)adjustsSize {
+    if (self = [super initWithFrame:CGRectZero]) {
+        [self resetInitProperty];
+        self.lineBreakMode = NSLineBreakByTruncatingTail;
+        self.adjustsFontSizeToFitWidth = adjustsSize;
+        self.minimumScaleFactor = 0.5;
+        self.textAlignment = alignment;
+        self.textColor = color;
+        self.numberOfLines = 1;
+        self.font = font;
     }
-    return _attriStr;
+    return self;
 }
 
-- (NSMutableParagraphStyle *)pStyle {
-    if (!_pStyle) {
-        _pStyle = [[NSMutableParagraphStyle alloc] init];
-        _pStyle.lineSpacing = _rowSpacing; //行间距
-        _pStyle.lineHeightMultiple = 1.25; //行倍数间距(设置0无效，总间距为行间距+行倍数间距)
-        _pStyle.paragraphSpacing = 0; //段间距(\n换行)(总间距为行间距+段间距)
-        _pStyle.paragraphSpacingBefore = 0; //段首留空白(\n换行)
-        _pStyle.firstLineHeadIndent = _headTailIndent; //首行缩进
-        _pStyle.headIndent = _headTailIndent; //整体缩进(首行除外)
-        _pStyle.tailIndent = -_headTailIndent; //尾部缩进(右侧缩进或显示宽度)
-        
-        _pStyle.hyphenationFactor = 0.3; //连字符属性
-        _pStyle.minimumLineHeight = 0; //最低行高
-        _pStyle.maximumLineHeight = 0; //最大行高
-        _pStyle.alignment = NSTextAlignmentLeft; //(两端对齐的)文本对齐方式(两端对齐，自然)
-        _pStyle.lineBreakMode = NSLineBreakByWordWrapping; //结尾部分的内容以……方式省略
-        _pStyle.baseWritingDirection = NSWritingDirectionLeftToRight; //书写方向
-        _pStyle.allowsDefaultTighteningForTruncation = NO; //换行问题
-    }
-    return _pStyle;
-}
-
-#pragma mark - Set1
-- (void)setText:(NSString *)text {
-    [self resetAttriStr:text];
-}
-
-- (void)setAttributedText:(NSAttributedString *)attributedText {
-    if (_isSelfSetAttriStr) {
-        [super setAttributedText:attributedText];
-    } else {
-        [self resetAttriStr:attributedText.string];
-    }
-    _isSelfSetAttriStr = NO;
+- (void)resetInitProperty {
+    _lineSpace = 0;
+    _headIndent = 0;
+    _fixSize = CGSizeZero;
+    _verticalAlignmentType = 0;
+    _verticalAlignmentOffset = 0;
+    _insideInsets = UIEdgeInsetsZero;
+    self.touchAction = nil;
 }
 
 - (void)setFont:(UIFont *)font {
+    _manualFont = font;
     [super setFont:font];
-    [self updateTextAttributeOrParagraphStyle];
 }
 
 - (void)setTextColor:(UIColor *)textColor {
+    _manualColor = textColor;
     [super setTextColor:textColor];
-    [self updateTextAttributeOrParagraphStyle];
 }
 
-- (void)setTextAlignment:(NSTextAlignment)textAlignment {
-    self.pStyle.alignment = textAlignment;
-    [self updateTextAttributeOrParagraphStyle];
+- (CGSize)sizeThatFits:(CGSize)size {
+    if (CGSizeEqualToSize(_fixSize, CGSizeZero)) {
+        return [super sizeThatFits:size];
+    } else {
+        return _fixSize;
+    }
 }
 
-- (void)setLineBreakMode:(NSLineBreakMode)lineBreakMode {
-    self.pStyle.lineBreakMode = lineBreakMode;
-    [self updateTextAttributeOrParagraphStyle];
+- (void)setTouchAction:(void (^)(ZCLabel * _Nonnull))touchAction {
+    _touchAction = touchAction;
+    if (_zcTapGes) {
+        [self removeGestureRecognizer:_zcTapGes];
+        _zcTapGes = nil;
+    }
+    if (touchAction) {
+        self.userInteractionEnabled = YES;
+        _zcTapGes = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTouchActionZC:)];
+        [self addGestureRecognizer:_zcTapGes];
+    } else {
+        self.userInteractionEnabled = NO;
+    }
 }
 
-- (void)setAllowsDefaultTighteningForTruncation:(BOOL)allowsDefaultTighteningForTruncation {
-    self.pStyle.allowsDefaultTighteningForTruncation = allowsDefaultTighteningForTruncation;
-    [self updateTextAttributeOrParagraphStyle];
+#pragma mark - Private
+- (void)onTouchActionZC:(id)sender {
+    if (_touchAction) _touchAction(self);
 }
 
-#pragma mark - Set2
-- (void)setWordSpacing:(CGFloat)wordSpacing {
-    if (wordSpacing < 0) wordSpacing = 0;
-    _wordSpacing = wordSpacing;
-    [self updateTextAttributeOrParagraphStyle];
+#pragma mark - Override
+- (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines {
+    if (!UIEdgeInsetsEqualToEdgeInsets(_insideInsets, UIEdgeInsetsZero)) {
+        CGRect textRect = [super textRectForBounds:UIEdgeInsetsInsetRect(bounds, _insideInsets) limitedToNumberOfLines:numberOfLines];
+        if (textRect.size.width != 0 || textRect.size.height != 0) {
+            textRect.origin.x = textRect.origin.x - _insideInsets.left;
+            textRect.origin.y = textRect.origin.y - _insideInsets.top;
+            textRect.size.width = textRect.size.width + _insideInsets.left + _insideInsets.right;
+            textRect.size.height = textRect.size.height + _insideInsets.top + _insideInsets.bottom;
+        }
+        return textRect;
+    } else if (_verticalAlignmentType || _verticalAlignmentOffset) {
+        CGRect textRect = [super textRectForBounds:bounds limitedToNumberOfLines:numberOfLines];
+        switch (_verticalAlignmentType) {
+            case 1:{
+                textRect.origin.y = bounds.origin.y + _verticalAlignmentOffset;
+            } break;
+            case 2:{
+                textRect.origin.y = bounds.origin.y + bounds.size.height - textRect.size.height - _verticalAlignmentOffset;
+            } break;
+            default:{
+                textRect.origin.y = bounds.origin.y + (bounds.size.height - textRect.size.height) / 2.0 - _verticalAlignmentOffset;
+            } break;
+        }
+        return textRect;
+    } else {
+        return [super textRectForBounds:bounds limitedToNumberOfLines:numberOfLines];
+    }
 }
 
-- (void)setRowSpacing:(CGFloat)rowSpacing {
-    if (rowSpacing < 0) rowSpacing = 0;
-    _rowSpacing = rowSpacing;
-    self.pStyle.lineSpacing = _rowSpacing;
-    [self updateTextAttributeOrParagraphStyle];
+- (void)drawTextInRect:(CGRect)requestedRect {
+    if (!UIEdgeInsetsEqualToEdgeInsets(_insideInsets, UIEdgeInsetsZero)) {
+        if (requestedRect.size.width != 0 || requestedRect.size.height != 0) {
+            [super drawTextInRect:UIEdgeInsetsInsetRect(requestedRect, _insideInsets)];
+        } else {
+            [super drawTextInRect:requestedRect];
+        }
+    } else if (_verticalAlignmentType || _verticalAlignmentOffset) {
+        [super drawTextInRect:[self textRectForBounds:requestedRect limitedToNumberOfLines:self.numberOfLines]];
+    } else {
+        [super drawTextInRect:requestedRect];
+    }
 }
 
-- (void)setHeadTailIndent:(CGFloat)headTailIndent {
-    if (headTailIndent < 0) headTailIndent = 0;
-    _headTailIndent = headTailIndent;
-    self.pStyle.headIndent = _headTailIndent;
-    self.pStyle.tailIndent = -_headTailIndent;
-    self.pStyle.firstLineHeadIndent = _headTailIndent;
-    [self updateTextAttributeOrParagraphStyle];
+- (void)setText:(NSString *)text {
+    if ((_lineSpace != 0 || _headIndent != 0) && text.length) {
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.lineBreakMode = self.lineBreakMode;
+        style.alignment = self.textAlignment;
+        style.lineSpacing = _lineSpace;
+        style.firstLineHeadIndent = _headIndent;
+        style.headIndent = _headIndent; //整体缩进(首行除外)
+        UIFont *font = self.font ? self.font : [UIFont fontWithName:@"HelveticaNeue" size:12];
+        NSDictionary *att = @{NSFontAttributeName:font, NSParagraphStyleAttributeName:style};
+        self.attributedText = [[NSAttributedString alloc] initWithString:text attributes:att];
+    } else {
+        [super setText:text];
+    }
 }
 
-#pragma mark - Set3
-- (void)setNumberOfLines:(NSInteger)numberOfLines {
-    [super setNumberOfLines:numberOfLines];
-    [self updateTextAttributeOrParagraphStyle];
+#pragma mark - Api
+- (void)resetVerticalCenterAlignmentOffsetTop:(CGFloat)offset {
+    offset = ceilf(offset);
+    if (_verticalAlignmentType != 0 || _verticalAlignmentOffset != offset) {
+        _verticalAlignmentType = 0;
+        _verticalAlignmentOffset = offset;
+        [self setNeedsDisplay];
+    }
 }
 
-- (void)setAdjustsFontSizeToFitWidth:(BOOL)adjustsFontSizeToFitWidth {
-    [super setAdjustsFontSizeToFitWidth:adjustsFontSizeToFitWidth];
-    [self updateTextAttributeOrParagraphStyle];
+- (void)resetVerticalTopAlignmentOffsetBottom:(CGFloat)offset {
+    offset = ceilf(offset);
+    if (_verticalAlignmentType != 1 || _verticalAlignmentOffset != offset) {
+        _verticalAlignmentType = 1;
+        _verticalAlignmentOffset = offset;
+        [self setNeedsDisplay];
+    }
 }
 
-- (void)setBaselineAdjustment:(UIBaselineAdjustment)baselineAdjustment {
-    [super setBaselineAdjustment:baselineAdjustment];
-    [self updateTextAttributeOrParagraphStyle];
+- (void)resetVerticalBottomAlignmentOffsetTop:(CGFloat)offset {
+    offset = ceilf(offset);
+    if (_verticalAlignmentType != 2 || _verticalAlignmentOffset != offset) {
+        _verticalAlignmentType = 2;
+        _verticalAlignmentOffset = offset;
+        [self setNeedsDisplay];
+    }
 }
 
-- (void)setMinimumScaleFactor:(CGFloat)minimumScaleFactor {
-    [super setMinimumScaleFactor:minimumScaleFactor];
-    [self updateTextAttributeOrParagraphStyle];
+- (void)setInsideInsets:(UIEdgeInsets)insideInsets {
+    insideInsets = UIEdgeInsetsMake(ceilf(insideInsets.top), ceilf(insideInsets.left), ceilf(insideInsets.bottom), ceilf(insideInsets.right));
+    if (!UIEdgeInsetsEqualToEdgeInsets(_insideInsets, insideInsets)) {
+        _insideInsets = insideInsets;
+        NSString *text = self.text;
+        NSAttributedString *aText = self.attributedText;
+        self.text = nil;
+        self.attributedText = nil;
+        self.text = text;
+        self.attributedText = aText;
+        [self setNeedsDisplay];
+    }
 }
 
-- (void)setPreferredMaxLayoutWidth:(CGFloat)preferredMaxLayoutWidth {
-    [super setPreferredMaxLayoutWidth:preferredMaxLayoutWidth];
-    [self updateTextAttributeOrParagraphStyle];
+- (void)setText:(NSString *)text matchText:(NSString *)mText isReverse:(BOOL)isReverse font:(UIFont *)font color:(UIColor *)color spacing:(CGFloat)spacing {
+    if (!text.length) {
+        self.attributedText = [[NSAttributedString alloc] initWithString:@""];
+    } else if (!mText.length || (font == nil && color == nil)) {
+        if (spacing != 0) {
+            NSMutableAttributedString *attriText = [[NSMutableAttributedString alloc] initWithString:text];
+            NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+            style.lineBreakMode = self.lineBreakMode;
+            style.alignment = self.textAlignment;
+            style.lineSpacing = spacing;
+            [attriText addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, attriText.length)];
+            self.attributedText = attriText;
+        } else {
+            self.attributedText = [[NSAttributedString alloc] initWithString:text];
+        }
+    } else {
+        NSMutableAttributedString *attriText = [[NSMutableAttributedString alloc] initWithString:text];
+        NSRange mRange = [text rangeOfString:mText]; NSRange maxRange = NSMakeRange(0, attriText.length);
+        if (spacing != 0) {
+            NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+            style.lineBreakMode = self.lineBreakMode;
+            style.alignment = self.textAlignment;
+            style.lineSpacing = spacing;
+            [attriText addAttribute:NSParagraphStyleAttributeName value:style range:maxRange];
+        }
+        if (mRange.location != NSNotFound && mRange.length) {
+            UIFont *ofont = self.manualFont ? self.manualFont : [UIFont fontWithName:@"HelveticaNeue" size:12];
+            UIColor *ocolor = self.manualColor ? self.manualColor : [UIColor colorFormHex:0xFFFFFF alpha:1.0];
+            NSDictionary *dicAtt = @{NSFontAttributeName:(font?font:ofont),NSForegroundColorAttributeName:(color?color:ocolor)};
+            NSDictionary *oriAtt = @{NSFontAttributeName:ofont,NSForegroundColorAttributeName:ocolor};
+            if (isReverse) {
+                NSRange leadingRange = NSMakeRange(0, mRange.location);
+                NSRange trailingRange = NSMakeRange(mRange.location + mRange.length, maxRange.length - mRange.location - mRange.length);
+                if (leadingRange.length) {
+                    [attriText addAttributes:dicAtt range:leadingRange];
+                }
+                if (trailingRange.length) {
+                    [attriText addAttributes:dicAtt range:trailingRange];
+                }
+                if (mRange.length) {
+                    [attriText addAttributes:oriAtt range:mRange];
+                }
+            } else {
+                NSRange leadingRange = NSMakeRange(0, mRange.location);
+                NSRange trailingRange = NSMakeRange(mRange.location + mRange.length, maxRange.length - mRange.location - mRange.length);
+                if (leadingRange.length) {
+                    [attriText addAttributes:oriAtt range:leadingRange];
+                }
+                if (trailingRange.length) {
+                    [attriText addAttributes:oriAtt range:trailingRange];
+                }
+                if (mRange.length) {
+                    [attriText addAttributes:dicAtt range:mRange];
+                }
+            }
+        }
+        self.attributedText = attriText;
+    }
+}
+
+- (CGSize)minToSize {
+    CGFloat initWid = self.frame.size.width;
+    CGFloat initHei = self.frame.size.height;
+    
+    if (!CGSizeEqualToSize(self.fixSize, CGSizeZero)) {
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.fixSize.width, self.fixSize.height);
+        return self.fixSize;
+    }
+
+    static ZCLabel *kSpacLabelX = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        kSpacLabelX = [[ZCLabel alloc] initWithFrame:CGRectZero];
+        kSpacLabelX.adjustsFontSizeToFitWidth = NO;
+        kSpacLabelX.numberOfLines = 0;
+    });
+    kSpacLabelX.font = self.font;
+    kSpacLabelX.textAlignment = self.textAlignment;
+    kSpacLabelX.insideInsets = self.insideInsets;
+    kSpacLabelX.lineSpace = self.lineSpace;
+    kSpacLabelX.headIndent = self.headIndent;
+    kSpacLabelX.frame = CGRectMake(0, 0, (initWid == 0 ? MAXFLOAT : initWid), MAXFLOAT);
+    [kSpacLabelX setText:self.text.copy];
+    [kSpacLabelX setNeedsDisplay];
+    [kSpacLabelX sizeToFit];
+    
+    CGFloat newWid = ceilf(kSpacLabelX.frame.size.width);
+    CGFloat newHei = ceilf(kSpacLabelX.frame.size.height);
+    if (initHei == 0 && initWid == 0) {
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, newWid, newHei);
+    } else if (initHei == 0) {
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, initWid, newHei);
+    } else if (initWid == 0) {
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, newWid, initHei);
+    } else if (newHei > initHei) {
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, initWid, newHei);
+    } else if (newWid < initWid) {
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, newWid, initHei);
+    } else {
+        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, newWid, newHei);
+    }
+    return CGSizeMake(newWid, newHei);
 }
 
 @end

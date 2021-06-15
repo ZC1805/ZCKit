@@ -8,6 +8,7 @@
 
 #import "ZCNavigationController.h"
 #import "UIViewController+ZC.h"
+#import "ZCViewController.h"
 #import "ZCQueueHandler.h"
 #import "ZCMacro.h"
 
@@ -23,7 +24,23 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
 
 @property (nonatomic, weak) UIViewController *willPopTopViewController;
 
-//@property (nonatomic, weak) id<UIGestureRecognizerDelegate> delegateOrg;
+@property (nonatomic, weak) UIViewController *iPopGesPopFromVc;
+
+@property (nonatomic, weak) UIViewController *iPopGesPopToVc;
+
+@property (nonatomic, assign) CGFloat iPopGesPopFromAlpha;
+
+@property (nonatomic, assign) CGFloat iPopGesPopToAlpha;
+
+@property (nonatomic, assign) BOOL iPopGesPopAnimate;
+
+@property (nonatomic, strong) UIImage *iPopGesPopFromImage;
+
+@property (nonatomic, strong) UIImageView *iPopGesPopTopImageView;
+
+@property (nonatomic, strong) NSArray *iGesTempViewControllers;
+
+@property (nonatomic, assign) BOOL iGesPopDelay;
 
 @end
 
@@ -36,18 +53,126 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
     if (self.navigationBar.delegate != self) self.navigationBar.delegate = self;
     if (self.interactivePopGestureRecognizer.delegate != self) self.interactivePopGestureRecognizer.delegate = self;
     [self.interactivePopGestureRecognizer addTarget:self action:@selector(onPopGesEvent:)];
-    
-//    if (self.interactivePopGestureRecognizer.delegate != self) {
-//        self.delegateOrg = self.interactivePopGestureRecognizer.delegate;
-//        self.interactivePopGestureRecognizer.delegate = self;
-//        [self.interactivePopGestureRecognizer addTarget:self action:@selector(onInteractivePopStart:)];
-//    }
 }
 
 #pragma mark - Private
 - (void)onPopGesEvent:(UIGestureRecognizer *)gesture {
-    if (gesture == self.interactivePopGestureRecognizer && gesture.state == UIGestureRecognizerStateEnded) {
-        [self viewControllerIsPopGes:YES viewController:self.willPopTopViewController];
+    if (gesture == self.interactivePopGestureRecognizer) {
+        if (gesture.state == UIGestureRecognizerStateEnded) {
+            [self viewControllerIsPopGes:YES viewController:self.willPopTopViewController];
+        }
+    }
+    if (@available(iOS 13.0, *)) { //导航颜色过渡
+        if (gesture == self.interactivePopGestureRecognizer) {
+            if (gesture.state == UIGestureRecognizerStateBegan) {
+                self.iPopGesPopToVc = self.topViewController;
+                self.iPopGesPopToAlpha = -1;
+                BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isHiddenNavigationBar];
+                BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isHiddenNavigationBar];
+                BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopFromVc isUseClearBar];
+                BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopToVc isUseClearBar];
+                BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseCustomBar)];
+                BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseCustomBar)];
+                if (isHideBarFrom || isHideBarTo) { //...
+                } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
+                    UIView *barBKView = self.navigationBar.subviews.firstObject;
+                    if (barBKView && !self.iPopGesPopTopImageView) {
+                        self.iPopGesPopTopImageView = [[UIImageView alloc] initWithFrame:barBKView.frame];
+                        self.iPopGesPopTopImageView.contentMode = barBKView.contentMode;
+                        self.iPopGesPopTopImageView.userInteractionEnabled = YES;
+                    }
+                    if (self.iPopGesPopTopImageView && self.iPopGesPopFromImage) {
+                        self.iPopGesPopTopImageView.image = self.iPopGesPopFromImage;
+                        self.iPopGesPopTopImageView.alpha = self.iPopGesPopFromAlpha;
+                    }
+                    [self.iPopGesPopTopImageView removeFromSuperview];
+                    if (barBKView && self.iPopGesPopTopImageView && ![self.iPopGesPopTopImageView isDescendantOfView:self.navigationBar]) {
+                        [self.navigationBar insertSubview:self.iPopGesPopTopImageView aboveSubview:barBKView];
+                    }
+                }
+            } else if (gesture.state == UIGestureRecognizerStateChanged) {
+                UIView *barBKView = self.navigationBar.subviews.firstObject;
+                if (self.iPopGesPopToAlpha == -1) self.iPopGesPopToAlpha = barBKView.alpha;
+                if (self.iPopGesPopFromVc && self.iPopGesPopToVc) {
+                    BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isHiddenNavigationBar];
+                    BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isHiddenNavigationBar];
+                    BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopFromVc isUseClearBar];
+                    BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopToVc isUseClearBar];
+                    BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseCustomBar)];
+                    BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseCustomBar)];
+                    if (isHideBarFrom || isHideBarTo) { //...
+                    } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        barBKView.alpha = clearAlpha * self.iPopGesPopToAlpha;
+                        self.iPopGesPopTopImageView.alpha = (1.0 - clearAlpha) * self.iPopGesPopFromAlpha;
+                    } else if (isClearFrom && !isClearTo && gesture.view) {
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        barBKView.alpha = clearAlpha * self.iPopGesPopToAlpha;
+                    } else if (!isClearFrom && isClearTo && gesture.view) {
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        barBKView.alpha = (1.0 - clearAlpha) * self.iPopGesPopFromAlpha;
+                    }
+                }
+            } else if (gesture.state == UIGestureRecognizerStateEnded) {
+                UIView *barBKView = self.navigationBar.subviews.firstObject;
+                if (self.iPopGesPopToAlpha == -1) self.iPopGesPopToAlpha = barBKView.alpha;
+                if (self.iPopGesPopFromVc && self.iPopGesPopToVc) {
+                    BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isHiddenNavigationBar];
+                    BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isHiddenNavigationBar];
+                    BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopFromVc isUseClearBar];
+                    BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopToVc isUseClearBar];
+                    BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseCustomBar)];
+                    BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseCustomBar)];
+                    if (isHideBarFrom || isHideBarTo) { //...
+                    } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
+                        self.iPopGesPopAnimate = YES;
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        [UIView animateWithDuration:0.36 animations:^{
+                            barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : 0;
+                            self.iPopGesPopTopImageView.alpha = clearAlpha > 0.5 ? 0 : self.iPopGesPopFromAlpha;
+                        } completion:^(BOOL finished) {
+                            barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
+                            self.iPopGesPopTopImageView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
+                            [self.iPopGesPopTopImageView removeFromSuperview];
+                            self.iPopGesPopAnimate = NO;
+                        }];
+                    } else if (isClearFrom && !isClearTo && gesture.view) {
+                        self.iPopGesPopAnimate = YES;
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        [UIView animateWithDuration:0.36 animations:^{
+                            barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : 0;
+                        } completion:^(BOOL finished) {
+                            barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
+                            [self.iPopGesPopTopImageView removeFromSuperview];
+                            self.iPopGesPopAnimate = NO;
+                        }];
+                    } else if (!isClearFrom && isClearTo && gesture.view) {
+                        self.iPopGesPopAnimate = YES;
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        [UIView animateWithDuration:0.36 animations:^{
+                            barBKView.alpha = clearAlpha > 0.5 ? 0 : self.iPopGesPopFromAlpha;
+                        } completion:^(BOOL finished) {
+                            barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
+                            [self.iPopGesPopTopImageView removeFromSuperview];
+                            self.iPopGesPopAnimate = NO;
+                        }];
+                    } else {
+                        [self.iPopGesPopTopImageView removeFromSuperview];
+                    }
+                }
+            }
+        }
+    }
+    if (gesture == self.interactivePopGestureRecognizer) {
+        if (gesture.state == UIGestureRecognizerStateEnded || gesture.state == UIGestureRecognizerStateCancelled || gesture.state == UIGestureRecognizerStateFailed) {
+            if (self.iGesTempViewControllers) {
+                self.iGesPopDelay = YES;
+                main_delay(0.51, ^{ //确保viewControllers已经改变完成
+                    [self gestureRecognizerHandleFinish:gesture];
+                    self.iGesPopDelay = NO;
+                });
+            }
+        }
     }
 }
 
@@ -132,153 +257,39 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
 #pragma mark - UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     if (self.interactivePopGestureRecognizer == gestureRecognizer) {
+        UIViewController *topVc = self.topViewController;
+        self.iPopGesPopFromVc = self.topViewController;
+        self.iPopGesPopFromAlpha = self.navigationBar.subviews.firstObject.alpha;
+        self.iPopGesPopFromImage = [self.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault];
+        if (self.iPopGesPopAnimate || self.iGesPopDelay) return NO;
         if (self.viewControllers.count <= 1) return NO;
-        if ([self.topViewController respondsToSelector:@selector(onCustomBackAction)]) return NO;
-        BOOL use = NO; SEL sel = @selector(isShieldInteractivePop);
-        if ([self.topViewController respondsToSelector:sel]) {
-            zc_suppress_leak_warning(use = (BOOL)[self.topViewController performSelector:sel]);
+        if ([topVc respondsToSelector:@selector(onCustomTapBackAction)] && ![topVc respondsToSelector:@selector(onCustomPanBackAction)]) return NO;
+        BOOL isCan = NO; SEL sel = @selector(isShieldInteractivePop);
+        if ([topVc respondsToSelector:sel]) {
+            zc_suppress_leak_warning(isCan = (BOOL)[topVc performSelector:sel]);
         }
-        return !use;
+        if (!isCan && gestureRecognizer.state == UIGestureRecognizerStatePossible && [topVc respondsToSelector:@selector(onCustomPanBackAction)]) { //可以手动返回
+            UIViewController *aimVc = [(id<ZCViewControllerBackProtocol>)topVc onCustomPanBackAction];
+            if (aimVc && [self.viewControllers containsObject:aimVc]) {
+                NSInteger aimIndex = [self.viewControllers indexOfObject:aimVc];
+                if (aimIndex < self.viewControllers.count - 2) {
+                    self.iGesTempViewControllers = self.viewControllers;
+                    NSArray *aimViewControllers = [self.viewControllers subarrayWithRange:NSMakeRange(0, self.viewControllers.count - 2)];
+                    self.viewControllers = [aimViewControllers arrayByAddingObject:self.viewControllers.lastObject];
+                }
+            }
+        }
+        return !isCan;
     }
     return YES;
 }
 
-///!!!:透明到不透明的滑动过度&onCustomBackAction和另一个方法和起来控制跨控制器滑动 && push前设置属性判断是否可push
-//- (void)onInteractivePopStart:(UIScreenEdgePanGestureRecognizer *)recognizer {
-////    NSLog(@"- %f", [gestureRecognizer translationInView:gestureRecognizer.view].x);
-////    self.navigationBar.subviews[0].alpha = 1 - [gestureRecognizer translationInView:gestureRecognizer.view].x / 414;
-//    
-//    if (![recognizer isKindOfClass:UIScreenEdgePanGestureRecognizer.class]) return;
-//    if (!recognizer.view || !CGSizeEqualToSize(recognizer.view.size, CGSizeMake(ZSWid, ZSHei))) return;
-//    
-//    UIView *bearView = self.navigationBar.subviews.firstObject;
-//    
-//    
-//    switch (recognizer.state) {
-//        case UIGestureRecognizerStateBegan:{
-////            self.referenceOffsetx = 0;
-////            CGPoint point = [recognizer locationInView:carrier];
-////            [self interactiveBegan:(self.isCanPopBack && point.x < carrier.width)];
-//        } break;
-//        case UIGestureRecognizerStateChanged:{
-//            bearView.alpha = 1 - [recognizer translationInView:recognizer.view].x / 414;
-////            CGPoint point = [recognizer translationInView:carrier];
-////            if (point.x < self.referenceOffsetx) self.referenceOffsetx = point.x;
-////            if (self.referenceOffsetx < 0) point.x = point.x - self.referenceOffsetx;
-////            [self interactivePercent:(point.x / carrier.width)];
-//        } break;
-//        case UIGestureRecognizerStateEnded:
-//        case UIGestureRecognizerStateCancelled:{
-////            CGPoint point = [recognizer translationInView:carrier];
-////            if (point.x < self.referenceOffsetx) self.referenceOffsetx = point.x;
-////            if (self.referenceOffsetx < 0) point.x = point.x - self.referenceOffsetx;
-////            [self interactiveSuccess:(point.x > carrier.width * 0.5)];
-//        } break;
-//        default:{
-////            [self interactiveSuccess:NO];
-//        } break;
-//    }
-//    
-//    
-//    
-//    
-////    UIView *carrier = recognizer.view;
-////    switch (recognizer.state) {
-////        case UIGestureRecognizerStateBegan:{
-////            self.referenceOffsetx = 0;
-////            CGPoint point = [recognizer locationInView:carrier];
-////            [self interactiveBegan:(self.isCanPopBack && point.x < carrier.width)];
-////        } break;
-////        case UIGestureRecognizerStateChanged:{
-////            CGPoint point = [recognizer translationInView:carrier];
-////            if (point.x < self.referenceOffsetx) self.referenceOffsetx = point.x;
-////            if (self.referenceOffsetx < 0) point.x = point.x - self.referenceOffsetx;
-////            [self interactivePercent:(point.x / carrier.width)];
-////        } break;
-////        case UIGestureRecognizerStateEnded:
-////        case UIGestureRecognizerStateCancelled:{
-////            CGPoint point = [recognizer translationInView:carrier];
-////            if (point.x < self.referenceOffsetx) self.referenceOffsetx = point.x;
-////            if (self.referenceOffsetx < 0) point.x = point.x - self.referenceOffsetx;
-////            [self interactiveSuccess:(point.x > carrier.width * 0.5)];
-////        } break;
-////        default:{
-////            [self interactiveSuccess:NO];
-////        } break;
-////    }
-////    
-////    - (void)interactiveSuccess:(BOOL)success {
-////        if (success) {
-////            self.interaction.completionSpeed = 1 - self.interaction.percentComplete;
-////            [self updateGradientAnimation:success];
-////            [self.interaction finishInteractiveTransition];
-////        } else {
-////            self.interaction.completionSpeed = self.interaction.percentComplete;
-////            [self updateGradientAnimation:success];
-////            [self.interaction cancelInteractiveTransition];
-////        }
-////        self.interaction = nil;
-////    }
-////    typedef NS_ENUM(NSInteger, UIGestureRecognizerState)
-////    {
-////        // 尚未识别是何种手势操作（但可能已经触发了触摸事件），默认状态：
-////        UIGestureRecognizerStatePossible,
-////        // 手势已经开始，此时已经被识别，但是这个过程中可能发生变化，手势操作尚未完成：
-////        UIGestureRecognizerStateBegan,
-////        // 手势状态发生改变：
-////        UIGestureRecognizerStateChanged,
-////        // 手势识别操作完成（此时已经松开手指）：
-////         UIGestureRecognizerStateEnded,
-////        // 手势被取消，恢复到默认状态：
-////        UIGestureRecognizerStateCancelled,
-////        // 手势识别失败，恢复到默认状态：
-////        UIGestureRecognizerStateFailed,
-////        // 手势识别完成，同“UIGestureRecognizerStateEnded”：
-////        UIGestureRecognizerStateRecognized = UIGestureRecognizerStateEnded
-////    };
-//}
-//
-//- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-//    if (self.delegateOrg && [self.delegateOrg respondsToSelector:@selector(gestureRecognizerShouldBegin:)]) {
-//        return [self.delegateOrg gestureRecognizerShouldBegin:gestureRecognizer];
-//    }
-//    return YES;
-//}
-//
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-//    if (self.delegateOrg && [self.delegateOrg respondsToSelector:@selector(gestureRecognizer:shouldRecognizeSimultaneouslyWithGestureRecognizer:)]) {
-//        return [self.delegateOrg gestureRecognizer:gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:otherGestureRecognizer];
-//    }
-//    return NO;
-//}
-//
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-//    if (self.delegateOrg && [self.delegateOrg respondsToSelector:@selector(gestureRecognizer:shouldRequireFailureOfGestureRecognizer:)]) {
-//        return [self.delegateOrg gestureRecognizer:gestureRecognizer shouldRequireFailureOfGestureRecognizer:otherGestureRecognizer];
-//    }
-//    return NO;
-//}
-//
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-//    if (self.delegateOrg && [self.delegateOrg respondsToSelector:@selector(gestureRecognizer:shouldBeRequiredToFailByGestureRecognizer:)]) {
-//        return [self.delegateOrg gestureRecognizer:gestureRecognizer shouldBeRequiredToFailByGestureRecognizer:otherGestureRecognizer];
-//    }
-//    return NO;
-//}
-//
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-//    if (self.delegateOrg && [self.delegateOrg respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)]) {
-//        return [self.delegateOrg gestureRecognizer:gestureRecognizer shouldReceiveTouch:touch];
-//    }
-//    return YES;
-//}
-//
-//- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceivePress:(UIPress *)press {
-//    if (self.delegateOrg && [self.delegateOrg respondsToSelector:@selector(gestureRecognizer:shouldReceivePress:)]) {
-//        return [self.delegateOrg gestureRecognizer:gestureRecognizer shouldReceivePress:press];
-//    }
-//    return YES;
-//}
+- (void)gestureRecognizerHandleFinish:(UIGestureRecognizer *)gestureRecognizer {
+    if ([self.viewControllers containsObject:self.iGesTempViewControllers.lastObject]) {
+        self.viewControllers = self.iGesTempViewControllers; //侧滑取消重置到之前
+    }
+    self.iGesTempViewControllers = nil;
+}
 
 #pragma mark - UINavigationBarDelegate
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {
@@ -305,8 +316,8 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
     if (shouldPop) {
         main_imp(^{
             [[NSNotificationCenter defaultCenter] postNotificationName:ZCViewControllerWillBeTouchPopNotification object:self.topViewController];
-            if ([vc respondsToSelector:@selector(onCustomBackAction)]) {
-                [(id<ZCViewControllerBackProtocol>)vc onCustomBackAction];
+            if ([vc respondsToSelector:@selector(onCustomTapBackAction)]) {
+                [(id<ZCViewControllerBackProtocol>)vc onCustomTapBackAction];
                 if (@available(iOS 13.0, *)) {
                     shouldPop = NO;
                 }

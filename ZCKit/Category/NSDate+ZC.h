@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSInteger weekOfYear;  /**< 年的第几周，每周从周日算起 (1~53) */
 
+@property (nonatomic, readonly) NSInteger daysOfMonth;  /**< 当月有多少天(28-31) */
+
 @property (nonatomic, readonly) BOOL isLeapMonth;  /**< 是否是闰月 */
 
 @property (nonatomic, readonly) BOOL isLeapYear;  /**< 是否是闰年 */
@@ -57,11 +59,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSDate *startDayDate;  /**< 当前时间当天的开始时间 */
 
+@property (nonatomic, readonly) NSDate *stopDayDate;  /**< 当前时间当天的结束时间，精确到毫秒 */
+
 @property (nonatomic, readonly) NSDate *startWeekDate;  /**< 当前时间当周的开始时间&从周一开始 */
 
 @property (nonatomic, readonly) NSDate *startMonthDate;  /**< 当前时间当月的开始时间 */
 
 @property (nonatomic, readonly) NSDate *startWeekEnglishDate;  /**< 当前时间当周的开始时间&从周日开始 */
+
++ (nullable NSDate *)dateFromYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day;  /**< 创建指定的某天的开始时间 */
+
++ (nullable NSDate *)dateFromYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day hour:(NSInteger)hour minute:(NSInteger)minute second:(NSInteger)second;  /**< 创建指定某个时间的天 */
 
 #pragma mark - Adding
 - (nullable NSDate *)dateByAddingYears:(NSInteger)years;

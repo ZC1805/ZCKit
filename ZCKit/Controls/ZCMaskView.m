@@ -41,7 +41,9 @@
 
 @property (nonatomic, assign) float maskAlpha;
 
-@property (nonatomic, copy) void(^hideAction)(void);
+@property (nonatomic, copy) void(^willHideBlock)(BOOL isByAutoHide);
+
+@property (nonatomic, copy) void(^didHideBlock)(BOOL isByAutoHide);
 
 @property (nonatomic, copy) void (^showAnimate)(UIView *displayView);
 
@@ -58,43 +60,44 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         mask = [[ZCMaskView alloc] initWithFrame:CGRectZero];
-        mask.maskAlpha = 0.3;
+        mask.maskAlpha = 0.5;
     });
     return mask;
 }
 
 + (float)maskAlpha {
-    return [ZCMaskView sharedView].maskAlpha;
+    return ZCMaskView.sharedView.maskAlpha;
 }
 
 + (void)setMaskAlpha:(float)maskAlpha {
-    [ZCMaskView sharedView].maskAlpha = maskAlpha;
+    ZCMaskView.sharedView.maskAlpha = maskAlpha;
 }
 
-+ (void)display:(UIView *)subview hideAction:(void (^)(void))hideAction {
-    [self display:subview autoHide:YES clearMask:NO hideAction:hideAction];
++ (void)display:(UIView *)subview didHide:(nullable void (^)(BOOL))didHide {
+    [self display:subview autoHide:NO clearMask:NO showAnimate:nil hideAnimate:nil willHide:nil didHide:didHide];
 }
 
-+ (void)display:(UIView *)subview autoHide:(BOOL)autoHide clearMask:(BOOL)clearMask hideAction:(void (^)(void))hideAction {
-    [self display:subview autoHide:autoHide clearMask:clearMask showAnimate:nil hideAnimate:nil hideAction:hideAction];
++ (void)display:(UIView *)subview autoHide:(BOOL)autoHide clearMask:(BOOL)clearMask willHide:(nullable void (^)(BOOL))willHide didHide:(nullable void (^)(BOOL))didHide {
+    [self display:subview autoHide:autoHide clearMask:clearMask showAnimate:nil hideAnimate:nil willHide:willHide didHide:didHide];
 }
 
 + (void)display:(UIView *)displayView autoHide:(BOOL)autoHide clearMask:(BOOL)clearMask showAnimate:(void (^)(UIView * _Nonnull))showAnimate
-    hideAnimate:(void (^)(UIView * _Nonnull))hideAnimate hideAction:(void (^)(void))hideAction {
+    hideAnimate:(void (^)(UIView * _Nonnull))hideAnimate willHide:(nullable void (^)(BOOL))willHide didHide:(nullable void (^)(BOOL))didHide {
     if (!displayView || ![UIApplication sharedApplication].delegate.window) return;
-    ZCMaskView *mask = [ZCMaskView sharedView];
+    ZCMaskView *mask = ZCMaskView.sharedView;
     __weak typeof(mask) weakMask = mask;
     if (mask.isAnimate) {
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [mask hide:^{
+            [mask hideIsAuto:YES finish:^{
                 weakMask.isAutoHide = autoHide;
                 weakMask.isGreyMask = !clearMask;
-                weakMask.hideAction = hideAction;
+                weakMask.willHideBlock = willHide;
+                weakMask.didHideBlock = didHide;
                 weakMask.showAnimate = showAnimate;
                 weakMask.hideAnimate = hideAnimate;
                 weakMask.displayView = displayView;
-                weakMask.frame = [UIScreen mainScreen].bounds;
-                UIView *maskView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+                weakMask.frame = ZSScreen;
+                UIView *maskView = [[UIView alloc] initWithFrame:ZSScreen];
                 [[UIApplication sharedApplication].delegate.window addSubview:maskView];
                 [maskView addSubview:weakMask];
                 [weakMask addSubview:displayView];
@@ -102,15 +105,16 @@
             }];
         });
     } else {
-        [mask hide:^{
+        [mask hideIsAuto:YES finish:^{
             weakMask.isAutoHide = autoHide;
             weakMask.isGreyMask = !clearMask;
-            weakMask.hideAction = hideAction;
+            weakMask.willHideBlock = willHide;
+            weakMask.didHideBlock = didHide;
             weakMask.showAnimate = showAnimate;
             weakMask.hideAnimate = hideAnimate;
             weakMask.displayView = displayView;
-            weakMask.frame = [UIScreen mainScreen].bounds;
-            UIView *maskView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+            weakMask.frame = ZSScreen;
+            UIView *maskView = [[UIView alloc] initWithFrame:ZSScreen];
             [[UIApplication sharedApplication].delegate.window addSubview:maskView];
             [maskView addSubview:weakMask];
             [weakMask addSubview:displayView];
@@ -120,20 +124,21 @@
 }
 
 + (void)dismissSubview {
-    ZCMaskView *mask = [ZCMaskView sharedView];
-    if (mask.hideAction) {
-        mask.hideAction();
-        mask.hideAction = nil;
-    }
-    [mask hide:nil];
+    [self autoDismiss:NO];
+}
+
++ (void)autoDismiss:(BOOL)isByAutoHide {
+    ZCMaskView *mask = ZCMaskView.sharedView;
+    if (mask.willHideBlock) {mask.willHideBlock(isByAutoHide);}
+    [mask hideIsAuto:isByAutoHide finish:nil];
 }
 
 - (void)show {
     self.isShow = YES;
     self.isAnimate = YES;
-    if (!self.showAnimate) self.alpha = 0;
+    self.alpha = self.showAnimate ? 1 : 0;
     self.superview.backgroundColor = [ZCBlack colorWithAlphaComponent:0];
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
         if (self.showAnimate) {
             self.showAnimate(self.displayView);
         } else {
@@ -145,10 +150,10 @@
     }];
 }
 
-- (void)hide:(void(^)(void))finish {
+- (void)hideIsAuto:(BOOL)isByAutoHide finish:(void(^)(void))finishBlock {
     if (self.isShow) {
         self.isAnimate = YES;
-        [UIView animateWithDuration:0.25 animations:^{
+        [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
             if (self.hideAnimate) {
                 self.hideAnimate(self.displayView);
             } else {
@@ -156,25 +161,26 @@
             }
             self.superview.backgroundColor = [ZCBlack colorWithAlphaComponent:0];
         } completion:^(BOOL finished) {
-            [self hideFinish];
-            if (finish) finish();
+            [self finish:finishBlock byAutoHide:isByAutoHide];
         }];
     } else {
-        [self hideFinish];
-        if (finish) finish();
+        [self finish:finishBlock byAutoHide:isByAutoHide];
     }
 }
 
-- (void)hideFinish {
+- (void)finish:(void(^)(void))finishBlock byAutoHide:(BOOL)isByAutoHide {
     [self.superview removeFromSuperview];
     [self removeFromSuperview];
     [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-    if (self.hideAction) self.hideAction = nil;
+    if (self.willHideBlock) self.willHideBlock = nil;
     if (self.showAnimate) self.showAnimate = nil;
     if (self.hideAnimate) self.hideAnimate = nil;
     if (self.displayView) self.displayView = nil;
-    self.isShow = NO;
     self.isAnimate = NO;
+    self.isShow = NO;
+    if (finishBlock == nil && self.didHideBlock) {self.didHideBlock(isByAutoHide);}
+    if (self.didHideBlock) self.didHideBlock = nil;
+    if (finishBlock) finishBlock();
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -183,9 +189,9 @@
             UITouch *touch = [touches anyObject];
             CGPoint point = [touch locationInView:self];
             CGRect rect = self.subviews.firstObject.frame;
-            if (CGRectContainsPoint(rect, point) == NO) [ZCMaskView dismissSubview];
+            if (CGRectContainsPoint(rect, point) == NO) [ZCMaskView autoDismiss:YES];
         } else {
-            [ZCMaskView dismissSubview];
+            [ZCMaskView autoDismiss:YES];
         }
     }
 }
@@ -246,7 +252,7 @@
 
 - (UIWindow *)maskWindow {
     if (!_maskWindow) {
-        _maskWindow = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        _maskWindow = [[UIWindow alloc] initWithFrame:ZSScreen];
         _maskWindow.windowLevel = UIWindowLevelAlert + 1.0;
         _maskWindow.rootViewController = self;
     }
@@ -288,14 +294,14 @@
     [self.view setNeedsLayout];
     self.visualView.alpha = 0;
     self.maskView.alpha = 0;
-    [UIView animateWithDuration:self.animationTime animations:^{
+    [UIView animateWithDuration:self.animationTime delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.visualView.alpha = 1;
         self.maskView.alpha = ZCMaskView.maskAlpha;
     } completion:nil];
 }
 
 - (void)dismissSubview {
-    [UIView animateWithDuration:self.animationTime animations:^{
+    [UIView animateWithDuration:self.animationTime delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.visualView.alpha = 0;
         self.maskView.alpha = 0;
     } completion:^(BOOL finished) {

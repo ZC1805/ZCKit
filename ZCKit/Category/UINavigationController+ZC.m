@@ -23,7 +23,7 @@
         if (finalvc) {
             [self popToViewController:finalvc animated:animated];
         } else if (isOtherwiseRoot) {
-            [self popToRootViewControllerAnimated:YES];
+            [self popToRootViewControllerAnimated:animated];
         } else {
             [self popViewControllerAnimated:animated];
         }

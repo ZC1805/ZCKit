@@ -13,7 +13,7 @@
 
 @property (nonatomic, strong) CAGradientLayer *dBKGradient;
 
-@property (nonatomic, strong) NSArray <UIColor *>*bkColors;
+@property (nonatomic, strong) NSArray <UIColor *>*bk1Colors;
 
 @end
 
@@ -37,7 +37,7 @@
 }
 
 - (void)resetAlphaGradientColors:(NSArray<UIColor *>*)colors isAxial:(BOOL)isAxial startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint location:(NSArray<NSNumber *> *)locations {
-    self.bkColors = colors.copy;
+    self.bk1Colors = colors.copy;
     NSMutableArray *CGColors = [NSMutableArray array];
     for (UIColor *color in colors) {[CGColors addObject:(id)(color.CGColor)];}
     self.dBKGradient.startPoint = startPoint;
@@ -56,7 +56,7 @@
 
 - (void)resetBKColor:(UIColor *)BKColor shadowColor:(UIColor *)shadowColor shadowOffset:(CGSize)shadowOffset shadowRadius:(CGFloat)shadowRadius
         cornerRadius:(CGFloat)cornerRadius borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor {
-    if ((self.bkColors == nil || self.bkColors.count < 2) && BKColor) self.dBKGradient.colors = @[(id)(BKColor.CGColor), (id)(BKColor.CGColor)];
+    if ((self.bk1Colors == nil || self.bk1Colors.count < 2) && BKColor) self.dBKGradient.colors = @[(id)(BKColor.CGColor), (id)(BKColor.CGColor)];
     if (shadowColor) {
         self.dBKGradient.masksToBounds = NO;
         self.dBKGradient.shadowColor = shadowColor.CGColor;

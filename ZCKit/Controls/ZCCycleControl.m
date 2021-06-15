@@ -38,7 +38,7 @@ static NSString * const ident = @"cycleControlCell";
 - (void)initialization {
     _dotColor = ZCWhite;
     self.backgroundColor = ZCClear;
-    self.layer.cornerRadius = self.width / 2.0;
+    self.layer.cornerRadius = self.zc_width / 2.0;
     self.layer.borderColor = ZCWhite.CGColor;
     self.layer.borderWidth = 1.0;
 }
@@ -144,16 +144,16 @@ static NSString * const ident = @"cycleControlCell";
 - (void)updateFrame:(BOOL)overrideExistingFrame {
     CGPoint center = self.center;
     CGSize requiredSize = [self sizeForNumberOfPages:self.numberOfPages];
-    if (overrideExistingFrame || ((self.width < requiredSize.width || self.height < requiredSize.height) && !overrideExistingFrame)) {
-        self.frame = CGRectMake(self.left, self.top, requiredSize.width, requiredSize.height);
+    if (overrideExistingFrame || ((self.zc_width < requiredSize.width || self.zc_height < requiredSize.height) && !overrideExistingFrame)) {
+        self.frame = CGRectMake(self.zc_left, self.zc_top, requiredSize.width, requiredSize.height);
         self.center = center;
     }
     [self resetDotViews];
 }
 
 - (void)updateDotFrame:(UIView *)dot atIndex:(NSInteger)index {
-    CGFloat x = (self.dotSize.width + self.spacingBetweenDots) * index + ((self.width - [self sizeForNumberOfPages:self.numberOfPages].width) / 2.0);
-    CGFloat y = (self.height - self.dotSize.height) / 2.0;
+    CGFloat x = (self.dotSize.width + self.spacingBetweenDots) * index + ((self.zc_width - [self sizeForNumberOfPages:self.numberOfPages].width) / 2.0);
+    CGFloat y = (self.zc_height - self.dotSize.height) / 2.0;
     dot.frame = CGRectMake(x, y, self.dotSize.width, self.dotSize.height);
 }
 
@@ -282,10 +282,10 @@ static NSString * const ident = @"cycleControlCell";
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _titleLabel = titleLabel;
     _titleLabel.textColor = ZCWhite;
-    _titleLabel.font = [UIFont systemFontOfSize:14];
+    _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
     _titleLabel.backgroundColor = [ZCBlack colorWithAlphaComponent:0.4];
     _titleLabel.textAlignment = NSTextAlignmentLeft;
-    _titleLabel.height = 30.0;
+    _titleLabel.zc_height = 30.0;
     _titleLabel.hidden = YES;
     [self.contentView addSubview:titleLabel];
 }
@@ -304,7 +304,7 @@ static NSString * const ident = @"cycleControlCell";
         _titleLabel.frame = self.bounds;
     } else {
         _imageView.frame = self.bounds;
-        _titleLabel.frame = CGRectMake(0, self.height - _titleLabel.height, self.width, _titleLabel.height);
+        _titleLabel.frame = CGRectMake(0, self.zc_height - _titleLabel.zc_height, self.zc_width, _titleLabel.zc_height);
     }
 }
 
@@ -341,17 +341,17 @@ static NSString * const ident = @"cycleControlCell";
     [super prepareLayout];
     CGFloat offset = self.isMultiple ? (self.itemHorSpace / 2.0 + 0.5) : 0;
     self.sectionInset = UIEdgeInsetsMake(0, self.itemHorSpace / 2.0, 0, self.itemHorSpace / 2.0);
-    self.itemSize = CGSizeMake(self.collectionView.width - self.itemHorSpace - offset, self.collectionView.height);
+    self.itemSize = CGSizeMake(self.collectionView.zc_width - self.itemHorSpace - offset, self.collectionView.zc_height);
     self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     self.minimumLineSpacing = self.itemHorSpace;
 }
 
 - (NSArray<UICollectionViewLayoutAttributes *> *)layoutAttributesForElementsInRect:(CGRect)rect {
     NSArray<UICollectionViewLayoutAttributes *>*atts = [super layoutAttributesForElementsInRect:rect];
-    CGFloat centerX = self.collectionView.contentOffset.x + self.collectionView.width * 0.5;
+    CGFloat centerX = self.collectionView.contentOffset.x + self.collectionView.zc_width * 0.5;
     for (UICollectionViewLayoutAttributes *attri in atts) {
         CGFloat delta = ABS(attri.center.x - centerX);
-        CGFloat scale = 1.0 - delta / self.collectionView.width * (1.0 - self.itemMinScale);
+        CGFloat scale = 1.0 - delta / self.collectionView.zc_width * (1.0 - self.itemMinScale);
         attri.transform = CGAffineTransformMakeScale(1.0, scale);
     }
     return atts;
@@ -699,7 +699,7 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (int)currentIndex {
-    if (_mainView.width == 0 || _mainView.height == 0) {
+    if (_mainView.zc_width == 0 || _mainView.zc_height == 0) {
         return 0;
     }
     int index = 0;
@@ -710,7 +710,7 @@ static NSString * const ident = @"cycleControlCell";
             index = (_mainView.contentOffset.y + _flowLayout.itemSize.height * 0.5) / _flowLayout.itemSize.height;
         }
     } else {
-        index = (_mainView.contentOffset.x + self.width * 0.5) / self.width;
+        index = (_mainView.contentOffset.x + self.zc_width * 0.5) / self.zc_width;
     }
     return MAX(0, index);
 }
@@ -746,11 +746,11 @@ static NSString * const ident = @"cycleControlCell";
     } else {
         size = CGSizeMake(self.imagePathsGroup.count * self.pageControlDotSize.width * 1.5, self.pageControlDotSize.height);
     }
-    CGFloat x = (self.width - size.width) * 0.5;
+    CGFloat x = (self.zc_width - size.width) * 0.5;
     if (self.pageControlAliment == ZCEnumCycleAlimentRight) {
-        x = self.mainView.width - size.width - 10.0;
+        x = self.mainView.zc_width - size.width - 10.0;
     }
-    CGFloat y = self.mainView.height - size.height - 10.0;
+    CGFloat y = self.mainView.zc_height - size.height - 10.0;
     
     if ([self.pageControl isKindOfClass:[ZCCyclePageControl class]]) {
         ZCCyclePageControl *pageControl = (ZCCyclePageControl *)_pageControl;
@@ -796,8 +796,8 @@ static NSString * const ident = @"cycleControlCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     ZCCycleCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ident forIndexPath:indexPath];
-    long itemIndex = [self pageControlIndexWithCurrentCellIndex:indexPath.item];
-    NSString *imagePath = self.imagePathsGroup[itemIndex];
+    int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:indexPath.item];
+    NSString *imagePath = self.imagePathsGroup[indexOnPageControl];
     if (!self.isOnlyDisplayText && [imagePath isKindOfClass:[NSString class]]) {
         if ([imagePath hasPrefix:@"http"]) {
             [ZCKitBridge.realize imageViewWebCache:cell.imageView url:[NSURL URLWithString:imagePath] holder:self.placeholderImage];
@@ -809,8 +809,8 @@ static NSString * const ident = @"cycleControlCell";
     } else if (!self.isOnlyDisplayText && [imagePath isKindOfClass:[UIImage class]]) {
         cell.imageView.image = (UIImage *)imagePath;
     }
-    if (_titlesGroup.count && itemIndex < _titlesGroup.count) {
-        cell.title = _titlesGroup[itemIndex];
+    if (_titlesGroup.count && indexOnPageControl < _titlesGroup.count) {
+        cell.title = _titlesGroup[indexOnPageControl];
     }
     if (!cell.isHasConfigured) {
         if (self.titleLableSet) self.titleLableSet(cell.titleLabel);
@@ -819,8 +819,8 @@ static NSString * const ident = @"cycleControlCell";
         cell.clipsToBounds = YES;
         cell.isOnlyDisplayText = self.isOnlyDisplayText;
     }
-    if ([self.delegate respondsToSelector:@selector(cycleControl:cell:indexPath:)]) {
-        [self.delegate cycleControl:self cell:cell indexPath:indexPath];
+    if ([self.delegate respondsToSelector:@selector(cycleControl:cell:index:)]) {
+        [self.delegate cycleControl:self cell:cell index:indexOnPageControl];
     }
     return cell;
 }

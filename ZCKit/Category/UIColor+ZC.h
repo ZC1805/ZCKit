@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIColor *)colorFormRad:(int)intR green:(int)intG blue:(int)intB alpha:(float)alpha;  /**< 十进制颜色255 */
 
++ (UIColor *)colorFromGradientColors:(NSArray <UIColor *>*)colors isHorizontal:(BOOL)isHorizontal;  /**< 渐变颜色 */
+
 
 - (BOOL)isClear;  /**< 是否是透明颜色或透明度小于0.01 */
 

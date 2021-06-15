@@ -142,11 +142,11 @@
 }
 
 #pragma mark - Api2
-+ (NSString *)urlStringFromHost:(NSString *)host parms:(NSDictionary <NSString *, NSString *>*)parms {
++ (NSString *)urlStringFromHost:(NSString *)host param:(NSDictionary <NSString *, NSString *>*)param {
     if (!host) {NSAssert(0, @"ZCKit: url host is nil"); return @"";}
-    if (!parms || !parms.count) return host;
+    if (!param || !param.count) return host;
     __block NSString *str = @"?";
-    [parms enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+    [param enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
         if ([key isKindOfClass:NSString.class] && [obj isKindOfClass:NSString.class]) {
             str = [str stringByAppendingString:key];
             str = [str stringByAppendingString:@"="];
@@ -162,27 +162,27 @@
     return host;
 }
 
-+ (NSDictionary <NSString *, NSString *>*)paramsFromUrlString:(NSString *)urlString {
++ (NSDictionary <NSString *, NSString *>*)paramFromUrlString:(NSString *)urlString {
     if (!urlString || !urlString.length) return @{};
     NSArray *allElements = [urlString componentsSeparatedByString:@"?"];
-    NSMutableDictionary <NSString *, NSString *>*params = [NSMutableDictionary dictionary];
+    NSMutableDictionary <NSString *, NSString *>*param = [NSMutableDictionary dictionary];
     if (allElements.count == 2) {
-        NSString *paramsString = allElements[1];
-        NSArray *paramsArray = [paramsString componentsSeparatedByString:@"&"];
-        if (paramsArray.count) {
-            for (NSString *singleParamString in paramsArray) {
+        NSString *paramString = allElements[1];
+        NSArray *paramArray = [paramString componentsSeparatedByString:@"&"];
+        if (paramArray.count) {
+            for (NSString *singleParamString in paramArray) {
                 NSArray *singleParamSet = [singleParamString componentsSeparatedByString:@"="];
                 if (singleParamSet.count == 2) {
                     NSString *key = singleParamSet[0];
                     NSString *value = singleParamSet[1];
                     if (key.length && value.length) {
-                        [params setObject:value forKey:key];
+                        [param setObject:value forKey:key];
                     }
                 }
             }
         }
     }
-    return params.copy;
+    return param.copy;
 }
 
 #pragma mark - Api3

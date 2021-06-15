@@ -17,7 +17,7 @@
 
 @implementation ZCKitBridge
 
-@dynamic naviBackImage, sideArrowImage, isPrintLog, invalidStr;
+@dynamic naviBackImage, sideArrowImage, isPrintLog;
 @dynamic toastTextColor, toastBackGroundColor, realize, naviBarImageOrColor, naviBarTitleColor;
 
 static UIColor *_toastBackGroundColor = nil;
@@ -122,10 +122,6 @@ static BOOL _isPrintLog = NO;
 
 + (void)setIsPrintLog:(BOOL)isPrintLog {
     _isPrintLog = isPrintLog;
-}
-
-+ (NSString *)invalidStr {
-    return @"zc_invalid_value &.Ignore";
 }
 
 + (id<ZCKitExternalRealize>)realize {

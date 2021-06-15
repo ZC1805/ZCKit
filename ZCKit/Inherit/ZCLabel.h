@@ -10,24 +10,32 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCLabel : UILabel  /**< 当text或font改变会自动计算size，字体默认系统16，颜色默认B30，默认可显示多行 */
+@interface ZCLabel : UILabel  /**< 好用的label控件setText前设置对齐颜色字体 */
 
-@property (nonatomic, assign) CGFloat rowSpacing;  /**< 行间距，默认ZSA(0) */
+@property (nonatomic, assign) CGFloat lineSpace;  /**< 行间距(不适用富文本)，需在setText/.text=之&self.font=前设置，默认0 */
 
-@property (nonatomic, assign) CGFloat wordSpacing;  /**< 字间距，默认ZSA(0) */
+@property (nonatomic, assign) CGFloat headIndent;  /**< 头部缩进(不适用富文本)，需在setText/.text=之&self.font=前设置，默认0 */
 
-@property (nonatomic, assign) CGFloat headTailIndent;  /**< 首尾缩进，默认ZSA(0) */
+@property (nonatomic, assign) CGSize fixSize;  /**< 自适应size大小，需实现sizeThatFits，默认sizeZero，即无效设置 */
 
-@property (nonatomic, strong, readonly) NSMutableParagraphStyle *pStyle;  /**< 段落风格，修改排版需要调用update */
+@property (nonatomic, assign) UIEdgeInsets insideInsets;  /**< 设置内部边距，默认为edgeZero，最好在设置Text之前就设置好 */
 
-/** 计算固定宽度时的高度 */
-- (CGFloat)calculateTextHeight:(CGFloat)maxWidth;
+@property (nullable, nonatomic, copy) void(^touchAction)(ZCLabel *sender);  /**< 添加TouchUpInset手势回调，默认nil */
 
-/** 计算单行时候的宽度 */
-- (CGFloat)calculateTextWidth;
+- (instancetype)initWithColor:(nullable UIColor *)color font:(nullable UIFont *)font alignment:(NSTextAlignment)alignment adjustsSize:(BOOL)adjustsSize;  /**< 初始化，多行的话最好设置字体自适应 */
 
-/** 更新attribute或者Paragraph的设置 */
-- (void)updateTextAttributeOrParagraphStyle;
+- (void)resetVerticalCenterAlignmentOffsetTop:(CGFloat)offset;  /**< 居中对齐向上偏移offset，与insideInsets同时设无效 */
+
+- (void)resetVerticalTopAlignmentOffsetBottom:(CGFloat)offset;  /**< 居上对齐向下偏移offset，与insideInsets同时设无效 */
+
+- (void)resetVerticalBottomAlignmentOffsetTop:(CGFloat)offset;  /**< 居下对齐向上偏移offset，与insideInsets同时设无效 */
+
+- (void)resetInitProperty;  /**< 重设到初始化属性值 */
+
+/** 匹配字符串设置富文本(调用此方法前需initWithColor:font:alignment:adjustsSize:方法前设置了font和color)，只匹配一次，isReverse为是否反向匹配，font为匹配文字的字体(nil时不改变)&color为匹配文字的颜色(nil时不改变)，spacing为lable的行间距，忽略首位缩进 */
+- (void)setText:(NSString *)text matchText:(NSString *)mText isReverse:(BOOL)isReverse font:(nullable UIFont *)font color:(nullable UIColor *)color spacing:(CGFloat)spacing;
+
+- (CGSize)minToSize;  /**< 计算高度或者宽度(会重新设置frame且不适用富文本)，初始时需要传入最大宽度，最好在设置了text、font、space、alignment后调用此方法 */
 
 @end
 

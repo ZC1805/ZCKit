@@ -34,7 +34,7 @@
         UIEdgeInsets insetsTop = [lineTopView convertHolderLineViewInsets];
         lineTopView.frame = CGRectMake(insetsTop.left,
                                        insetsTop.top,
-                                       self.width - insetsTop.left - insetsTop.right,
+                                       self.zc_width - insetsTop.left - insetsTop.right,
                                        insetsTop.bottom);
     }
     UIView *lineLeftView = [self valueForKey:@"holderLineLeftView"];
@@ -43,23 +43,23 @@
         lineLeftView.frame = CGRectMake(insetsLeft.left,
                                         insetsLeft.top,
                                         insetsLeft.right,
-                                        self.height - insetsLeft.top - insetsLeft.bottom);
+                                        self.zc_height - insetsLeft.top - insetsLeft.bottom);
     }
     UIView *lineBottomView = [self valueForKey:@"holderLineBottomView"];
     if (lineBottomView) {
         UIEdgeInsets insetsBottom = [lineBottomView convertHolderLineViewInsets];
         lineBottomView.frame = CGRectMake(insetsBottom.left,
-                                          self.height - insetsBottom.bottom - insetsBottom.top,
-                                          self.width - insetsBottom.left - insetsBottom.right,
+                                          self.zc_height - insetsBottom.bottom - insetsBottom.top,
+                                          self.zc_width - insetsBottom.left - insetsBottom.right,
                                           insetsBottom.top);
     }
     UIView *lineRightView = [self valueForKey:@"holderLineRightView"];
     if (lineRightView) {
         UIEdgeInsets insetsRight = [lineRightView convertHolderLineViewInsets];
-        lineRightView.frame = CGRectMake(self.width - insetsRight.left - insetsRight.right,
+        lineRightView.frame = CGRectMake(self.zc_width - insetsRight.left - insetsRight.right,
                                          insetsRight.top,
                                          insetsRight.left,
-                                         self.height - insetsRight.top - insetsRight.bottom);
+                                         self.zc_height - insetsRight.top - insetsRight.bottom);
     }
     [self swizzle_layoutSubviews];
 }

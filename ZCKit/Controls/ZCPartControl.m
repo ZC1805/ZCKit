@@ -11,6 +11,7 @@
 #import "ZCMacro.h"
 #import "UIView+ZC.h"
 #import "NSArray+ZC.h"
+#import "UIColor+ZC.h"
 
 #pragma mark - ~ ZCPartSet ~
 @interface ZCPartSet ()
@@ -36,8 +37,8 @@
         self.title = title;
         self.normalImage = nil;
         self.selectImage = nil;
-        self.normalTitleFont = ZCFS(15);
-        self.selectTitleFont = ZCFS(15);
+        self.normalTitleFont = [UIFont fontWithName:@"HelveticaNeue" size:15];
+        self.selectTitleFont = [UIFont fontWithName:@"HelveticaNeue" size:15];
         self.normalColorRGB = ZCBlack30.RGBValue;
         self.selectColorRGB = ZCRed.RGBValue;
         self.spaceHeight = 20.0;
@@ -71,7 +72,7 @@
         NSDictionary *att = @{NSFontAttributeName : self.selectTitleFont};
         NSStringDrawingOptions ops = NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading;
         CGFloat wid = [self.title boundingRectWithSize:CGSizeMake(MAXFLOAT, 30.0) options:ops attributes:att context:nil].size.width;
-        self.itemSelCalwid = MAX(self.itemSelCalwid, wid + 12.0);
+        self.itemSelCalwid = MAX(self.itemSelCalwid, ceilf(wid) + 12.0);
     }
     if (self.selectImage) {
         self.itemSelCalwid = MAX(self.itemSelCalwid, self.selectImage.size.width + 12.0);
@@ -236,10 +237,10 @@ typedef void(^block)(NSInteger touchIndex);
             selectIndex = 0; change = YES;
         }
         if (_scrollView) {
-            if (_scrollView.contentOffset.x == selectIndex * _scrollView.width) {
+            if (_scrollView.contentOffset.x == selectIndex * _scrollView.zc_width) {
                 [self scrollViewChangeOffset:_scrollView.contentOffset.x];
             }
-            [_scrollView setContentOffset:CGPointMake(selectIndex * _scrollView.width, 0) animated:animated];
+            [_scrollView setContentOffset:CGPointMake(selectIndex * _scrollView.zc_width, 0) animated:animated];
         } else {
             [self barScrollToIndex:selectIndex animated:animated];
         }
@@ -288,12 +289,12 @@ typedef void(^block)(NSInteger touchIndex);
     if (index != -1) {
         CGFloat setx = self.barView.contentOffset.x;
         CGFloat offx = [self totalWidthToIndex:index];
-        CGFloat barHalf = self.barView.width / 2.0;
+        CGFloat barHalf = self.barView.zc_width / 2.0;
         CGFloat itemHalf = self.items[index].itemSelCalwid / 2.0 + _interval;
         if ((offx + _alphaOffset + itemHalf > barHalf) && (offx + _alphaOffset + itemHalf + barHalf < self.barView.contentSize.width)) {
             setx = offx + _alphaOffset + itemHalf - barHalf;
         } else if (offx + _alphaOffset + itemHalf + barHalf >= self.barView.contentSize.width) {
-            setx = self.barView.contentSize.width - self.barView.width;
+            setx = self.barView.contentSize.width - self.barView.zc_width;
         } else if (offx + _alphaOffset + itemHalf <= barHalf) {
             setx = 0;
         }
@@ -311,16 +312,16 @@ typedef void(^block)(NSInteger touchIndex);
 }
 
 - (void)scrollViewChangeOffset:(CGFloat)offset {
-    NSInteger page = round(offset / _scrollView.width);
+    NSInteger page = round(offset / _scrollView.zc_width);
     if (page != self.selectItemIndex && page >= 0 && page < self.items.count) {
         CGFloat setx = self.barView.contentOffset.x;
         CGFloat offx = [self totalWidthToIndex:page];
-        CGFloat barHalf = self.barView.width / 2.0;
+        CGFloat barHalf = self.barView.zc_width / 2.0;
         CGFloat itemHalf = self.items[page].itemSelCalwid / 2.0 + _interval;
         if ((offx + _alphaOffset + itemHalf > barHalf) && (offx + _alphaOffset + itemHalf + barHalf < self.barView.contentSize.width)) {
             setx = offx + _alphaOffset + itemHalf - barHalf;
         } else if (offx + _alphaOffset + itemHalf + barHalf >= self.barView.contentSize.width) {
-            setx = self.barView.contentSize.width - self.barView.width;
+            setx = self.barView.contentSize.width - self.barView.zc_width;
         } else if (offx + _alphaOffset + itemHalf <= barHalf) {
             setx = 0;
         }
@@ -334,18 +335,18 @@ typedef void(^block)(NSInteger touchIndex);
     }
     
     NSInteger ws, cs = self.selectItemIndex;
-    CGFloat mscal = (offset + _scrollView.width / 2.0 - self.selectItemIndex * _scrollView.width) / _scrollView.width;
-    if (offset > _scrollView.width * self.selectItemIndex) {
-        ws = ceil(offset / _scrollView.width);
-    } else if (offset < _scrollView.width * self.selectItemIndex) {
-        ws = floor(offset / _scrollView.width);
+    CGFloat mscal = (offset + _scrollView.zc_width / 2.0 - self.selectItemIndex * _scrollView.zc_width) / _scrollView.zc_width;
+    if (offset > _scrollView.zc_width * self.selectItemIndex) {
+        ws = ceilf(offset / _scrollView.zc_width);
+    } else if (offset < _scrollView.zc_width * self.selectItemIndex) {
+        ws = floorf(offset / _scrollView.zc_width);
     } else {
         ws = cs;
     }
     if (ws != cs) {
         ZCButton *cb = [self buttonWithIndex:cs];
         ZCButton *wb = [self buttonWithIndex:ws];
-        CGFloat var = 1.0 - ABS(ws - offset / _scrollView.width);
+        CGFloat var = 1.0 - ABS(ws - offset / _scrollView.zc_width);
         if (cb) [cb setTitleColor:[self colorForVar:var index:cs] forState:UIControlStateSelected];
         if (wb) [wb setTitleColor:[self colorForVar:(1.0 - var) index:ws] forState:UIControlStateNormal];
         [self resetMarkRect:cs to:ws scal:mscal var:var];
@@ -364,12 +365,12 @@ typedef void(^block)(NSInteger touchIndex);
         if (select) {
             btn.titleLabel.font = self.items[index].selectTitleFont;
             if (touch) {
-                CGFloat hei = self.height - _contentEdge.top - _contentEdge.bottom;
+                CGFloat hei = self.zc_height - _contentEdge.top - _contentEdge.bottom;
                 CGSize size = self.items[index].itemSelMarkSize;
                 CGRect fromRect = self.markView.frame;
-                self.markView.size = size;
-                self.markView.centerX = btn.centerX;
-                self.markView.top = _isBottomMark ? (hei - size.height) : (hei - size.height) / 2.0;
+                self.markView.zc_size = size;
+                self.markView.zc_centerX = btn.zc_centerX;
+                self.markView.zc_top = _isBottomMark ? (hei - size.height) : (hei - size.height) / 2.0;
                 if (self.delegate && [self.delegate respondsToSelector:@selector(partControl:didMoveMark:from:to:index:)]) {
                     [self.delegate partControl:self didMoveMark:self.markView from:fromRect to:self.markView.frame index:index];
                 }
@@ -398,10 +399,10 @@ typedef void(^block)(NSInteger touchIndex);
         midx = [self totalWidthToIndex:fromIndex] + fromSet.itemSelCalwid * scal + _alphaOffset;
         size = fromSet.itemSelMarkSize;
     }
-    CGFloat hei = self.height - _contentEdge.top - _contentEdge.bottom;
-    self.markView.size = size;
-    self.markView.centerX = midx + (fromIndex > 0 ? _interval : 0);
-    self.markView.top = _isBottomMark ? (hei - size.height) : (hei - size.height) / 2.0;
+    CGFloat hei = self.zc_height - _contentEdge.top - _contentEdge.bottom;
+    self.markView.zc_size = size;
+    self.markView.zc_centerX = midx + (fromIndex > 0 ? _interval : 0);
+    self.markView.zc_top = _isBottomMark ? (hei - size.height) : (hei - size.height) / 2.0;
 }
 
 - (UIColor *)colorForVar:(CGFloat)v index:(NSInteger)index {
@@ -411,7 +412,7 @@ typedef void(^block)(NSInteger touchIndex);
         CGFloat R = [sc[0] floatValue] - ([sc[0] floatValue] - [nc[0] floatValue]) * v;
         CGFloat G = [sc[1] floatValue] - ([sc[1] floatValue] - [nc[1] floatValue]) * v;
         CGFloat B = [sc[2] floatValue] - ([sc[2] floatValue] - [nc[2] floatValue]) * v;
-        return [UIColor colorWithRed:(R)/255.0 green:(G)/255.0 blue:(B)/255.0 alpha:1.0];
+        return [UIColor colorFormRad:(int)R green:(int)G blue:(int)B alpha:1.0];
     }
     return nil;
 }
@@ -583,8 +584,8 @@ typedef void(^block)(NSInteger touchIndex);
     if (_isFixItemWid) {
         CGFloat itemwid = 0;
         CGSize itemSize = CGSizeZero;
-        CGFloat width = self.width - _contentEdge.left - _contentEdge.right - 2.0 * _alphaOffset;
-        CGFloat height = self.height - _contentEdge.top - _contentEdge.bottom;
+        CGFloat width = self.zc_width - _contentEdge.left - _contentEdge.right - 2.0 * _alphaOffset;
+        CGFloat height = self.zc_height - _contentEdge.top - _contentEdge.bottom;
         NSInteger count = self.items.count;
         if (count) {
             if (self.itemWidth) {
@@ -625,16 +626,16 @@ typedef void(^block)(NSInteger touchIndex);
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self layoutItemSAI11];
-    self.backgroundView.frame = CGRectMake(0, 0, self.width, self.height);
-    CGFloat bar_h = self.height - _contentEdge.top - _contentEdge.bottom;
-    CGFloat bar_w = self.width - _contentEdge.left - _contentEdge.right;
+    self.backgroundView.frame = CGRectMake(0, 0, self.zc_width, self.zc_height);
+    CGFloat bar_h = self.zc_height - _contentEdge.top - _contentEdge.bottom;
+    CGFloat bar_w = self.zc_width - _contentEdge.left - _contentEdge.right;
     self.barView.frame = CGRectMake(_contentEdge.left, _contentEdge.top, bar_w, bar_h);
     self.barView.contentSize = CGSizeMake([self totalWidthToIndex:_items.count] + 2.0 * _alphaOffset, bar_h);
     if (!self.leftAlphaView.hidden) {
-        self.leftAlphaView.frame = CGRectMake(0, 0, _alphaOffset, self.height);
+        self.leftAlphaView.frame = CGRectMake(0, 0, _alphaOffset, self.zc_height);
     }
     if (!self.rightAlphaView.hidden) {
-        self.rightAlphaView.frame = CGRectMake(self.width - _alphaOffset, 0, _alphaOffset, self.height);
+        self.rightAlphaView.frame = CGRectMake(self.zc_width - _alphaOffset, 0, _alphaOffset, self.zc_height);
     }
     CGFloat add = _alphaOffset;
     for (NSInteger i = 0; i < _items.count; i ++) {
@@ -651,6 +652,10 @@ typedef void(^block)(NSInteger touchIndex);
 
 #pragma mark - Action
 - (void)onItemBar:(ZCButton *)btn {
+    BOOL isCanTouch = YES;
+    if (self.delegate && [self.delegate respondsToSelector:@selector(partControlCanTouchBarItem:)]) {
+        isCanTouch = [self.delegate partControlCanTouchBarItem:self];
+    } if (!isCanTouch) return;
     btn.highlighted = NO;
     NSInteger fromIdex = self.selectItemIndex;
     NSInteger aimIndex = [self.allBtns indexOfObject:btn];

@@ -49,13 +49,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** 字体设置，family 字体 */
 + (UIFont *)fontFamily:(NSString *)family size:(CGFloat)size weight:(NSInteger)weight slant:(CGFloat)slant;
 
-
-+ (UIFont *)fontCNSize:(CGFloat)size;  /**< HiraginoSansGB-W3字体 */
-
-+ (UIFont *)fontENSize:(CGFloat)size;  /**< HelveticaNeue字体 */
-
-+ (UIFont *)fontTITLESize:(CGFloat)size;  /**< HiraginoSansGB-W6字体 */
-
 @end
 
 NS_ASSUME_NONNULL_END

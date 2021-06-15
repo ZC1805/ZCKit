@@ -47,6 +47,17 @@
     return [arr copy];
 }
 
+- (NSArray *)itemDictionaryArrayForKeyKey:(NSString *)keyKey valueKey:(NSString *)valueKey {
+    NSMutableArray *array = [NSMutableArray array];
+    [self enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+        NSMutableDictionary *dic = [NSMutableDictionary dictionary];
+        if (keyKey) [dic setObject:key forKey:keyKey];
+        if (valueKey) [dic setObject:obj forKey:valueKey];
+        [array addObject:dic.copy];
+    }];
+    return array.copy;
+}
+
 - (NSDictionary *)dictionaryForKeysOrKeyReplaceKeys:(id)kvsOrKeys {
     NSMutableDictionary *dic = [NSMutableDictionary dictionary];
     if (kvsOrKeys && [kvsOrKeys isKindOfClass:NSArray.class] && ((NSArray *)kvsOrKeys).count) {
@@ -127,13 +138,24 @@
 
 - (NSString *)jsonFormatString {
     if ([NSJSONSerialization isValidJSONObject:self]) {
-        NSError *error;
+        NSError *error; NSString *jsonStr = nil;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:NSJSONWritingPrettyPrinted error:&error];
-        NSString *jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-        if (!error && jsonStr) return jsonStr;
+        if (!error && jsonData) jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        if (jsonStr.length) return jsonStr;
     }
     if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse to json string fail");
     return @"";
+}
+
+- (NSString *)jsonString {
+    if ([NSJSONSerialization isValidJSONObject:self]) {
+        NSError *error = nil; NSString *jsonStr = nil;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:self options:kNilOptions error:&error];
+        if (!error && jsonData) jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        if (jsonStr.length) return jsonStr;
+    }
+    if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse to json string fail");
+    return nil;
 }
 
 #pragma mark - Misc
@@ -422,11 +444,11 @@
         if (firstObject == nil) return nil;
         NSMutableArray *validObjects = [NSMutableArray array];
         [validObjects addObject:firstObject];
-        va_list params;
-        va_start(params, firstKey);
+        va_list param;
+        va_start(param, firstKey);
         NSString *arg;
         BOOL isContain = YES;
-        while ((arg = va_arg(params, NSString *))) {
+        while ((arg = va_arg(param, NSString *))) {
             if (arg) {
                 if (!isContain) continue;
                 id object = [self objectForKey:arg];
@@ -434,7 +456,7 @@
                 else [validObjects addObject:object];
             }
         }
-        va_end(params);
+        va_end(param);
         if (isContain) return validObjects;
     }
     return nil;
@@ -498,7 +520,7 @@
 }
 
 /** allowNull为YES时候，不规则的value值将替换成NSNull注入 */
-/** allowNull为NO时候，allowRemove为NO，不规则的value值将替换成NSNull注入 */
+/** allowNull为NO时候，allowRemove为NO，不规则的value值将不会注入也不会移除原有值 */
 /** allowNull为NO时候，allowRemove为YES，不规则的value将按key移除之前的key-value */
 - (void)injectValue:(ZCJsonValue)value forKey:(NSString *)key allowNull:(BOOL)allowNull allowRemove:(BOOL)allowRemove {
     if ([self keyIsInvalidKey:key value:value allowNull:allowNull allowRemove:allowRemove]) return;

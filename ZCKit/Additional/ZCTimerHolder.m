@@ -253,7 +253,7 @@ static const long zc_max_allow_cache_count = 100;
     if (!parts) {parts = [NSMutableArray array]; [self.cachePool setObject:parts forKey:key];}
     if (parts.count <= zc_max_allow_cache_count) [parts addObject:part];
     if (self.isActive || !self.isOnlyActivateIssue) {
-        if (self.isAllowOverflowIssue && parts.count > (NSUInteger)floor(self.maxAssemble * 1.5)) {
+        if (self.isAllowOverflowIssue && parts.count > (NSUInteger)floorf(self.maxAssemble * 1.5)) {
             NSArray <ZCAssemblePart *>* subParts = [parts subarrayWithRange:NSMakeRange(0, self.maxAssemble)];
             [parts removeObjectsInRange:NSMakeRange(0, self.maxAssemble)];
             [self issueAssembleParts:subParts];

@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCGradientView : UIView
+@interface ZCGradientView : UIView  /**< 渐变的View */
 
 - (void)resetAlphaGradientColors:(NSArray<UIColor *>*)colors isAxial:(BOOL)isAxial startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint location:(nullable NSArray<NSNumber *> *)locations;
 

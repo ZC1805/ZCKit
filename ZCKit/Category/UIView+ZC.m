@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 #import "UITableViewCell+ZC.h"
 #import "NSArray+ZC.h"
+#import "ZCMacro.h"
 
 @implementation UIView (ZC)
 
@@ -68,7 +69,6 @@
 }
 
 - (void)setFlagStr:(NSString *)flagStr {
-    if (!flagStr && !self.flagStr) return;
     objc_setAssociatedObject(self, @selector(flagStr), flagStr, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
@@ -76,10 +76,18 @@
     return objc_getAssociatedObject(self, _cmd);
 }
 
+- (void)setFlagDic:(NSDictionary *)flagDic {
+    objc_setAssociatedObject(self, @selector(flagDic), flagDic, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (NSDictionary *)flagDic {
+    return objc_getAssociatedObject(self, _cmd);
+}
+
 - (ZCBlankControl *)blankCoverView {
     ZCBlankControl *blankCoverView = objc_getAssociatedObject(self, _cmd);
     if (!blankCoverView) {
-        blankCoverView = [[ZCBlankControl alloc] initWithFrame:CGRectMake(0, 0, self.width, self.height) color:self.backgroundColor];
+        blankCoverView = [[ZCBlankControl alloc] initWithFrame:CGRectMake(0, 0, self.zc_width, self.zc_height) color:self.backgroundColor];
         objc_setAssociatedObject(self, _cmd, blankCoverView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self addSubview:blankCoverView];
     }
@@ -89,9 +97,15 @@
 #pragma mark - Func
 - (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color {
     if (self = [self initWithFrame:frame]) {
-        self.backgroundColor = color;
-    }
-    return self;
+        if (color) self.backgroundColor = color;
+    } return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color addTo:(UIView *)superView {
+    if (self = [self initWithFrame:frame]) {
+        if (color) self.backgroundColor = color;
+        if (superView) [superView addSubview:self];
+    } return self;
 }
 
 - (void)removeAllSubviews {
@@ -116,19 +130,19 @@
 }
 
 - (CGRect)minContainerRect {
-    CGFloat left = self.width, right = 0, top = self.height, bottom = 0;
+    CGFloat left = self.zc_width, right = 0, top = self.zc_height, bottom = 0;
     for (UIView *subview in self.subviews) {
-        top = MIN(top, subview.top);
-        left = MIN(left, subview.left);
-        right = MAX(right, subview.right);
-        bottom = MAX(bottom, subview.bottom);
+        top = MIN(top, subview.zc_top);
+        left = MIN(left, subview.zc_left);
+        right = MAX(right, subview.zc_right);
+        bottom = MAX(bottom, subview.zc_bottom);
     }
     if (right < left || bottom < top) return CGRectZero;
     return CGRectMake(left, top, right - left, bottom - top);
 }
 
 - (BOOL)isDisplayInScreen {
-    CGRect screenRect = [UIScreen mainScreen].bounds;
+    CGRect screenRect = ZSScreen;
     CGRect rect = [self convertRect:self.frame fromView:nil];
     if (CGRectIsEmpty(rect) || CGRectIsNull(rect)) return NO;
     if (self.hidden) return NO;
@@ -292,7 +306,7 @@
     }
     if (line) {
         line.backgroundColor = color;
-        line.frame = CGRectMake(insets.left, insets.top, self.width - insets.left - insets.right, insets.bottom);
+        line.frame = CGRectMake(insets.left, insets.top, self.zc_width - insets.left - insets.right, insets.bottom);
         NSValue *value = [NSValue valueWithUIEdgeInsets:insets];
         objc_setAssociatedObject(line, @selector(holderLineViewInsets), value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
@@ -319,7 +333,7 @@
     }
     if (line) {
         line.backgroundColor = color;
-        line.frame = CGRectMake(insets.left, insets.top, insets.right, self.height - insets.top - insets.bottom);
+        line.frame = CGRectMake(insets.left, insets.top, insets.right, self.zc_height - insets.top - insets.bottom);
         NSValue *value = [NSValue valueWithUIEdgeInsets:insets];
         objc_setAssociatedObject(line, @selector(holderLineViewInsets), value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
@@ -346,8 +360,8 @@
     }
     if (line) {
         line.backgroundColor = color;
-        line.frame = CGRectMake(insets.left, self.height - insets.bottom - insets.top,
-                                self.width - insets.left - insets.right, insets.top);
+        line.frame = CGRectMake(insets.left, self.zc_height - insets.bottom - insets.top,
+                                self.zc_width - insets.left - insets.right, insets.top);
         NSValue *value = [NSValue valueWithUIEdgeInsets:insets];
         objc_setAssociatedObject(line, @selector(holderLineViewInsets), value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
@@ -374,8 +388,8 @@
     }
     if (line) {
         line.backgroundColor = color;
-        line.frame = CGRectMake(self.width - insets.left - insets.right, insets.top,
-                                insets.left, self.height - insets.top - insets.bottom);
+        line.frame = CGRectMake(self.zc_width - insets.left - insets.right, insets.top,
+                                insets.left, self.zc_height - insets.top - insets.bottom);
         NSValue *value = [NSValue valueWithUIEdgeInsets:insets];
         objc_setAssociatedObject(line, @selector(holderLineViewInsets), value, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }
@@ -383,103 +397,161 @@
 }
 
 #pragma mark - Layout
-- (void)setTop:(CGFloat)top {
+- (void)setZc_top:(CGFloat)top {
     CGRect rect = self.frame;
     rect.origin.y = top;
     self.frame = rect;
 }
 
-- (CGFloat)top {
+- (CGFloat)zc_top {
     return self.frame.origin.y;
 }
 
-- (void)setLeft:(CGFloat)left {
+- (void)setZc_left:(CGFloat)left {
     CGRect rect = self.frame;
     rect.origin.x = left;
     self.frame = rect;
 }
 
-- (CGFloat)left {
+- (CGFloat)zc_left {
     return self.frame.origin.x;
 }
 
-- (void)setWidth:(CGFloat)width {
+- (void)setZc_width:(CGFloat)width {
     CGRect rect = self.frame;
     rect.size.width = width;
     self.frame = rect;
 }
 
-- (CGFloat)width {
+- (CGFloat)zc_width {
     return self.frame.size.width;
 }
 
-- (void)setHeight:(CGFloat)height {
+- (void)setZc_height:(CGFloat)height {
     CGRect rect = self.frame;
     rect.size.height = height;
     self.frame = rect;
 }
 
-- (CGFloat)height {
+- (CGFloat)zc_height {
     return self.frame.size.height;
 }
 
-- (void)setRight:(CGFloat)right {
+- (void)setZc_right:(CGFloat)right {
     CGRect rect = self.frame;
     rect.origin.x = right - rect.size.width;
     self.frame = rect;
 }
 
-- (CGFloat)right {
+- (CGFloat)zc_right {
     return self.frame.origin.x + self.frame.size.width;
 }
 
-- (void)setBottom:(CGFloat)bottom {
+- (void)setZc_bottom:(CGFloat)bottom {
     CGRect rect = self.frame;
     rect.origin.y = bottom - rect.size.height;
     self.frame = rect;
 }
 
-- (CGFloat)bottom {
+- (CGFloat)zc_bottom {
     return self.frame.origin.y + self.frame.size.height;
 }
 
-- (void)setSize:(CGSize)size {
+- (void)setZc_edge:(UIEdgeInsets)zc_edge {
+    if (self.superview && !CGSizeEqualToSize(CGSizeZero, self.superview.zc_size)) {
+        CGSize super_size = self.superview.zc_size;
+        self.frame = CGRectMake(zc_edge.left, zc_edge.top, super_size.width - zc_edge.left - zc_edge.right, super_size.height - zc_edge.top - zc_edge.bottom);
+    } else {
+        NSAssert(0, @"ZCKit: super view is invalid");
+    }
+}
+
+- (UIEdgeInsets)zc_edge {
+    if (self.superview) {
+        CGRect rect = self.frame;
+        CGSize super_size = self.superview.zc_size;
+        return UIEdgeInsetsMake(rect.origin.y, rect.origin.x, super_size.height - rect.origin.y - rect.size.height, super_size.width - rect.origin.x - rect.size.width);
+    } else {
+        NSAssert(0, @"ZCKit: super view is invalid");
+        return UIEdgeInsetsZero;
+    }
+}
+
+- (void)setZc_edgeRight:(CGFloat)zc_edgeRight {
+    if (self.superview && !CGSizeEqualToSize(CGSizeZero, self.superview.zc_size)) {
+        CGRect rect = self.frame;
+        rect.origin.x = self.superview.frame.size.width - zc_edgeRight - rect.size.width;
+        self.frame = rect;
+    } else {
+        NSAssert(0, @"ZCKit: super view is invalid");
+    }
+}
+
+- (CGFloat)zc_edgeRight {
+    if (self.superview) {
+        return self.superview.frame.size.width - self.frame.origin.x - self.frame.size.width;
+    } else {
+        NSAssert(0, @"ZCKit: super view is invalid");
+        return 0;
+    }
+}
+
+- (void)setZc_edgeBottom:(CGFloat)zc_edgeBottom {
+    if (self.superview && !CGSizeEqualToSize(CGSizeZero, self.superview.zc_size)) {
+        CGRect rect = self.frame;
+        rect.origin.y = self.superview.frame.size.height - zc_edgeBottom - rect.size.height;
+        self.frame = rect;
+    } else {
+        NSAssert(0, @"ZCKit: super view is invalid");
+    }
+}
+
+- (CGFloat)zc_edgeBottom {
+    if (self.superview) {
+        return self.superview.frame.size.height - self.frame.origin.y - self.frame.size.height;
+    } else {
+        NSAssert(0, @"ZCKit: super view is invalid");
+        return 0;
+    }
+}
+
+- (void)setZc_size:(CGSize)size {
     CGRect rect = self.frame;
     rect.size = size;
     self.frame = rect;
 }
 
-- (CGSize)size {
+- (CGSize)zc_size {
     return self.frame.size;
 }
 
-- (void)setOrigin:(CGPoint)origin {
+- (void)setZc_origin:(CGPoint)origin {
     CGRect rect = self.frame;
     rect.origin = origin;
     self.frame = rect;
 }
 
-- (CGPoint)origin {
+- (CGPoint)zc_origin {
     return self.frame.origin;
 }
 
-- (void)setCenterX:(CGFloat)centerX {
+- (void)setZc_centerX:(CGFloat)centerX {
     CGPoint point = self.center;
     point.x = centerX;
     self.center = point;
 }
 
-- (CGFloat)centerX {
+- (CGFloat)zc_centerX {
     return self.center.x;
 }
 
-- (void)setCenterY:(CGFloat)centerY {
+- (void)setZc_centerY:(CGFloat)centerY {
     CGPoint point = self.center;
     point.y = centerY;
     self.center = point;
 }
 
-- (CGFloat)centerY {
+- (CGFloat)zc_centerY {
     return self.center.y;
 }
 

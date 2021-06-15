@@ -46,10 +46,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @optional
 
+/** 用户点击头部item按钮响应不响应事件 */
+- (BOOL)partControlCanTouchBarItem:(ZCPartControl *)partControl;
+
 /** 用户点击触发barBtn在此回调，可能为-1 */
 - (void)partControl:(ZCPartControl *)partControl didSelectItemAtIndex:(NSUInteger)aimIndex fromIndex:(NSUInteger)fromIndex;
 
-/** selectIndexd发生改变(index有可能会等于-1)，关联scroll view时候，可能会3->2->1->0，而不是3->0，isTouchTrigger是非滑动触发 */
+/** selectIndexd发生改变(index有可能会等于-1)，关联scroll view时候，可能会3->2->1->0，而不是3->0，isTouchTrigger是非滑动触发，isActiveSlid是否是主动滑动 */
 - (void)partControl:(ZCPartControl *)partControl selectIndexDidChange:(NSInteger)index isTouchTrigger:(BOOL)isTouchTrigger isActiveSlid:(BOOL)isActiveSlid;
 
 /** 在此回调可以设置ZCPartSet属性 */

@@ -41,7 +41,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 - (void)cycleControl:(ZCCycleControl *)cycleControl didSelectAtIndex:(NSInteger)index;  /**< 点击图片 */
 
-- (void)cycleControl:(ZCCycleControl *)cycleControl cell:(ZCCycleCell *)cell indexPath:(NSIndexPath *)indexPath;  /**< 代理返回的cell，在此可对Cell再加工 */
+- (void)cycleControl:(ZCCycleControl *)cycleControl cell:(ZCCycleCell *)cell index:(NSInteger *)index;  /**< 代理返回的cell，在此可对Cell再加工 */
 
 @end
 

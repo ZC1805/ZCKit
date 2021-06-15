@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray *)allValuesSortedByKeys;  /**< 返回按键排序好的所有值 */
 
+- (NSArray *)itemDictionaryArrayForKeyKey:(NSString *)keyKey valueKey:(NSString *)valueKey;  /**< 返回用字典中每对键值对分别作值组成一个新的字典的数组 */
+
 - (NSDictionary *)dictionaryForKeysOrKeyReplaceKeys:(id)kvsOrKeys;  /**< 返回所有目标键或者替换目标键的键值对字典，没有查询到的键值对按NSNull值注入 */
 
 - (NSDictionary *)dictionaryForKeys:(NSArray *)keys;  /**< 返回所有目标键组合的子字典，没有查询到对应的值则不会将键值对加入到新字典中 */
@@ -34,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)containsObjectForValue:(id)value;  /**< 是否包含某个值 */
 
 - (NSString *)jsonFormatString;  /**< 返回json字符串，已经做格式化显示处理 */
+
+- (nullable NSString *)jsonString;  /**< 返回json字符串，未做格式化处理 */
 
 #pragma mark - Parse
 - (nullable ZCJsonValue)jsonValueForKey:(NSString *)key;

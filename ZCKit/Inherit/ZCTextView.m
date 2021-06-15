@@ -34,15 +34,13 @@
 - (void)dealloc {
     [_placeholderLabel removeFromSuperview];
     _placeholderLabel = nil;
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:nil];
-    [self removeNotificationTextObserver];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:self];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _fixSize = CGSizeZero;
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshPlaceholder)
-                                                     name:UITextViewTextDidChangeNotification object:self];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshIPlaceholder:) name:UITextViewTextDidChangeNotification object:self];
     }
     return self;
 }
@@ -67,7 +65,12 @@
     }
 }
 
-- (void)refreshPlaceholder {
+- (void)refreshIPlaceholder:(NSNotification *)notify {
+    if (notify && notify.object == self) {
+        if (_textChangeBlock) {
+            _textChangeBlock(self);
+        }
+    }
     if (self.text.length || self.attributedText.length) {
         [_placeholderLabel setAlpha:0];
     } else {
@@ -80,12 +83,12 @@
 #pragma mark - Override
 - (void)setText:(NSString *)text {
     [super setText:text];
-    [self refreshPlaceholder];
+    [self refreshIPlaceholder:nil];
 }
 
 - (void)setAttributedText:(NSAttributedString *)attributedText {
     [super setAttributedText:attributedText];
-    [self refreshPlaceholder];
+    [self refreshIPlaceholder:nil];
 }
 
 - (void)setFont:(UIFont *)font {
@@ -119,17 +122,17 @@
 - (void)setPlaceholder:(NSString *)placeholder {
     _placeholder = placeholder;
     self.placeholderLabel.text = placeholder;
-    [self refreshPlaceholder];
+    [self refreshIPlaceholder:nil];
 }
 
 - (void)setAttributedPlaceholder:(NSAttributedString *)attributedPlaceholder {
     _attributedPlaceholder = attributedPlaceholder;
     self.placeholderLabel.attributedText = attributedPlaceholder;
-    [self refreshPlaceholder];
+    [self refreshIPlaceholder:nil];
 }
 
 - (void)setPlaceholderTextColor:(UIColor *)placeholderTextColor {
-    if (!placeholderTextColor) placeholderTextColor = ZCCA(ZCBlackA8, 0.7);
+    if (!placeholderTextColor) placeholderTextColor = [ZCBlackA8 colorWithAlphaComponent:0.7];
     _placeholderTextColor = placeholderTextColor;
     self.placeholderLabel.textColor = placeholderTextColor;
 }
@@ -159,7 +162,7 @@
         _placeholderLabel.font = self.font;
         _placeholderLabel.textAlignment = self.textAlignment;
         _placeholderLabel.backgroundColor = ZCClear;
-        _placeholderLabel.textColor = ZCCA(ZCBlackA8, 0.7);
+        _placeholderLabel.textColor = [ZCBlackA8 colorWithAlphaComponent:0.7];
         _placeholderLabel.alpha = 0;
         [self addSubview:_placeholderLabel];
     }
@@ -167,7 +170,7 @@
 }
 
 - (id<UITextViewDelegate>)delegate {
-    [self refreshPlaceholder];
+    [self refreshIPlaceholder:nil];
     return [super delegate];
 }
 
@@ -177,28 +180,6 @@
     CGSize newSize = [super intrinsicContentSize];
     newSize.height = [self placeholderExpectedFrame].size.height + placeholderInsets.top + placeholderInsets.bottom;
     return newSize;
-}
-
-#pragma mark - Change
-- (void)setTextChangeBlock:(void (^)(ZCTextView *textView))textChangeBlock {
-    [self removeNotificationTextObserver];
-    _textChangeBlock = textChangeBlock;
-    if (_textChangeBlock) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewTextChange)
-                                                     name:UITextViewTextDidChangeNotification object:self];
-    }
-}
-
-- (void)removeNotificationTextObserver {
-    if (_textChangeBlock) {
-        [[NSNotificationCenter defaultCenter] removeObserver:self name:UITextViewTextDidChangeNotification object:self];
-    }
-}
-
-- (void)textViewTextChange {
-    if (_textChangeBlock) {
-        _textChangeBlock(self);
-    }
 }
 
 #pragma mark - Delegate

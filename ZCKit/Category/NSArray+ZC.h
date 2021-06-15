@@ -19,11 +19,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSArray *)restExceptObjects:(NSArray *)objects;  /**< 返回余下的对象数组 */
 
-- (nullable id)objectForPropertyName:(NSString *)propertyName propertyValue:(id)propertyValue;  /**< 返回能匹配到成员的键值 */
+- (nullable id)objectForPropertyName:(NSString *)propertyName propertyValue:(id)propertyValue;  /**< 返回能匹配到第一个成员的键值 */
+
+- (NSInteger)indexForPropertyName:(NSString *)propertyName propertyValue:(id)propertyValue;  /**< 返回能匹配到第一个成员的键值对象的index，没找到返回-1 */
 
 - (NSArray *)objectValueArrayForKey:(NSString *)key defaultValue:(id)defaultValue;  /**< 返回成员对象按key取值得到的value的数组 */
 
 - (NSString *)jsonFormatString;  /**< 返回json字符串，已经做格式化显示处理 */
+
+- (nullable NSString *)jsonString;  /**< 返回json字符串，未做格式化处理 */
 
 #pragma mark - Parse
 - (nullable ZCJsonValue)jsonValueForIndex:(NSInteger)index;

@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL isVerticalCenterAlignment;  /**< 图片和标题是否是竖直居中中心对齐，默认NO */
 
+@property (nonatomic, assign) BOOL isUseGrayImage;  /**< 是否使用灰度图片，默认NO */
+
 @property (nullable, nonatomic, copy) void(^touchAction)(ZCButton *sender);  /**< 添加TouchUpInset回调，默认nil */
 
 @property (nonatomic, assign) UIEdgeInsets responseAreaExtend;  /**< 延伸响应区域，默认zero */

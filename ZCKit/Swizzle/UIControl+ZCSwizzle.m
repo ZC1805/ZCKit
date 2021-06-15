@@ -100,6 +100,6 @@ NSNotificationName const ZCControlGenerateEventNotification = @"ZCControlGenerat
     [[NSNotificationCenter defaultCenter] postNotificationName:ZCControlGenerateEventNotification object:control];
 }
 
-#warning - 还差UITextView,UITextField,UITableViewCell,UICollectViewCell,UIBarBauttonItem,UIAlertAction事件记录 & 注意屏蔽系统控件的事件或者打标机来确认是否处理此事件 & 响应链寻找路径
+#warning - 还差UITextView,UITextField,UITableViewCell,UICollectViewCell,UIBarBauttonItem,UIAlertAction事件记录 & 注意屏蔽系统控件的事件或者打标机来确认是否处理此事件 & 响应链寻找路径 & 修改手势锁存储位置
 
 @end

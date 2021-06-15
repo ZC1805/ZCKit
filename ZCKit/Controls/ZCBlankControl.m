@@ -28,77 +28,77 @@
     if ([self isSeatView:_originImageView]) {
         _originImageView.frame = self.bounds;
     }
-    CGFloat allHei = 0, space = ZSA(23);
+    CGFloat allHei = 0, space = 23;
     if ([self isSeatView:_headerLabel]) {
-        _headerLabel.size = [_headerLabel sizeThatFits:CGSizeMake(self.width - 2 * ZSMInvl, MAXFLOAT)];
-        _headerLabel.centerX = self.width / 2.0;
-        allHei = allHei + _headerLabel.height + space;
+        _headerLabel.zc_size = [_headerLabel sizeThatFits:CGSizeMake(self.zc_width - 2 * 15, MAXFLOAT)];
+        _headerLabel.zc_centerX = self.zc_width / 2.0;
+        allHei = allHei + _headerLabel.zc_height + space;
     }
     if ([self isSeatView:_imageView]) {
-        if (CGSizeEqualToSize(_imageView.size, CGSizeZero)) _imageView.size = _imageView.image.size;
-        _imageView.centerX = self.width / 2.0;
-        allHei = allHei + _imageView.height + space;
+        if (CGSizeEqualToSize(_imageView.zc_size, CGSizeZero)) _imageView.zc_size = _imageView.image.size;
+        _imageView.zc_centerX = self.zc_width / 2.0;
+        allHei = allHei + _imageView.zc_height + space;
     }
     if ([self isSeatView:_contentLabel]) {
-        _contentLabel.size = [_contentLabel sizeThatFits:CGSizeMake(self.width - 2 * ZSMInvl, MAXFLOAT)];
-        _contentLabel.centerX = self.width / 2.0;
-        allHei = allHei + _contentLabel.height + space;
+        _contentLabel.zc_size = [_contentLabel sizeThatFits:CGSizeMake(self.zc_width - 2 * 15, MAXFLOAT)];
+        _contentLabel.zc_centerX = self.zc_width / 2.0;
+        allHei = allHei + _contentLabel.zc_height + space;
     }
     if ([self isSeatView:_handleButton]) {
-        if (CGSizeEqualToSize(_handleButton.size, CGSizeZero)) {
+        if (CGSizeEqualToSize(_handleButton.zc_size, CGSizeZero)) {
             CGFloat height = _handleButton.imageView.image.size.height;
             CGFloat width = _handleButton.imageView.image.size.width;
-            width = width + ZSA(20);
-            CGFloat calwid = self.width - 2 * ZSMInvl - width;
+            width = width + 20;
+            CGFloat calwid = self.zc_width - 2 * 15 - width;
             CGSize size = [_handleButton.titleLabel sizeThatFits:CGSizeMake(calwid, MAXFLOAT)];
             width = width + size.width;
-            height = MAX(height, size.height) + ZSA(20);
-            _handleButton.size = CGSizeMake(width, height);
+            height = MAX(height, size.height) + 20;
+            _handleButton.zc_size = CGSizeMake(width, height);
         }
-        _handleButton.centerX = self.width / 2.0;
-        allHei = allHei + _handleButton.height + space;
+        _handleButton.zc_centerX = self.zc_width / 2.0;
+        allHei = allHei + _handleButton.zc_height + space;
     }
     if ([self isSeatView:_footerLabel]) {
-        _footerLabel.size = [_footerLabel sizeThatFits:CGSizeMake(self.width - 2 * ZSMInvl, MAXFLOAT)];
-        _footerLabel.centerX = self.width / 2.0;
-        allHei = allHei + _footerLabel.height + space;
+        _footerLabel.zc_size = [_footerLabel sizeThatFits:CGSizeMake(self.zc_width - 2 * 15, MAXFLOAT)];
+        _footerLabel.zc_centerX = self.zc_width / 2.0;
+        allHei = allHei + _footerLabel.zc_height + space;
     }
     if ([self isSeatView:_containerView]) {
-        _containerView.size = [_containerView minContainerRect].size;
-        _containerView.centerX = self.width / 2.0;
-        allHei = allHei + _containerView.height + space;
+        _containerView.zc_size = [_containerView minContainerRect].size;
+        _containerView.zc_centerX = self.zc_width / 2.0;
+        allHei = allHei + _containerView.zc_height + space;
     }
     
-    CGFloat top = self.height / 2.0 - allHei / 2.0 - ZSA(30);
+    CGFloat top = self.zc_height / 2.0 - allHei / 2.0 - 30;
     if ([self isSeatView:_headerLabel]) {
-        _headerLabel.top = top;
-        top = _headerLabel.bottom + space;
+        _headerLabel.zc_top = top;
+        top = _headerLabel.zc_bottom + space;
     }
     if ([self isSeatView:_imageView]) {
-        _imageView.top = top;
-        top = _imageView.bottom + space;
+        _imageView.zc_top = top;
+        top = _imageView.zc_bottom + space;
     }
     if ([self isSeatView:_contentLabel]) {
-        _contentLabel.top = top;
-        top = _contentLabel.bottom + space;
+        _contentLabel.zc_top = top;
+        top = _contentLabel.zc_bottom + space;
     }
     if ([self isSeatView:_handleButton]) {
-        _handleButton.top = top;
-        top = _handleButton.bottom + space;
+        _handleButton.zc_top = top;
+        top = _handleButton.zc_bottom + space;
     }
     if ([self isSeatView:_footerLabel]) {
-        _footerLabel.top = top;
-        top = _footerLabel.bottom + space;
+        _footerLabel.zc_top = top;
+        top = _footerLabel.zc_bottom + space;
     }
     if ([self isSeatView:_containerView]) {
-        _containerView.top = top;
+        _containerView.zc_top = top;
     }
 }
 
 #pragma mark - Get
 - (UILabel *)headerLabel {
     if (!_headerLabel) {
-        _headerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:ZCFS(16) color:ZCBlack30];
+        _headerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:16] color:ZCBlack30];
         _headerLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _headerLabel.textAlignment = NSTextAlignmentCenter;
         _headerLabel.numberOfLines = 0;
@@ -118,7 +118,7 @@
 
 - (UILabel *)contentLabel {
     if (!_contentLabel) {
-        _contentLabel = [[UILabel alloc] initWithFrame:CGRectZero font:ZCFS(16) color:ZCBlack80];
+        _contentLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:16] color:ZCBlack80];
         _contentLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _contentLabel.textAlignment = NSTextAlignmentCenter;
         _contentLabel.numberOfLines = 0;
@@ -130,8 +130,8 @@
 - (ZCButton *)handleButton {
     if (!_handleButton) {
         _handleButton = [ZCButton buttonWithType:UIButtonTypeCustom];
-        _handleButton.titleLabel.font = ZCFS(15);
-        [_handleButton setCorner:ZSA(3) color:ZCClear width:ZSA(0)];
+        _handleButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
+        [_handleButton setCorner:3 color:ZCClear width:0];
         [self addSubview:_handleButton];
     }
     return _handleButton;
@@ -139,7 +139,7 @@
 
 - (UILabel *)footerLabel {
     if (!_footerLabel) {
-        _footerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:ZCFS(14) color:ZCBlack80];
+        _footerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:14] color:ZCBlack80];
         _footerLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _footerLabel.textAlignment = NSTextAlignmentCenter;
         _footerLabel.numberOfLines = 0;
@@ -171,25 +171,25 @@
 - (void)setTouchAction:(void (^)(BOOL))touchAction {
     _touchAction = touchAction;
     if ([self.allTargets containsObject:self] && (self.allControlEvents & UIControlEventTouchUpInside)) {
-        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
-            [self removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[self actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchActionZC:))]) {
+            [self removeTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
         }
     }
     if (_touchAction) {
-        [self addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self addTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
     }
     if ([_handleButton.allTargets containsObject:self] && (_handleButton.allControlEvents & UIControlEventTouchUpInside)) {
-        if ([[_handleButton actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchAction:))]) {
-            [_handleButton removeTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        if ([[_handleButton actionsForTarget:self forControlEvent:UIControlEventTouchUpInside] containsObject:NSStringFromSelector(@selector(onTouchActionZC:))]) {
+            [_handleButton removeTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
         }
     }
     if (_touchAction) {
-        [_handleButton addTarget:self action:@selector(onTouchAction:) forControlEvents:UIControlEventTouchUpInside];
+        [_handleButton addTarget:self action:@selector(onTouchActionZC:) forControlEvents:UIControlEventTouchUpInside];
     }
 }
 
 #pragma mark - Misc
-- (void)onTouchAction:(id)sender {
+- (void)onTouchActionZC:(id)sender {
     if (_touchAction) _touchAction(sender == self ? NO : YES);
 }
 
@@ -223,7 +223,7 @@
     }
     if (self.hidden != hidden) {
         if (animated) {
-            [UIView animateWithDuration:0.25 animations:^{
+            [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
                 self.alpha = hidden ? 0 : 1;
             } completion:^(BOOL finished) {
                 [super setHidden:hidden];

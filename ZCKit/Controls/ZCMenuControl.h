@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface ZCMenuControl : UIView  /**< 点击菜单控件 */
+@interface ZCMenuControl : UIView  /**< 点击菜单控件，加载在自定义window上 */
 
 @property (nonatomic, assign) BOOL isShowShadow;  /**< 是否显示阴影，默认NO */
 

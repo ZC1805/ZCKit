@@ -8,7 +8,7 @@
 
 #import "ZCSheetControl.h"
 #import "ZCMaskView.h"
-#import "ZCButton.h"
+#import "ZCLabel.h"
 #import "ZCMacro.h"
 
 static const CGFloat sheetEdgeTop = 7.0;
@@ -28,12 +28,21 @@ static const CGFloat sheetFlagTag = 83803;
 
 @property (nonatomic, copy) void(^sheetBlock)(NSInteger selectIndex);
 
+@property (nonatomic, copy) void(^msgLabelCtor)(ZCLabel *msgLabel);
+
+@property (nonatomic, copy) void(^itemBtnCtor)(ZCButton *itemBtn, NSInteger itemIndex, BOOL isCancelBtn);
+
 @end
 
 @implementation ZCSheetControl
 
 + (void)display:(NSString *)msg sheet:(NSArray<NSString *> *)sheet ctor:(void (^)(ZCSheetControl * _Nonnull))ctor action:(void (^)(NSInteger))action {
-    ZCSheetControl *sheetControl = [[ZCSheetControl alloc] initWithMsg:msg sheets:sheet action:action];
+    [self display:msg sheet:sheet ctor:ctor labelCtor:nil buttonCtor:nil action:action];
+}
+
++ (void)display:(NSString *)msg sheet:(NSArray<NSString *> *)sheet ctor:(void (^)(ZCSheetControl * _Nonnull))ctor
+      labelCtor:(void (^)(ZCLabel * _Nonnull))labelCtor buttonCtor:(void (^)(ZCButton * _Nonnull, NSInteger, BOOL))buttonCtor action:(void (^)(NSInteger))action {
+    ZCSheetControl *sheetControl = [[ZCSheetControl alloc] initWithMsg:msg sheets:sheet action:action labelCtor:labelCtor buttonCtor:buttonCtor];
     [sheetControl initProperty];
     if (ctor) ctor(sheetControl);
     [sheetControl resetItems];
@@ -41,10 +50,13 @@ static const CGFloat sheetFlagTag = 83803;
     [sheetControl showItems];
 }
 
-- (instancetype)initWithMsg:(NSString *)msg sheets:(NSArray <NSString *>*)sheets action:(void(^)(NSInteger selectIndex))action {
+- (instancetype)initWithMsg:(NSString *)msg sheets:(NSArray <NSString *>*)sheets action:(void(^)(NSInteger selectIndex))action
+                  labelCtor:(void (^)(ZCLabel * _Nonnull))labelCtor buttonCtor:(void (^)(ZCButton * _Nonnull, NSInteger, BOOL))buttonCtor {
     if (self = [super initWithFrame:CGRectZero]) {
         self.items = [NSMutableArray array];
         if (sheets.count) [self.items addObjectsFromArray:sheets];
+        self.msgLabelCtor = labelCtor;
+        self.itemBtnCtor = buttonCtor;
         self.sheetBlock = action;
         self.msgText = msg;
     }
@@ -81,7 +93,7 @@ static const CGFloat sheetFlagTag = 83803;
 - (void)showItems {
     [ZCWindowView display:self time:0.25 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{[self disappearItems:-1];}) : nil)];
     self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.frame.size.height);
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
         self.isCanTouch = YES;
@@ -98,7 +110,7 @@ static const CGFloat sheetFlagTag = 83803;
     if (!self.isCanTouch) return;
     self.isCanTouch = NO;
     [ZCWindowView dismissSubview];
-    [UIView animateWithDuration:0.25 animations:^{
+    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
         self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.frame.size.height);
     } completion:^(BOOL finished) {
         [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -145,9 +157,9 @@ static const CGFloat sheetFlagTag = 83803;
 }
 
 - (void)build:(BOOL)msgExist cancel:(BOOL)celExist only:(BOOL)isOnly safeHei:(CGFloat)safeHei initHei:(CGFloat)initHei conHei:(CGFloat)conHei {
-    CGFloat initWid = [UIScreen mainScreen].bounds.size.width;
+    CGFloat initWid = ZSWid;
     self.backgroundColor = ZCBKColor;
-    self.frame = CGRectMake(0, [UIScreen mainScreen].bounds.size.height - initHei, initWid, initHei);
+    self.frame = CGRectMake(0, ZSHei - initHei, initWid, initHei);
     self.contentView = [[UIScrollView alloc] initWithFrame:CGRectZero];
     self.contentView.backgroundColor = ZCClear;
     self.contentView.showsVerticalScrollIndicator = NO;
@@ -172,19 +184,20 @@ static const CGFloat sheetFlagTag = 83803;
         }
     }
     if (msgExist) {
-        UILabel *msglabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, initWid, sheetMsgHei - sheetEdgeTop)];
+        ZCLabel *msglabel = [[ZCLabel alloc] initWithFrame:CGRectMake(0, 0, initWid, sheetMsgHei - sheetEdgeTop)];
         msglabel.text = self.msgText;
         msglabel.numberOfLines = 0;
         msglabel.textColor = ZCBlack80;
-        msglabel.font = [UIFont systemFontOfSize:13];
-        msglabel.backgroundColor = ZCClear;
+        msglabel.font = [UIFont fontWithName:@"HelveticaNeue" size:13];
+        msglabel.backgroundColor = ZCWhite;
         msglabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:msglabel];
         if (self.isMaskClear) {
-            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, 1.0 / [UIScreen mainScreen].scale)];
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, ZSSepHei)];
             line.backgroundColor = ZCBlackDC;
             [msglabel addSubview:line];
         }
+        if (self.msgLabelCtor) {self.msgLabelCtor(msglabel); self.msgLabelCtor = nil;}
     }
     for (int i = 0; i < self.items.count; i ++) {
         BOOL isCancel = NO;
@@ -195,7 +208,7 @@ static const CGFloat sheetFlagTag = 83803;
         UIImage *imageBk = [UIImage imageWithColor:[UIColor colorFormHex:0xE1E1E3 alpha:1.0] size:CGSizeMake(1.0, 1.0)];
         itemBtn.tag = sheetFlagTag + i;
         itemBtn.backgroundColor = ZCWhite;
-        itemBtn.titleLabel.font = [UIFont systemFontOfSize:17];
+        itemBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
         [itemBtn setTitleColor:titleColor forState:UIControlStateNormal];
         [itemBtn setTitleColor:[titleColor colorWithAlphaComponent:0.2] forState:UIControlStateHighlighted];
@@ -213,7 +226,7 @@ static const CGFloat sheetFlagTag = 83803;
             } else {
                 itemBtn.frame = CGRectMake(0, i * sheetItemHei, initWid, sheetItemHei);
                 if (i != 0 || (!msgExist && self.isMaskClear)) {
-                    topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * sheetItemHei, initWid, 1.0 / [UIScreen mainScreen].scale)];
+                    topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * sheetItemHei, initWid, ZSSepHei)];
                     topSep.backgroundColor = ZCBlackDC;
                 }
             }
@@ -222,7 +235,7 @@ static const CGFloat sheetFlagTag = 83803;
             itemBtn.titleEdgeInsets = UIEdgeInsetsMake(-safeHei, 0, 0, 0);
             itemBtn.responseAreaExtend = UIEdgeInsetsMake(0, 0, -safeHei, 0);
             if (isOnly && self.isMaskClear) {
-                UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, 1.0 / [UIScreen mainScreen].scale)];
+                UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, ZSSepHei)];
                 line.backgroundColor = ZCBlackDC;
                 [itemBtn addSubview:line];
             }
@@ -230,7 +243,10 @@ static const CGFloat sheetFlagTag = 83803;
         if (isCancel) [self addSubview:itemBtn];
         else [self.contentView addSubview:itemBtn];
         if (topSep) [self.contentView addSubview:topSep];
+        
+        if (self.itemBtnCtor) {self.itemBtnCtor(itemBtn, i, isCancel);}
     }
+    if (self.itemBtnCtor) {self.itemBtnCtor = nil;}
 }
 
 @end

@@ -31,6 +31,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 生成线性渐变图片 */
 + (UIImage *)imageWithColor1:(UIColor *)color1 color2:(UIColor *)color2 size:(CGSize)size isHorizontal:(BOOL)isHorizontal;
 
+/** 生成线性渐变图片 */
++ (UIImage *)imageWithGradientColors:(NSArray <UIColor *>*)colors size:(CGSize)size isHorizontal:(BOOL)isHorizontal;
+
 /** 改变图片的透明度 */
 - (UIImage *)imageWithAlpha:(CGFloat)alpha;
 
@@ -64,13 +67,13 @@ NS_ASSUME_NONNULL_BEGIN
 /** 修正图片方向 */
 - (UIImage *)imageFixOrientation;
 
-//压缩图片质量，尽可能保留图片清晰度，图片不会明显模糊。
+/** 压缩图片质量，尽可能保留图片清晰度，图片不会明显模糊。 */
 - (NSData *)imageCompressQuality:(NSInteger)maxLength;
 
-//压缩图片尺寸可以使图片小于指定大小，但会使图片明显模糊。
+/** 压缩图片尺寸可以使图片小于指定大小，但会使图片明显模糊。 */
 - (NSData *)imageCompressSize:(NSUInteger)maxLength;
 
-//先压缩图片质量，如果已经小于指定大小，就可得到清晰的图片，否则再压缩图片尺寸。
+/** 先压缩图片质量，如果已经小于指定大小，就可得到清晰的图片，否则再压缩图片尺寸。 */
 - (NSData *)imageCompress:(NSUInteger)maxLength;
 
 #pragma mark - Image modify

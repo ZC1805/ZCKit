@@ -9,8 +9,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-///!!! 自动根据SEL或者Delegate生成中间对象来绑定源对象赋值与监听
-
 extern NSString * const ZCStreamValueInvalid;
 
 @interface ZCStreamCoat : NSObject  /**< 基本多向绑定单元 */

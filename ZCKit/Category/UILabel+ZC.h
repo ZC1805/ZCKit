@@ -14,11 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithFrame:(CGRect)frame font:(UIFont *)font color:(UIColor *)color;  /**< 带字体的初始化，color为textColor */
 
-- (void)setText:(NSString *)text lineSpacing:(CGFloat)lineSpacing;  /**< 设置行距，最好先设置font */
-
-+ (CGFloat)heiText:(NSString *)text font:(UIFont *)font width:(CGFloat)width lineSpacing:(CGFloat)lineSpacing;  /**< 计算文字行高 */
-
 @end
 
 NS_ASSUME_NONNULL_END
-

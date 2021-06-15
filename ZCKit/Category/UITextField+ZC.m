@@ -16,7 +16,7 @@
     if (leftSpace > 0) {
         if (self.leftView) {
             if (self.leftView.tag == 189001) {
-                self.leftView.width = leftSpace;
+                self.leftView.zc_width = leftSpace;
             }
         } else {
             self.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftSpace, 1) color:ZCClear];
@@ -32,13 +32,14 @@
 
 - (CGFloat)leftSpace {
     if (self.leftView && self.leftView.tag == 189001) {
-        return self.leftView.width;
+        return self.leftView.zc_width;
     }
     return 0;
 }
 
 - (void)setPlaceholderText:(NSString *)placeholderText color:(UIColor *)color font:(UIFont *)font {
-    NSDictionary *dic = @{NSFontAttributeName:(font?font:self.font?self.font:[UIFont systemFontOfSize:12]), NSForegroundColorAttributeName:(color?color:ZCPHColor)};
+    NSDictionary *dic = @{NSFontAttributeName:(font?font:(self.font?self.font:[UIFont fontWithName:@"HelveticaNeue" size:12])),
+                          NSForegroundColorAttributeName:(color?color:ZCPHColor)};
     NSAttributedString *attStr = [[NSAttributedString alloc] initWithString:ZCStrNonnil(placeholderText) attributes:dic];
     self.attributedPlaceholder = attStr;
 }
@@ -56,7 +57,7 @@
         imageView.image = leftImage;
         imageView.contentMode = UIViewContentModeScaleToFill;
         imageView.contentMode = UIViewContentModeCenter;
-        imageView.frame = CGRectMake(0, 0, ZSA(40), ZSA(60));
+        imageView.frame = CGRectMake(0, 0, 40, 60);
         self.leftViewMode = UITextFieldViewModeAlways;
         self.leftView = imageView;
     } else {

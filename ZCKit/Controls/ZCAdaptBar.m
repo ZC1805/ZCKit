@@ -45,10 +45,10 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    if (!ZFZero(self.reserveHei) && !ZFEqual(self.height, self.recordHei + self.reserveHei)) {
-        self.recordHei = self.height;
+    if (!ZFZero(self.reserveHei) && !ZFEqual(self.zc_height, self.recordHei + self.reserveHei)) {
+        self.recordHei = self.zc_height;
         if (self.adaptPosition) {
-            self.frame = CGRectMake(0, self.bottom - self.recordHei - self.reserveHei, ZSWid, self.recordHei + self.reserveHei);
+            self.frame = CGRectMake(0, self.zc_bottom - self.recordHei - self.reserveHei, ZSWid, self.recordHei + self.reserveHei);
             self.reserveView.frame = CGRectMake(0, self.recordHei, ZSWid, self.reserveHei);
             self.contentView.frame = CGRectMake(0, 0, ZSWid, self.recordHei);
         } else {
@@ -63,10 +63,10 @@
     if (self.isVagueBackground) self.effectView.frame = self.bounds;
     if (self.adaptPosition) {
         if (self.isShowLine) self.topSepline1.frame = CGRectMake(0, 0, ZSWid, ZSSepHei);
-        if (self.isShowMidLine) self.midSepline1.frame = CGRectMake(0, self.contentView.height - ZSSepHei, ZSWid, ZSSepHei);
+        if (self.isShowMidLine) self.midSepline1.frame = CGRectMake(0, self.contentView.zc_height - ZSSepHei, ZSWid, ZSSepHei);
     } else {
-        if (self.isShowLine) self.topSepline1.frame = CGRectMake(0, self.height - ZSSepHei, ZSWid, ZSSepHei);
-        if (self.isShowMidLine) self.midSepline1.frame = CGRectMake(0, self.reserveView.height, ZSWid, ZSSepHei);
+        if (self.isShowLine) self.topSepline1.frame = CGRectMake(0, self.zc_height - ZSSepHei, ZSWid, ZSSepHei);
+        if (self.isShowMidLine) self.midSepline1.frame = CGRectMake(0, self.reserveView.zc_height, ZSWid, ZSSepHei);
     }
 }
 

@@ -11,9 +11,9 @@
 #import "ZCBadgeView.h"
 #import "ZCTextField.h"
 #import "ZCTextView.h"
-#import "ZCFixLabel.h"
 #import "ZCSwitch.h"
 #import "ZCButton.h"
+#import "ZCLabel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -73,7 +73,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) ZCAvatarControl *avatarControl;  /**< 默认size(ZSA(40)*ZSA(40)) */
 
-@property (nonatomic, strong, readonly) ZCFixLabel *leadingLabel;  /**< 默认size是auto */
+@property (nonatomic, strong, readonly) ZCLabel *leadingLabel;  /**< 默认size是auto */
 
 @property (nonatomic, strong, readonly) UIView *flagContainerView;  /**< 默认size(ZSA(20)*ZSA(20)) */
 
@@ -91,9 +91,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) ZCTextField *fitTextField;  /**< 第一行主，会布局满行，fixSize无效，默认size是auto */
 
-@property (nonatomic, strong, readonly) ZCFixLabel *trailingLabel;  /**< 第一行主，不同时显示fitTextField，默认size是auto */
+@property (nonatomic, strong, readonly) ZCLabel *trailingLabel;  /**< 第一行主，不同时显示fitTextField，默认size是auto */
 
-@property (nonatomic, strong, readonly) ZCFixLabel *bottomDescLabel;  /**< 不同时显示bottomTextView，默认size是auto */
+@property (nonatomic, strong, readonly) ZCLabel *bottomDescLabel;  /**< 不同时显示bottomTextView，默认size是auto */
 
 @property (nonatomic, strong, readonly) ZCTextView *bottomTextView;  /**< 会布局满行，默认size是auto */
 
@@ -101,7 +101,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) ZCTextField *bottomTextField;  /**< 默认size(ZSA(160)*ZSA(30)) */
 
-@property (nonatomic, strong, readonly) ZCFixLabel *bottomAttachLabel;  /**< 第二行主，默认size是auto */
+@property (nonatomic, strong, readonly) ZCLabel *bottomAttachLabel;  /**< 第二行主，默认size是auto */
 
 @property (nonatomic, strong, readonly) UIView *bottomContainerView;  /**< 默认size(ZSA(30)*ZSA(30)) */
 

@@ -90,6 +90,36 @@
     return image;
 }
 
++ (UIImage *)imageWithGradientColors:(NSArray <UIColor *>*)colors size:(CGSize)size isHorizontal:(BOOL)isHorizontal {
+    if (!colors.count) return [UIImage imageWithColor:[UIColor colorFormHex:0xFFFFFF alpha:0] size:size];
+    CAGradientLayer *layer = [CAGradientLayer layer];
+    NSMutableArray *CGColors = [NSMutableArray array];
+    for (UIColor *color in colors) {[CGColors addObject:(__bridge id)[color CGColor]];}
+    layer.frame = CGRectMake(0, 0, size.width, size.height);
+    layer.colors = CGColors.copy;
+    if (isHorizontal) {
+        layer.startPoint = CGPointMake(0.0, 0.5);
+        layer.endPoint = CGPointMake(1.0, 0.5);
+    } else {
+        layer.startPoint = CGPointMake(0.5, 0.0);
+        layer.endPoint = CGPointMake(0.5, 1.0);
+    }
+    NSMutableArray *locs = [NSMutableArray array];
+    if (CGColors.count == 1) {
+        [locs addObject:[NSNumber numberWithFloat:1.0]];
+    } else {
+        for (int i = 0; i < CGColors.count; i ++) {
+            [locs addObject:[NSNumber numberWithFloat:i * (1.0 / (CGColors.count - 1))]];
+        }
+    }
+    layer.locations = locs.copy;
+    UIGraphicsBeginImageContextWithOptions(size, NO, 0);
+    [layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return image ? image : [UIImage imageWithColor:[UIColor colorFormHex:0xFFFFFF alpha:0] size:size];
+}
+
 - (UIImage *)imageWithAlpha:(CGFloat)alpha {
     UIGraphicsBeginImageContextWithOptions(self.size, NO, 0);
     CGContextRef ctx = UIGraphicsGetCurrentContext();
@@ -149,10 +179,10 @@
     paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
     paragraphStyle.alignment = NSTextAlignmentCenter; //文字居中
     CGSize sizeText = [title boundingRectWithSize:self.size options:NSStringDrawingUsesLineFragmentOrigin
-                                       attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:fontSize]}
+                                       attributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue" size:fontSize]}
                                           context:nil].size; //计算文字所占的size
     CGRect rect = CGRectMake(point.x, point.y, sizeText.width, sizeText.height);
-    [title drawInRect:rect withAttributes:@{NSFontAttributeName : [UIFont systemFontOfSize:fontSize],
+    [title drawInRect:rect withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue" size:fontSize],
                                             NSForegroundColorAttributeName : [ UIColor whiteColor],
                                             NSParagraphStyleAttributeName : paragraphStyle}];
     UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
@@ -523,7 +553,7 @@
     }
     
     if (borderColor && borderWidth < minSize / 2.0 && borderWidth > 0) {
-        CGFloat strokeInset = (floor(borderWidth * self.scale) + 0.5) / self.scale;
+        CGFloat strokeInset = (floorf(borderWidth * self.scale) + 0.5) / self.scale;
         CGRect strokeRect = CGRectInset(rect, strokeInset, strokeInset);
         CGFloat strokeRadius = radius > self.scale / 2.0 ? radius - self.scale / 2.0 : 0;
         UIBezierPath *path = [UIBezierPath bezierPathWithRoundedRect:strokeRect byRoundingCorners:corners cornerRadii:CGSizeMake(strokeRadius, borderWidth)];
@@ -739,7 +769,7 @@
     if (hasBlur) {
         CGFloat inputRadius = blurRadius * scale;
         if (inputRadius - 2.0 < __FLT_EPSILON__) inputRadius = 2.0;
-        uint32_t radius = floor((inputRadius * 3.0 * sqrt(2 * M_PI) / 4 + 0.5) / 2);
+        uint32_t radius = floorf((inputRadius * 3.0 * sqrt(2 * M_PI) / 4 + 0.5) / 2);
         radius |= 1; //force radius to be odd so that the three box-blur methodology works.
         int iterations;
         if (blurRadius * scale < 0.5) iterations = 1;

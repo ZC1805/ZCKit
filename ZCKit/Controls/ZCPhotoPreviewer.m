@@ -52,7 +52,7 @@
 
 - (void)initialSet {
     self.backgroundColor = ZCClear;
-    self.frame = [UIScreen mainScreen].bounds;
+    self.frame = ZSScreen;
     self.textOriginColor = ZCBKColor;
     self.isAllowDoubleTap = NO;
     self.isUseDarkStyle = YES;
@@ -90,10 +90,10 @@
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
         _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero color:ZCClear];
-        _titleLabel.font = ZCFS(16);
+        _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.textColor = self.isUseDarkStyle ? self.textOriginColor : ZCBlack30;
-        _titleLabel.frame = CGRectMake(30.0, ZSStuBarHei, self.width - 60.0, ZSNaviBarHei);
+        _titleLabel.frame = CGRectMake(30.0, ZSStuBarHei, self.zc_width - 60.0, ZSNaviBarHei);
         [self addSubview:self.titleLabel];
     }
     return _titleLabel;
@@ -230,18 +230,18 @@ static void *imageObserveContext = @"imageObserveContext";
     if (@available(iOS 11.0, *)) {
         self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     }
-    CGFloat height = self.height;
-    if (imageSize.width > 0) height = imageSize.height / imageSize.width * self.width;
-    if (height < 1.0) height = self.height;
-    height = floor(height);
-    if (ABS(height - self.height) <= 1.0) height = self.height;
-    self.containerView.height = height;
-    self.containerView.width = self.width;
-    self.containerView.center = CGPointMake(self.width / 2.0, MAX(self.height, height) / 2.0);
+    CGFloat height = self.zc_height;
+    if (imageSize.width > 0) height = imageSize.height / imageSize.width * self.zc_width;
+    if (height < 1.0) height = self.zc_height;
+    height = floorf(height);
+    if (ABS(height - self.zc_height) <= 1.0) height = self.zc_height;
+    self.containerView.zc_height = height;
+    self.containerView.zc_width = self.zc_width;
+    self.containerView.center = CGPointMake(self.zc_width / 2.0, MAX(self.zc_height, height) / 2.0);
     
-    self.scrollView.alwaysBounceVertical = self.containerView.height > self.height;
-    self.scrollView.contentSize = CGSizeMake(self.width, MAX(height, self.height));
-    CGRect visible = CGRectOffset(self.bounds, 0, MAX((height - self.height) / 2.0, 0));
+    self.scrollView.alwaysBounceVertical = self.containerView.zc_height > self.zc_height;
+    self.scrollView.contentSize = CGSizeMake(self.zc_width, MAX(height, self.zc_height));
+    CGRect visible = CGRectOffset(self.bounds, 0, MAX((height - self.zc_height) / 2.0, 0));
     [self.scrollView scrollRectToVisible:visible animated:NO];
     
     if (self.carrier && self.carrier.superview) {
@@ -249,7 +249,7 @@ static void *imageObserveContext = @"imageObserveContext";
     } else {
         CGFloat height = 100.0;
         if (imageSize.width > 0) height = 100.0 * imageSize.height / imageSize.width;
-        self.fromRect = CGRectMake(self.containerView.width / 2.0 - 50.0, self.containerView.height / 2.0 - height / 2.0, 100.0, height);
+        self.fromRect = CGRectMake(self.containerView.zc_width / 2.0 - 50.0, self.containerView.zc_height / 2.0 - height / 2.0, 100.0, height);
     }
 }
 
@@ -286,8 +286,8 @@ static void *imageObserveContext = @"imageObserveContext";
     } else {
         CGPoint touchPoint = [recognizer locationInView:self.imageView];
         CGFloat newZoomScale = self.scrollView.maximumZoomScale;
-        CGFloat xSize = self.width / newZoomScale;
-        CGFloat ySize = self.height / newZoomScale;
+        CGFloat xSize = self.zc_width / newZoomScale;
+        CGFloat ySize = self.zc_height / newZoomScale;
         [self.scrollView zoomToRect:CGRectMake(touchPoint.x - xSize / 2.0, touchPoint.y - ySize / 2.0, xSize, ySize) animated:YES];
     }
 }

@@ -40,8 +40,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic, strong) UIColor *toastTextColor;  /**< toast文字颜色，默认@"0xFFFFFF white" */
 
-@property (class, nonatomic, copy, readonly) NSString *invalidStr;  /**< 定义的特定无效值，默认"zc_invalid_value &.Ignore" */
-
 @property (class, nullable, nonatomic, strong) id<ZCKitExternalRealize> realize;  /**< 上层外部实现，供Kit调用，程序启动时需要上层注入 */
 
 @end

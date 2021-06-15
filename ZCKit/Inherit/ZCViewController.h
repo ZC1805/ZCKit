@@ -16,9 +16,11 @@ extern NSNotificationName const ZCViewControllerDidBeGesPopNotification;  /**< �
 
 @optional
 
-- (void)onCustomBackAction;  /**< 自定义点击返回实现，注意手动返回将不走此方法 */
+- (nullable UIViewController *)onCustomPanBackAction;  /**< 自定义手动侧换返回实现，返回需要手动侧滑到的目标控制器，返回nil或不实现此方法则按系统处理 */
 
-- (BOOL)isShieldInteractivePop;  /**< 能否屏蔽手动返回，当实现了onCustomBackAction时候默认此返回YES，默认NO */
+- (void)onCustomTapBackAction;  /**< 自定义点击返回按钮的实现，注意手动返回将不走此方法 */
+
+- (BOOL)isShieldInteractivePop;  /**< 是否屏蔽手动返回，若实现了onCustomTapBackAction而没实现onCustomPanBackAction则自动返回YES，默认NO */
 
 - (BOOL)isCanResponseTouchPop;  /**< 是否能手动点击返回，默认YES */
 

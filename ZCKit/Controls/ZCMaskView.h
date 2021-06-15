@@ -23,23 +23,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCMaskView : UIView  /**< 自定义view，添加mask和点击处理，仅透明度动画 */
 
-/** 半透明黑色透明度默认0.3 */
+/** 半透明黑色透明度默认0.5 */
 @property (class, nonatomic, assign) float maskAlpha;
 
 /** 可在此单例对象添加额外的子视图 */
 + (instancetype)sharedView;
 
-/** 展示子视图，默认灰色背景 & 点击背景自动隐藏 */
-+ (void)display:(UIView *)subview hideAction:(nullable void(^)(void))hideAction;
+/** 展示子视图，默认灰色背景 & 点击背景不自动隐藏 */
++ (void)display:(UIView *)subview didHide:(nullable void(^)(BOOL isByAutoHide))didHide;
 
-/** 展示子视图，autoHides点击背景是否自动隐藏，clearMask是否使用透明mask，hideAction手动隐藏或点击背景自动隐藏的回调 */
-+ (void)display:(UIView *)subview autoHide:(BOOL)autoHide clearMask:(BOOL)clearMask hideAction:(nullable void(^)(void))hideAction;
+/** 展示子视图，autoHides点击背景是否自动隐藏，clearMask是否使用透明mask，willHide/didHide手动隐藏或点击背景自动隐藏的回调(isByAutoHide为YES时是点击背景图层自动隐藏) */
++ (void)display:(UIView *)subview autoHide:(BOOL)autoHide clearMask:(BOOL)clearMask willHide:(nullable void(^)(BOOL isByAutoHide))willHide didHide:(nullable void(^)(BOOL isByAutoHide))didHide;
 
-/** 展示子视图，autoHides点击背景是否自动隐藏，clearMask是否使用透明mask，,showAnimate显示的动画实现，hideAnimate隐藏动画的实现成对出现，hideAction手动隐藏或点击背景自动隐藏的回调 */
+/** 展示子视图，autoHides点击背景是否自动隐藏，clearMask是否使用透明mask，showAnimate显示的动画实现，hideAnimate隐藏动画的实现成对出现，willHide/didHide手动隐藏或点击背景自动隐藏的回调(不是被挤出去时候才会触发这两回调) */
 + (void)display:(UIView *)displayView autoHide:(BOOL)autoHide clearMask:(BOOL)clearMask
     showAnimate:(nullable void(^)(UIView *displayView))showAnimate
     hideAnimate:(nullable void(^)(UIView *displayView))hideAnimate
-     hideAction:(nullable void(^)(void))hideAction;
+       willHide:(nullable void(^)(BOOL isByAutoHide))willHide
+        didHide:(nullable void(^)(BOOL isByAutoHide))didHide;
 
 /** 主动隐藏或者点击背景能隐藏时会触发Action回调，subview是nil时候，能隐藏时只要获取到了焦点就会隐藏 */
 + (void)dismissSubview;

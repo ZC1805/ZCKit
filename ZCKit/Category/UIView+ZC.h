@@ -26,25 +26,31 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIView (ZC) <ZCViewLayoutProtocol>
 
-@property (nonatomic) CGFloat top;  /**< 视图顶部距离父视图顶部距离 */
+@property (nonatomic) CGFloat zc_top;  /**< 视图顶部距离父视图顶部距离 */
 
-@property (nonatomic) CGFloat left;  /**< 视图左边距离父视图左边距离 */
+@property (nonatomic) CGFloat zc_left;  /**< 视图左边距离父视图左边距离 */
 
-@property (nonatomic) CGFloat bottom;  /**< 视图底部距离父视图底部距离，在设置高度后(或size)再设置bottom，同时设置上下不能确定高 */
+@property (nonatomic) CGFloat zc_bottom;  /**< 视图底部距离父视图底部距离，在设置高度后(或size)再设置bottom，同时设置上下不能确定高 */
 
-@property (nonatomic) CGFloat right;  /**< 视图右边距离父视图右边距离，在设置宽度后(或size)再设置right，同时设置左右不能确定宽 */
+@property (nonatomic) CGFloat zc_right;  /**< 视图右边距离父视图右边距离，在设置宽度后(或size)再设置right，同时设置左右不能确定宽 */
 
-@property (nonatomic) CGFloat width;  /**< 视图宽度 */
+@property (nonatomic) UIEdgeInsets zc_edge;  /**< 视图到父视图上下左右的间距，在设置宽度&父视图size后(或size)再设置right，同时设置左右不能确定宽 */
 
-@property (nonatomic) CGFloat height;  /**< 视图高度 */
+@property (nonatomic) CGFloat zc_edgeRight;  /**< 视图到父视图右边的间距，在设置宽度&父视图size后(或size)再设置right，同时设置左右不能确定宽 */
 
-@property (nonatomic) CGPoint origin;  /**< 视图左上顶点位置 */
+@property (nonatomic) CGFloat zc_edgeBottom;  /**< 视图到父视图下边的间距，在设置高度&父视图size后(或size)再设置bottom，同时设置上下不能确定高 */
 
-@property (nonatomic) CGSize  size;  /**< 视图宽高尺寸 */
+@property (nonatomic) CGFloat zc_width;  /**< 视图宽度 */
 
-@property (nonatomic) CGFloat centerX;  /**< 视图x轴位置，在设置宽度后(或size)再设置centerX */
+@property (nonatomic) CGFloat zc_height;  /**< 视图高度 */
 
-@property (nonatomic) CGFloat centerY;  /**< 视图y轴位置，在设置高度后(或size)再设置centerY */
+@property (nonatomic) CGPoint zc_origin;  /**< 视图左上顶点位置 */
+
+@property (nonatomic) CGSize  zc_size;  /**< 视图宽高尺寸 */
+
+@property (nonatomic) CGFloat zc_centerX;  /**< 视图x轴位置，在设置宽度后(或size)再设置centerX */
+
+@property (nonatomic) CGFloat zc_centerY;  /**< 视图y轴位置，在设置高度后(或size)再设置centerY */
 
 @property (nonatomic, readonly) CGFloat visibleAlpha;  /**< 返回屏幕上可见的alpha，考虑到超视窗和窗口 */
 
@@ -58,8 +64,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSString *flagStr;  /**< 类似tag的标识，默认nil */
 
+@property (nullable, nonatomic, copy) NSDictionary *flagDic;  /**< 类似tag的标识，默认nil */
 
-- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color;  /**< 带背景颜色初始化 */
+
+- (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color;  /**< 带背景颜色初始化 */
+
+- (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color addTo:(nullable UIView *)superView;  /**< 带背景颜色初始化且加入到父视图 */
 
 - (void)removeAllSubviews;  /**< 移除所有子视图 */
 
