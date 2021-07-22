@@ -7,6 +7,7 @@
 
 #import "ViewController.h"
 #import "NextViewController.h"
+#import "ZCKit.h"
 
 @interface ViewController ()
 

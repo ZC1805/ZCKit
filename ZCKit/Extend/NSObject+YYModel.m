@@ -7,7 +7,7 @@
 //
 
 #import "NSObject+YYModel.h"
-#import "YYClassInfo.h"
+#import "ZCClassInfo.h"
 #include <objc/message.h>
 
 #define force_inline __inline__ __attribute__((always_inline))
@@ -342,7 +342,7 @@ static force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic
 @end
 
 @implementation _YYModelPropertyMeta
-+ (instancetype)metaWithClassInfo:(YYClassInfo *)classInfo propertyInfo:(YYClassPropertyInfo *)propertyInfo generic:(Class)generic {
++ (instancetype)metaWithClassInfo:(ZCClassInfo *)classInfo propertyInfo:(YYClassPropertyInfo *)propertyInfo generic:(Class)generic {
     
     // support pseudo generic class with protocol name
     if (!generic && propertyInfo.protocols) {
@@ -450,7 +450,7 @@ static force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic
 /// A class info in object model.
 @interface _YYModelMeta : NSObject {
     @package
-    YYClassInfo *_classInfo;
+    ZCClassInfo *_classInfo;
     /// Key:mapped key and key path, Value:_YYModelPropertyMeta.
     NSDictionary *_mapper;
     /// Array<_YYModelPropertyMeta>, all property meta of this model.
@@ -473,7 +473,7 @@ static force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic
 
 @implementation _YYModelMeta
 - (instancetype)initWithClass:(Class)cls {
-    YYClassInfo *classInfo = [YYClassInfo classInfoWithClass:cls];
+    ZCClassInfo *classInfo = [ZCClassInfo classInfoWithClass:cls];
     if (!classInfo) return nil;
     self = [super init];
     
@@ -520,7 +520,7 @@ static force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic
     
     // Create all property metas.
     NSMutableDictionary *allPropertyMetas = [NSMutableDictionary new];
-    YYClassInfo *curClassInfo = classInfo;
+    ZCClassInfo *curClassInfo = classInfo;
     while (curClassInfo && curClassInfo.superCls != nil) { // recursive parse super class, but ignore root class (NSObject/NSProxy)
         for (YYClassPropertyInfo *propertyInfo in curClassInfo.propertyInfos.allValues) {
             if (!propertyInfo.name) continue;

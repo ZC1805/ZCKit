@@ -1,5 +1,5 @@
 //
-//  YYClassInfo.h
+//  ZCClassInfo.h
 //  ZCKit
 //
 //  Created by admin on 2018/11/3.
@@ -142,13 +142,13 @@ YYEncodingType YYEncodingGetType(const char *typeEncoding);
 /**
  Class information for a class.
  */
-@interface YYClassInfo : NSObject
+@interface ZCClassInfo : NSObject
 @property (nonatomic, assign, readonly) Class cls; ///< class object
 @property (nullable, nonatomic, assign, readonly) Class superCls; ///< super class object
 @property (nullable, nonatomic, assign, readonly) Class metaCls; ///< class's meta class object
 @property (nonatomic, readonly) BOOL isMeta; ///< whether this class is meta class
 @property (nonatomic, strong, readonly) NSString *name; ///< class name
-@property (nullable, nonatomic, strong, readonly) YYClassInfo *superClassInfo; ///< super class's class info
+@property (nullable, nonatomic, strong, readonly) ZCClassInfo *superClassInfo; ///< super class's class info
 @property (nullable, nonatomic, strong, readonly) NSDictionary<NSString *, YYClassIvarInfo *> *ivarInfos; ///< ivars
 @property (nullable, nonatomic, strong, readonly) NSDictionary<NSString *, YYClassMethodInfo *> *methodInfos; ///< methods
 @property (nullable, nonatomic, strong, readonly) NSDictionary<NSString *, YYClassPropertyInfo *> *propertyInfos; ///< properties

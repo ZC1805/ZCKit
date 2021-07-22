@@ -6,6 +6,7 @@
 //
 
 #import "NextViewController.h"
+#import "ZCKit.h"
 
 @interface NextViewController ()
 

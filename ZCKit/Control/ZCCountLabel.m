@@ -1,12 +1,12 @@
 //
-//  ZCCountingLabel.m
+//  ZCCountLabel.m
 //  ZCKit
 //
 //  Created by admin on 2018/10/9.
 //  Copyright © 2018 Squat in house. All rights reserved.
 //
 
-#import "ZCCountingLabel.h"
+#import "ZCCountLabel.h"
 #import "ZCMacro.h"
 #import <QuartzCore/QuartzCore.h>
 
@@ -65,8 +65,8 @@
 @end
 
 
-#pragma mark - ~ ZCCountingLabel ~
-@interface ZCCountingLabel ()
+#pragma mark - ~ ZCCountLabel ~
+@interface ZCCountLabel ()
 
 @property (nonatomic, assign) CGFloat startingValue;
 
@@ -86,7 +86,7 @@
 
 @end
 
-@implementation ZCCountingLabel
+@implementation ZCCountLabel
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {

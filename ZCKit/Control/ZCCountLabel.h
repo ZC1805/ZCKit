@@ -1,5 +1,5 @@
 //
-//  ZCCountingLabel.h
+//  ZCCountLabel.h
 //  ZCKit
 //
 //  Created by admin on 2018/10/9.
@@ -18,7 +18,7 @@ typedef NS_ENUM(NSInteger, ZCEnumLabelCountingMethod) {
     ZCEnumLabelCountingMethodLinear    = 3,  /**< 计数方式 */
 };
 
-@interface ZCCountingLabel : UILabel  /**< 快速计数标签 */
+@interface ZCCountLabel : UILabel  /**< 快速计数标签 */
 
 @property (nonatomic, assign) ZCEnumLabelCountingMethod method;  /**< 计数方式 */
 

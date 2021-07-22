@@ -57,6 +57,7 @@
 #import "ZCQueueHandler.h"
 #import "ZCSystemHandler.h"
 #import "ZCMonitorService.h"
+#import "ZCFlowSectionLayout.h"
 
 //#import "ZCYYModel.h"
 //#import "NSDate+ZC.h"
@@ -82,7 +83,7 @@
 //#import "ZCBlankControl.h"
 //#import "ZCGradientView.h"
 //#import "ZCIndicatorView.h"
-//#import "ZCCountingLabel.h"
+//#import "ZCCountLabel.h"
 //#import "ZCListControl.h"
 //#import "ZCPartControl.h"
 //#import "ZCMenuControl.h"

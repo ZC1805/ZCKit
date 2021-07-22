@@ -1,12 +1,12 @@
 //
-//  YYClassInfo.m
+//  ZCClassInfo.m
 //  ZCKit
 //
 //  Created by admin on 2018/11/3.
 //  Copyright © 2018 Squat in house. All rights reserved.
 //
 
-#import "YYClassInfo.h"
+#import "ZCClassInfo.h"
 #import <objc/runtime.h>
 
 YYEncodingType YYEncodingGetType(const char *typeEncoding) {
@@ -247,7 +247,7 @@ YYEncodingType YYEncodingGetType(const char *typeEncoding) {
 
 @end
 
-@implementation YYClassInfo {
+@implementation ZCClassInfo {
     BOOL _needUpdate;
 }
 
@@ -335,13 +335,13 @@ YYEncodingType YYEncodingGetType(const char *typeEncoding) {
         lock = dispatch_semaphore_create(1);
     });
     dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
-    YYClassInfo *info = CFDictionaryGetValue(class_isMetaClass(cls) ? metaCache : classCache, (__bridge const void *)(cls));
+    ZCClassInfo *info = CFDictionaryGetValue(class_isMetaClass(cls) ? metaCache : classCache, (__bridge const void *)(cls));
     if (info && info->_needUpdate) {
         [info _update];
     }
     dispatch_semaphore_signal(lock);
     if (!info) {
-        info = [[YYClassInfo alloc] initWithClass:cls];
+        info = [[ZCClassInfo alloc] initWithClass:cls];
         if (info) {
             dispatch_semaphore_wait(lock, DISPATCH_TIME_FOREVER);
             CFDictionarySetValue(info.isMeta ? metaCache : classCache, (__bridge const void *)(cls), (__bridge const void *)(info));

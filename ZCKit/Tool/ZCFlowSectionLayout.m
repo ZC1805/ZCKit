@@ -7,6 +7,7 @@
 //
 
 #import "ZCFlowSectionLayout.h"
+#import "NSArray+ZC.h"
 
 @interface ZCFlowSectionLayout ()
 @property (nonatomic, assign) CGFloat i_w;
@@ -75,9 +76,9 @@
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForItemAtIndexPath:(NSIndexPath *)idxp {
-    NSArray *i_atts = [self.s_atts objectAtIndexVerify:idxp.section];
+    NSArray *i_atts = [self.s_atts objectOrNilAtIndex:idxp.section];
     if (!i_atts) return [super layoutAttributesForItemAtIndexPath:idxp];
-    UICollectionViewLayoutAttributes *i_att = [i_atts objectAtIndexVerify:idxp.item];
+    UICollectionViewLayoutAttributes *i_att = [i_atts objectOrNilAtIndex:idxp.item];
     if (i_att) return i_att;
     i_att = [UICollectionViewLayoutAttributes layoutAttributesForCellWithIndexPath:idxp];
     if (self.isHorLayout) {
@@ -97,7 +98,7 @@
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
     if ([elementKind isEqualToString:UICollectionElementKindSectionHeader]) {
         NSInteger index = [indexPath indexAtPosition:0];
-        UICollectionViewLayoutAttributes *sh_att = [self.sh_atts objectAtIndexVerify:index];
+        UICollectionViewLayoutAttributes *sh_att = [self.sh_atts objectOrNilAtIndex:index];
         if (sh_att) return sh_att;
         sh_att = [UICollectionViewLayoutAttributes layoutAttributesForSupplementaryViewOfKind:elementKind withIndexPath:indexPath];
         if (self.isHorLayout) {

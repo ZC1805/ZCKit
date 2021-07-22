@@ -9,6 +9,7 @@
 #import "UIViewController+ZCSwizzle.h"
 #import "UINavigationController+ZCSwizzle.h"
 #import "UIViewController+ZC.h"
+#import "ZCViewController.h"
 #import "ZCSwizzleHeader.h"
 #import "ZCKitBridge.h"
 #import "UIView+ZC.h"
