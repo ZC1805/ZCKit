@@ -100,6 +100,7 @@
 		58D0215726A9708000D8D316 /* UITableViewCell+ZCSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0214B26A9708000D8D316 /* UITableViewCell+ZCSwizzle.m */; };
 		58D0215826A9708000D8D316 /* UIControl+ZCSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0214E26A9708000D8D316 /* UIControl+ZCSwizzle.m */; };
 		58D0215926A9708000D8D316 /* UIViewController+ZCSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0214F26A9708000D8D316 /* UIViewController+ZCSwizzle.m */; };
+		58D0215D26A9736E00D8D316 /* ZCFlowSectionLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0215C26A9736E00D8D316 /* ZCFlowSectionLayout.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -290,6 +291,8 @@
 		58D0215026A9708000D8D316 /* UIView+ZCSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+ZCSwizzle.h"; path = "../../../../ZCKit/Swizzle/UIView+ZCSwizzle.h"; sourceTree = "<group>"; };
 		58D0215126A9708000D8D316 /* UIViewController+ZCSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+ZCSwizzle.h"; path = "../../../../ZCKit/Swizzle/UIViewController+ZCSwizzle.h"; sourceTree = "<group>"; };
 		58D0215226A9708000D8D316 /* UINavigationItem+ZCSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UINavigationItem+ZCSwizzle.h"; path = "../../../../ZCKit/Swizzle/UINavigationItem+ZCSwizzle.h"; sourceTree = "<group>"; };
+		58D0215B26A9736E00D8D316 /* ZCFlowSectionLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ZCFlowSectionLayout.h; path = ../../../../ZCKit/Additional/ZCFlowSectionLayout.h; sourceTree = "<group>"; };
+		58D0215C26A9736E00D8D316 /* ZCFlowSectionLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ZCFlowSectionLayout.m; path = ../../../../ZCKit/Additional/ZCFlowSectionLayout.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -390,6 +393,8 @@
 				58D0206326A9703400D8D316 /* ZCTimerHolder.m */,
 				58D0207026A9703400D8D316 /* ZCYYModel.h */,
 				58D0206426A9703400D8D316 /* ZCYYModel.m */,
+				58D0215B26A9736E00D8D316 /* ZCFlowSectionLayout.h */,
+				58D0215C26A9736E00D8D316 /* ZCFlowSectionLayout.m */,
 			);
 			path = Additional;
 			sourceTree = "<group>";
@@ -683,6 +688,7 @@
 				58D020C826A9704200D8D316 /* UIView+ZC.m in Sources */,
 				58D0207926A9703400D8D316 /* ZCQueueHandler.m in Sources */,
 				58D020C926A9704200D8D316 /* UIFont+ZC.m in Sources */,
+				58D0215D26A9736E00D8D316 /* ZCFlowSectionLayout.m in Sources */,
 				58D020CF26A9704200D8D316 /* UILabel+ZC.m in Sources */,
 				58D0210526A9704F00D8D316 /* ZCPhotoPreviewer.m in Sources */,
 				58D020BC26A9704200D8D316 /* UITableViewCell+ZC.m in Sources */,
