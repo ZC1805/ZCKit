@@ -69,88 +69,8 @@
 				58D0201B26A94B8500D8D316 /* Assets.xcassets */,
 				58D0202026A94B8500D8D316 /* Info.plist */,
 				58D0202126A94B8500D8D316 /* main.m */,
-				58D0220226A98FE500D8D316 /* ZCKit */,
 			);
 			path = ZCTest;
-			sourceTree = "<group>";
-		};
-		58D0220226A98FE500D8D316 /* ZCKit */ = {
-			isa = PBXGroup;
-			children = (
-				58D0220B26A98FE500D8D316 /* Tool */,
-				58D0220826A98FE500D8D316 /* Model */,
-				58D0220A26A98FE500D8D316 /* Control */,
-				58D0220426A98FE500D8D316 /* Category */,
-				58D0220926A98FE500D8D316 /* Additional */,
-				58D0220626A98FE500D8D316 /* Inherit */,
-				58D0220326A98FE500D8D316 /* Extend */,
-				58D0220726A98FE500D8D316 /* Swizzle */,
-				58D0220526A98FE500D8D316 /* File */,
-			);
-			path = ZCKit;
-			sourceTree = "<group>";
-		};
-		58D0220326A98FE500D8D316 /* Extend */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Extend;
-			sourceTree = "<group>";
-		};
-		58D0220426A98FE500D8D316 /* Category */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Category;
-			sourceTree = "<group>";
-		};
-		58D0220526A98FE500D8D316 /* File */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = File;
-			sourceTree = "<group>";
-		};
-		58D0220626A98FE500D8D316 /* Inherit */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Inherit;
-			sourceTree = "<group>";
-		};
-		58D0220726A98FE500D8D316 /* Swizzle */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Swizzle;
-			sourceTree = "<group>";
-		};
-		58D0220826A98FE500D8D316 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		58D0220926A98FE500D8D316 /* Additional */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Additional;
-			sourceTree = "<group>";
-		};
-		58D0220A26A98FE500D8D316 /* Control */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Control;
-			sourceTree = "<group>";
-		};
-		58D0220B26A98FE500D8D316 /* Tool */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Tool;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
