@@ -338,6 +338,7 @@
 				58D0201B26A94B8500D8D316 /* Assets.xcassets */,
 				58D0202026A94B8500D8D316 /* Info.plist */,
 				58D0202126A94B8500D8D316 /* main.m */,
+				58F435DF26AABED800CEA1BF /* ZCBasic */,
 				58D0221926A991E100D8D316 /* ZCKit */,
 			);
 			path = ZCTest;
@@ -601,6 +602,14 @@
 				58D022D126A991E200D8D316 /* ZCFlowSectionLayout.m */,
 			);
 			path = Tool;
+			sourceTree = "<group>";
+		};
+		58F435DF26AABED800CEA1BF /* ZCBasic */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ZCBasic;
+			path = ../../ZCBasic;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
