@@ -47,6 +47,7 @@
         self.isVerticalAlignment = YES;
         self.itemSelCalwid = 20.0;
         self.itemSelMarkSize = CGSizeMake(6.0, 2.0);
+        self.isUseFixSelMarkSize = YES;
     }
     return self;
 }
@@ -77,7 +78,11 @@
     if (self.selectImage) {
         self.itemSelCalwid = MAX(self.itemSelCalwid, self.selectImage.size.width + 12.0);
     }
-    self.itemSelMarkSize = CGSizeMake(self.itemSelCalwid - 14.0, 2.0);
+    if (self.isUseFixSelMarkSize) {
+        self.itemSelMarkSize = CGSizeMake(30, 3);
+    } else {
+        self.itemSelMarkSize = CGSizeMake(self.itemSelCalwid - 14.0, 2);
+    }
 }
 
 @end
@@ -544,15 +549,24 @@ typedef void(^block)(NSInteger touchIndex);
         ZCButton *button = [ZCButton buttonWithType:UIButtonTypeCustom];
         button.adjustsImageWhenDisabled = NO;
         button.adjustsImageWhenHighlighted = NO;
-        [button setTitle:item.title forState:UIControlStateNormal];
-        [button setTitleColor:item.normalColor forState:UIControlStateNormal];
-        [button setTitleColor:item.selectColor forState:UIControlStateSelected];
-        [button setTitleColor:item.normalColor forState:UIControlStateHighlighted|UIControlStateNormal];
-        [button setTitleColor:item.selectColor forState:UIControlStateHighlighted|UIControlStateSelected];
+        if (item.normalAttTitle || item.selectAttTitle) {
+            [button setAttributedTitle:item.normalAttTitle forState:UIControlStateNormal];
+            [button setAttributedTitle:item.selectAttTitle forState:UIControlStateSelected];
+            [button setAttributedTitle:item.normalAttTitle forState:UIControlStateHighlighted|UIControlStateNormal];
+            [button setAttributedTitle:item.selectAttTitle forState:UIControlStateHighlighted|UIControlStateSelected];
+        } else {
+            [button setTitle:item.title forState:UIControlStateNormal];
+            [button setTitleColor:item.normalColor forState:UIControlStateNormal];
+            [button setTitleColor:item.selectColor forState:UIControlStateSelected];
+            [button setTitleColor:item.normalColor forState:UIControlStateHighlighted|UIControlStateNormal];
+            [button setTitleColor:item.selectColor forState:UIControlStateHighlighted|UIControlStateSelected];
+            button.titleLabel.font = item.normalTitleFont;
+        }
         if (item.normalImage) [button setImage:item.normalImage forState:UIControlStateNormal];
         if (item.normalImage) [button setImage:item.normalImage forState:UIControlStateHighlighted|UIControlStateNormal];
         if (item.selectImage) [button setImage:item.selectImage forState:UIControlStateSelected];
         if (item.selectImage) [button setImage:item.selectImage forState:UIControlStateHighlighted|UIControlStateSelected];
+        button.responseAreaExtend = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
         button.responseTouchInterval = 0.35;
         if (item.normalImage) {
             button.imageViewSize = item.imageSize;
@@ -563,7 +577,6 @@ typedef void(^block)(NSInteger touchIndex);
             button.imageViewSize = CGSizeZero;
             button.centerAlignmentSpace = 0;
         }
-        button.titleLabel.font = item.normalTitleFont;
         button.titleLabel.textAlignment = NSTextAlignmentCenter;
         [button addTarget:self action:@selector(onItemBar:) forControlEvents:UIControlEventTouchUpInside];
         UIView *spaceline = [[UIView alloc] init];

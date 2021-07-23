@@ -101,6 +101,7 @@
 		58D0232A26A991E200D8D316 /* UIView+ZCToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D026A991E200D8D316 /* UIView+ZCToast.m */; };
 		58D0232B26A991E200D8D316 /* ZCFlowSectionLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D126A991E200D8D316 /* ZCFlowSectionLayout.m */; };
 		58D0232C26A991E200D8D316 /* ZCPredefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D426A991E200D8D316 /* ZCPredefine.m */; };
+		58F435D926AAAA0C00CEA1BF /* ZCSubsetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F435D826AAAA0C00CEA1BF /* ZCSubsetItem.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -293,6 +294,8 @@
 		58D022D226A991E200D8D316 /* UIView+ZCToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ZCToast.h"; sourceTree = "<group>"; };
 		58D022D326A991E200D8D316 /* ZCFlowSectionLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCFlowSectionLayout.h; sourceTree = "<group>"; };
 		58D022D426A991E200D8D316 /* ZCPredefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCPredefine.m; sourceTree = "<group>"; };
+		58F435D726AAAA0C00CEA1BF /* ZCSubsetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCSubsetItem.h; sourceTree = "<group>"; };
+		58F435D826AAAA0C00CEA1BF /* ZCSubsetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCSubsetItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -590,10 +593,12 @@
 		58D022CF26A991E200D8D316 /* Tool */ = {
 			isa = PBXGroup;
 			children = (
+				58F435D726AAAA0C00CEA1BF /* ZCSubsetItem.h */,
+				58F435D826AAAA0C00CEA1BF /* ZCSubsetItem.m */,
 				58D022D226A991E200D8D316 /* UIView+ZCToast.h */,
 				58D022D026A991E200D8D316 /* UIView+ZCToast.m */,
-				58D022D126A991E200D8D316 /* ZCFlowSectionLayout.m */,
 				58D022D326A991E200D8D316 /* ZCFlowSectionLayout.h */,
+				58D022D126A991E200D8D316 /* ZCFlowSectionLayout.m */,
 			);
 			path = Tool;
 			sourceTree = "<group>";
@@ -729,6 +734,7 @@
 				58D0231726A991E200D8D316 /* ZCAvatarControl.m in Sources */,
 				58D022E926A991E200D8D316 /* UINavigationItem+ZC.m in Sources */,
 				58D0230526A991E200D8D316 /* UIControl+ZCSwizzle.m in Sources */,
+				58F435D926AAAA0C00CEA1BF /* ZCSubsetItem.m in Sources */,
 				58D022E626A991E200D8D316 /* UIImage+ZC.m in Sources */,
 				58D0203526A9590000D8D316 /* NextViewController.m in Sources */,
 				58D0232426A991E200D8D316 /* ZCBadgeView.m in Sources */,

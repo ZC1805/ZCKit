@@ -16,7 +16,7 @@ typedef NS_ENUM(NSInteger, ZCEnumToastPosition) {
     ZCEnumToastPositionBottom = 2,  /**< 位于底部 */
 };
 
-@interface UIView (ZCToast)
+@interface UIView (ZCToast)  /**< 页面toast显示分类 */
 
 - (void)makeToast:(NSString *)message;  /**< 显示文字内容，默认居中持续显示2秒 */
 

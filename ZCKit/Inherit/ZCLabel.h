@@ -24,11 +24,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithColor:(nullable UIColor *)color font:(nullable UIFont *)font alignment:(NSTextAlignment)alignment adjustsSize:(BOOL)adjustsSize;  /**< 初始化，多行的话最好设置字体自适应 */
 
-- (void)resetVerticalCenterAlignmentOffsetTop:(CGFloat)offset;  /**< 居中对齐向上偏移offset，与insideInsets同时设无效 */
+- (void)resetVerticalCenterAlignmentOffsetTop:(CGFloat)offset;  /**< 居中对齐向上偏移offset，与insideInsets同时设无效，不适用minToSize */
 
-- (void)resetVerticalTopAlignmentOffsetBottom:(CGFloat)offset;  /**< 居上对齐向下偏移offset，与insideInsets同时设无效 */
+- (void)resetVerticalTopAlignmentOffsetBottom:(CGFloat)offset;  /**< 居上对齐向下偏移offset，与insideInsets同时设无效，不适用minToSize */
 
-- (void)resetVerticalBottomAlignmentOffsetTop:(CGFloat)offset;  /**< 居下对齐向上偏移offset，与insideInsets同时设无效 */
+- (void)resetVerticalBottomAlignmentOffsetTop:(CGFloat)offset;  /**< 居下对齐向上偏移offset，与insideInsets同时设无效，不适用minToSize */
 
 - (void)resetInitProperty;  /**< 重设到初始化属性值 */
 

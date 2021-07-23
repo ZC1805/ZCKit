@@ -34,11 +34,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic) CGFloat zc_right;  /**< 视图右边距离父视图右边距离，在设置宽度后(或size)再设置right，同时设置左右不能确定宽 */
 
-@property (nonatomic) UIEdgeInsets zc_edge;  /**< 视图到父视图上下左右的间距，在设置宽度&父视图size后(或size)再设置right，同时设置左右不能确定宽 */
+@property (nonatomic) UIEdgeInsets zc_edge;  /**< 视图到父视图上下左右的间距，在设置宽度(或size)&父视图size后再设置right，同时设置左右不能确定宽 */
 
-@property (nonatomic) CGFloat zc_edgeRight;  /**< 视图到父视图右边的间距，在设置宽度&父视图size后(或size)再设置right，同时设置左右不能确定宽 */
+@property (nonatomic) CGFloat zc_edgeRight;  /**< 视图到父视图右边的间距，在设置宽度(或size)&父视图size后再设置right，同时设置左右不能确定宽 */
 
-@property (nonatomic) CGFloat zc_edgeBottom;  /**< 视图到父视图下边的间距，在设置高度&父视图size后(或size)再设置bottom，同时设置上下不能确定高 */
+@property (nonatomic) CGFloat zc_edgeBottom;  /**< 视图到父视图下边的间距，在设置高度(或size)&父视图size后再设置bottom，同时设置上下不能确定高 */
 
 @property (nonatomic) CGFloat zc_width;  /**< 视图宽度 */
 

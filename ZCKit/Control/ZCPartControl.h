@@ -16,6 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSString *title;  /**< 默认nil */
 
+@property (nullable, nonatomic, copy) NSAttributedString *normalAttTitle; /**< 默认nil，设置了此的话则需包含设置color、font */
+
+@property (nullable, nonatomic, copy) NSAttributedString *selectAttTitle; /**< 默认nil，设置了此的话则需包含设置color、font */
+
 @property (nullable, nonatomic, strong) UIImage *normalImage;  /**< 默认nil */
 
 @property (nullable, nonatomic, strong) UIImage *selectImage;  /**< 默认nil */
@@ -35,6 +39,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) CGFloat imageTitleSpace;  /**< 图片和文字的竖直间距，默认5 */
 
 @property (nonatomic, assign) BOOL isVerticalAlignment;  /**< 图片和文字是否是竖直居中对齐，默认YES */
+
+@property (nonatomic, assign) BOOL isUseFixSelMarkSize;  /**< 计算宽度是是否固定markView宽度(30，3)，默认YES */
 
 @end
 

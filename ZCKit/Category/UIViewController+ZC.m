@@ -17,6 +17,7 @@
     return [self routeVCNameForRank:0];
 }
 
+#warning - 此处要适配
 - (NSString *)routeVCNameForRank:(int)level {
     UIViewController *aimVc = nil; BOOL isContainer = YES;
     if ([self isKindOfClass:UITabBarController.class]) {
