@@ -51,7 +51,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL isThisYear;  /**< 是否是今年 (based on current locale) */
 
-@property (nonatomic, readonly) NSString *timestamp;  /**< 当前时间戳毫秒，精确到秒乘以1000 */
+@property (nonatomic, readonly) NSString *timestamp;  /**< 当前时间戳毫秒，精确到秒乘以1000，，注意用户手动设置 */
 
 @property (nonatomic, readonly) NSString *dateString;  /**< 日期年月日时分秒，2018-10-01 02:20:08 */
 
@@ -67,24 +67,26 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSDate *startWeekEnglishDate;  /**< 当前时间当周的开始时间&从周日开始 */
 
++ (NSDate *)dateFromTimestamp:(long)timestamp;  /**< timestamp为13位时可算上了三位毫秒数，错误时候返回当前时间 */
+
 + (nullable NSDate *)dateFromYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day;  /**< 创建指定的某天的开始时间 */
 
 + (nullable NSDate *)dateFromYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day hour:(NSInteger)hour minute:(NSInteger)minute second:(NSInteger)second;  /**< 创建指定某个时间的天 */
 
 #pragma mark - Adding
-- (nullable NSDate *)dateByAddingYears:(NSInteger)years;
+- (nullable NSDate *)dateByAddingYears:(NSInteger)years;  /**< 往后推年，可能为nil */
 
-- (nullable NSDate *)dateByAddingMonths:(NSInteger)months;
+- (nullable NSDate *)dateByAddingMonths:(NSInteger)months;  /**< 往后推月，可能为nil */
 
-- (nullable NSDate *)dateByAddingWeeks:(NSInteger)weeks;
+- (nullable NSDate *)dateByAddingWeeks:(NSInteger)weeks;  /**< 往后推星期，可能为nil */
 
-- (nullable NSDate *)dateByAddingDays:(NSInteger)days;
+- (nullable NSDate *)dateByAddingDays:(NSInteger)days;  /**< 往后推天 */
 
-- (nullable NSDate *)dateByAddingHours:(NSInteger)hours;
+- (nullable NSDate *)dateByAddingHours:(NSInteger)hours;  /**< 往后推小时 */
 
-- (nullable NSDate *)dateByAddingMinutes:(NSInteger)minutes;
+- (nullable NSDate *)dateByAddingMinutes:(NSInteger)minutes;  /**< 往后推分钟 */
 
-- (nullable NSDate *)dateByAddingSeconds:(NSInteger)seconds;
+- (nullable NSDate *)dateByAddingSeconds:(NSInteger)seconds;  /**< 往后推秒 */
 
 #pragma mark - Format
 - (BOOL)isSameDayAsDate:(NSDate *)date;  /**< 是否是同年同月同日 */
@@ -95,7 +97,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (NSString *)stringWithFormat:(NSString *)format;  /**< 返回格式化时间 */
 
-- (NSString *)stringWithFormat:(NSString *)format timeZone:(nullable NSTimeZone *)timeZone locale:(nullable NSLocale *)locale;
+- (NSString *)stringWithFormat:(NSString *)format timeZone:(nullable NSTimeZone *)timeZone locale:(nullable NSLocale *)locale;  /**< 不设置使用系统时区和语言 */
 
 + (NSDateFormatter *)preciseFormatter;  /**< yyyy-MM-dd HH:mm:ss.SSS，dateFormatter外部不可对其属性赋值 */
 
@@ -105,10 +107,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSDateFormatter *)timeFormatter;  /**< HH:mm:ss，dateFormatter外部不可对其属性赋值 */
 
-+ (NSString *)dateStringWithTime:(long)timeInterval format:(NSString *)format;  /**< timeInterval为13位时可算上了三位毫秒数 */
++ (NSString *)dateStringWithTime:(long)timestamp format:(NSString *)format;  /**< timestamp为13位时可算上了三位毫秒数 */
 
+/** 将字符串时间格式化成NSDate */
 + (nullable NSDate *)dateWithString:(NSString *)dateString format:(NSString *)format;
 
+/** 将字符串时间格式化成NSDate，不设置使用系统时区和语言 */
 + (nullable NSDate *)dateWithString:(NSString *)dateString format:(NSString *)format timeZone:(nullable NSTimeZone *)timeZone locale:(nullable NSLocale *)locale;
 
 @end

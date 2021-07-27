@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCMiscTool : NSObject  /**< 杂碎处理类 */
 
-@property (class, nonatomic, readonly) NSString *timestamp;  /**< 当前时间戳，精确到毫秒 */
+@property (class, nonatomic, readonly) NSString *timestamp;  /**< 当前时间戳，精确到毫秒，注意用户手动设置 */
 
 @property (class, nonatomic, readonly) BOOL isChinese;  /**< 系统是否是中文 */
 

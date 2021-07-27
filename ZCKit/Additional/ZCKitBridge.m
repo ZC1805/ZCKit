@@ -7,6 +7,7 @@
 //
 
 #import "ZCKitBridge.h"
+#import "ZCDateManager.h"
 #import "ZCMacro.h"
 
 @interface ZCKitBridge ()
@@ -19,6 +20,7 @@
 
 @dynamic naviBackImage, sideArrowImage, isPrintLog;
 @dynamic toastTextColor, toastBackGroundColor, realize, naviBarImageOrColor, naviBarTitleColor;
+@dynamic aimLocale, aimTimeZone;
 
 static UIColor *_toastBackGroundColor = nil;
 static UIColor *_toastTextColor = nil;
@@ -27,6 +29,8 @@ static UIImage *_naviBackImage = nil;
 static NSString *_naviBarImageOrColor = nil;
 static NSString *_naviBarTitleColor = nil;
 static BOOL _isPrintLog = NO;
+static NSLocale *_aimLocale = nil;
+static NSTimeZone *_aimTimeZone = nil;
 
 + (instancetype)sharedBridge {
     static ZCKitBridge *instacne = nil;
@@ -138,6 +142,32 @@ static BOOL _isPrintLog = NO;
         [ZCKitBridge sharedBridge].singleRealize = realize;
     } else {
         if (self.isPrintLog) NSLog(@"ZCKit: kit manager delegate is nil");
+    }
+}
+
++ (NSLocale *)aimLocale {
+    if (_aimLocale == nil) {
+        _aimLocale = ZCDateManager.chinaLocale;
+    }
+    return _aimLocale;
+}
+
++ (void)setAimLocale:(NSLocale *)aimLocale {
+    if (aimLocale) {
+        _aimLocale = aimLocale;
+    }
+}
+
++ (NSTimeZone *)aimTimeZone {
+    if (_aimTimeZone == nil) {
+        _aimTimeZone = ZCDateManager.beijingTimeZone;
+    }
+    return _aimTimeZone;
+}
+
++ (void)setAimTimeZone:(NSTimeZone *)aimTimeZone {
+    if (aimTimeZone) {
+        _aimTimeZone = aimTimeZone;
     }
 }
 

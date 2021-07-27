@@ -36,7 +36,7 @@
     if ([source length] == 0) return nil;
     NSMutableString *mutableString = [NSMutableString stringWithString:source];
     CFStringTransform((CFMutableStringRef)mutableString, NULL, kCFStringTransformToLatin, false);
-    mutableString = (NSMutableString *)[mutableString stringByFoldingWithOptions:NSDiacriticInsensitiveSearch locale:[NSLocale currentLocale]];
+    mutableString = (NSMutableString *)[mutableString stringByFoldingWithOptions:NSDiacriticInsensitiveSearch locale:NSLocale.currentLocale];
     return [mutableString stringByReplacingOccurrencesOfString:@"'" withString:@""];
 }
 

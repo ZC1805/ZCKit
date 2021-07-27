@@ -88,12 +88,12 @@
 
 - (BOOL)isThisYear {
     NSDateComponents *selfCmps = [NSCalendar.gregorianCalendar components:NSCalendarUnitYear fromDate:self];
-    NSDateComponents *nowCmps = [NSCalendar.gregorianCalendar components:NSCalendarUnitYear fromDate:[NSDate date]];
+    NSDateComponents *nowCmps = [NSCalendar.gregorianCalendar components:NSCalendarUnitYear fromDate:NSDate.date];
     return nowCmps.year == selfCmps.year;
 }
 
 - (NSString *)timestamp {
-    return [[NSNumber numberWithLong:(long)([self timeIntervalSince1970] * 1000)] stringValue];
+    return [[NSNumber numberWithLong:(long)(self.timeIntervalSince1970 * 1000)] stringValue];
 }
 
 - (NSString *)dateString {
@@ -137,6 +137,13 @@
     NSDateComponents *comps = [NSCalendar.gregorianCalendar components:unit fromDate:self];
     NSDate *start = [[NSCalendar.gregorianCalendar dateFromComponents:comps] dateByAddingDays:-self.weekday];
     return start ? start : self;
+}
+
++ (NSDate *)dateFromTimestamp:(long)timestamp {
+    NSTimeInterval sec = timestamp / 1.0;
+    if (timestamp > 1000000000000) sec = timestamp / 1000.0;
+    NSDate *date = [NSDate dateWithTimeIntervalSince1970:sec];
+    return date ? date : NSDate.date;
 }
 
 + (NSDate *)dateFromYear:(NSInteger)year month:(NSInteger)month day:(NSInteger)day {
@@ -235,11 +242,11 @@
     return [ZCDateManager dateFormatter:@"HH:mm:ss"];
 }
 
-+ (NSString *)dateStringWithTime:(long)timeInterval format:(NSString *)format {
-    NSString *interval = [NSString stringWithFormat:@"%ld", timeInterval];
-    NSTimeInterval sec = timeInterval / 1.0;
-    if (interval.length == 13) sec = timeInterval / 1000.0;
++ (NSString *)dateStringWithTime:(long)timestamp format:(NSString *)format {
+    NSTimeInterval sec = timestamp / 1.0;
+    if (timestamp > 1000000000000) sec = timestamp / 1000.0;
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:sec];
+    if (!date) date = NSDate.date;
     return [date stringWithFormat:format];
 }
 

@@ -8,6 +8,7 @@
 
 #import "ZCDateManager.h"
 #import "NSDictionary+ZC.h"
+#import "ZCKitBridge.h"
 
 @implementation NSCalendar (ZC)
 
@@ -17,6 +18,12 @@
     dispatch_once(&onceToken, ^{
         gregorian = [NSCalendar calendarWithIdentifier:NSCalendarIdentifierGregorian];
     });
+    if (![ZCDateManager.appTimeZone.name isEqualToString:gregorian.timeZone.name]) {
+        gregorian.timeZone = ZCDateManager.appTimeZone;
+    }
+    if (![ZCDateManager.appLocale.localeIdentifier isEqualToString:gregorian.locale.localeIdentifier]) {
+        gregorian.locale = ZCDateManager.appLocale;
+    }
     return gregorian;
 }
 
@@ -42,7 +49,7 @@
 
 @property (nonatomic, strong, readonly) NSCalendar *chineseGregorianCalendar;
 
-@property (nonatomic, strong, readonly) NSCalendar *chineseCalendar; 
+@property (nonatomic, strong, readonly) NSCalendar *chineseCalendar;
 
 @end
 
@@ -63,21 +70,20 @@
 + (NSDateFormatter *)dateFormatter:(NSString *)format {
     if (!format || !format.length) format = @"yyyy-MM-dd HH:mm:ss";
     ZCDateManager *manager = [ZCDateManager sharedManager];
-    if ([manager.formatMaps containsObjectForKey:format]) {
-        return [manager.formatMaps objectForKey:format];
-    }
+    if ([manager.formatMaps containsObjectForKey:format]) {return [manager.formatMaps objectForKey:format];}
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:format];
+    [formatter setLocale:self.appLocale];
+    [formatter setTimeZone:self.appTimeZone];
     [manager.formatMaps setObject:formatter forKey:format];
     return formatter;
 }
 
 + (NSString *)chineseDate:(NSDate *)date {
-    if (!date) date = [NSDate date];
-    NSDate *chineseDate = [date dateByAddingTimeInterval:28800.0]; //将国际时间转为中国时间
+    if (!date) return @"";
     ZCDateManager *manager = [ZCDateManager sharedManager];
     NSCalendarUnit unit = NSCalendarUnitEra | NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay;
-    NSDateComponents *comp = [manager.chineseCalendar components:unit fromDate:chineseDate];
+    NSDateComponents *comp = [manager.chineseCalendar components:unit fromDate:date];
     NSString *year = [manager.chineseYears objectAtIndex:(comp.year - 1)];
     NSString *month = [manager.chineseMonths objectAtIndex:(comp.month - 1)];
     NSString *day = [manager.chineseDays objectAtIndex:(comp.day - 1)];
@@ -86,8 +92,7 @@
 
 + (NSString *)showPastTime:(NSTimeInterval)interval detail:(BOOL)detail {
     NSString *result = nil;
-    if (interval < 0) interval = [[NSDate date] timeIntervalSince1970];
-    else if (interval > 9999999999) interval = interval / 100;
+    if (interval > 1000000000000) interval = interval / 1000.0;
     NSDate *date = [NSDate dateWithTimeIntervalSince1970:interval];
     if ([NSCalendar.gregorianCalendar isDateInToday:date]) { //今天，显示时间段，12小时制
         NSCalendarUnit unit = NSCalendarUnitHour | NSCalendarUnitMinute;
@@ -102,7 +107,7 @@
             NSInteger hour = comps.hour > 12 ? (comps.hour - 12) : comps.hour;
             result = [result stringByAppendingFormat:@"%@%zd:%02zd", [self timeSlot:comps.hour], hour, comps.minute];
         }
-    } else if ([NSCalendar.gregorianCalendar isDate:date equalToDate:[NSDate date] toUnitGranularity:NSCalendarUnitYear]) { //今年，显示日期，24小时制
+    } else if ([NSCalendar.gregorianCalendar isDate:date equalToDate:NSDate.date toUnitGranularity:NSCalendarUnitYear]) { //今年，显示日期，24小时制
         NSCalendarUnit unit = NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
         NSDateComponents *comps = [NSCalendar.gregorianCalendar components:unit fromDate:date];
         result = [NSString stringWithFormat:@"%zd%@%zd%@ ", comps.month, NSLocalizedString(@"Month", nil), comps.day, NSLocalizedString(@"Day", nil)]; //月 日
@@ -179,14 +184,14 @@
 #pragma mark - Set & Get
 - (NSLocale *)chinaLocale {
     if (!_chinaLocale) {
-        _chinaLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
+        _chinaLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]; //简体中文语言环境
     }
     return _chinaLocale;
 }
 
 - (NSTimeZone *)beijingTimeZone {
     if (!_beijingTimeZone) {
-        _beijingTimeZone = [NSTimeZone timeZoneForSecondsFromGMT:8];
+        _beijingTimeZone = [NSTimeZone timeZoneForSecondsFromGMT:8*3600]; //东八区
     }
     return _beijingTimeZone;
 }
@@ -210,10 +215,6 @@
 }
 
 #pragma mark - Api
-+ (NSString *)today {
-    return [[ZCDateManager dateFormatter:@"yyyy-MM-dd"] stringFromDate:[NSDate date]];
-}
-
 + (NSLocale *)chinaLocale {
     return [ZCDateManager sharedManager].chinaLocale;
 }
@@ -228,6 +229,14 @@
 
 + (NSCalendar *)chineseGregorianCalendar {
     return [ZCDateManager sharedManager].chineseGregorianCalendar;
+}
+
++ (NSLocale *)appLocale {
+    return ZCKitBridge.aimLocale;
+}
+
++ (NSTimeZone *)appTimeZone {
+    return ZCKitBridge.aimTimeZone;
 }
 
 @end

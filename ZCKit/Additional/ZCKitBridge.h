@@ -42,6 +42,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nullable, nonatomic, strong) id<ZCKitExternalRealize> realize;  /**< 上层外部实现，供Kit调用，程序启动时需要上层注入 */
 
+@property (class, nonatomic, strong) NSLocale *aimLocale;  /**< 用户语言环境，默认简体中文 */
+
+@property (class, nonatomic, strong) NSTimeZone *aimTimeZone;  /**< 用户时区设置，默认北京时间 */
+
 @end
 
 NS_ASSUME_NONNULL_END

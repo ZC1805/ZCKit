@@ -39,7 +39,7 @@
 
 #pragma mark - Api1
 + (NSString *)timestamp {
-    return [[NSNumber numberWithLong:(long)([[NSDate date] timeIntervalSince1970] * 1000)] stringValue];
+    return [[NSNumber numberWithLong:(long)(NSDate.date.timeIntervalSince1970 * 1000)] stringValue];
 }
 
 + (BOOL)isChinese { //当前语言是否是汉语
