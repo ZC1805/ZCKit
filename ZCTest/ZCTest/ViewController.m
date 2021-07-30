@@ -11,6 +11,7 @@
 #import "NSDate+ZC.h"
 #import "ZCDateManager.h"
 #import "ZCKitBridge.h"
+#import "VCIdManager.h"
 
 @interface ViewController ()
 
@@ -18,15 +19,19 @@
 
 @implementation ViewController
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    
-    
-    
-    
-    
++ (void)load {
+    NSLog(@"1-%@", NSStringFromClass(self));
+    [[VCIdManager share].vcs addObject:NSStringFromClass(self)];
 }
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.navigationItem.title = @"1";
+    self.view.backgroundColor = ZCRGB(0xEE88AA);
+}
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    [self.navigationController pushViewController:[NSClassFromString(@"NextViewController") new] animated:YES];
+}
 
 @end

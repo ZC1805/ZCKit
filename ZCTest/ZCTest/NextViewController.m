@@ -7,6 +7,7 @@
 
 #import "NextViewController.h"
 #import "ZCKit.h"
+#import "VCIdManager.h"
 
 @interface NextViewController ()
 
@@ -14,19 +15,15 @@
 
 @implementation NextViewController
 
++ (void)load {
+    NSLog(@"2-%@", NSStringFromClass(self));
+    [[VCIdManager share].vcs addObject:NSStringFromClass(self)];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    self.navigationItem.title = @"2";
+    self.view.backgroundColor = ZCRGB(0xEEEEEE);
 }
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

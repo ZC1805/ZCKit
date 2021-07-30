@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5839B5CD26B29B3F004493B8 /* VCIdManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5839B5CC26B29B3F004493B8 /* VCIdManager.m */; };
+		5839B5D126B29C7A004493B8 /* UIViewController+VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5839B5D026B29C7A004493B8 /* UIViewController+VC.m */; };
 		58D0201126A94B8500D8D316 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0201026A94B8500D8D316 /* AppDelegate.m */; };
 		58D0201726A94B8500D8D316 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0201626A94B8500D8D316 /* ViewController.m */; };
 		58D0201C26A94B8500D8D316 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58D0201B26A94B8500D8D316 /* Assets.xcassets */; };
@@ -105,6 +107,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5839B5CB26B29B3F004493B8 /* VCIdManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCIdManager.h; sourceTree = "<group>"; };
+		5839B5CC26B29B3F004493B8 /* VCIdManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCIdManager.m; sourceTree = "<group>"; };
+		5839B5CF26B29C7A004493B8 /* UIViewController+VC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+VC.h"; sourceTree = "<group>"; };
+		5839B5D026B29C7A004493B8 /* UIViewController+VC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+VC.m"; sourceTree = "<group>"; };
 		58D0200C26A94B8500D8D316 /* ZCTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZCTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58D0200F26A94B8500D8D316 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		58D0201026A94B8500D8D316 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -334,6 +340,10 @@
 				58D0201626A94B8500D8D316 /* ViewController.m */,
 				58D0203326A9590000D8D316 /* NextViewController.h */,
 				58D0203426A9590000D8D316 /* NextViewController.m */,
+				5839B5CB26B29B3F004493B8 /* VCIdManager.h */,
+				5839B5CC26B29B3F004493B8 /* VCIdManager.m */,
+				5839B5CF26B29C7A004493B8 /* UIViewController+VC.h */,
+				5839B5D026B29C7A004493B8 /* UIViewController+VC.m */,
 				58D0202F26A958BE00D8D316 /* screen.storyboard */,
 				58D0201B26A94B8500D8D316 /* Assets.xcassets */,
 				58D0202026A94B8500D8D316 /* Info.plist */,
@@ -734,8 +744,10 @@
 				58D0230626A991E200D8D316 /* UIViewController+ZCSwizzle.m in Sources */,
 				58D0231826A991E200D8D316 /* ZCGradientView.m in Sources */,
 				58D0201726A94B8500D8D316 /* ViewController.m in Sources */,
+				5839B5D126B29C7A004493B8 /* UIViewController+VC.m in Sources */,
 				58D022D626A991E200D8D316 /* ZCClassInfo.m in Sources */,
 				58D022F626A991E200D8D316 /* ZCImageView.m in Sources */,
+				5839B5CD26B29B3F004493B8 /* VCIdManager.m in Sources */,
 				58D0230226A991E200D8D316 /* UIGestureRecognizer+ZCSwizzle.m in Sources */,
 				58D022EF26A991E200D8D316 /* NSNumber+ZC.m in Sources */,
 				58D022D526A991E200D8D316 /* NSObject+YYModel.m in Sources */,
