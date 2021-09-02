@@ -32,15 +32,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) uint32_t selectColorRGB;  /**< 默认0xFF0000 */
 
-@property (nonatomic, assign) CGFloat spaceHeight;  /**< 分割线高度，默认20 */
+@property (nonatomic, assign) CGFloat spaceHeight;  /**< 分割线高度，默认0*/
 
 @property (nonatomic, assign) CGSize imageSize;  /**< 自定义图片的大小，默认{20, 20} */
 
-@property (nonatomic, assign) CGFloat imageTitleSpace;  /**< 图片和文字的竖直间距，默认5 */
+@property (nonatomic, assign) CGFloat imageTitleSpace;  /**< 图片和文字的竖直间距，默认0 */
 
 @property (nonatomic, assign) BOOL isVerticalAlignment;  /**< 图片和文字是否是竖直居中对齐，默认YES */
 
 @property (nonatomic, assign) BOOL isUseFixSelMarkSize;  /**< 计算宽度是是否固定markView宽度(30，3)，默认YES */
+
+- (instancetype)initWithTitle:(NSString *)title;  /**< 默认初始化方法 */
 
 @end
 

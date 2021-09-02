@@ -20,31 +20,15 @@ typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
 
 @interface UIScrollView (ZC)
 
-@property (nonatomic) CGFloat offsetX;  /**< 水平偏移量 */
+@property (nonatomic) CGFloat zc_offsetX;  /**< 水平偏移量 */
 
-@property (nonatomic) CGFloat offsetY;  /**< 垂直偏移量 */
+@property (nonatomic) CGFloat zc_offsetY;  /**< 垂直偏移量 */
 
-@property (nonatomic) CGFloat sizeWidth;  /**< size宽 */
+@property (nonatomic) CGFloat zc_sizeWidth;  /**< size宽 */
 
-@property (nonatomic) CGFloat sizeHeight;  /**< size高 */
-
-@property (nonatomic) CGFloat insetTop;  /**< inset顶部 */
-
-@property (nonatomic) CGFloat insetLeft;  /**< inset左部 */
-
-@property (nonatomic) CGFloat insetBottom;  /**< inset底部 */
-
-@property (nonatomic) CGFloat insetRight;  /**< inset右部 */
-
-@property (nonatomic) CGFloat visualOffsetX;  /**< 直观的水平偏移量 */
-
-@property (nonatomic) CGFloat visualOffsetY;  /**< 直观的垂直偏移量 */
+@property (nonatomic) CGFloat zc_sizeHeight;  /**< size高 */
 
 #pragma mark - Offset
-@property (nonatomic) CGPoint visualOffset;  /**< 肉眼直观偏移量，相对于初始位置目视滑动的距离 */
-
-@property (nonatomic, readonly) CGPoint relativeOffset;  /**< 相对与刚可反弹时零界点的偏移量 */
-
 @property (nullable, nonatomic, strong) UIColor *topExpandColor;  /**< 上部偏移出来的颜色设置，在确定frame后再设置 */
 
 @property (nullable, nonatomic, strong) UIColor *bottomExpandColor;  /**< 底部偏移出来的颜色设置，在确定frame后再设置 */

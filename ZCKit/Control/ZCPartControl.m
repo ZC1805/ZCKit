@@ -41,9 +41,9 @@
         self.selectTitleFont = [UIFont fontWithName:@"HelveticaNeue" size:15];
         self.normalColorRGB = ZCBlack30.RGBValue;
         self.selectColorRGB = ZCRed.RGBValue;
-        self.spaceHeight = 20.0;
+        self.spaceHeight = 0;
         self.imageSize = CGSizeMake(20.0, 20.0);
-        self.imageTitleSpace = 5.0;
+        self.imageTitleSpace = 0;
         self.isVerticalAlignment = YES;
         self.itemSelCalwid = 20.0;
         self.itemSelMarkSize = CGSizeMake(6.0, 2.0);

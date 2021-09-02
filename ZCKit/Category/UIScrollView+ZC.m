@@ -14,163 +14,44 @@
 @implementation UIScrollView (ZC)
 
 #pragma mark - Usually
-- (void)setOffsetX:(CGFloat)offsetX {
+- (void)setZc_offsetX:(CGFloat)zc_offsetX {
     CGPoint offset = self.contentOffset;
-    offset.x = offsetX;
+    offset.x = zc_offsetX;
     self.contentOffset = offset;
 }
 
-- (CGFloat)offsetX {
+- (CGFloat)zc_offsetX {
     return self.contentOffset.x;
 }
 
-- (void)setOffsetY:(CGFloat)offsetY {
+- (void)setZc_offsetY:(CGFloat)zc_offsetY {
     CGPoint offset = self.contentOffset;
-    offset.y = offsetY;
+    offset.y = zc_offsetY;
     self.contentOffset = offset;
 }
 
-- (CGFloat)offsetY {
+- (CGFloat)zc_offsetY {
     return self.contentOffset.y;
 }
 
-- (void)setSizeWidth:(CGFloat)sizeWidth {
+- (void)setZc_sizeWidth:(CGFloat)zc_sizeWidth {
     CGSize contentSize = self.contentSize;
-    contentSize.width = sizeWidth;
+    contentSize.width = zc_sizeWidth;
     self.contentSize = contentSize;
 }
 
-- (CGFloat)sizeWidth {
+- (CGFloat)zc_sizeWidth {
     return self.contentSize.width;
 }
 
-- (void)setSizeHeight:(CGFloat)sizeHeight {
+- (void)setZc_sizeHeight:(CGFloat)zc_sizeHeight {
     CGSize contentSize = self.contentSize;
-    contentSize.height = sizeHeight;
+    contentSize.height = zc_sizeHeight;
     self.contentSize = contentSize;
 }
 
-- (CGFloat)sizeHeight {
+- (CGFloat)zc_sizeHeight {
     return self.contentSize.height;
-}
-
-- (void)setInsetTop:(CGFloat)insetTop {
-    UIEdgeInsets inset = self.contentInset;
-    inset.top = insetTop;
-    self.contentInset = inset;
-}
-
-- (CGFloat)insetTop {
-    return self.contentInset.top;
-}
-
-- (void)setInsetLeft:(CGFloat)insetLeft {
-    UIEdgeInsets inset = self.contentInset;
-    inset.left = insetLeft;
-    self.contentInset = inset;
-}
-
-- (CGFloat)insetLeft {
-    return self.contentInset.left;
-}
-
-- (void)setInsetBottom:(CGFloat)insetBottom {
-    UIEdgeInsets inset = self.contentInset;
-    inset.bottom = insetBottom;
-    self.contentInset = inset;
-}
-
-- (CGFloat)insetBottom {
-    return self.contentInset.bottom;
-}
-
-- (void)setInsetRight:(CGFloat)insetRight {
-    UIEdgeInsets inset = self.contentInset;
-    inset.right = insetRight;
-    self.contentInset = inset;
-}
-
-- (CGFloat)insetRight {
-    return self.contentInset.right;
-}
-
-- (void)setVisualOffsetX:(CGFloat)visualOffsetX {
-    CGPoint offset = self.visualOffset;
-    offset.y = visualOffsetX;
-    self.visualOffset = offset;
-}
-
-- (CGFloat)visualOffsetX {
-    return self.visualOffset.x;
-}
-
-- (void)setVisualOffsetY:(CGFloat)visualOffsetY {
-    CGPoint offset = self.visualOffset;
-    offset.y = visualOffsetY;
-    self.visualOffset = offset;
-}
-
-- (CGFloat)visualOffsetY {
-    return self.visualOffset.y;
-}
-
-#pragma mark - Offset
-- (void)setVisualOffset:(CGPoint)visualOffset {
-    self.contentOffset = [self convertToContentOffsetFromVisualOffset:visualOffset];
-}
-
-- (CGPoint)visualOffset {
-    return [self convertToVisualOffsetFromContentOffset:self.contentOffset];
-}
-
-- (CGPoint)relativeOffset {
-    if (@available(iOS 11.0, *)) {
-        CGFloat x = self.contentOffset.x + self.adjustedContentInset.left;
-        CGFloat y = self.contentOffset.y + self.adjustedContentInset.top;
-        return CGPointMake(x, y);
-    } else {
-        CGFloat x = self.contentOffset.x + self.contentInset.left;
-        CGFloat y = self.contentOffset.y + self.contentInset.top;
-        return CGPointMake(x, y);
-    }
-}
-
-- (CGPoint)convertToContentOffsetFromVisualOffset:(CGPoint)visualOffset { //转换成content offset
-    if (@available(iOS 11.0, *)) {
-        if (self.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentNever) {
-            return visualOffset;
-        } else {
-            CGFloat x = visualOffset.x + self.contentInset.left - self.adjustedContentInset.left;
-            CGFloat y = visualOffset.y + self.contentInset.top - self.adjustedContentInset.top;
-            return CGPointMake(x, y);
-        }
-    } else {
-        UIViewController *controller = self.currentViewController;
-        if (controller && controller.automaticallyAdjustsScrollViewInsets) {
-            return CGPointMake(visualOffset.x, visualOffset.y - controller.topLayoutGuide.length);
-        } else {
-            return visualOffset;
-        }
-    }
-}
-
-- (CGPoint)convertToVisualOffsetFromContentOffset:(CGPoint)contentOffset { //转换成visual offset
-    if (@available(iOS 11.0, *)) {
-        if (self.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentNever) {
-            return contentOffset;
-        } else {
-            CGFloat offx = contentOffset.x + self.adjustedContentInset.left - self.contentInset.left;
-            CGFloat offy = contentOffset.y + self.adjustedContentInset.top - self.contentInset.top;
-            return CGPointMake(offx, offy);
-        }
-    } else {
-        UIViewController *controller = self.currentViewController;
-        if (controller && controller.automaticallyAdjustsScrollViewInsets) {
-            return CGPointMake(contentOffset.x, contentOffset.y + controller.topLayoutGuide.length);
-        } else {
-            return contentOffset;
-        }
-    }
 }
 
 #pragma mark - Offset
@@ -181,7 +62,7 @@
         objc_setAssociatedObject(self, _cmd, topv, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self addSubview:topv];
     }
-    topv.frame = CGRectMake(-200.0, -self.zc_height, MAX(self.zc_height, self.sizeWidth) + 400.0, self.zc_height);
+    topv.frame = CGRectMake(-200.0, -self.zc_height - 200.0, MAX(self.zc_height, self.zc_sizeWidth) + 400.0, self.zc_height + 200.0);
     [self sendSubviewToBack:topv];
     return topv;
 }
@@ -193,19 +74,8 @@
         objc_setAssociatedObject(self, _cmd, bottomv, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self addSubview:bottomv];
     }
-    CGFloat resBottom = 0;
-    if ([self isKindOfClass:UITableView.class] && [(UITableView *)self style] == UITableViewStyleGrouped) {
-        if (self.currentViewController.automaticallyAdjustsScrollViewInsets) {
-            resBottom = 20.0;
-        }
-        if (@available(iOS 11.0, *)) {
-            if (self.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentAutomatic) {
-                resBottom = 20.0;
-            }
-        }
-    }
-    CGFloat top = self.sizeHeight - self.insetBottom - resBottom;
-    bottomv.frame = CGRectMake(-200.0, top, MAX(self.zc_height, self.sizeWidth) + 400.0, self.zc_height + 500);
+    CGFloat top = self.zc_sizeHeight - self.contentInset.bottom;
+    bottomv.frame = CGRectMake(-200.0, top, MAX(self.zc_height, self.zc_sizeWidth) + 400.0, self.zc_height + 500.0);
     [self sendSubviewToBack:bottomv];
     return bottomv;
 }

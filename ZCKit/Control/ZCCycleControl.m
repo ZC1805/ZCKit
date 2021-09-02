@@ -458,6 +458,7 @@ static NSString * const ident = @"cycleControlCell";
     _flowLayout = flowLayout;
     _flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     UICollectionView *mainView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:_flowLayout];
+    if (@available(iOS 11.0, *)) {mainView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;}
     mainView.backgroundColor = ZCClear;
     mainView.pagingEnabled = YES;
     mainView.showsHorizontalScrollIndicator = NO;
@@ -478,7 +479,7 @@ static NSString * const ident = @"cycleControlCell";
     if (!_backgroundImageView) {
         UIImageView *bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         bgImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self insertSubview:bgImageView belowSubview:self.mainView];
+        [self insertSubview:bgImageView belowSubview:_mainView];
         _backgroundImageView = bgImageView;
     }
     _backgroundImageView.image = placeholderImage;
@@ -557,7 +558,7 @@ static NSString * const ident = @"cycleControlCell";
 - (void)setIsInfiniteLoop:(BOOL)isInfiniteLoop {
     _isInfiniteLoop = isInfiniteLoop;
     if (self.imagePathsGroup.count) {
-        self.imagePathsGroup = self.imagePathsGroup;
+        self.imagePathsGroup = _imagePathsGroup;
     }
 }
 
@@ -587,15 +588,16 @@ static NSString * const ident = @"cycleControlCell";
 - (void)setImagePathsGroup:(NSArray *)imagePathsGroup {
     [self invalidateTimer];
     _imagePathsGroup = imagePathsGroup;
-    _totalItemsCount = self.isInfiniteLoop ? self.imagePathsGroup.count * 100 : self.imagePathsGroup.count;
+    _totalItemsCount = self.isInfiniteLoop ? imagePathsGroup.count * 100 : imagePathsGroup.count;
     if (imagePathsGroup.count != 1) {
-        self.mainView.scrollEnabled = YES;
+        _mainView.scrollEnabled = YES;
         [self setIsAutoScroll:self.isAutoScroll];
     } else {
-        self.mainView.scrollEnabled = NO;
+        _mainView.scrollEnabled = NO;
     }
     [self setupPageControl];
-    [self.mainView reloadData];
+    [_mainView reloadData];
+    self.backgroundImageView.hidden = imagePathsGroup.count;
 }
 
 - (void)setImageURLStringsGroup:(NSArray *)imageURLStringsGroup {
@@ -686,16 +688,29 @@ static NSString * const ident = @"cycleControlCell";
     if (_totalItemsCount == 0) return;
     int currentIndex = [self currentIndex];
     int targetIndex = currentIndex + 1;
-    [self scrollToIndex:targetIndex];
+    [self scrollToIndex:targetIndex isAnimate:YES];
 }
 
-- (void)scrollToIndex:(int)targetIndex {
+- (void)scrollToIndex:(int)targetIndex isAnimate:(BOOL)isAnimate {
     if (targetIndex >= _totalItemsCount) {
+        isAnimate = NO; targetIndex = _totalItemsCount * 0.5;
         if (!self.isInfiniteLoop) return;
-        [_mainView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:(_totalItemsCount * 0.5) inSection:0] atScrollPosition:0 animated:NO];
-        return;
     }
-    [_mainView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:targetIndex inSection:0] atScrollPosition:0 animated:YES];
+    if (_itemHorSpace <= 0) {
+        if (_flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
+            CGFloat x = _flowLayout.itemSize.width * targetIndex;
+            CGFloat y = _mainView.contentOffset.y;
+            [_mainView setContentOffset:CGPointMake(x, y) animated:isAnimate];
+        } else {
+            CGFloat x = _mainView.contentOffset.x;
+            CGFloat y = _flowLayout.itemSize.height * targetIndex;
+            [_mainView setContentOffset:CGPointMake(x, y) animated:isAnimate];
+        }
+    } else {
+        CGFloat x = self.zc_width * targetIndex;
+        CGFloat y = _mainView.contentOffset.y;
+        [_mainView setContentOffset:CGPointMake(x, y) animated:isAnimate];
+    }
 }
 
 - (int)currentIndex {
@@ -726,14 +741,14 @@ static NSString * const ident = @"cycleControlCell";
         _flowLayout.itemSize = self.frame.size;
     }
     _mainView.frame = self.bounds;
-    if (_mainView.contentOffset.x == 0 &&  _totalItemsCount) {
+    if (_mainView.contentOffset.x == 0 && _totalItemsCount) {
         int targetIndex = 0;
         if (self.isInfiniteLoop) {
             targetIndex = _totalItemsCount * 0.5;
         } else {
             targetIndex = 0;
         }
-        [_mainView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:targetIndex inSection:0] atScrollPosition:0 animated:NO];
+        [self scrollToIndex:targetIndex isAnimate:NO];
     }
     
     CGSize size = CGSizeZero;
@@ -748,9 +763,9 @@ static NSString * const ident = @"cycleControlCell";
     }
     CGFloat x = (self.zc_width - size.width) * 0.5;
     if (self.pageControlAliment == ZCEnumCycleAlimentRight) {
-        x = self.mainView.zc_width - size.width - 10.0;
+        x = _mainView.zc_width - size.width - 10.0;
     }
-    CGFloat y = self.mainView.zc_height - size.height - 10.0;
+    CGFloat y = _mainView.zc_height - size.height - 10.0;
     
     if ([self.pageControl isKindOfClass:[ZCCyclePageControl class]]) {
         ZCCyclePageControl *pageControl = (ZCCyclePageControl *)_pageControl;
@@ -780,13 +795,13 @@ static NSString * const ident = @"cycleControlCell";
 - (void)adjustWhenControllerViewWillAppera {
     long targetIndex = [self currentIndex];
     if (targetIndex < _totalItemsCount) {
-        [_mainView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:targetIndex inSection:0] atScrollPosition:0 animated:NO];
+        [self scrollToIndex:(int)targetIndex isAnimate:NO];
     }
 }
 
 #pragma mark - ZCCyclePageControlDelegate
 - (void)cyclePageControl:(ZCCyclePageControl *)pageControl didSelectPageAtIndex:(NSInteger)index {
-    [self scrollToIndex:(int)index];
+    [self scrollToIndex:(int)index isAnimate:YES];
 }
 
 #pragma mark - UICollectionViewDataSource
@@ -857,7 +872,7 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
-    [self scrollViewDidEndScrollingAnimation:self.mainView];
+    [self scrollViewDidEndScrollingAnimation:_mainView];
 }
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView {

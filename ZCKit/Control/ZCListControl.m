@@ -130,6 +130,7 @@
     }
     
     UITableView *listView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    listView.dataSource = self; listView.delegate = self;
     listView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     listView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
     listView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, ZSBomSafeHei)];
@@ -146,8 +147,6 @@
     listView.backgroundColor = ZCClear;
     listView.sectionIndexColor = ZCBlack30;
     listView.directionalLockEnabled = YES;
-    listView.dataSource = self;
-    listView.delegate = self;
     listView.bounces = YES;
     listView.frame = CGRectMake(0, line.zc_bottom, self.zc_width, 1000); //这里要设置大些
     [listView registerClass:(self.rowHei == 0 ? ZCTableViewCell.class : UITableViewCell.class) forCellReuseIdentifier:@"listCellx"];

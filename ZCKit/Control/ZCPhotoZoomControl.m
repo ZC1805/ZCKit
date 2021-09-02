@@ -142,7 +142,7 @@ static const float initAdditional = 30.0;
 - (void)updateHeaderImageFrame:(UIScrollView *)scrollView {
     if (!scrollView) return;
     if (self.scrollView != scrollView) self.scrollView = scrollView;
-    CGFloat offsetY = scrollView.visualOffsetY;
+    CGFloat offsetY = [self convertToVisualOffsetFromContentOffset:scrollView.contentOffset scrollView:scrollView].y;
     if (!self.isNeedNarrow && offsetY >= 0) return; //图片不变窄
     if (self.originFrame.size.height - offsetY <= 0) return; //防止高度小于0
     CGFloat x = self.originFrame.origin.x; //如果不使用约束，图片的y值要上移，height也要增加
@@ -155,6 +155,45 @@ static const float initAdditional = 30.0;
         self.headerMask.frame = CGRectMake(0, -self.originOffset.y, width, MAX(maskHei, 0));
     }
     self.blurBKView.frame = self.headerIv.maskView ? self.headerMask.frame : self.headerIv.bounds;
+}
+
+#pragma mark - Misc
+- (CGPoint)convertToContentOffsetFromVisualOffset:(CGPoint)visualOffset scrollView:(UIScrollView *)scrollView { //转换成content offset
+    if (@available(iOS 11.0, *)) {
+        if (scrollView.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentNever) {
+            return visualOffset;
+        } else {
+            CGFloat x = visualOffset.x + scrollView.contentInset.left - scrollView.adjustedContentInset.left;
+            CGFloat y = visualOffset.y + scrollView.contentInset.top - scrollView.adjustedContentInset.top;
+            return CGPointMake(x, y);
+        }
+    } else {
+        UIViewController *controller = scrollView.currentViewController;
+        if (controller && controller.automaticallyAdjustsScrollViewInsets) {
+            return CGPointMake(visualOffset.x, visualOffset.y - controller.topLayoutGuide.length);
+        } else {
+            return visualOffset;
+        }
+    }
+}
+
+- (CGPoint)convertToVisualOffsetFromContentOffset:(CGPoint)contentOffset scrollView:(UIScrollView *)scrollView { //转换成visual offset
+    if (@available(iOS 11.0, *)) {
+        if (scrollView.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentNever) {
+            return contentOffset;
+        } else {
+            CGFloat offx = contentOffset.x + scrollView.adjustedContentInset.left - scrollView.contentInset.left;
+            CGFloat offy = contentOffset.y + scrollView.adjustedContentInset.top - scrollView.contentInset.top;
+            return CGPointMake(offx, offy);
+        }
+    } else {
+        UIViewController *controller = scrollView.currentViewController;
+        if (controller && controller.automaticallyAdjustsScrollViewInsets) {
+            return CGPointMake(contentOffset.x, contentOffset.y + controller.topLayoutGuide.length);
+        } else {
+            return contentOffset;
+        }
+    }
 }
 
 @end

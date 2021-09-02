@@ -227,9 +227,7 @@ static void *imageObserveContext = @"imageObserveContext";
 
 #pragma mark - Misc
 - (void)layoutFrame:(CGSize)imageSize {
-    if (@available(iOS 11.0, *)) {
-        self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
-    }
+    if (@available(iOS 11.0, *)) { self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever; }
     CGFloat height = self.zc_height;
     if (imageSize.width > 0) height = imageSize.height / imageSize.width * self.zc_width;
     if (height < 1.0) height = self.zc_height;

@@ -233,7 +233,7 @@
 
 #pragma mark - Safe layout
 + (CGFloat)leadingSpacing { //左边距离 -> 0 / 44
-    CGFloat height = [self safeLeft];
+    CGFloat height = [self safeInset].left;
     if (height <= 0 && [self isLandscape]) { //暂时默认横屏左右都是44
         //if ([self bottomReserveHeight]) height = 44.0;
         if ([self isiPhoneX]) height = 44.0;
@@ -242,7 +242,7 @@
 }
 
 + (CGFloat)trailingSpacing { //右边距离 -> 0 / 44
-    CGFloat height = [self safeRight];
+    CGFloat height = [self safeInset].right;
     if (height <= 0 && [self isLandscape]) { //暂时默认横屏左右都是44
         //if ([self bottomReserveHeight]) height = 44.0;
         if ([self isiPhoneX]) height = 44.0;
@@ -378,14 +378,6 @@
         bottom = topvc.bottomLayoutGuide.length;
     }
     return UIEdgeInsetsMake(top, left, bottom, right);
-}
-
-+ (CGFloat)safeLeft {
-    return [self safeInset].left;
-}
-
-+ (CGFloat)safeRight {
-    return [self safeInset].right;
 }
 
 @end
