@@ -25,7 +25,9 @@
 
 
 /** --- misc --- */
-#define ZCStrNonnil(str)    ((str && [str isKindOfClass:NSString.class]) ? str : @"")   /**< 返回非nil字符串类型，用@""替换nil或非str类型数据 */
+#define ZCStrNonnil(str)    ((NSString *)((str && [str isKindOfClass:NSString.class]) ? str : @""))         /**< 返回非nil字符串类型，用@""替换nil或非str类型数据 */
+#define ZCArrNonnil(arr)    ((NSArray *)((arr && [arr isKindOfClass:NSArray.class]) ? arr : @[]))           /**< 返回非nil数组类型，用@[]替换nil或非arr类型数据 */
+#define ZCDicNonnil(dic)    ((NSDictionary *)((dic && [dic isKindOfClass:NSDictionary.class]) ? dic : @{})) /**< 返回非nil字典类型，用@{}替换nil或非dic类型数据 */
 #define ZCStrIsValid(str)   [ZCGlobal isValidString:str]                                /**< 返回布尔型，判断字符串是否有效 & 非空格 */
 #define ZCArrIsValid(arr)   [ZCGlobal isValidArray:arr]                                 /**< 返回布尔型，判断数组是否有效 & 有count */
 #define ZCDicIsValid(dic)   [ZCGlobal isValidDictionary:dic]                            /**< 返回布尔型，判断字典是否有效 & 有count */
@@ -67,10 +69,10 @@
 
 
 /** --- font --- */
-#define ZCFS(adt_size)          [UIFont fontWithName:@"HelveticaNeue" size:ZSA(adt_size)]        /**< 适配了的系统字体 */
-#define ZCFBS(adt_size)         [UIFont fontWithName:@"HelveticaNeue-Bold" size:ZSA(adt_size)]   /**< 适配了的粗体系统bold字体 */
-#define ZCFLS(adt_size)         [UIFont fontWithName:@"HelveticaNeue-Light" size:ZSA(adt_size)]  /**< 适配了的粗体系统light字体 */
-#define ZCFMS(adt_size)         [UIFont fontWithName:@"HelveticaNeue-Medium" size:ZSA(adt_size)] /**< 适配了的粗体系统medium字体 */
+#define ZCF(adt_size)           [UIFont fontWithName:@"HelveticaNeue" size:ZSA(adt_size)]        /**< 适配了的系统字体 */
+#define ZCFB(adt_size)          [UIFont fontWithName:@"HelveticaNeue-Bold" size:ZSA(adt_size)]   /**< 适配了的粗体系统bold字体 */
+#define ZCFL(adt_size)          [UIFont fontWithName:@"HelveticaNeue-Light" size:ZSA(adt_size)]  /**< 适配了的粗体系统light字体 */
+#define ZCFM(adt_size)          [UIFont fontWithName:@"HelveticaNeue-Medium" size:ZSA(adt_size)] /**< 适配了的粗体系统medium字体 */
 
 
 /** --- adapt 360 --- */

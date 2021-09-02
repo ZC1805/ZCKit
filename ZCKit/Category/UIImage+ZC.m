@@ -685,7 +685,7 @@
     return [self imageByBlurRadius:20 tintColor:effectColor tintMode:kCGBlendModeNormal saturation:-1.0 maskImage:nil];
 }
 
-#define ZCIMGSwap(_a_, _b_)  do { __typeof__(_a_) _tmp_ = (_a_); (_a_) = (_b_); (_b_) = _tmp_; } while (0)
+#define K_IMGSwap(_a_, _b_)  do { __typeof__(_a_) _tmp_ = (_a_); (_a_) = (_b_); (_b_) = _tmp_; } while (0)
 - (UIImage *)imageByBlurRadius:(CGFloat)blurRadius
                      tintColor:(UIColor *)tintColor
                       tintMode:(CGBlendMode)tintBlendMode
@@ -779,7 +779,7 @@
         void *temp = malloc(tempSize);
         for (int i = 0; i < iterations; i++) {
             vImageBoxConvolve_ARGB8888(input, output, temp, 0, 0, radius, radius, NULL, kvImageEdgeExtend);
-            ZCIMGSwap(input, output);
+            K_IMGSwap(input, output);
         }
         free(temp);
     }
@@ -800,7 +800,7 @@
             matrix[i] = (int16_t)roundf(matrixFloat[i] * divisor);
         }
         vImageMatrixMultiply_ARGB8888(input, output, matrix, divisor, NULL, NULL, kvImageNoFlags);
-        ZCIMGSwap(input, output);
+        K_IMGSwap(input, output);
     }
     
     UIImage *outputImage = nil;

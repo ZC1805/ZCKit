@@ -174,24 +174,24 @@
 }
 
 
-#define IOS_CELLULAR    @"pdp_ip0"
-#define IOS_WIFI        @"en0"
-#define IOS_VPN         @"utun0"
-#define IP_ADDR_IPv4    @"ipv4"
-#define IP_ADDR_IPv6    @"ipv6"
+#define K_IOS_CELLULAR    @"pdp_ip0"
+#define K_IOS_WIFI        @"en0"
+#define K_IOS_VPN         @"utun0"
+#define K_IP_ADDR_IPv4    @"ipv4"
+#define K_IP_ADDR_IPv6    @"ipv6"
 
 + (NSString *)IPAddress:(BOOL)isIPv4 isIPv6:(BOOL)isIPv6 wifi:(BOOL)isWifi {
     NSArray *searchArray = isIPv4 ?
-    @[IOS_VPN @"/" IP_ADDR_IPv4, IOS_VPN @"/" IP_ADDR_IPv6, IOS_WIFI @"/" IP_ADDR_IPv4,
-      IOS_WIFI @"/" IP_ADDR_IPv6, IOS_CELLULAR @"/" IP_ADDR_IPv4, IOS_CELLULAR @"/" IP_ADDR_IPv6] :
-    @[IOS_VPN @"/" IP_ADDR_IPv6, IOS_VPN @"/" IP_ADDR_IPv4, IOS_WIFI @"/" IP_ADDR_IPv6,
-      IOS_WIFI @"/" IP_ADDR_IPv4, IOS_CELLULAR @"/" IP_ADDR_IPv6, IOS_CELLULAR @"/" IP_ADDR_IPv4];
+    @[K_IOS_VPN @"/" K_IP_ADDR_IPv4, K_IOS_VPN @"/" K_IP_ADDR_IPv6, K_IOS_WIFI @"/" K_IP_ADDR_IPv4,
+      K_IOS_WIFI @"/" K_IP_ADDR_IPv6, K_IOS_CELLULAR @"/" K_IP_ADDR_IPv4, K_IOS_CELLULAR @"/" K_IP_ADDR_IPv6] :
+    @[K_IOS_VPN @"/" K_IP_ADDR_IPv6, K_IOS_VPN @"/" K_IP_ADDR_IPv4, K_IOS_WIFI @"/" K_IP_ADDR_IPv6,
+      K_IOS_WIFI @"/" K_IP_ADDR_IPv4, K_IOS_CELLULAR @"/" K_IP_ADDR_IPv6, K_IOS_CELLULAR @"/" K_IP_ADDR_IPv4];
     NSDictionary *addresses = [self IPAddresses];
     NSString *ipKey = nil;
     if (isIPv4) {
-        ipKey = isWifi ? (IOS_WIFI @"/" IP_ADDR_IPv4) : (IOS_CELLULAR @"/" IP_ADDR_IPv4);
+        ipKey = isWifi ? (K_IOS_WIFI @"/" K_IP_ADDR_IPv4) : (K_IOS_CELLULAR @"/" K_IP_ADDR_IPv4);
     } else if (isIPv6) {
-        ipKey = isWifi ? (IOS_WIFI @"/" IP_ADDR_IPv6) : (IOS_CELLULAR @"/" IP_ADDR_IPv6);
+        ipKey = isWifi ? (K_IOS_WIFI @"/" K_IP_ADDR_IPv6) : (K_IOS_CELLULAR @"/" K_IP_ADDR_IPv6);
     }
     __block NSString *address = nil;
     if (ipKey) {
@@ -234,12 +234,12 @@
                 NSString *type;
                 if (addr->sin_family == AF_INET) {
                     if (inet_ntop(AF_INET, &addr->sin_addr, addrBuf, INET_ADDRSTRLEN)) {
-                        type = IP_ADDR_IPv4;
+                        type = K_IP_ADDR_IPv4;
                     }
                 } else {
                     const struct sockaddr_in6 *addr6 = (const struct sockaddr_in6 *)interface->ifa_addr;
                     if (inet_ntop(AF_INET6, &addr6->sin6_addr, addrBuf, INET6_ADDRSTRLEN)) {
-                        type = IP_ADDR_IPv6;
+                        type = K_IP_ADDR_IPv6;
                     }
                 }
                 if (type) {

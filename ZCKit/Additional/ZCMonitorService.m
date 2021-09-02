@@ -11,7 +11,7 @@
 
 const ZCMonitorType ZCMonitorTypeNone = 0;  /**< 用于获取监听类型等 */
 
-#define MONITOR_USE_PRIORITY_LAZY  0  /**< 是否使用优先级&懒广播，暂不使用 */
+#define K_MONITOR_USE_PRIORITY_LAZY  0  /**< 是否使用优先级&懒广播，暂不使用 */
 
 #pragma mark - ~ ZCMonitorBroadcast ~
 @implementation ZCMonitorBroadcast
@@ -101,7 +101,7 @@ const ZCMonitorType ZCMonitorTypeNone = 0;  /**< 用于获取监听类型等 */
 }
 
 - (void)open_caches:(ZCMonitorType)types {
-    if (MONITOR_USE_PRIORITY_LAZY) {
+    if (K_MONITOR_USE_PRIORITY_LAZY) {
         NSUInteger n = types; NSUInteger i = 0;
         if (types == ZCMonitorTypeNone) n = _mask3;
         while (n > 0) {
@@ -118,7 +118,7 @@ const ZCMonitorType ZCMonitorTypeNone = 0;  /**< 用于获取监听类型等 */
 }
 
 - (void)close_caches:(ZCMonitorType)types {
-    if (MONITOR_USE_PRIORITY_LAZY) {
+    if (K_MONITOR_USE_PRIORITY_LAZY) {
         NSUInteger n = types; NSUInteger i = 0;
         if (types == ZCMonitorTypeNone) n = _mask3;
         while (n > 0) {
@@ -150,7 +150,7 @@ const ZCMonitorType ZCMonitorTypeNone = 0;  /**< 用于获取监听类型等 */
     if ([listener respondsToSelector:@selector(monitorForwardBroadcast:)]) {
         _listenType = [listener monitorForwardBroadcast:[ZCMonitorBroadcast broadcastType:ZCMonitorTypeNone issuer:nil]];
     }
-    if (MONITOR_USE_PRIORITY_LAZY) {
+    if (K_MONITOR_USE_PRIORITY_LAZY) {
         _mask1 = 0; _mask2 = 0; _mask3 = 0; [_lazyMap removeAllObjects];
         NSUInteger n = _listenType; NSUInteger i = 0;
         while (n > 0) {
@@ -282,7 +282,7 @@ const ZCMonitorType ZCMonitorTypeNone = 0;  /**< 用于获取监听类型等 */
         i += 1;
     }
     for (ZCMonitorBroadcast *subbro in subbros) {
-        if (MONITOR_USE_PRIORITY_LAZY) {
+        if (K_MONITOR_USE_PRIORITY_LAZY) {
             [self issue_map:subbro]; continue;
         }
         int rank = 0;

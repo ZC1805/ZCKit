@@ -8,9 +8,9 @@
 
 #import "ZCPinyinHandler.h"
 
-#define ZC_SPELL_UNIT_FULLSPELL   @"f"
-#define ZC_SPELL_UNIT_SHORTSPELL  @"s"
-#define ZC_SPELL_CACHE            @"sc"
+#define K_SPELL_UNIT_FULLSPELL   @"f"
+#define K_SPELL_UNIT_SHORTSPELL  @"s"
+#define K_SPELL_CACHE            @"sc"
 
 #pragma mark - ~ ZCPinyinConverter ~
 @interface ZCPinyinConverter : NSObject {
@@ -55,14 +55,14 @@
 @implementation ZCSpellUnit
 
 - (void)encodeWithCoder:(NSCoder *)aCoder {
-    [aCoder encodeObject:_fullSpell forKey:ZC_SPELL_UNIT_FULLSPELL];
-    [aCoder encodeObject:_shortSpell forKey:ZC_SPELL_UNIT_SHORTSPELL];
+    [aCoder encodeObject:_fullSpell forKey:K_SPELL_UNIT_FULLSPELL];
+    [aCoder encodeObject:_shortSpell forKey:K_SPELL_UNIT_SHORTSPELL];
 }
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
-        self.fullSpell = [aDecoder decodeObjectForKey:ZC_SPELL_UNIT_FULLSPELL];
-        self.shortSpell = [aDecoder decodeObjectForKey:ZC_SPELL_UNIT_SHORTSPELL];
+        self.fullSpell = [aDecoder decodeObjectForKey:K_SPELL_UNIT_FULLSPELL];
+        self.shortSpell = [aDecoder decodeObjectForKey:K_SPELL_UNIT_SHORTSPELL];
     }
     return self;
 }
@@ -93,7 +93,7 @@
     if (self = [super init]) {
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *appDocumentPath = [[NSString alloc] initWithFormat:@"%@/", [paths objectAtIndex:0]];
-        _filePath = [appDocumentPath stringByAppendingPathComponent:ZC_SPELL_CACHE];
+        _filePath = [appDocumentPath stringByAppendingPathComponent:K_SPELL_CACHE];
         _spellCache = nil;
         if ([[NSFileManager defaultManager] fileExistsAtPath:_filePath]) {
             NSDictionary *dict = [NSKeyedUnarchiver unarchiveObjectWithFile:_filePath];

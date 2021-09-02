@@ -72,6 +72,7 @@
     _isAlreadyLoad = YES;
     [_requestParm removeAllObjects];
     if (_innate && _innate.count) [_requestParm addEntriesFromDictionary:_innate];
+#warning - xxxxx 此处处理 & tableView先设置代理在设置表头
     if (isRefresh && list) [(NSMutableArray *)_dataItems removeAllObjects]; //刷新时候list不为nil则移除数据刷新，即如果list返回你来则表示请求数据失败&不做处理
     if (list && list.count) {
         if (isInsert) {
@@ -121,14 +122,6 @@
     //2.isAddToLast为YES可能是请求到数据但是此数据追加到上页数据的末尾数组中了
     if (!list || (!list.count && !isAddToLast)) _currentPage = _currentPage - 1;
     if (list && total >= 0) _totalPage = total; //list不为nil且total不小于0则会重置总页数total
-}
-
-- (void)resetToPreviousPage {
-    _currentPage = _currentPage + 1;
-}
-
-- (void)resetToNextPage {
-    _currentPage = _currentPage - 1;
 }
 
 @end
