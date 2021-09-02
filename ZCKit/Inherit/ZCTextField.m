@@ -132,7 +132,7 @@
 - (UIView *)underlineView {
     if (!_underlineView) {
         _underlineView = [[UIView alloc] initWithFrame:CGRectZero];
-        _underlineView.backgroundColor = ZCSPColor;
+        _underlineView.backgroundColor = kZCSplit;
     }
     return _underlineView;
 }

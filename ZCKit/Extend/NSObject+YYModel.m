@@ -10,7 +10,7 @@
 #import "ZCClassInfo.h"
 #include <objc/message.h>
 
-#define k_force_inline __inline__ __attribute__((always_inline))
+#define K_FORCE_INLINE __inline__ __attribute__((always_inline))
 
 /// Foundation Class Type
 typedef NS_ENUM (NSUInteger, YYEncodingNSType) {
@@ -33,7 +33,7 @@ typedef NS_ENUM (NSUInteger, YYEncodingNSType) {
 };
 
 /// Get the Foundation class type from property info.
-static k_force_inline YYEncodingNSType YYClassGetNSType(Class cls) {
+static K_FORCE_INLINE YYEncodingNSType YYClassGetNSType(Class cls) {
     if (!cls) return YYEncodingTypeNSUnknown;
     if ([cls isSubclassOfClass:[NSMutableString class]]) return YYEncodingTypeNSMutableString;
     if ([cls isSubclassOfClass:[NSString class]]) return YYEncodingTypeNSString;
@@ -54,7 +54,7 @@ static k_force_inline YYEncodingNSType YYClassGetNSType(Class cls) {
 }
 
 /// Whether the type is c number.
-static k_force_inline BOOL YYEncodingTypeIsCNumber(YYEncodingType type) {
+static K_FORCE_INLINE BOOL YYEncodingTypeIsCNumber(YYEncodingType type) {
     switch (type & YYEncodingTypeMask) {
         case YYEncodingTypeBool:
         case YYEncodingTypeInt8:
@@ -73,7 +73,7 @@ static k_force_inline BOOL YYEncodingTypeIsCNumber(YYEncodingType type) {
 }
 
 /// Parse a number value from 'id'.
-static k_force_inline NSNumber *YYNSNumberCreateFromID(__unsafe_unretained id value) {
+static K_FORCE_INLINE NSNumber *YYNSNumberCreateFromID(__unsafe_unretained id value) {
     static NSCharacterSet *dot;
     static NSDictionary *dic;
     static dispatch_once_t onceToken;
@@ -129,10 +129,10 @@ static k_force_inline NSNumber *YYNSNumberCreateFromID(__unsafe_unretained id va
 }
 
 /// Parse string to date.
-static k_force_inline NSDate *YYNSDateFromString(__unsafe_unretained NSString *string) {
+static K_FORCE_INLINE NSDate *YYNSDateFromString(__unsafe_unretained NSString *string) {
     typedef NSDate* (^YYNSDateParseBlock)(NSString *string);
-    #define k_parser_num 34
-    static YYNSDateParseBlock blocks[k_parser_num + 1] = {0};
+    #define K_PARSER_NUM 34
+    static YYNSDateParseBlock blocks[K_PARSER_NUM + 1] = {0};
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         {
@@ -232,7 +232,7 @@ static k_force_inline NSDate *YYNSDateFromString(__unsafe_unretained NSString *s
         }
     });
     if (!string) return nil;
-    if (string.length > k_parser_num) return nil;
+    if (string.length > K_PARSER_NUM) return nil;
     YYNSDateParseBlock parser = blocks[string.length];
     if (!parser) return nil;
     return parser(string);
@@ -241,7 +241,7 @@ static k_force_inline NSDate *YYNSDateFromString(__unsafe_unretained NSString *s
 
 
 /// Get the 'NSBlock' class.
-static k_force_inline Class YYNSBlockClass() {
+static K_FORCE_INLINE Class YYNSBlockClass() {
     static Class cls;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -266,7 +266,7 @@ static k_force_inline Class YYNSBlockClass() {
  
  length: 20/24/25
  */
-static k_force_inline NSDateFormatter *YYISODateFormatter() {
+static K_FORCE_INLINE NSDateFormatter *YYISODateFormatter() {
     static NSDateFormatter *formatter = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -279,7 +279,7 @@ static k_force_inline NSDateFormatter *YYISODateFormatter() {
 
 /// Get the value with key paths from dictionary
 /// The dic should be NSDictionary, and the keyPath should not be nil.
-static k_force_inline id YYValueForKeyPath(__unsafe_unretained NSDictionary *dic, __unsafe_unretained NSArray *keyPaths) {
+static K_FORCE_INLINE id YYValueForKeyPath(__unsafe_unretained NSDictionary *dic, __unsafe_unretained NSArray *keyPaths) {
     id value = nil;
     for (NSUInteger i = 0, max = keyPaths.count; i < max; i++) {
         value = dic[keyPaths[i]];
@@ -296,7 +296,7 @@ static k_force_inline id YYValueForKeyPath(__unsafe_unretained NSDictionary *dic
 
 /// Get the value with multi key (or key path) from dictionary
 /// The dic should be NSDictionary
-static k_force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic, __unsafe_unretained NSArray *multiKeys) {
+static K_FORCE_INLINE id YYValueForMultiKeys(__unsafe_unretained NSDictionary *dic, __unsafe_unretained NSArray *multiKeys) {
     id value = nil;
     for (NSString *key in multiKeys) {
         if ([key isKindOfClass:[NSString class]]) {
@@ -655,7 +655,7 @@ static k_force_inline id YYValueForMultiKeys(__unsafe_unretained NSDictionary *d
  @param meta  Should not be nil, meta.isCNumber should be YES, meta.getter should not be nil.
  @return A number object, or nil if failed.
  */
-static k_force_inline NSNumber *ModelCreateNumberFromProperty(__unsafe_unretained id model,
+static K_FORCE_INLINE NSNumber *ModelCreateNumberFromProperty(__unsafe_unretained id model,
                                                             __unsafe_unretained _YYModelPropertyMeta *meta) {
     switch (meta->_type & YYEncodingTypeMask) {
         case YYEncodingTypeBool: {
@@ -711,7 +711,7 @@ static k_force_inline NSNumber *ModelCreateNumberFromProperty(__unsafe_unretaine
  @param num   Can be nil.
  @param meta  Should not be nil, meta.isCNumber should be YES, meta.setter should not be nil.
  */
-static k_force_inline void ModelSetNumberToProperty(__unsafe_unretained id model,
+static K_FORCE_INLINE void ModelSetNumberToProperty(__unsafe_unretained id model,
                                                   __unsafe_unretained NSNumber *num,
                                                   __unsafe_unretained _YYModelPropertyMeta *meta) {
     switch (meta->_type & YYEncodingTypeMask) {

@@ -57,7 +57,7 @@ static NSTimeZone *_aimTimeZone = nil;
 
 + (NSString *)naviBarImageOrColor {
     if (_naviBarImageOrColor == nil) {
-        _naviBarImageOrColor = ZCStrFormat(@"%06x", ZCBKColor.RGBValue);
+        _naviBarImageOrColor = kZStrFormat(@"%06x", kZCPad.RGBValue);
     }
     return _naviBarImageOrColor;
 }
@@ -70,7 +70,7 @@ static NSTimeZone *_aimTimeZone = nil;
 
 + (NSString *)naviBarTitleColor {
     if (_naviBarTitleColor == nil) {
-        _naviBarTitleColor = ZCStrFormat(@"%06x", ZCBlack30.RGBValue);
+        _naviBarTitleColor = kZStrFormat(@"%06x", kZCBlack30.RGBValue);
     }
     return _naviBarTitleColor;
 }
@@ -96,7 +96,7 @@ static NSTimeZone *_aimTimeZone = nil;
 
 + (UIColor *)toastBackGroundColor {
     if (_toastBackGroundColor == nil) {
-        _toastBackGroundColor = ZCBlack;
+        _toastBackGroundColor = kZCBlack;
     }
     return _toastBackGroundColor;
 }
@@ -109,7 +109,7 @@ static NSTimeZone *_aimTimeZone = nil;
 
 + (UIColor *)toastTextColor {
     if (_toastTextColor == nil) {
-        _toastTextColor = ZCWhite;
+        _toastTextColor = kZCWhite;
     }
     return _toastTextColor;
 }

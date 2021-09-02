@@ -125,7 +125,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    if (ZFNotEqual(self.previousFrame.size.width, self.bounds.size.width)) {
+    if (kZFNotEqual(self.previousFrame.size.width, self.bounds.size.width)) {
         self.previousFrame = self.frame;
         [self rowHeiChange];
     }
@@ -201,7 +201,7 @@
 
 - (NSMutableDictionary *)myAttributes {
     if (!_myAttributes) {
-        NSDictionary *dic = @{NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue" size:16], NSForegroundColorAttributeName:ZCBlack30,
+        NSDictionary *dic = @{NSFontAttributeName:[UIFont fontWithName:@"HelveticaNeue" size:16], NSForegroundColorAttributeName:kZCBlack30,
                               NSKernAttributeName:@(0), NSParagraphStyleAttributeName:self.paragraphStyle};
         _myAttributes = [NSMutableDictionary dictionaryWithDictionary:dic];
     }
@@ -221,7 +221,7 @@
     self.textView.attributedText = nil;
     self.textView.clearsOnInsertion = NO;
     self.textView.linkTextAttributes = nil;
-    self.textView.backgroundColor = ZCClear;
+    self.textView.backgroundColor = kZCClear;
     self.textView.returnKeyType = UIReturnKeySend;
     self.textView.showsVerticalScrollIndicator = NO;
     self.textView.showsHorizontalScrollIndicator = NO;
@@ -277,8 +277,8 @@
     self.textView.frame = frame;
     self.contentSize = frame.size;
     CGRect newScrollViewFrame = [self measureFrame:actualTextViewSize];
-    BOOL isChangeHei = ZFNotEqual(oldScrollViewFrame.size.height, newScrollViewFrame.size.height);
-    if (isChangeHei && ZFBelowEqual(newScrollViewFrame.size.height, self.maxHeight)) {
+    BOOL isChangeHei = kZFNotEqual(oldScrollViewFrame.size.height, newScrollViewFrame.size.height);
+    if (isChangeHei && kZFBelowEqual(newScrollViewFrame.size.height, self.maxHeight)) {
         [self flashScrollIndicators];
         if ([self.textDelegate respondsToSelector:@selector(growViewWillChangeHeight:)]) {
             [self.textDelegate growViewWillChangeHeight:newScrollViewFrame.size.height];
@@ -300,9 +300,9 @@
 
 - (CGRect)measureFrame:(CGSize)contentSize {
     CGFloat height = contentSize.height;
-    if (ZFBelow(contentSize.height, self.minHeight) || !self.textView.hasText) {
+    if (kZFBelow(contentSize.height, self.minHeight) || !self.textView.hasText) {
         height = self.minHeight;
-    } else if (ZFAbove(contentSize.height, self.maxHeight)) {
+    } else if (kZFAbove(contentSize.height, self.maxHeight)) {
         height = self.maxHeight;
     }
     CGRect frame = self.frame;
@@ -380,7 +380,7 @@
 - (void)setPlaceholderText:(NSString *)placeholderText {
     if (!placeholderText) return;
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:self.myAttributes];
-    [dic setObject:ZCBlackA8 forKey:NSForegroundColorAttributeName];
+    [dic setObject:kZCBlackA8 forKey:NSForegroundColorAttributeName];
     NSAttributedString *attributedText = [[NSAttributedString alloc] initWithString:placeholderText attributes:dic];
     [self.textView setPlaceholderAttributedText:attributedText];
 }

@@ -22,13 +22,13 @@ NS_ASSUME_NONNULL_BEGIN
 /** cell布局是自动行高，所以代理不需要返回行高，如属性需要改变，最好在子类initComplete赋值 */
 @property (nonatomic, assign) NSInteger level;  /**< 当前水平层级，默认0 */
 
-@property (nonatomic, assign) CGFloat levelSpacing;  /**< 各层级间的水平缩进距离，默认ZSA(30) */
+@property (nonatomic, assign) CGFloat levelSpacing;  /**< 各层级间的水平缩进距离，默认kZSA(30) */
 
-@property (nonatomic, assign) CGFloat verticalSpacing;  /**< 各子视图的竖直最小间距，默认ZSA(3) */
+@property (nonatomic, assign) CGFloat verticalSpacing;  /**< 各子视图的竖直最小间距，默认kZSA(3) */
 
-@property (nonatomic, assign) CGFloat horizontalSpacing;  /**< 各子视图的水平间距，默认ZSA(10) */
+@property (nonatomic, assign) CGFloat horizontalSpacing;  /**< 各子视图的水平间距，默认kZSA(10) */
 
-@property (nonatomic, assign) UIEdgeInsets marginInset;  /**< 边缘间距，手动设置行高底部距离可能不对，默认(ZSMInvl...ZSMInvl) */
+@property (nonatomic, assign) UIEdgeInsets marginInset;  /**< 边缘间距，手动设置行高底部距离可能不对，默认(kZSInvl...kZSInvl) */
 
 @property (nonatomic, assign) UIEdgeInsets topSeparatorInset;  /**< 顶部分离器，上左高右(top, left, height, right)，默认Zero，隐藏 */
 
@@ -44,9 +44,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL isAccessBeCenter;  /**< accessControl是否是垂直居中，自动行高不会拿accessControl计算最大高，默认NO */
 
-@property (nullable, nonatomic, strong) UIColor *separatorBKColor;  /**< 分离器颜色，默认ZCSPColor */
+@property (nullable, nonatomic, strong) UIColor *separatorBKColor;  /**< 分离器颜色，默认kZCSplit */
 
-@property (nullable, nonatomic, strong) UIColor *insideBKColor;  /**< 内侧背景视图颜色，默认ZCSPColor */
+@property (nullable, nonatomic, strong) UIColor *insideBKColor;  /**< 内侧背景视图颜色，默认kZCSplit */
 
 @property (nullable, nonatomic, strong) UIColor *selectBKColor;  /**< 选中状态下的背景颜色，默认nil，即无选中风格 */
 
@@ -69,25 +69,25 @@ NS_ASSUME_NONNULL_BEGIN
 /** 表视图要设置估计行高[tableView setEstimatedRowHeight:50] */
 
 /** 以下子视图懒加载形式创建，可设置隐藏来回收为其分配的位置，auto可设置fixSize来改变视图大小，非auto可设置size来改变视图大小 */
-@property (nonatomic, strong, readonly) ZCButton *selectButton;  /**< 默认size(ZSA(20)*ZSA(20)) */
+@property (nonatomic, strong, readonly) ZCButton *selectButton;  /**< 默认size(kZSA(20)*kZSA(20)) */
 
-@property (nonatomic, strong, readonly) ZCAvatarControl *avatarControl;  /**< 默认size(ZSA(40)*ZSA(40)) */
+@property (nonatomic, strong, readonly) ZCAvatarControl *avatarControl;  /**< 默认size(kZSA(40)*kZSA(40)) */
 
 @property (nonatomic, strong, readonly) ZCLabel *leadingLabel;  /**< 默认size是auto */
 
-@property (nonatomic, strong, readonly) UIView *flagContainerView;  /**< 默认size(ZSA(20)*ZSA(20)) */
+@property (nonatomic, strong, readonly) UIView *flagContainerView;  /**< 默认size(kZSA(20)*kZSA(20)) */
 
-@property (nonatomic, strong, readonly) ZCTextField *inputTextField;  /**< 默认size(ZSA(160)*ZSA(30)) */
+@property (nonatomic, strong, readonly) ZCTextField *inputTextField;  /**< 默认size(kZSA(160)*kZSA(30)) */
 
-@property (nonatomic, strong, readonly) ZCAvatarControl *accessControl;  /**< 默认size(ZSA(6)*ZSA(12)) */
+@property (nonatomic, strong, readonly) ZCAvatarControl *accessControl;  /**< 默认size(kZSA(6)*kZSA(12)) */
 
 @property (nonatomic, strong, readonly) ZCBadgeView *badgeView;  /**< fixSize无效，默认size是auto */
 
 @property (nonatomic, strong, readonly) ZCSwitch *switchControl;  /**< fixSize无效，默认size是auto */
 
-@property (nonatomic, strong, readonly) ZCButton *clickButton;  /**< 默认size(ZSA(30)*ZSA(30)) */
+@property (nonatomic, strong, readonly) ZCButton *clickButton;  /**< 默认size(kZSA(30)*kZSA(30)) */
 
-@property (nonatomic, strong, readonly) UIView *containerView;  /**< 默认size(ZSA(30)*ZSA(30)) */
+@property (nonatomic, strong, readonly) UIView *containerView;  /**< 默认size(kZSA(30)*kZSA(30)) */
 
 @property (nonatomic, strong, readonly) ZCTextField *fitTextField;  /**< 第一行主，会布局满行，fixSize无效，默认size是auto */
 
@@ -97,15 +97,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) ZCTextView *bottomTextView;  /**< 会布局满行，默认size是auto */
 
-@property (nonatomic, strong, readonly) UIView *bottomFlagContainerView;  /**< 默认size(ZSA(20)*ZSA(20)) */
+@property (nonatomic, strong, readonly) UIView *bottomFlagContainerView;  /**< 默认size(kZSA(20)*kZSA(20)) */
 
-@property (nonatomic, strong, readonly) ZCTextField *bottomTextField;  /**< 默认size(ZSA(160)*ZSA(30)) */
+@property (nonatomic, strong, readonly) ZCTextField *bottomTextField;  /**< 默认size(kZSA(160)*kZSA(30)) */
 
 @property (nonatomic, strong, readonly) ZCLabel *bottomAttachLabel;  /**< 第二行主，默认size是auto */
 
-@property (nonatomic, strong, readonly) UIView *bottomContainerView;  /**< 默认size(ZSA(30)*ZSA(30)) */
+@property (nonatomic, strong, readonly) UIView *bottomContainerView;  /**< 默认size(kZSA(30)*kZSA(30)) */
 
-@property (nonatomic, strong, readonly) ZCButton *bottomClickButton;  /**< 默认size(ZSA(30)*ZSA(30)) */
+@property (nonatomic, strong, readonly) ZCButton *bottomClickButton;  /**< 默认size(kZSA(30)*kZSA(30)) */
 
 @property (nonatomic, strong, readonly) ZCBadgeView *bottomBadgeView;  /**< fixSize无效，默认size是auto */
 

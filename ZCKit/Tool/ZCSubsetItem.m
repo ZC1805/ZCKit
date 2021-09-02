@@ -28,7 +28,7 @@
         _isOnRequest = NO;
         _isAlreadyLoad = NO;
         _listView = listView;
-        _requestUrl = ZCStrNonnil(url);
+        _requestUrl = kZStrNonnil(url);
         _dataItems = [NSMutableArray array];
         _requestParm = [NSMutableDictionary dictionary];
         if (_innate && _innate.count) [_requestParm addEntriesFromDictionary:_innate];

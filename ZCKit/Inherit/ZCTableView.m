@@ -142,7 +142,7 @@
 #pragma mark - Misc
 - (void)buildHeaderView:(CGFloat)hei color:(UIColor *)color {
     _header = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, hei)];
-    _header.backgroundColor = color ? color : ZCClear;
+    _header.backgroundColor = color ? color : kZCClear;
 }
 
 - (void)buildFooterView:(CGFloat)hei color:(UIColor *)color {
@@ -295,7 +295,7 @@
     table.sectionHeaderHeight = 0;
     table.sectionFooterHeight = 0;
     table.rowHeight = UITableViewAutomaticDimension;
-    table.backgroundColor = ZCClear;
+    table.backgroundColor = kZCClear;
     table.showsHorizontalScrollIndicator = NO;
     table.separatorInset = UIEdgeInsetsZero;
     table.directionalLockEnabled = YES;
@@ -566,8 +566,8 @@
         if ([cell isKindOfClass:[ZCTableViewCell class]]) {
             if (!self.isShieldResetZCCell) [((ZCTableViewCell *)cell) resetAllItemHiddenAndProperty];
             BOOL islast = indexPath.row == slice.rows.count - 1;
-            ((ZCTableViewCell *)cell).topSeparatorInset = UIEdgeInsetsMake(0, 0, indexPath.row ? 0 : ZSSepHei, 0);
-            ((ZCTableViewCell *)cell).bottomSeparatorInset = UIEdgeInsetsMake(ZSSepHei, islast ? 0 : ZSMInvl, 0, 0);
+            ((ZCTableViewCell *)cell).topSeparatorInset = UIEdgeInsetsMake(0, 0, indexPath.row ? 0 : kZSPixel, 0);
+            ((ZCTableViewCell *)cell).bottomSeparatorInset = UIEdgeInsetsMake(kZSPixel, islast ? 0 : kZSInvl, 0, 0);
         }
         void(^share)(ZCTableView *, UITableViewCell *, NSIndexPath *, id _Nullable) = [slice valueForKey:@"shareCellReprocess"];
         if (share) {share((ZCTableView *)tableView, cell, indexPath, unit.model);}

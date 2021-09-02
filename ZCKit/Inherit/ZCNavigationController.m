@@ -266,7 +266,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
         if ([topVc respondsToSelector:@selector(onCustomTapBackAction)] && ![topVc respondsToSelector:@selector(onCustomPanBackAction)]) return NO;
         BOOL isCan = NO; SEL sel = @selector(isShieldInteractivePop);
         if ([topVc respondsToSelector:sel]) {
-            zc_suppress_leak_warning(isCan = (BOOL)[topVc performSelector:sel]);
+            kZSuppressLeakWarn(isCan = (BOOL)[topVc performSelector:sel]);
         }
         if (!isCan && gestureRecognizer.state == UIGestureRecognizerStatePossible && [topVc respondsToSelector:@selector(onCustomPanBackAction)]) { //可以手动返回
             UIViewController *aimVc = [(id<ZCViewControllerBackProtocol>)topVc onCustomPanBackAction];

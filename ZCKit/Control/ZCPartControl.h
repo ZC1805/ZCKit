@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) uint32_t normalColorRGB;  /**< 默认0x303030 */
 
-@property (nonatomic, assign) uint32_t selectColorRGB;  /**< 默认0xFF0000 */
+@property (nonatomic, assign) uint32_t selectColorRGB;  /**< 默认0x303030 */
 
 @property (nonatomic, assign) CGFloat spaceHeight;  /**< 分割线高度，默认0*/
 

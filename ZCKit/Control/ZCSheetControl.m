@@ -157,11 +157,11 @@ static const CGFloat sheetFlagTag = 83803;
 }
 
 - (void)build:(BOOL)msgExist cancel:(BOOL)celExist only:(BOOL)isOnly safeHei:(CGFloat)safeHei initHei:(CGFloat)initHei conHei:(CGFloat)conHei {
-    CGFloat initWid = ZSWid;
-    self.backgroundColor = ZCBKColor;
-    self.frame = CGRectMake(0, ZSHei - initHei, initWid, initHei);
+    CGFloat initWid = kZSWid;
+    self.backgroundColor = kZCPad;
+    self.frame = CGRectMake(0, kZSHei - initHei, initWid, initHei);
     self.contentView = [[UIScrollView alloc] initWithFrame:CGRectZero];
-    self.contentView.backgroundColor = ZCClear;
+    self.contentView.backgroundColor = kZCClear;
     self.contentView.showsVerticalScrollIndicator = NO;
     self.contentView.delaysContentTouches = (conHei + safeHei > self.maxHeight);
     self.contentView.bounces = NO;
@@ -187,14 +187,14 @@ static const CGFloat sheetFlagTag = 83803;
         ZCLabel *msglabel = [[ZCLabel alloc] initWithFrame:CGRectMake(0, 0, initWid, sheetMsgHei - sheetEdgeTop)];
         msglabel.text = self.msgText;
         msglabel.numberOfLines = 0;
-        msglabel.textColor = ZCBlack80;
+        msglabel.textColor = kZCBlack80;
         msglabel.font = [UIFont fontWithName:@"HelveticaNeue" size:13];
-        msglabel.backgroundColor = ZCWhite;
+        msglabel.backgroundColor = kZCWhite;
         msglabel.textAlignment = NSTextAlignmentCenter;
         [self addSubview:msglabel];
         if (self.isMaskClear) {
-            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, ZSSepHei)];
-            line.backgroundColor = ZCBlackDC;
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, kZSPixel)];
+            line.backgroundColor = kZCBlackDC;
             [msglabel addSubview:line];
         }
         if (self.msgLabelCtor) {self.msgLabelCtor(msglabel); self.msgLabelCtor = nil;}
@@ -204,10 +204,10 @@ static const CGFloat sheetFlagTag = 83803;
         UIView *topSep = nil;
         ZCButton *itemBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
         itemBtn.delayResponseTime = 0.1;
-        UIColor *titleColor = [self isDangerousForIndex:i] ? ZCRed : ZCBlack;
+        UIColor *titleColor = [self isDangerousForIndex:i] ? kZCRGB(0xFF0000) : kZCBlack;
         UIImage *imageBk = [UIImage imageWithColor:[UIColor colorFormHex:0xE1E1E3 alpha:1.0] size:CGSizeMake(1.0, 1.0)];
         itemBtn.tag = sheetFlagTag + i;
-        itemBtn.backgroundColor = ZCWhite;
+        itemBtn.backgroundColor = kZCWhite;
         itemBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
         [itemBtn setTitleColor:titleColor forState:UIControlStateNormal];
@@ -226,8 +226,8 @@ static const CGFloat sheetFlagTag = 83803;
             } else {
                 itemBtn.frame = CGRectMake(0, i * sheetItemHei, initWid, sheetItemHei);
                 if (i != 0 || (!msgExist && self.isMaskClear)) {
-                    topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * sheetItemHei, initWid, ZSSepHei)];
-                    topSep.backgroundColor = ZCBlackDC;
+                    topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * sheetItemHei, initWid, kZSPixel)];
+                    topSep.backgroundColor = kZCBlackDC;
                 }
             }
         }
@@ -235,8 +235,8 @@ static const CGFloat sheetFlagTag = 83803;
             itemBtn.titleEdgeInsets = UIEdgeInsetsMake(-safeHei, 0, 0, 0);
             itemBtn.responseAreaExtend = UIEdgeInsetsMake(0, 0, -safeHei, 0);
             if (isOnly && self.isMaskClear) {
-                UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, ZSSepHei)];
-                line.backgroundColor = ZCBlackDC;
+                UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, kZSPixel)];
+                line.backgroundColor = kZCBlackDC;
                 [itemBtn addSubview:line];
             }
         }

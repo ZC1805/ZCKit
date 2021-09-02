@@ -91,7 +91,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.textAlignment = NSTextAlignmentCenter;
-        self.backgroundColor = ZCClear;
+        self.backgroundColor = kZCClear;
         self.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     }
     return self;

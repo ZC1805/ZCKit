@@ -41,7 +41,7 @@ NSString * const ZCFlagStr = @"^.~!*.^";
 
 - (NSString *)URLAllowString {
     NSString *urlStr = [self stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    return ZCStrNonnil(urlStr);
+    return kZStrNonnil(urlStr);
 }
 
 - (id)jsonObject {
@@ -293,13 +293,13 @@ NSString * const ZCFlagStr = @"^.~!*.^";
     if (!aString) aString = @"";
     NSCharacterSet *cSet = [NSCharacterSet characterSetWithCharactersInString:charStrings];
     if (isReverse) cSet = [cSet invertedSet];
-    return ZCStrNonnil([[self componentsSeparatedByCharactersInSet:cSet] componentsJoinedByString:aString]);
+    return kZStrNonnil([[self componentsSeparatedByCharactersInSet:cSet] componentsJoinedByString:aString]);
 }
 
 - (NSString *)regroupStringFromCharStrings:(NSString *)charStrings {
     if (!self.length || !charStrings.length) return self;
     NSCharacterSet *cSet = [[NSCharacterSet characterSetWithCharactersInString:charStrings] invertedSet];
-    return ZCStrNonnil([[self componentsSeparatedByCharactersInSet:cSet] componentsJoinedByString:@""]);
+    return kZStrNonnil([[self componentsSeparatedByCharactersInSet:cSet] componentsJoinedByString:@""]);
 }
 
 - (NSString *)replaceStringArray:(NSArray <NSString *>*)strings withString:(NSString *)aString {
@@ -309,13 +309,13 @@ NSString * const ZCFlagStr = @"^.~!*.^";
     for (NSString *iStr in strings) {
         if (iStr.length && str.length) {str = [str stringByReplacingOccurrencesOfString:iStr withString:aString];}
     }
-    return ZCStrNonnil(str);
+    return kZStrNonnil(str);
 }
 
 - (NSMutableAttributedString *)attriToMatch:(NSString *)match matchAtt:(NSDictionary *)matchAtt otherAtt:(NSDictionary *)otherAtt alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing {
     if (!self.length) return [[NSMutableAttributedString alloc] initWithString:self attributes:otherAtt];
     NSMutableAttributedString *attStr = [[NSMutableAttributedString alloc] initWithString:self];
-    NSRange rang = [self rangeOfString:ZCStrNonnil(match)];
+    NSRange rang = [self rangeOfString:kZStrNonnil(match)];
     if (attStr.length) {
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         if (spacing != 0) style.lineSpacing = spacing;

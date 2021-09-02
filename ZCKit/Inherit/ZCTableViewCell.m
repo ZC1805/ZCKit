@@ -58,11 +58,11 @@
 
 @property (nonatomic, assign) BOOL isAttachLabel; //是否是设置bottomClickButton而初始化的attachLabel
 
-@property (nonatomic, assign) CGFloat lineOneMinLeft; //第一行左侧label最小宽度(当右侧是trailingLabel有效)，ZSA(80)，可KVC赋值
+@property (nonatomic, assign) CGFloat lineOneMinLeft; //第一行左侧label最小宽度(当右侧是trailingLabel有效)，kZSA(80)，可KVC赋值
 
-@property (nonatomic, assign) CGFloat lineOneMinRight; //第一行右侧field最小宽度(当右侧是fitTextField有效)，ZSA(100)，可KVC赋值
+@property (nonatomic, assign) CGFloat lineOneMinRight; //第一行右侧field最小宽度(当右侧是fitTextField有效)，kZSA(100)，可KVC赋值
 
-@property (nonatomic, assign) CGFloat lineTwoMinLeft; //第二行左侧text/desc最小宽度(当右侧是bottomAttachLabel有效)，ZSA(80)，可KVC赋值
+@property (nonatomic, assign) CGFloat lineTwoMinLeft; //第二行左侧text/desc最小宽度(当右侧是bottomAttachLabel有效)，kZSA(80)，可KVC赋值
 
 @property (nonatomic, copy) NSString *textViewCalText; //bottomTextView计算最小高度，默认三行，可外部KVC赋值
 
@@ -97,35 +97,35 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 
 - (void)initValue {
     _level = 0;
-    _levelSpacing = ZSA(30);
-    _verticalSpacing = ZSA(3);
-    _horizontalSpacing = ZSA(10);
-    _marginInset = UIEdgeInsetsMake(ZSMInvl, ZSMInvl, ZSMInvl, ZSMInvl);
+    _levelSpacing = kZSA(30);
+    _verticalSpacing = kZSA(3);
+    _horizontalSpacing = kZSA(10);
+    _marginInset = UIEdgeInsetsMake(kZSInvl, kZSInvl, kZSInvl, kZSInvl);
     _bottomClickOffsetY = 0;
     _isSelectAvatarBeCenter = NO;
     _isLeadingBeCenter = NO;
     _isAccessBeCenter = NO;
-    _insideBKColor = ZCSPColor;
+    _insideBKColor = kZCSplit;
     _insideMargin = UIEdgeInsetsZero;
-    _separatorBKColor = ZCSPColor;
+    _separatorBKColor = kZCSplit;
     _topSeparatorInset = UIEdgeInsetsZero;
-    _bottomSeparatorInset = UIEdgeInsetsMake(ZSSepHei, ZSMInvl, 0, 0);
+    _bottomSeparatorInset = UIEdgeInsetsMake(kZSPixel, kZSInvl, 0, 0);
     _selectBKColor = nil;
 }
 
 #pragma mark - Api
 - (void)initStart {
     [self initValue];
-    _lineOneMinLeft = ZSA(80);
-    _lineTwoMinLeft = ZSA(80);
-    _lineOneMinRight = ZSA(100);
+    _lineOneMinLeft = kZSA(80);
+    _lineTwoMinLeft = kZSA(80);
+    _lineOneMinRight = kZSA(100);
     _textViewCalText = @" \n \n ";
     _recordHiddenInt = 0;
     self.bottomSeparator.backgroundColor = _separatorBKColor;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     self.editingAccessoryType = UITableViewCellAccessoryNone;
     self.accessoryType = UITableViewCellAccessoryNone;
-    self.backgroundColor = ZCWhite;
+    self.backgroundColor = kZCWhite;
 }
 
 - (void)initComplete {
@@ -148,7 +148,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     self.selectedBackgroundView = nil;
     self.editingAccessoryType = UITableViewCellAccessoryNone;
     self.accessoryType = UITableViewCellAccessoryNone;
-    self.backgroundColor = ZCWhite;
+    self.backgroundColor = kZCWhite;
     [self resetCellBaseProperty];
     
     _selectButton.hidden = YES;
@@ -382,7 +382,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
             fitMaxWid = self.zc_width - rightMax - leftMax + _lineOneMinLeft - MIN(maxWid1, size.width);
         }
         rightMax = rightMax + fitMaxWid + _horizontalSpacing;
-        _fitTextField.zc_size = CGSizeMake(fitMaxWid, _fitTextField.font.fontSize + ZSA(4));
+        _fitTextField.zc_size = CGSizeMake(fitMaxWid, _fitTextField.font.fontSize + kZSA(4));
     }
     //重算左侧宽度
     if ([self isSeatView:_leadingLabel]) {
@@ -842,13 +842,13 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     if (!_selectButton) {
         if (!_lineOneReferView && !_trailingLabel) {self.trailingLabel.hidden = YES; _isTrailingLabel = YES;}
         _selectButton = [ZCButton buttonWithType:UIButtonTypeCustom];
-        _selectButton.zc_size = CGSizeMake(ZSA(20), ZSA(20));
-        _selectButton.titleLabel.font = ZCF(16);
+        _selectButton.zc_size = CGSizeMake(kZSA(20), kZSA(20));
+        _selectButton.titleLabel.font = kZFR(16);
         _selectButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         _selectButton.titleLabel.minimumScaleFactor = 0.5;
-        _selectButton.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
+        _selectButton.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
         _selectButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [_selectButton setTitleColor:ZCBlack30 forState:UIControlStateNormal];
+        [_selectButton setTitleColor:kZCBlack30 forState:UIControlStateNormal];
         [self.contentView addSubview:_selectButton];
         [self injectBasicConstraint:_selectButton lineOne:YES];
     }
@@ -864,7 +864,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         if (!_lineOneReferView && !_trailingLabel) {self.trailingLabel.hidden = YES; _isTrailingLabel = YES;}
         _avatarControl = [[ZCAvatarControl alloc] initWithFrame:CGRectZero];
         _avatarControl.translatesAutoresizingMaskIntoConstraints = NO;
-        _avatarControl.zc_size = CGSizeMake(ZSA(40), ZSA(40));
+        _avatarControl.zc_size = CGSizeMake(kZSA(40), kZSA(40));
         _avatarControl.userInteractionEnabled = YES;
         [self.contentView addSubview:_avatarControl];
         [self injectBasicConstraint:_avatarControl lineOne:YES];
@@ -881,9 +881,9 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         if (!_lineOneReferView && !_trailingLabel) {self.trailingLabel.hidden = YES; _isTrailingLabel = YES;}
         _leadingLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _leadingLabel.textAlignment = NSTextAlignmentLeft;
-        _leadingLabel.textColor = ZCBlack30;
+        _leadingLabel.textColor = kZCBlack30;
         _leadingLabel.numberOfLines = 0;
-        _leadingLabel.font = ZCF(16);
+        _leadingLabel.font = kZFR(16);
         _leadingLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_leadingLabel];
         [self injectBasicConstraint:_leadingLabel lineOne:YES];
@@ -898,7 +898,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (UIView *)flagContainerView {
     if (!_flagContainerView) {
         _flagContainerView = [[UIView alloc] initWithFrame:CGRectZero];
-        _flagContainerView.zc_size = CGSizeMake(ZSA(20), ZSA(20));
+        _flagContainerView.zc_size = CGSizeMake(kZSA(20), kZSA(20));
         _flagContainerView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_flagContainerView];
         [self injectBasicConstraint:_flagContainerView lineOne:YES];
@@ -913,17 +913,17 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (ZCTextField *)inputTextField {
     if (!_inputTextField) {
         _inputTextField = [[ZCTextField alloc] initWithFrame:CGRectZero];
-        _inputTextField.zc_size = CGSizeMake(ZSA(160), ZSA(30));
+        _inputTextField.zc_size = CGSizeMake(kZSA(160), kZSA(30));
         _inputTextField.textAlignment = NSTextAlignmentLeft;
         _inputTextField.keyboardType = UIKeyboardTypeDefault;
         _inputTextField.borderStyle = UITextBorderStyleNone;
         _inputTextField.returnKeyType = UIReturnKeyDone;
         _inputTextField.adjustsFontSizeToFitWidth = YES;
         _inputTextField.isForbidVisibleMenu = YES;
-        _inputTextField.minimumFontSize = ZSA(10);
-        _inputTextField.textColor = ZCBlack30;
-        _inputTextField.font = ZCF(16);
-        _inputTextField.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
+        _inputTextField.minimumFontSize = kZSA(10);
+        _inputTextField.textColor = kZCBlack30;
+        _inputTextField.font = kZFR(16);
+        _inputTextField.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
         _inputTextField.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_inputTextField];
         [self injectBasicConstraint:_inputTextField lineOne:YES];
@@ -941,7 +941,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         _accessControl = [[ZCAvatarControl alloc] initWithFrame:CGRectZero];
         _accessControl.translatesAutoresizingMaskIntoConstraints = NO;
         _accessControl.localImage = ZCKitBridge.sideArrowImage;
-        _accessControl.zc_size = CGSizeMake(ZSA(6), ZSA(12));
+        _accessControl.zc_size = CGSizeMake(kZSA(6), kZSA(12));
         _accessControl.userInteractionEnabled = NO;
         [self.contentView addSubview:_accessControl];
         [self injectBasicConstraint:_accessControl lineOne:YES];
@@ -984,13 +984,13 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (ZCButton *)clickButton {
     if (!_clickButton) {
         _clickButton = [ZCButton buttonWithType:UIButtonTypeCustom];
-        _clickButton.zc_size = CGSizeMake(ZSA(30), ZSA(30));
-        _clickButton.titleLabel.font = ZCF(16);
+        _clickButton.zc_size = CGSizeMake(kZSA(30), kZSA(30));
+        _clickButton.titleLabel.font = kZFR(16);
         _clickButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         _clickButton.titleLabel.minimumScaleFactor = 0.5;
-        _clickButton.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
+        _clickButton.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
         _clickButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [_clickButton setTitleColor:ZCBlack30 forState:UIControlStateNormal];
+        [_clickButton setTitleColor:kZCBlack30 forState:UIControlStateNormal];
         [self.contentView addSubview:_clickButton];
         [self injectBasicConstraint:_clickButton lineOne:YES];
     }
@@ -1004,7 +1004,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (UIView *)containerView {
     if (!_containerView) {
         _containerView = [[UIView alloc] initWithFrame:CGRectZero];
-        _containerView.zc_size = CGSizeMake(ZSA(30), ZSA(30));
+        _containerView.zc_size = CGSizeMake(kZSA(30), kZSA(30));
         _containerView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_containerView];
         [self injectBasicConstraint:_containerView lineOne:YES];
@@ -1025,9 +1025,9 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         _fitTextField.returnKeyType = UIReturnKeyDone;
         _fitTextField.adjustsFontSizeToFitWidth = NO;
         _fitTextField.isForbidVisibleMenu = YES;
-        _fitTextField.textColor = ZCBlack30;
-        _fitTextField.font = ZCF(16);
-        _fitTextField.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
+        _fitTextField.textColor = kZCBlack30;
+        _fitTextField.font = kZFR(16);
+        _fitTextField.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
         _fitTextField.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_fitTextField];
         [self injectBasicConstraint:_fitTextField lineOne:YES];
@@ -1047,9 +1047,9 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     if (!_trailingLabel) {
         _trailingLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _trailingLabel.textAlignment = NSTextAlignmentRight;
-        _trailingLabel.textColor = ZCBlackA8;
+        _trailingLabel.textColor = kZCBlackA8;
         _trailingLabel.numberOfLines = 0;
-        _trailingLabel.font = ZCF(16);
+        _trailingLabel.font = kZFR(16);
         _trailingLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_trailingLabel];
         [self injectBasicConstraint:_trailingLabel lineOne:YES];
@@ -1065,9 +1065,9 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     if (!_bottomDescLabel) {
         _bottomDescLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _bottomDescLabel.textAlignment = NSTextAlignmentLeft;
-        _bottomDescLabel.textColor = ZCBlack80;
+        _bottomDescLabel.textColor = kZCBlack80;
         _bottomDescLabel.numberOfLines = 0;
-        _bottomDescLabel.font = ZCF(14);
+        _bottomDescLabel.font = kZFR(14);
         _bottomDescLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_bottomDescLabel];
         [self injectBasicConstraint:_bottomDescLabel lineOne:NO];
@@ -1090,8 +1090,8 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         _bottomTextView.showsHorizontalScrollIndicator = NO;
         _bottomTextView.showsVerticalScrollIndicator = NO;
         _bottomTextView.placeholderTextColor = nil;
-        _bottomTextView.textColor = ZCBlack30;
-        _bottomTextView.font = ZCF(16);
+        _bottomTextView.textColor = kZCBlack30;
+        _bottomTextView.font = kZFR(16);
         _bottomTextView.bounces = NO;
         _bottomTextView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_bottomTextView];
@@ -1107,7 +1107,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (UIView *)bottomFlagContainerView {
     if (!_bottomFlagContainerView) {
         _bottomFlagContainerView = [[UIView alloc] initWithFrame:CGRectZero];
-        _bottomFlagContainerView.zc_size = CGSizeMake(ZSA(20), ZSA(20));
+        _bottomFlagContainerView.zc_size = CGSizeMake(kZSA(20), kZSA(20));
         _bottomFlagContainerView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_bottomFlagContainerView];
         [self injectBasicConstraint:_bottomFlagContainerView lineOne:NO];
@@ -1122,17 +1122,17 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (ZCTextField *)bottomTextField {
     if (!_bottomTextField) {
         _bottomTextField = [[ZCTextField alloc] initWithFrame:CGRectZero];
-        _bottomTextField.zc_size = CGSizeMake(ZSA(160), ZSA(30));
+        _bottomTextField.zc_size = CGSizeMake(kZSA(160), kZSA(30));
         _bottomTextField.textAlignment = NSTextAlignmentLeft;
         _bottomTextField.keyboardType = UIKeyboardTypeDefault;
         _bottomTextField.borderStyle = UITextBorderStyleNone;
         _bottomTextField.returnKeyType = UIReturnKeyDone;
         _bottomTextField.adjustsFontSizeToFitWidth = YES;
         _bottomTextField.isForbidVisibleMenu = YES;
-        _bottomTextField.minimumFontSize = ZSA(10);
-        _bottomTextField.textColor = ZCBlack30;
-        _bottomTextField.font = ZCF(16);
-        _bottomTextField.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
+        _bottomTextField.minimumFontSize = kZSA(10);
+        _bottomTextField.textColor = kZCBlack30;
+        _bottomTextField.font = kZFR(16);
+        _bottomTextField.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
         _bottomTextField.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_bottomTextField];
         [self injectBasicConstraint:_bottomTextField lineOne:NO];
@@ -1152,9 +1152,9 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     if (!_bottomAttachLabel) {
         _bottomAttachLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _bottomAttachLabel.textAlignment = NSTextAlignmentRight;
-        _bottomAttachLabel.textColor = ZCBlackA8;
+        _bottomAttachLabel.textColor = kZCBlackA8;
         _bottomAttachLabel.numberOfLines = 0;
-        _bottomAttachLabel.font = ZCF(13);
+        _bottomAttachLabel.font = kZFR(13);
         _bottomAttachLabel.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_bottomAttachLabel];
         [self injectBasicConstraint:_bottomAttachLabel lineOne:NO];
@@ -1169,7 +1169,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (UIView *)bottomContainerView {
     if (!_bottomContainerView) {
         _bottomContainerView = [[UIView alloc] initWithFrame:CGRectZero];
-        _bottomContainerView.zc_size = CGSizeMake(ZSA(30), ZSA(30));
+        _bottomContainerView.zc_size = CGSizeMake(kZSA(30), kZSA(30));
         _bottomContainerView.translatesAutoresizingMaskIntoConstraints = NO;
         [self.contentView addSubview:_bottomContainerView];
         [self injectBasicConstraint:_bottomContainerView lineOne:NO];
@@ -1185,13 +1185,13 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
     if (!_bottomClickButton) {
         if (!_lineTwoReferView && !_bottomAttachLabel) {self.bottomAttachLabel.hidden = YES; _isAttachLabel = YES;}
         _bottomClickButton = [ZCButton buttonWithType:UIButtonTypeCustom];
-        _bottomClickButton.zc_size = CGSizeMake(ZSA(30), ZSA(30));
-        _bottomClickButton.titleLabel.font = ZCF(16);
+        _bottomClickButton.zc_size = CGSizeMake(kZSA(30), kZSA(30));
+        _bottomClickButton.titleLabel.font = kZFR(16);
         _bottomClickButton.titleLabel.adjustsFontSizeToFitWidth = YES;
         _bottomClickButton.titleLabel.minimumScaleFactor = 0.5;
-        _bottomClickButton.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
+        _bottomClickButton.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
         _bottomClickButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [_bottomClickButton setTitleColor:ZCBlack30 forState:UIControlStateNormal];
+        [_bottomClickButton setTitleColor:kZCBlack30 forState:UIControlStateNormal];
         [self.contentView addSubview:_bottomClickButton];
         [self injectBasicConstraint:_bottomClickButton lineOne:NO];
     }
@@ -1223,13 +1223,13 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         [view removeAllSubviews];
         
         if (view == _flagContainerView) {
-            view.zc_size = CGSizeMake(ZSA(20), ZSA(20));
+            view.zc_size = CGSizeMake(kZSA(20), kZSA(20));
         } else if (view == _containerView) {
-            view.zc_size = CGSizeMake(ZSA(30), ZSA(30));
+            view.zc_size = CGSizeMake(kZSA(30), kZSA(30));
         } else if (view == _bottomContainerView) {
-            view.zc_size = CGSizeMake(ZSA(30), ZSA(30));
+            view.zc_size = CGSizeMake(kZSA(30), kZSA(30));
         } else if (view == _bottomFlagContainerView) {
-            view.zc_size = CGSizeMake(ZSA(20), ZSA(20));
+            view.zc_size = CGSizeMake(kZSA(20), kZSA(20));
         }
     }
 }
@@ -1272,10 +1272,10 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         
         if (avatar == _avatarControl) {
             avatar.userInteractionEnabled = YES;
-            avatar.zc_size = CGSizeMake(ZSA(40), ZSA(40));
+            avatar.zc_size = CGSizeMake(kZSA(40), kZSA(40));
         } else if (avatar == _accessControl) {
             avatar.userInteractionEnabled = NO;
-            avatar.zc_size = CGSizeMake(ZSA(6), ZSA(12));
+            avatar.zc_size = CGSizeMake(kZSA(6), kZSA(12));
             avatar.localImage = ZCKitBridge.sideArrowImage;
         }
     }
@@ -1298,24 +1298,24 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         label.text = nil;
         
         if (label == _leadingLabel) {
-            label.font = ZCF(16);
+            label.font = kZFR(16);
             label.numberOfLines = 0;
-            label.textColor = ZCBlack30;
+            label.textColor = kZCBlack30;
             label.textAlignment = NSTextAlignmentLeft;
         } else if (label == _trailingLabel) {
-            label.font = ZCF(16);
+            label.font = kZFR(16);
             label.numberOfLines = 0;
-            label.textColor = ZCBlackA8;
+            label.textColor = kZCBlackA8;
             label.textAlignment = NSTextAlignmentRight;
         } else if (label == _bottomDescLabel) {
-            label.font = ZCF(14);
+            label.font = kZFR(14);
             label.numberOfLines = 0;
-            label.textColor = ZCBlack80;
+            label.textColor = kZCBlack80;
             label.textAlignment = NSTextAlignmentLeft;
         } else if (label == _bottomAttachLabel) {
-            label.font = ZCF(13);
+            label.font = kZFR(13);
             label.numberOfLines = 0;
-            label.textColor = ZCBlackA8;
+            label.textColor = kZCBlackA8;
             label.textAlignment = NSTextAlignmentRight;
         }
     }
@@ -1344,26 +1344,26 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         [button resetInitProperty];
         
         if (button == _selectButton) {
-            button.titleLabel.font = ZCF(16);
-            button.zc_size = CGSizeMake(ZSA(20), ZSA(20));
+            button.titleLabel.font = kZFR(16);
+            button.zc_size = CGSizeMake(kZSA(20), kZSA(20));
             button.titleLabel.adjustsFontSizeToFitWidth = YES;
             button.titleLabel.minimumScaleFactor = 0.5;
-            button.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
-            [button setTitleColor:ZCBlack30 forState:UIControlStateNormal];
+            button.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
+            [button setTitleColor:kZCBlack30 forState:UIControlStateNormal];
         } else if (button == _clickButton) {
-            button.titleLabel.font = ZCF(16);
-            button.zc_size = CGSizeMake(ZSA(30), ZSA(30));
+            button.titleLabel.font = kZFR(16);
+            button.zc_size = CGSizeMake(kZSA(30), kZSA(30));
             button.titleLabel.adjustsFontSizeToFitWidth = YES;
             button.titleLabel.minimumScaleFactor = 0.5;
-            button.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
-            [button setTitleColor:ZCBlack30 forState:UIControlStateNormal];
+            button.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
+            [button setTitleColor:kZCBlack30 forState:UIControlStateNormal];
         } else if (button == _bottomClickButton) {
-            button.titleLabel.font = ZCF(16);
-            button.zc_size = CGSizeMake(ZSA(30), ZSA(30));
+            button.titleLabel.font = kZFR(16);
+            button.zc_size = CGSizeMake(kZSA(30), kZSA(30));
             button.titleLabel.adjustsFontSizeToFitWidth = YES;
             button.titleLabel.minimumScaleFactor = 0.5;
-            button.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
-            [button setTitleColor:ZCBlack30 forState:UIControlStateNormal];
+            button.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
+            [button setTitleColor:kZCBlack30 forState:UIControlStateNormal];
         }
     }
 }
@@ -1422,39 +1422,39 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         #pragma clang diagnostic pop
         
         if (field == _inputTextField) {
-            field.zc_size = CGSizeMake(ZSA(160), ZSA(30));
-            field.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
+            field.zc_size = CGSizeMake(kZSA(160), kZSA(30));
+            field.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
             field.textAlignment = NSTextAlignmentLeft;
             field.keyboardType = UIKeyboardTypeDefault;
             field.borderStyle = UITextBorderStyleNone;
             field.adjustsFontSizeToFitWidth = YES;
             field.returnKeyType = UIReturnKeyDone;
             field.isForbidVisibleMenu = YES;
-            field.minimumFontSize = ZSA(10);
-            field.textColor = ZCBlack30;
-            field.font = ZCF(16);
+            field.minimumFontSize = kZSA(10);
+            field.textColor = kZCBlack30;
+            field.font = kZFR(16);
         } else if (field == _fitTextField) {
-            field.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
+            field.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
             field.textAlignment = NSTextAlignmentRight;
             field.keyboardType = UIKeyboardTypeDefault;
             field.borderStyle = UITextBorderStyleNone;
             field.returnKeyType = UIReturnKeyDone;
             field.adjustsFontSizeToFitWidth = NO;
             field.isForbidVisibleMenu = YES;
-            field.textColor = ZCBlack30;
-            field.font = ZCF(16);
+            field.textColor = kZCBlack30;
+            field.font = kZFR(16);
         } else if (field == _bottomTextField) {
-            field.zc_size = CGSizeMake(ZSA(160), ZSA(30));
-            field.responseAreaExtend = UIEdgeInsetsMake(ZSA(5), ZSA(5), ZSA(5), ZSA(5));
+            field.zc_size = CGSizeMake(kZSA(160), kZSA(30));
+            field.responseAreaExtend = UIEdgeInsetsMake(kZSA(5), kZSA(5), kZSA(5), kZSA(5));
             field.textAlignment = NSTextAlignmentLeft;
             field.keyboardType = UIKeyboardTypeDefault;
             field.borderStyle = UITextBorderStyleNone;
             field.adjustsFontSizeToFitWidth = YES;
             field.returnKeyType = UIReturnKeyDone;
             field.isForbidVisibleMenu = YES;
-            field.minimumFontSize = ZSA(10);
-            field.textColor = ZCBlack30;
-            field.font = ZCF(16);
+            field.minimumFontSize = kZSA(10);
+            field.textColor = kZCBlack30;
+            field.font = kZFR(16);
         }
     }
 }
@@ -1508,8 +1508,8 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
             text.showsHorizontalScrollIndicator = NO;
             text.showsVerticalScrollIndicator = NO;
             text.placeholderTextColor = nil;
-            text.textColor = ZCBlack30;
-            text.font = ZCF(16);
+            text.textColor = kZCBlack30;
+            text.font = kZFR(16);
             text.bounces = NO;
         }
     }
@@ -1619,8 +1619,8 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
                 ((UIScrollView *)view).refreshControl = nil;
             }
             ((UIScrollView *)view).keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
-            ((UIScrollView *)view).bottomExpandColor = ZCClear;
-            ((UIScrollView *)view).topExpandColor = ZCClear;
+            ((UIScrollView *)view).bottomExpandColor = kZCClear;
+            ((UIScrollView *)view).topExpandColor = kZCClear;
         }
     }
 }

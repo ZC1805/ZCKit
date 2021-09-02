@@ -44,7 +44,7 @@
     NSArray *instances = [_singletons allValues];
     for (id instance in instances) {
         if ([instance respondsToSelector:selecotr]) {
-            zc_suppress_leak_warning([instance performSelector:selecotr]);
+            kZSuppressLeakWarn([instance performSelector:selecotr]);
         }
     }
 }

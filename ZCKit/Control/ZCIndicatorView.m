@@ -28,9 +28,9 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _tintColor = ZCBlack80;
+        _tintColor = kZCBlack80;
         _diameter = frame.size.width / 9;
-        self.backgroundColor = ZCRed;
+        self.backgroundColor = kZCRGB(0xFF0000);
         [self indicatorSize:self.frame.size];
     }
     return self;

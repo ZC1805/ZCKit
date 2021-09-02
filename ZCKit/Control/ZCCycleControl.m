@@ -36,10 +36,10 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (void)initialization {
-    _dotColor = ZCWhite;
-    self.backgroundColor = ZCClear;
+    _dotColor = kZCWhite;
+    self.backgroundColor = kZCClear;
     self.layer.cornerRadius = self.zc_width / 2.0;
-    self.layer.borderColor = ZCWhite.CGColor;
+    self.layer.borderColor = kZCWhite.CGColor;
     self.layer.borderWidth = 1.0;
 }
 
@@ -59,7 +59,7 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (void)animateToDeactiveState {
-    self.backgroundColor = ZCClear;
+    self.backgroundColor = kZCClear;
     [UIView animateWithDuration:1.0 delay:0 usingSpringWithDamping:0.5 initialSpringVelocity:0 options:UIViewAnimationOptionCurveLinear animations:^{
         self.transform = CGAffineTransformIdentity;
     } completion:nil];
@@ -115,7 +115,7 @@ static NSString * const ident = @"cycleControlCell";
     self.spacingBetweenDots = 7.0;
     self.numberOfPages = 0;
     self.currentPage = 0;
-    self.backgroundColor = ZCClear;
+    self.backgroundColor = kZCClear;
 }
 
 - (void)sizeToFit {
@@ -281,9 +281,9 @@ static NSString * const ident = @"cycleControlCell";
 - (void)setupTitleLabel {
     UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
     _titleLabel = titleLabel;
-    _titleLabel.textColor = ZCWhite;
+    _titleLabel.textColor = kZCWhite;
     _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
-    _titleLabel.backgroundColor = [ZCBlack colorWithAlphaComponent:0.4];
+    _titleLabel.backgroundColor = [kZCBlack colorWithAlphaComponent:0.4];
     _titleLabel.textAlignment = NSTextAlignmentLeft;
     _titleLabel.zc_height = 30.0;
     _titleLabel.hidden = YES;
@@ -442,12 +442,12 @@ static NSString * const ident = @"cycleControlCell";
     _pageControlSpacing = 7.0;
     _pageControlAliment = ZCEnumCycleAlimentCenter;
     _pageControlStyle = ZCEnumCyclePageStyleAnimated;
-    _pageDotSelectColor = ZCWhite;
-    _pageDotColor = ZCBlackA8;
+    _pageDotSelectColor = kZCWhite;
+    _pageDotColor = kZCBlackA8;
 }
 
 - (void)setupMainView {
-    self.backgroundColor = ZCWhite;
+    self.backgroundColor = kZCWhite;
     UICollectionViewFlowLayout *flowLayout = nil;
     if (_itemHorSpace > 0) {
         flowLayout = [[ZCCycleHorizontalFlowLayout alloc] initWithItemHorSpace:_itemHorSpace isMultiple:_isShowMultiple];
@@ -459,7 +459,7 @@ static NSString * const ident = @"cycleControlCell";
     _flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     UICollectionView *mainView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:_flowLayout];
     if (@available(iOS 11.0, *)) {mainView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;}
-    mainView.backgroundColor = ZCClear;
+    mainView.backgroundColor = kZCClear;
     mainView.pagingEnabled = YES;
     mainView.showsHorizontalScrollIndicator = NO;
     mainView.showsVerticalScrollIndicator = NO;

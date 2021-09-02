@@ -132,7 +132,7 @@
 }
 
 - (void)setPlaceholderTextColor:(UIColor *)placeholderTextColor {
-    if (!placeholderTextColor) placeholderTextColor = [ZCBlackA8 colorWithAlphaComponent:0.7];
+    if (!placeholderTextColor) placeholderTextColor = [kZCBlackA8 colorWithAlphaComponent:0.7];
     _placeholderTextColor = placeholderTextColor;
     self.placeholderLabel.textColor = placeholderTextColor;
 }
@@ -161,8 +161,8 @@
         _placeholderLabel.numberOfLines = 0;
         _placeholderLabel.font = self.font;
         _placeholderLabel.textAlignment = self.textAlignment;
-        _placeholderLabel.backgroundColor = ZCClear;
-        _placeholderLabel.textColor = [ZCBlackA8 colorWithAlphaComponent:0.7];
+        _placeholderLabel.backgroundColor = kZCClear;
+        _placeholderLabel.textColor = [kZCBlackA8 colorWithAlphaComponent:0.7];
         _placeholderLabel.alpha = 0;
         [self addSubview:_placeholderLabel];
     }

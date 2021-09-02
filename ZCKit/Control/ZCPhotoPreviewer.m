@@ -51,9 +51,9 @@
 }
 
 - (void)initialSet {
-    self.backgroundColor = ZCClear;
-    self.frame = ZSScreen;
-    self.textOriginColor = ZCBKColor;
+    self.backgroundColor = kZCClear;
+    self.frame = kZSScreen;
+    self.textOriginColor = kZCPad;
     self.isAllowDoubleTap = NO;
     self.isUseDarkStyle = YES;
     self.isInAnimation = NO;
@@ -89,11 +89,11 @@
 
 - (UILabel *)titleLabel {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero color:ZCClear];
+        _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero color:kZCClear];
         _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
-        _titleLabel.textColor = self.isUseDarkStyle ? self.textOriginColor : ZCBlack30;
-        _titleLabel.frame = CGRectMake(30.0, ZSStuBarHei, self.zc_width - 60.0, ZSNaviBarHei);
+        _titleLabel.textColor = self.isUseDarkStyle ? self.textOriginColor : kZCBlack30;
+        _titleLabel.frame = CGRectMake(30.0, kZSStuBarHei, self.zc_width - 60.0, kZSNaviBarHei);
         [self addSubview:self.titleLabel];
     }
     return _titleLabel;
@@ -112,7 +112,7 @@
 - (void)setIsUseDarkStyle:(BOOL)isUseDarkStyle {
     _isUseDarkStyle = isUseDarkStyle;
     if (_titleLabel && [_titleLabel.textColor isEqual:self.textOriginColor]) {
-        _titleLabel.textColor = ZCBlack30;
+        _titleLabel.textColor = kZCBlack30;
     }
 }
 

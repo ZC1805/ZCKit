@@ -23,7 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"2";
-    self.view.backgroundColor = ZCRGB(0xEEEEEE);
+    self.view.backgroundColor = kZCRGB(0xEEEEEE);
 }
 
 @end

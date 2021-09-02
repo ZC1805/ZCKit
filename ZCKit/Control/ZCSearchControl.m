@@ -95,8 +95,8 @@
 
 - (void)setIsGrayStyle:(BOOL)isGrayStyle {
     _isGrayStyle = isGrayStyle;
-    _barColor = _isGrayStyle ? ZCBKColor : ZCClear;
-    _tintColor = _isGrayStyle ? ZCBlackA8 : ZCWhite;
+    _barColor = _isGrayStyle ? kZCPad : kZCClear;
+    _tintColor = _isGrayStyle ? kZCBlackA8 : kZCWhite;
     UIImage *image = [ZCGlobal ZCImageName:(self.isGrayStyle ? @"zc_image_search_grey" : @"zc_image_search_white")];
     self.eventButton.titleLabel.font = self.isGrayStyle ? [UIFont fontWithName:@"HelveticaNeue" size:13] : [UIFont fontWithName:@"HelveticaNeue" size:15];
     self.eventButton.backgroundColor = _barColor;

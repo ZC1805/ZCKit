@@ -96,8 +96,8 @@
                 weakMask.showAnimate = showAnimate;
                 weakMask.hideAnimate = hideAnimate;
                 weakMask.displayView = displayView;
-                weakMask.frame = ZSScreen;
-                UIView *maskView = [[UIView alloc] initWithFrame:ZSScreen];
+                weakMask.frame = kZSScreen;
+                UIView *maskView = [[UIView alloc] initWithFrame:kZSScreen];
                 [[UIApplication sharedApplication].delegate.window addSubview:maskView];
                 [maskView addSubview:weakMask];
                 [weakMask addSubview:displayView];
@@ -113,8 +113,8 @@
             weakMask.showAnimate = showAnimate;
             weakMask.hideAnimate = hideAnimate;
             weakMask.displayView = displayView;
-            weakMask.frame = ZSScreen;
-            UIView *maskView = [[UIView alloc] initWithFrame:ZSScreen];
+            weakMask.frame = kZSScreen;
+            UIView *maskView = [[UIView alloc] initWithFrame:kZSScreen];
             [[UIApplication sharedApplication].delegate.window addSubview:maskView];
             [maskView addSubview:weakMask];
             [weakMask addSubview:displayView];
@@ -137,14 +137,14 @@
     self.isShow = YES;
     self.isAnimate = YES;
     self.alpha = self.showAnimate ? 1 : 0;
-    self.superview.backgroundColor = [ZCBlack colorWithAlphaComponent:0];
+    self.superview.backgroundColor = [kZCBlack colorWithAlphaComponent:0];
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
         if (self.showAnimate) {
             self.showAnimate(self.displayView);
         } else {
             self.alpha = 1;
         }
-        self.superview.backgroundColor = [ZCBlack colorWithAlphaComponent:self.isGreyMask ? self.maskAlpha : 0];
+        self.superview.backgroundColor = [kZCBlack colorWithAlphaComponent:self.isGreyMask ? self.maskAlpha : 0];
     } completion:^(BOOL finished) {
         self.isAnimate = NO;
     }];
@@ -159,7 +159,7 @@
             } else {
                 self.alpha = 0;
             }
-            self.superview.backgroundColor = [ZCBlack colorWithAlphaComponent:0];
+            self.superview.backgroundColor = [kZCBlack colorWithAlphaComponent:0];
         } completion:^(BOOL finished) {
             [self finish:finishBlock byAutoHide:isByAutoHide];
         }];
@@ -232,13 +232,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.animationTime = 0;
-    self.view.backgroundColor = ZCClear;
+    self.view.backgroundColor = kZCClear;
     UIBlurEffect *blur = [UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight];
     self.visualView = [[UIVisualEffectView alloc] initWithEffect:blur];
     self.contentView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.contentView.backgroundColor = ZCClear;
+    self.contentView.backgroundColor = kZCClear;
     self.maskView = [[ZCFocusView alloc] initWithFrame:CGRectZero];
-    self.maskView.backgroundColor = ZCClear;
+    self.maskView.backgroundColor = kZCClear;
     [self.view addSubview:self.visualView];
     [self.view addSubview:self.contentView];
     [self.contentView addSubview:self.maskView];
@@ -252,7 +252,7 @@
 
 - (UIWindow *)maskWindow {
     if (!_maskWindow) {
-        _maskWindow = [[UIWindow alloc] initWithFrame:ZSScreen];
+        _maskWindow = [[UIWindow alloc] initWithFrame:kZSScreen];
         _maskWindow.windowLevel = UIWindowLevelAlert + 1.0;
         _maskWindow.rootViewController = self;
     }
@@ -287,7 +287,7 @@
     self.maskWindow.hidden = NO;
     self.animationTime = time;
     self.visualView.hidden = !blur;
-    self.maskView.backgroundColor = clear ? ZCClear : ZCBlack;
+    self.maskView.backgroundColor = clear ? kZCClear : kZCBlack;
     self.maskView.isCanResponse = ^BOOL(CGPoint focus) {return !CGRectContainsPoint(view.frame, focus);};
     self.maskView.responseAction = action;
     [self.contentView addSubview:view];

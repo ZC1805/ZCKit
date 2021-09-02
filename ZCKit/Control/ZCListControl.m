@@ -62,9 +62,9 @@
 #pragma mark - Display
 - (void)displayItems {
     [ZCWindowView display:self time:0.25 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{[self disappearItems:-1];}) : nil)];
-    self.zc_top = ZSHei;
+    self.zc_top = kZSHei;
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
-        self.zc_top = ZSHei - self.zc_height;
+        self.zc_top = kZSHei - self.zc_height;
     } completion:^(BOOL finished) {
         self.isCanTouch = YES;
     }];
@@ -75,7 +75,7 @@
     self.isCanTouch = NO;
     [ZCWindowView dismissSubview];
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.zc_top = ZSHei;
+        self.zc_top = kZSHei;
     } completion:^(BOOL finished) {
         NSDictionary *item = [self.items objectOrNilAtIndex:selectIndex];
         if (self.cellClickBlock) {self.cellClickBlock(selectIndex, item);};
@@ -86,8 +86,8 @@
 
 #pragma mark - Build
 - (void)title:(NSString *)title message:(NSString *)message {
-    self.frame = CGRectMake(0, 0, ZSWid, ZSHei);
-    self.backgroundColor = ZCWhite;
+    self.frame = CGRectMake(0, 0, kZSWid, kZSHei);
+    self.backgroundColor = kZCWhite;
     CGFloat headerHei = 18;
     ZCLabel *titleLabel = nil; ZCLabel *messageLabel = nil;
     if (self.isUseTopCorner) {
@@ -98,7 +98,7 @@
         headerHei = headerHei - corView.zc_height/2.0;
     }
     if (title.length) {
-        titleLabel = [[ZCLabel alloc] initWithColor:ZCBlack30 font:[UIFont fontWithName:@"HelveticaNeue-Medium" size:16] alignment:NSTextAlignmentCenter adjustsSize:NO];
+        titleLabel = [[ZCLabel alloc] initWithColor:kZCBlack30 font:[UIFont fontWithName:@"HelveticaNeue-Medium" size:16] alignment:NSTextAlignmentCenter adjustsSize:NO];
         titleLabel.frame = CGRectMake(15, headerHei, self.zc_width - 30, 0);
         titleLabel.numberOfLines = 0; titleLabel.lineSpace = 3; titleLabel.text = title;
         [titleLabel minToSize];
@@ -107,7 +107,7 @@
     }
     if (message.length) {
         if (title.length) headerHei = headerHei + 5;
-        messageLabel = [[ZCLabel alloc] initWithColor:ZCBlackA8 font:[UIFont fontWithName:@"HelveticaNeue" size:13] alignment:NSTextAlignmentCenter adjustsSize:NO];
+        messageLabel = [[ZCLabel alloc] initWithColor:kZCBlackA8 font:[UIFont fontWithName:@"HelveticaNeue" size:13] alignment:NSTextAlignmentCenter adjustsSize:NO];
         messageLabel.frame = CGRectMake(15, headerHei, self.zc_width - 30, 0);
         messageLabel.numberOfLines = 0; messageLabel.lineSpace = 3; messageLabel.text = message;
         [messageLabel minToSize];
@@ -115,8 +115,8 @@
         headerHei = messageLabel.zc_bottom;
     }
     headerHei = headerHei + 18;
-    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, headerHei, self.zc_width, ZSSepHei)];
-    line.backgroundColor = ZCSPColor;
+    UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, headerHei, self.zc_width, kZSPixel)];
+    line.backgroundColor = kZCSplit;
     [self addSubview:line];
     
     if (self.isShowCloseButton) {
@@ -133,7 +133,7 @@
     listView.dataSource = self; listView.delegate = self;
     listView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     listView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0)];
-    listView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, ZSBomSafeHei)];
+    listView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, kZSBomSafeHei)];
     listView.separatorStyle = UITableViewCellSeparatorStyleNone;
     listView.estimatedSectionFooterHeight = 0;
     listView.estimatedSectionHeaderHeight = 0;
@@ -144,8 +144,8 @@
     listView.showsHorizontalScrollIndicator = NO;
     listView.showsVerticalScrollIndicator = YES;
     listView.separatorInset = UIEdgeInsetsZero;
-    listView.backgroundColor = ZCClear;
-    listView.sectionIndexColor = ZCBlack30;
+    listView.backgroundColor = kZCClear;
+    listView.sectionIndexColor = kZCBlack30;
     listView.directionalLockEnabled = YES;
     listView.bounces = YES;
     listView.frame = CGRectMake(0, line.zc_bottom, self.zc_width, 1000); //这里要设置大些
@@ -157,11 +157,11 @@
     [listView layoutIfNeeded];
     
     CGFloat contentHei = listView.contentSize.height;
-    if (contentHei > self.maxContentHei + ZSBomSafeHei) {
-        contentHei = self.maxContentHei + ZSBomSafeHei;
+    if (contentHei > self.maxContentHei + kZSBomSafeHei) {
+        contentHei = self.maxContentHei + kZSBomSafeHei;
     }
-    if (contentHei < self.minContentHei + ZSBomSafeHei) {
-        contentHei = self.minContentHei + ZSBomSafeHei;
+    if (contentHei < self.minContentHei + kZSBomSafeHei) {
+        contentHei = self.minContentHei + kZSBomSafeHei;
     }
     self.zc_height = line.zc_bottom + contentHei;
     listView.zc_height = contentHei;
@@ -195,8 +195,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"listCellx" forIndexPath:indexPath];
     cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-    cell.backgroundView = [[UIView alloc] initWithFrame:cell.bounds color:ZCWhite];
-    cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.bounds color:ZCSPColor];
+    cell.backgroundView = [[UIView alloc] initWithFrame:cell.bounds color:kZCWhite];
+    cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.bounds color:kZCSplit];
     NSDictionary *item = [self.items dictionaryValueForIndex:indexPath.row];
     if (cell && self.cellResueBlock) {self.cellResueBlock(cell, indexPath, item);}
     return cell;

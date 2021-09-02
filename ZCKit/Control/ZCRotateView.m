@@ -21,7 +21,7 @@
     if (self = [super initWithFrame:frame]) {
         _strokeRadius = 15.0;
         _strokeThickness = 3.5;
-        _strokeColor = ZCRed;
+        _strokeColor = kZCRGB(0xFF0000);
     }
     return self;
 }
@@ -53,7 +53,7 @@
         _indefiniteAnimatedLayer = [CAShapeLayer layer];
         _indefiniteAnimatedLayer.contentsScale = [[UIScreen mainScreen] scale];
         _indefiniteAnimatedLayer.frame = rect;
-        _indefiniteAnimatedLayer.fillColor = ZCClear.CGColor;
+        _indefiniteAnimatedLayer.fillColor = kZCClear.CGColor;
         _indefiniteAnimatedLayer.strokeColor = self.strokeColor.CGColor;
         _indefiniteAnimatedLayer.lineWidth = self.strokeThickness;
         _indefiniteAnimatedLayer.lineCap = kCALineCapRound;

@@ -27,7 +27,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"1";
-    self.view.backgroundColor = ZCRGB(0xEE88AA);
+    self.view.backgroundColor = kZCRGB(0xEE88AA);
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.edgesForExtendedLayout = UIRectEdgeAll;
@@ -50,8 +50,8 @@
     listView.separatorInset = UIEdgeInsetsZero;
     listView.directionalLockEnabled = YES;
     listView.bounces = YES;
-    listView.frame = CGRectMake(0, 64, ZSWid, ZSHei - 64); //这里要设置大些
-    listView.backgroundColor = ZCRGB(0xEEEEEE);
+    listView.frame = CGRectMake(0, 64, kZSWid, kZSHei - 64); //这里要设置大些
+    listView.backgroundColor = kZCRGB(0xEEEEEE);
     
     [self.view addSubview:listView];
 }
@@ -73,7 +73,7 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, ZSWid, 50) color:ZCRGB(0xFFFFFF)];
+    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, kZSWid, 50) color:kZCRGB(0xFFFFFF)];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -81,14 +81,14 @@
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
-    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, ZSWid, 50) color:ZCRGB(0xFFFFFF)];
+    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, kZSWid, 50) color:kZCRGB(0xFFFFFF)];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    cell.backgroundColor = ZCClear;
-    cell.textLabel.text = ZCStrFormat(@"%ld", indexPath.row);
+    cell.backgroundColor = kZCClear;
+    cell.textLabel.text = kZStrFormat(@"%ld", indexPath.row);
     return cell;
 }
 

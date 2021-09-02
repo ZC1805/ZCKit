@@ -39,8 +39,8 @@
         self.selectImage = nil;
         self.normalTitleFont = [UIFont fontWithName:@"HelveticaNeue" size:15];
         self.selectTitleFont = [UIFont fontWithName:@"HelveticaNeue" size:15];
-        self.normalColorRGB = ZCBlack30.RGBValue;
-        self.selectColorRGB = ZCRed.RGBValue;
+        self.normalColorRGB = kZCBlack30.RGBValue;
+        self.selectColorRGB = kZCBlack30.RGBValue;
         self.spaceHeight = 0;
         self.imageSize = CGSizeMake(20.0, 20.0);
         self.imageTitleSpace = 0;
@@ -54,7 +54,7 @@
 
 - (void)setNormalColorRGB:(uint32_t)normalColorRGB {
     _normalColorRGB = normalColorRGB;
-    _normalColor = ZCRGB(normalColorRGB);
+    _normalColor = kZCRGB(normalColorRGB);
     _nca = @[@((CGFloat)((normalColorRGB & 0xFF0000) >> 16)),
              @((CGFloat)((normalColorRGB & 0x00FF00) >> 8)),
              @((CGFloat)(normalColorRGB & 0x0000FF))];
@@ -62,7 +62,7 @@
 
 - (void)setSelectColorRGB:(uint32_t)selectColorRGB {
     _selectColorRGB = selectColorRGB;
-    _selectColor = ZCRGB(selectColorRGB);
+    _selectColor = kZCRGB(selectColorRGB);
     _sca = @[@((CGFloat)((selectColorRGB & 0xFF0000) >> 16)),
              @((CGFloat)((selectColorRGB & 0x00FF00) >> 8)),
              @((CGFloat)(selectColorRGB & 0x0000FF))];
@@ -149,12 +149,12 @@ typedef void(^block)(NSInteger touchIndex);
     _alphaOffset = 0;
     _isObserver = NO;
     _alphaImage = nil;
-    _barColor = ZCClear;
+    _barColor = kZCClear;
     _markSize = CGSizeZero;
     _contentEdge = UIEdgeInsetsZero;
     _allBtns = NSMutableArray.array;
     _allSpaces = NSMutableArray.array;
-    _markColor = ZCBlackDC;
+    _markColor = kZCBlackDC;
     _currentTapIndex = -1;
     _selectItemIndex = -1;
     _targetScrollIndex = -1;
@@ -514,7 +514,7 @@ typedef void(^block)(NSInteger touchIndex);
 #pragma mark - Interface
 - (void)initBarUI {
     _backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
-    _backgroundView.backgroundColor = ZCClear;
+    _backgroundView.backgroundColor = kZCClear;
     
     _barView = [[UIScrollView alloc] init];
     _barView.backgroundColor = _barColor;
@@ -580,7 +580,7 @@ typedef void(^block)(NSInteger touchIndex);
         button.titleLabel.textAlignment = NSTextAlignmentCenter;
         [button addTarget:self action:@selector(onItemBar:) forControlEvents:UIControlEventTouchUpInside];
         UIView *spaceline = [[UIView alloc] init];
-        spaceline.backgroundColor = ZCBlackDC;
+        spaceline.backgroundColor = kZCBlackDC;
         [self.barView addSubview:button];
         [self.barView addSubview:spaceline];
         [self.allBtns addObject:button];

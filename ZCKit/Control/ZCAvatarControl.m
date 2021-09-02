@@ -14,7 +14,7 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = ZCClear;
+        self.backgroundColor = kZCClear;
         self.layer.geometryFlipped = YES;
         _alignment = 0;
         _descLabel = nil;
@@ -100,7 +100,7 @@
     if (!_descLabel) {
         _descLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _descLabel.textAlignment = NSTextAlignmentCenter;
-        _descLabel.textColor = ZCBlack30;
+        _descLabel.textColor = kZCBlack30;
         _descLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         [self addSubview:_descLabel];
     }
@@ -146,7 +146,7 @@
 }
 
 - (void)imageUrl:(NSString *)url holder:(UIImage *)holder {
-    [ZCKitBridge.realize imageWebCache:self url:[NSURL URLWithString:ZCStrNonnil(url)] holder:holder
+    [ZCKitBridge.realize imageWebCache:self url:[NSURL URLWithString:kZStrNonnil(url)] holder:holder
                             assignment:^(UIImage * _Nullable image, NSData * _Nullable imageData,
                                          NSInteger cacheType, NSURL * _Nullable imageURL) {
                                 self.localImage = image;

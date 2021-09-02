@@ -98,7 +98,7 @@
 #pragma mark - Get
 - (UILabel *)headerLabel {
     if (!_headerLabel) {
-        _headerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:16] color:ZCBlack30];
+        _headerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:16] color:kZCBlack30];
         _headerLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _headerLabel.textAlignment = NSTextAlignmentCenter;
         _headerLabel.numberOfLines = 0;
@@ -118,7 +118,7 @@
 
 - (UILabel *)contentLabel {
     if (!_contentLabel) {
-        _contentLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:16] color:ZCBlack80];
+        _contentLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:16] color:kZCBlack80];
         _contentLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _contentLabel.textAlignment = NSTextAlignmentCenter;
         _contentLabel.numberOfLines = 0;
@@ -131,7 +131,7 @@
     if (!_handleButton) {
         _handleButton = [ZCButton buttonWithType:UIButtonTypeCustom];
         _handleButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-        [_handleButton setCorner:3 color:ZCClear width:0];
+        [_handleButton setCorner:3 color:kZCClear width:0];
         [self addSubview:_handleButton];
     }
     return _handleButton;
@@ -139,7 +139,7 @@
 
 - (UILabel *)footerLabel {
     if (!_footerLabel) {
-        _footerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:14] color:ZCBlack80];
+        _footerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:14] color:kZCBlack80];
         _footerLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         _footerLabel.textAlignment = NSTextAlignmentCenter;
         _footerLabel.numberOfLines = 0;

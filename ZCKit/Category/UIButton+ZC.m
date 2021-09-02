@@ -13,7 +13,7 @@
 
 + (instancetype)customTitle:(NSString *)title font:(UIFont *)font color:(UIColor *)color image:(NSString *)image target:(id)target action:(SEL)action {
     UIButton *cusBtn = [self buttonWithType:UIButtonTypeCustom];
-    cusBtn.backgroundColor = ZCClear;
+    cusBtn.backgroundColor = kZCClear;
     cusBtn.adjustsImageWhenHighlighted = NO;
     if (font) cusBtn.titleLabel.font = font;
     if (title) {
@@ -22,7 +22,7 @@
         cusBtn.titleLabel.minimumScaleFactor = 0.6;
     }
     if (color) [cusBtn setTitleColor:color forState:UIControlStateNormal];
-    UIImage *im = image ? ZCIN(image) : nil;
+    UIImage *im = image ? kZIN(image) : nil;
     if (im) [cusBtn setImage:im forState:UIControlStateNormal];
     if (target && action && [target respondsToSelector:action]) {
         [cusBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];

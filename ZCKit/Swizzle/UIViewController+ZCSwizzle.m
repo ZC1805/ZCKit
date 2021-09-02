@@ -68,34 +68,34 @@
                 UIImage *imageBar = [[UIImage alloc] init];
                 UIImage *imageShadow = [[UIImage alloc] init];
                 if (@available(iOS 13.0, *)) { //导航过渡需要的
-                    imageBar = ZCIN(ZCKitBridge.naviBarImageOrColor);
-                    if (!imageBar) imageBar = [UIImage imageWithColor:ZCCS(ZCKitBridge.naviBarImageOrColor)];
-                    imageShadow = [UIImage imageWithColor:ZCSPColor size:CGSizeMake(ZSWid, ZSSepHei)];
+                    imageBar = kZIN(ZCKitBridge.naviBarImageOrColor);
+                    if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
+                    imageShadow = [UIImage imageWithColor:kZCSplit size:CGSizeMake(kZSWid, kZSPixel)];
                 }
                 self.navigationController.navigationBar.subviews.firstObject.alpha = 0;
                 [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
                 [self.navigationController.navigationBar setShadowImage:imageShadow];
-                [self.navigationController.navigationBar setShadow:ZCClear offset:CGSizeZero radius:1];
+                [self.navigationController.navigationBar setShadow:kZCClear offset:CGSizeZero radius:1];
                 [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
             } else if ([self swizzle_isShieldBarShadow]) {
-                UIImage *imageBar = ZCIN(ZCKitBridge.naviBarImageOrColor);
-                if (!imageBar) imageBar = [UIImage imageWithColor:ZCCS(ZCKitBridge.naviBarImageOrColor)];
+                UIImage *imageBar = kZIN(ZCKitBridge.naviBarImageOrColor);
+                if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
                 self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
                 [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
                 [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-                [self.navigationController.navigationBar setShadow:ZCClear offset:CGSizeZero radius:1];
+                [self.navigationController.navigationBar setShadow:kZCClear offset:CGSizeZero radius:1];
                 [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
             } else if ([self swizzle_isUseCustomBar]) {
-                UIColor *shadowColor = [self swizzle_isUseNaviBarShadowColor] ? ZCSPColor : ZCClear;
+                UIColor *shadowColor = [self swizzle_isUseNaviBarShadowColor] ? kZCSplit : kZCClear;
                 self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
                 [self.navigationController.navigationBar setShadow:shadowColor offset:CGSizeZero radius:1];
                 [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
             } else {
                 if (!self.navigationController.isNormalBar) {
-                    UIImage *imageBar = ZCIN(ZCKitBridge.naviBarImageOrColor);
-                    if (!imageBar) imageBar = [UIImage imageWithColor:ZCCS(ZCKitBridge.naviBarImageOrColor)];
-                    UIImage *imageShadow = [UIImage imageWithColor:ZCSPColor size:CGSizeMake(ZSWid, ZSSepHei)];
-                    UIColor *shadowColor = [self swizzle_isUseNaviBarShadowColor] ? ZCSPColor : ZCClear;
+                    UIImage *imageBar = kZIN(ZCKitBridge.naviBarImageOrColor);
+                    if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
+                    UIImage *imageShadow = [UIImage imageWithColor:kZCSplit size:CGSizeMake(kZSWid, kZSPixel)];
+                    UIColor *shadowColor = [self swizzle_isUseNaviBarShadowColor] ? kZCSplit : kZCClear;
                     self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
                     [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
                     [self.navigationController.navigationBar setShadowImage:imageShadow];
@@ -147,7 +147,7 @@
 - (BOOL)swizzle_isUseCustomBar {
     SEL sel = @selector(isUseCustomBar);
     if ([self respondsToSelector:sel]) {
-        zc_suppress_leak_warning([self performSelector:sel]); return YES;
+        kZSuppressLeakWarn([self performSelector:sel]); return YES;
     }
     return NO;
 }
@@ -155,7 +155,7 @@
 - (BOOL)swizzle_isUseClearBar {
     BOOL use = NO; SEL sel = @selector(isUseClearBar);
     if ([self respondsToSelector:sel]) {
-        zc_suppress_leak_warning(use = (BOOL)[self performSelector:sel]);
+        kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }
     return use;
 }
@@ -163,7 +163,7 @@
 - (BOOL)swizzle_isShieldBarShadow {
     BOOL use = NO; SEL sel = @selector(isShieldBarShadow);
     if ([self respondsToSelector:sel]) {
-        zc_suppress_leak_warning(use = (BOOL)[self performSelector:sel]);
+        kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }
     return use;
 }
@@ -171,7 +171,7 @@
 - (BOOL)swizzle_isUseTranslucentBar {
     BOOL use = NO; SEL sel = @selector(isUseTranslucentBar);
     if ([self respondsToSelector:sel]) {
-        zc_suppress_leak_warning(use = (BOOL)[self performSelector:sel]);
+        kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }
     return use;
 }
@@ -179,7 +179,7 @@
 - (BOOL)swizzle_isUseNaviBarShadowColor {
     BOOL use = NO; SEL sel = @selector(isUseNaviBarShadowColor);
     if ([self respondsToSelector:sel]) {
-        zc_suppress_leak_warning(use = (BOOL)[self performSelector:sel]);
+        kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }
     return use;
 }
@@ -187,7 +187,7 @@
 - (BOOL)swizzle_isHiddenNavigationBar {
     BOOL use = NO; SEL sel = @selector(isHiddenNavigationBar);
     if ([self respondsToSelector:sel]) {
-        zc_suppress_leak_warning(use = (BOOL)[self performSelector:sel]);
+        kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }
     return use;
 }

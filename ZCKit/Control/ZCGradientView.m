@@ -29,7 +29,7 @@
 - (CAGradientLayer *)dBKGradient {
     if (!_dBKGradient) {
         _dBKGradient = [CAGradientLayer layer];
-        _dBKGradient.colors = @[(id)(ZCClear.CGColor), (id)(ZCClear.CGColor)];
+        _dBKGradient.colors = @[(id)(kZCClear.CGColor), (id)(kZCClear.CGColor)];
         _dBKGradient.startPoint = CGPointMake(0.5, 0);
         _dBKGradient.endPoint = CGPointMake(0.5, 1);
     }

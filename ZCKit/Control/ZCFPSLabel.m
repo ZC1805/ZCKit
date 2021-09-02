@@ -20,8 +20,8 @@
     if (self = [super initWithFrame:frame]) {
         self.textAlignment = NSTextAlignmentCenter;
         self.userInteractionEnabled = NO;
-        self.backgroundColor = ZCClear;
-        self.textColor = ZCRed;
+        self.backgroundColor = kZCClear;
+        self.textColor = kZCRGB(0xFF0000);
         self.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     }
     return self;

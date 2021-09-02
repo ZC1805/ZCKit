@@ -19,7 +19,7 @@
                 self.leftView.zc_width = leftSpace;
             }
         } else {
-            self.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftSpace, 1) color:ZCClear];
+            self.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftSpace, 1) color:kZCClear];
             self.leftViewMode = UITextFieldViewModeAlways;
             self.leftView.tag = 189001;
         }
@@ -39,8 +39,8 @@
 
 - (void)setPlaceholderText:(NSString *)placeholderText color:(UIColor *)color font:(UIFont *)font {
     NSDictionary *dic = @{NSFontAttributeName:(font?font:(self.font?self.font:[UIFont fontWithName:@"HelveticaNeue" size:12])),
-                          NSForegroundColorAttributeName:(color?color:ZCPHColor)};
-    NSAttributedString *attStr = [[NSAttributedString alloc] initWithString:ZCStrNonnil(placeholderText) attributes:dic];
+                          NSForegroundColorAttributeName:(color?color:kZCHolder)};
+    NSAttributedString *attStr = [[NSAttributedString alloc] initWithString:kZStrNonnil(placeholderText) attributes:dic];
     self.attributedPlaceholder = attStr;
 }
 

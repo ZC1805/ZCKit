@@ -142,7 +142,7 @@
 }
 
 - (BOOL)isDisplayInScreen {
-    CGRect screenRect = ZSScreen;
+    CGRect screenRect = kZSScreen;
     CGRect rect = [self convertRect:self.frame fromView:nil];
     if (CGRectIsEmpty(rect) || CGRectIsNull(rect)) return NO;
     if (self.hidden) return NO;

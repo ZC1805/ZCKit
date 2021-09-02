@@ -106,13 +106,13 @@
 #pragma mark - Build
 - (void)initialUI:(void(^)(NSInteger index, UIButton *btn, UIView *line))btnSet {
     CGFloat initHei = MIN(self.items.count * self.rowHeight, self.maxLine * self.rowHeight);
-    self.backgroundColor = ZCClear;
+    self.backgroundColor = kZCClear;
     self.zc_size = CGSizeMake(self.initWid, initHei + 2.0 * self.topHeight + self.initArrowRect.size.height);
     self.zc_origin = CGPointMake(self.initVertex.x - self.initArrowRect.origin.x - self.initArrowRect.size.width / 2.0, self.initVertex.y);
     [self initialBKlayer];
 
     self.contentView = [[UIScrollView alloc] initWithFrame:CGRectZero];
-    self.contentView.backgroundColor = ZCClear;
+    self.contentView.backgroundColor = kZCClear;
     self.contentView.showsVerticalScrollIndicator = NO;
     self.contentView.bounces = NO;
     self.contentView.delaysContentTouches = (self.items.count > self.maxLine);
@@ -123,9 +123,9 @@
     for (int i = 0; i < self.items.count; i ++) {
         UIView *topSep = nil;
         ZCButton *itemBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
-        UIColor *titleColor = ZCBlack;
+        UIColor *titleColor = kZCBlack;
         itemBtn.tag = 73203 + i;
-        itemBtn.backgroundColor = ZCWhite;
+        itemBtn.backgroundColor = kZCWhite;
         itemBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
         [itemBtn setTitleColor:titleColor forState:UIControlStateNormal];
@@ -133,7 +133,7 @@
         [itemBtn addTarget:self action:@selector(onItem:) forControlEvents:UIControlEventTouchUpInside];
         itemBtn.frame = CGRectMake(0, i * self.rowHeight, self.initWid, self.rowHeight);
         if (i != 0) topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * self.rowHeight, self.initWid, 0.35)];
-        if (topSep) topSep.backgroundColor = ZCBlackDC;
+        if (topSep) topSep.backgroundColor = kZCBlackDC;
         [self.contentView addSubview:itemBtn];
         if (topSep) [self.contentView addSubview:topSep];
         if (btnSet) btnSet(i, itemBtn, topSep);
@@ -151,11 +151,11 @@
     [bkPath closePath];
     CAShapeLayer *bkLayer = [CAShapeLayer layer];
     bkLayer.path = bkPath.CGPath;
-    bkLayer.fillColor = ZCWhite.CGColor;
-    bkLayer.strokeColor = ZCClear.CGColor;
+    bkLayer.fillColor = kZCWhite.CGColor;
+    bkLayer.strokeColor = kZCClear.CGColor;
     bkLayer.lineWidth = 0.35;
     bkLayer.lineJoin = @"round";
-    bkLayer.shadowColor = ZCBlackC8.CGColor;
+    bkLayer.shadowColor = kZCBlackC8.CGColor;
     bkLayer.shadowOffset = CGSizeMake(0, 0);
     bkLayer.shadowRadius = 7.0;
     bkLayer.shadowOpacity = self.isShowShadow ? 1.0 : 0;

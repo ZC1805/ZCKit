@@ -40,24 +40,24 @@
 
 - (void)resetInitProperty {
     _badgeCircleWidth = 2.0;
-    _badgeBKColor = ZCRed;
-    _badgeTextColor = ZCWhite;
-    _badgeBorderColor = ZCWhite;
+    _badgeBKColor = kZCRGB(0xFF0000);
+    _badgeTextColor = kZCWhite;
+    _badgeBorderColor = kZCWhite;
     _badgeTextFont = [UIFont fontWithName:@"HelveticaNeue-Bold" size:12];
-    self.backgroundColor = ZCClear;
+    self.backgroundColor = kZCClear;
     self.userInteractionEnabled = NO;
     self.badgeValue = nil;
 }
 
 #pragma mark - Set
 - (void)setBadgeBKColor:(UIColor *)badgeBKColor {
-    if (!badgeBKColor) badgeBKColor = ZCRed;
+    if (!badgeBKColor) badgeBKColor = kZCRGB(0xFF0000);
     _badgeBKColor = badgeBKColor;
     self.badgeValue = _badgeValue;
 }
 
 - (void)setBadgeBorderColor:(UIColor *)badgeBorderColor {
-    if (!badgeBorderColor) badgeBorderColor = ZCWhite;
+    if (!badgeBorderColor) badgeBorderColor = kZCWhite;
     _badgeBorderColor = badgeBorderColor;
     self.badgeValue = _badgeValue;
 }
@@ -69,7 +69,7 @@
 }
 
 - (void)setBadgeTextColor:(UIColor *)badgeTextColor {
-    if (!badgeTextColor) badgeTextColor = ZCWhite;
+    if (!badgeTextColor) badgeTextColor = kZCWhite;
     _badgeTextColor = badgeTextColor;
     self.badgeValue = _badgeValue;
 }

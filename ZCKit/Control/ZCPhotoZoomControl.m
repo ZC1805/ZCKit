@@ -36,7 +36,7 @@ static const float initAdditional = 30.0;
         _isAutoOfset = YES;
         _isNeedNarrow = YES;
         _originOffset = CGPointZero;
-        self.backgroundColor = ZCClear;
+        self.backgroundColor = kZCClear;
     }
     return self;
 }
@@ -116,7 +116,7 @@ static const float initAdditional = 30.0;
 
 - (UIView *)headerMask {
     if (!_headerMask) {
-        _headerMask = [[UIView alloc] initWithFrame:CGRectZero color:ZCBlack];
+        _headerMask = [[UIView alloc] initWithFrame:CGRectZero color:kZCBlack];
     }
     return _headerMask;
 }

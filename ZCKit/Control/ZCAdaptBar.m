@@ -37,36 +37,36 @@
         _isShowMidLine = NO;
         _isVagueBackground = NO;
         _adaptPosition = position;
-        _reserveHei = position ? ZSBomResHei : ZSTopResHei;
-        self.backgroundColor = ZCClear;
+        _reserveHei = position ? kZSBomResHei : kZSTopResHei;
+        self.backgroundColor = kZCClear;
     }
     return self;
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    if (!ZFZero(self.reserveHei) && !ZFEqual(self.zc_height, self.recordHei + self.reserveHei)) {
+    if (!kZFZero(self.reserveHei) && !kZFEqual(self.zc_height, self.recordHei + self.reserveHei)) {
         self.recordHei = self.zc_height;
         if (self.adaptPosition) {
-            self.frame = CGRectMake(0, self.zc_bottom - self.recordHei - self.reserveHei, ZSWid, self.recordHei + self.reserveHei);
-            self.reserveView.frame = CGRectMake(0, self.recordHei, ZSWid, self.reserveHei);
-            self.contentView.frame = CGRectMake(0, 0, ZSWid, self.recordHei);
+            self.frame = CGRectMake(0, self.zc_bottom - self.recordHei - self.reserveHei, kZSWid, self.recordHei + self.reserveHei);
+            self.reserveView.frame = CGRectMake(0, self.recordHei, kZSWid, self.reserveHei);
+            self.contentView.frame = CGRectMake(0, 0, kZSWid, self.recordHei);
         } else {
-            self.frame = CGRectMake(0, 0, ZSWid, self.recordHei + self.reserveHei);
-            self.contentView.frame = CGRectMake(0, self.reserveHei, ZSWid, self.recordHei);
-            self.reserveView.frame = CGRectMake(0, 0, ZSWid, self.reserveHei);
+            self.frame = CGRectMake(0, 0, kZSWid, self.recordHei + self.reserveHei);
+            self.contentView.frame = CGRectMake(0, self.reserveHei, kZSWid, self.recordHei);
+            self.reserveView.frame = CGRectMake(0, 0, kZSWid, self.reserveHei);
         }
-    } else if (ZFZero(self.reserveHei)) {
+    } else if (kZFZero(self.reserveHei)) {
         self.contentView.frame = self.bounds;
         self.reserveView.frame = CGRectZero;
     }
     if (self.isVagueBackground) self.effectView.frame = self.bounds;
     if (self.adaptPosition) {
-        if (self.isShowLine) self.topSepline1.frame = CGRectMake(0, 0, ZSWid, ZSSepHei);
-        if (self.isShowMidLine) self.midSepline1.frame = CGRectMake(0, self.contentView.zc_height - ZSSepHei, ZSWid, ZSSepHei);
+        if (self.isShowLine) self.topSepline1.frame = CGRectMake(0, 0, kZSWid, kZSPixel);
+        if (self.isShowMidLine) self.midSepline1.frame = CGRectMake(0, self.contentView.zc_height - kZSPixel, kZSWid, kZSPixel);
     } else {
-        if (self.isShowLine) self.topSepline1.frame = CGRectMake(0, self.zc_height - ZSSepHei, ZSWid, ZSSepHei);
-        if (self.isShowMidLine) self.midSepline1.frame = CGRectMake(0, self.reserveView.zc_height, ZSWid, ZSSepHei);
+        if (self.isShowLine) self.topSepline1.frame = CGRectMake(0, self.zc_height - kZSPixel, kZSWid, kZSPixel);
+        if (self.isShowMidLine) self.midSepline1.frame = CGRectMake(0, self.reserveView.zc_height, kZSWid, kZSPixel);
     }
 }
 
@@ -93,7 +93,7 @@
 #pragma mark - Get
 - (UIView *)topSepline1 {
     if (!_topSepline1) {
-        _topSepline1 = [[UIView alloc] initWithFrame:CGRectZero color:ZCSPColor];
+        _topSepline1 = [[UIView alloc] initWithFrame:CGRectZero color:kZCSplit];
         [self addSubview:_topSepline1];
     }
     return _topSepline1;
@@ -101,7 +101,7 @@
 
 - (UIView *)midSepline1 {
     if (!_midSepline1) {
-        _midSepline1 = [[UIView alloc] initWithFrame:CGRectZero color:ZCSPColor];
+        _midSepline1 = [[UIView alloc] initWithFrame:CGRectZero color:kZCSplit];
         [self addSubview:_midSepline1];
     }
     return _midSepline1;
@@ -109,7 +109,7 @@
 
 - (UIView *)contentView {
     if (!_contentView) {
-        _contentView = [[UIView alloc] initWithFrame:CGRectZero color:ZCClear];
+        _contentView = [[UIView alloc] initWithFrame:CGRectZero color:kZCClear];
         [self addSubview:_contentView];
     }
     return _contentView;
@@ -117,7 +117,7 @@
 
 - (UIView *)reserveView {
     if (!_reserveView) {
-        _reserveView = [[UIView alloc] initWithFrame:CGRectZero color:ZCClear];
+        _reserveView = [[UIView alloc] initWithFrame:CGRectZero color:kZCClear];
         [self addSubview:_reserveView];
     }
     return _reserveView;
@@ -126,7 +126,7 @@
 - (UIVisualEffectView *)effectView {
     if (!_effectView) {
         _effectView = [[UIVisualEffectView alloc] initWithEffect:[UIBlurEffect effectWithStyle:UIBlurEffectStyleExtraLight]];
-        _effectView.backgroundColor = ZCClear;
+        _effectView.backgroundColor = kZCClear;
         [self insertSubview:_effectView atIndex:0];
     }
     return _effectView;

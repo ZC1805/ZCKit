@@ -101,12 +101,12 @@
     if (self = [self initWithFrame:frame]) {
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
-        self.backgroundColor = ZCClear;
+        self.backgroundColor = kZCClear;
         self.directionalLockEnabled = YES;
         self.pagingEnabled = isPaging;
         self.bounces = isBounces;
         if (frame.size.height > 0) {
-            self.contentSize = CGSizeMake(frame.size.width, frame.size.height + (isBounces ? ZSSepHei : 0));
+            self.contentSize = CGSizeMake(frame.size.width, frame.size.height + (isBounces ? kZSPixel : 0));
         }
     }
     return self;
