@@ -17,7 +17,7 @@
     return [self routeVCNameForRank:0];
 }
 
-#warning - 此处要适配
+#warning - 此处要适配 & tableView先设置代理在设置表头
 - (NSString *)routeVCNameForRank:(int)level {
     UIViewController *aimVc = nil; BOOL isContainer = YES;
     if ([self isKindOfClass:UITabBarController.class]) {

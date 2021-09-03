@@ -56,7 +56,7 @@ typedef NS_ENUM(NSUInteger, ZCEnumSubsetUnique) {
 - (BOOL)resetRequestStart:(BOOL)isRefresh;
 
 /** 重置请求状态&载入状态&请求参数(list没有传非nil表示请求成功)，isInsert为是否将数组数据顺序插入到最前面 */
-- (void)resetRequestComplete:(BOOL)isRefresh list:(nullable NSArray *)list isInsert:(BOOL)isInsert;
+- (void)resetRequestComplete:(BOOL)isRefresh list:(nullable NSArray *)list isInsert:(BOOL)isInsert isAddToLast:(BOOL)isAddToLast;
 
 @end
 
@@ -68,7 +68,7 @@ typedef NS_ENUM(NSUInteger, ZCEnumSubsetUnique) {
 
 @property (nonatomic, assign, readonly) NSInteger totalPage;  /**< 总页数，默认1 */
 
-/** 重置请求状态&载入状态&请求参数(list没有传非nil表示请求成功&total没有传则传-1)，isInsert为是否将数组数据顺序插入到最前面，isAddToLast是否有数据合并到上页数据中 */
+/** 重置请求状态&载入状态&请求参数(list没有传非nil表示请求成功&total没有传则传-1)，isInsert为是否将数组数据顺序插入到最前面，isAddToLast是否有数据且全合并到上页数据中 */
 - (void)resetRequestComplete:(BOOL)isRefresh list:(nullable NSArray *)list isInsert:(BOOL)isInsert total:(NSInteger)total isAddToLast:(BOOL)isAddToLast;
 
 @end

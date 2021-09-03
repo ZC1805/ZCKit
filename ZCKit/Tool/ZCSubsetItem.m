@@ -67,14 +67,15 @@
     return YES;
 }
 
-- (void)resetRequestComplete:(BOOL)isRefresh list:(NSArray *)list isInsert:(BOOL)isInsert {
+- (void)resetRequestComplete:(BOOL)isRefresh list:(NSArray *)list isInsert:(BOOL)isInsert isAddToLast:(BOOL)isAddToLast {
     _isOnRequest = NO;
     _isAlreadyLoad = YES;
     [_requestParm removeAllObjects];
     if (_innate && _innate.count) [_requestParm addEntriesFromDictionary:_innate];
-#warning - xxxxx 此处处理 & tableView先设置代理在设置表头
-    if (isRefresh && list) [(NSMutableArray *)_dataItems removeAllObjects]; //刷新时候list不为nil则移除数据刷新，即如果list返回你来则表示请求数据失败&不做处理
-    if (list && list.count) {
+    //刷新时候list不为nil则移除数据刷新，即如果list返回你来则表示请求数据失败&不做处理
+    if (isAddToLast) list = @[];
+    if (isRefresh && list) [(NSMutableArray *)_dataItems removeAllObjects];
+    if (list.count) {
         if (isInsert) {
             NSUInteger iidx = 0; for (id item in list) {[(NSMutableArray *)_dataItems insertObject:item atIndex:iidx++];}
         } else {
@@ -87,6 +88,12 @@
 
 
 #pragma mark - ~ ZCPageItem ~
+@interface ZCPageItem ()
+
+@property (nonatomic, assign) NSInteger lastPage;
+
+@end
+
 @implementation ZCPageItem
 
 - (instancetype)initWithListView:(UITableView *)listView url:(NSString *)url innate:(NSDictionary *)innate unique:(ZCEnumSubsetUnique)unique {
@@ -97,6 +104,7 @@
 }
 
 - (void)resetPage {
+    _lastPage = _currentPage;
     _totalPage = 1;
     _currentPage = 0;
 }
@@ -117,10 +125,12 @@
 }
 
 - (void)resetRequestComplete:(BOOL)isRefresh list:(NSArray *)list isInsert:(BOOL)isInsert total:(NSInteger)total isAddToLast:(BOOL)isAddToLast {
-    [super resetRequestComplete:isRefresh list:list isInsert:isInsert];
+    [super resetRequestComplete:isRefresh list:list isInsert:isInsert isAddToLast:isAddToLast];
     //1.list为nil、count为0分别表示请求失败、没数据，页数需要重置到上一页
-    //2.isAddToLast为YES可能是请求到数据但是此数据追加到上页数据的末尾数组中了
-    if (!list || (!list.count && !isAddToLast)) _currentPage = _currentPage - 1;
+    //2.isAddToLast为YES可能是请求到数据但是此数据全追加到上页数据的末尾数组中了
+    if (isAddToLast) list = @[];
+    if (isRefresh && !list) _currentPage = _lastPage; //刷新失败重置到刷新前的页码
+    else if (!list || (!list.count && !isAddToLast)) _currentPage = _currentPage - 1;
     if (list && total >= 0) _totalPage = total; //list不为nil且total不小于0则会重置总页数total
 }
 
