@@ -285,13 +285,14 @@
 + (ZCTableView *)initialTable:(CGRect)frame style:(UITableViewStyle)style reuses:(NSDictionary <NSString *, NSString *>*)reuses {
     BOOL isGroup = style == UITableViewStyleGrouped;
     ZCTableView *table = [[ZCTableView alloc] initWithFrame:frame style:style];
+    [table delegateAndDataSourceToSelf];
     table.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     table.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, isGroup ? 0.01 : 0)];
     table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, isGroup ? 0.01 : 0)];
     table.separatorStyle = UITableViewCellSeparatorStyleNone;
     table.estimatedSectionFooterHeight = 0;
     table.estimatedSectionHeaderHeight = 0;
-    table.estimatedRowHeight = 100;
+    table.estimatedRowHeight = 100; //先自动适配行高，需要准确的contentSize与contentOffset时这里设置为0
     table.sectionHeaderHeight = 0;
     table.sectionFooterHeight = 0;
     table.rowHeight = UITableViewAutomaticDimension;
@@ -303,7 +304,6 @@
     [reuses enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
         [table registerClass:NSClassFromString(obj) forCellReuseIdentifier:key];
     }];
-    [table delegateAndDataSourceToSelf];
     return table;
 }
 

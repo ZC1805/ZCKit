@@ -137,7 +137,7 @@
     listView.separatorStyle = UITableViewCellSeparatorStyleNone;
     listView.estimatedSectionFooterHeight = 0;
     listView.estimatedSectionHeaderHeight = 0;
-    listView.estimatedRowHeight = UITableViewAutomaticDimension;
+    listView.estimatedRowHeight = 0;
     listView.sectionHeaderHeight = 0;
     listView.sectionFooterHeight = 0;
     listView.rowHeight = UITableViewAutomaticDimension;
