@@ -71,8 +71,7 @@
 - (void)calcelateSelectWidth {
     if (self.title) {
         NSDictionary *att = @{NSFontAttributeName : self.selectTitleFont};
-        NSStringDrawingOptions ops = NSStringDrawingUsesLineFragmentOrigin|NSStringDrawingUsesFontLeading;
-        CGFloat wid = [self.title boundingRectWithSize:CGSizeMake(MAXFLOAT, 30.0) options:ops attributes:att context:nil].size.width;
+        CGFloat wid = [self.title boundingRectWithSize:CGSizeMake(MAXFLOAT, 30.0) options:NSStringDrawingUsesLineFragmentOrigin attributes:att context:nil].size.width;
         self.itemSelCalwid = MAX(self.itemSelCalwid, ceilf(wid) + 12.0);
     }
     if (self.selectImage) {
@@ -577,6 +576,7 @@ typedef void(^block)(NSInteger touchIndex);
             button.imageViewSize = CGSizeZero;
             button.centerAlignmentSpace = 0;
         }
+        button.titleLabel.adjustsFontSizeToFitWidth = YES;
         button.titleLabel.textAlignment = NSTextAlignmentCenter;
         [button addTarget:self action:@selector(onItemBar:) forControlEvents:UIControlEventTouchUpInside];
         UIView *spaceline = [[UIView alloc] init];

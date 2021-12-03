@@ -14,6 +14,7 @@
 
 NSString * const ZCFlagStr = @"^.~!*.^";
 
+#pragma mark - ~ NSString ~
 @implementation NSString (ZC)
 
 #pragma mark - Usually
@@ -64,47 +65,36 @@ NSString * const ZCFlagStr = @"^.~!*.^";
     return [NSArray array];
 }
 
-- (CGFloat)widthForFont:(UIFont *)font {
-    CGSize size = [self sizeForFont:font size:CGSizeMake(MAXFLOAT, MAXFLOAT) mode:NSLineBreakByWordWrapping];
+- (CGFloat)widthForFont:(UIFont *)font isSystemStyle:(BOOL)isSystemStyle {
+    CGSize size = [self sizeForFont:font size:CGSizeMake(MAXFLOAT, MAXFLOAT) mode:NSLineBreakByWordWrapping isCalculateLineSpace:!isSystemStyle];
     return ceilf(size.width);
 }
 
-- (CGFloat)heightForFont:(UIFont *)font width:(CGFloat)width {
-    CGSize size = [self sizeForFont:font size:CGSizeMake(width, MAXFLOAT) mode:NSLineBreakByWordWrapping];
+- (CGFloat)heightForFont:(UIFont *)font width:(CGFloat)width isSystemStyle:(BOOL)isSystemStyle {
+    CGSize size = [self sizeForFont:font size:CGSizeMake(width, MAXFLOAT) mode:NSLineBreakByWordWrapping isCalculateLineSpace:!isSystemStyle];
     return ceilf(size.height);
 }
 
-- (CGFloat)heightForFont:(UIFont *)font width:(CGFloat)width spacing:(CGFloat)spacing {
-    if (!self.length || width < 0.01) return 0;
+- (CGSize)sizeLabelForFont:(UIFont *)font width:(CGFloat)width alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing {
+    if (!self.length || width < 0.01) return CGSizeZero;
     static NSMutableParagraphStyle *kStyle = nil;
     static UILabel *kCalSpacLabel = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         kCalSpacLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        kCalSpacLabel.adjustsFontSizeToFitWidth = NO;
         kCalSpacLabel.numberOfLines = 0;
         kStyle = [[NSMutableParagraphStyle alloc] init];
         kStyle.lineBreakMode = NSLineBreakByWordWrapping;
-        kStyle.alignment = NSTextAlignmentLeft;
     });
-    kStyle.lineSpacing = spacing;
+    kStyle.alignment = alignment;
+    kStyle.lineSpacing = MAX(spacing, 0);
     UIFont *kFont = font ? font : [UIFont fontWithName:@"HelveticaNeue" size:12];
     NSDictionary *attri = @{NSFontAttributeName:kFont, NSParagraphStyleAttributeName:kStyle.copy};
     kCalSpacLabel.frame = CGRectMake(0, 0, width, MAXFLOAT);
     kCalSpacLabel.attributedText = [[NSAttributedString alloc] initWithString:self.copy attributes:attri];
     [kCalSpacLabel sizeToFit];
-    return ceilf(kCalSpacLabel.frame.size.height);
-}
-
-- (CGSize)sizeForFont:(UIFont *)font width:(CGFloat)width alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing {
-    if (!self.length || width < 0.01) return CGSizeZero;
-    UIFont *sFont = font ? font : [UIFont fontWithName:@"HelveticaNeue" size:12];
-    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-    style.lineBreakMode = NSLineBreakByWordWrapping;
-    if (spacing != 0) style.lineSpacing = spacing;
-    style.alignment = alignment;
-    NSDictionary *attri = @{NSFontAttributeName:sFont, NSParagraphStyleAttributeName:style};
-    NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
-    return [self boundingRectWithSize:CGSizeMake(width, MAXFLOAT) options:options attributes:attri context:nil].size;
+    return CGSizeMake(ceilf(kCalSpacLabel.frame.size.width), ceilf(kCalSpacLabel.frame.size.height));
 }
 
 - (NSUInteger)charCount {
@@ -629,7 +619,7 @@ NSString * const ZCFlagStr = @"^.~!*.^";
 }
 
 #pragma mark - Private
-- (CGSize)sizeForFont:(UIFont *)font size:(CGSize)size mode:(NSLineBreakMode)lineBreakMode {
+- (CGSize)sizeForFont:(UIFont *)font size:(CGSize)size mode:(NSLineBreakMode)lineBreakMode isCalculateLineSpace:(BOOL)isCalculateLineSpace {
     if (!font) font = [UIFont fontWithName:@"HelveticaNeue" size:12];
     NSMutableDictionary *attr = [NSMutableDictionary dictionary];
     [attr setObject:font forKey:NSFontAttributeName];
@@ -638,7 +628,8 @@ NSString * const ZCFlagStr = @"^.~!*.^";
         pStyle.lineBreakMode = lineBreakMode;
         [attr setObject:pStyle forKey:NSParagraphStyleAttributeName];
     }
-    NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
+    NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin;
+    if (isCalculateLineSpace) options = options | NSStringDrawingUsesFontLeading;
     CGRect rect = [self boundingRectWithSize:size options:options attributes:attr context:nil];
     return rect.size;
 }
@@ -732,6 +723,28 @@ NSString * const ZCFlagStr = @"^.~!*.^";
     }
     free(buf);
     return result;
+}
+
+@end
+
+
+
+#pragma mark - ~ NSAttributedString ~
+@implementation NSAttributedString (ZC)
+
+- (CGSize)sizeLabelForWidth:(CGFloat)width {
+    if (!self.length || width < 0.01) return CGSizeZero;
+    static UILabel *kCalAttLabel = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        kCalAttLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        kCalAttLabel.adjustsFontSizeToFitWidth = NO;
+        kCalAttLabel.numberOfLines = 0;
+    });
+    kCalAttLabel.frame = CGRectMake(0, 0, width, MAXFLOAT);
+    kCalAttLabel.attributedText = self.copy;
+    [kCalAttLabel sizeToFit];
+    return CGSizeMake(ceilf(kCalAttLabel.frame.size.width), ceilf(kCalAttLabel.frame.size.height));
 }
 
 @end
