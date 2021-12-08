@@ -7,7 +7,6 @@
 //
 
 #import "ZCPhotoZoomControl.h"
-#import "UIScrollView+ZC.h"
 #import "ZCKitBridge.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"

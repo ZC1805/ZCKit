@@ -96,22 +96,6 @@
     return self.bottomExpandOffsetView.backgroundColor;
 }
 
-#pragma mark - Basic
-- (UIScrollView *)initWithFrame:(CGRect)frame isPaging:(BOOL)isPaging isBounces:(BOOL)isBounces {
-    if (self = [self initWithFrame:frame]) {
-        self.showsHorizontalScrollIndicator = NO;
-        self.showsVerticalScrollIndicator = NO;
-        self.backgroundColor = kZCClear;
-        self.directionalLockEnabled = YES;
-        self.pagingEnabled = isPaging;
-        self.bounces = isBounces;
-        if (frame.size.height > 0) {
-            self.contentSize = CGSizeMake(frame.size.width, frame.size.height + (isBounces ? kZSPixel : 0));
-        }
-    }
-    return self;
-}
-
 #pragma mark - Direction
 static NSString * const directionOffset = @"contentOffset";
 static void *directionContext = @"scrollViewDirectionContext";

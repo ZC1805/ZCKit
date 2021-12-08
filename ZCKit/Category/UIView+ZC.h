@@ -64,7 +64,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSString *flagStr;  /**< 类似tag的标识，默认nil */
 
-@property (nullable, nonatomic, copy) NSDictionary *flagDic;  /**< 类似tag的标识，默认nil */
+@property (nullable, nonatomic, strong) NSDictionary *flagDic;  /**< 类似tag的标识，默认nil */
 
 
 - (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color;  /**< 带背景颜色初始化 */
