@@ -101,7 +101,7 @@
         titleLabel = [[ZCLabel alloc] initWithColor:kZCBlack30 font:[UIFont fontWithName:@"HelveticaNeue-Medium" size:16] alignment:NSTextAlignmentCenter adjustsSize:NO];
         titleLabel.frame = CGRectMake(15, headerHei, self.zc_width - 30, 0);
         titleLabel.numberOfLines = 0; titleLabel.lineSpace = 3; titleLabel.text = title;
-        [titleLabel minToSize];
+        [titleLabel autoAdaptToSize];
         [self addSubview:titleLabel];
         headerHei = titleLabel.zc_bottom;
     }
@@ -110,7 +110,7 @@
         messageLabel = [[ZCLabel alloc] initWithColor:kZCBlackA8 font:[UIFont fontWithName:@"HelveticaNeue" size:13] alignment:NSTextAlignmentCenter adjustsSize:NO];
         messageLabel.frame = CGRectMake(15, headerHei, self.zc_width - 30, 0);
         messageLabel.numberOfLines = 0; messageLabel.lineSpace = 3; messageLabel.text = message;
-        [messageLabel minToSize];
+        [messageLabel autoAdaptToSize];
         [self addSubview:messageLabel];
         headerHei = messageLabel.zc_bottom;
     }

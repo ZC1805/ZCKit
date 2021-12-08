@@ -87,9 +87,9 @@
     [self.containerView addSubview:self.imageView];
 }
 
-- (UILabel *)titleLabel {
+- (ZCLabel *)titleLabel {
     if (!_titleLabel) {
-        _titleLabel = [[UILabel alloc] initWithFrame:CGRectZero color:kZCClear];
+        _titleLabel = [[ZCLabel alloc] initWithFrame:CGRectZero color:kZCClear];
         _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.textColor = self.isUseDarkStyle ? self.textOriginColor : kZCBlack30;

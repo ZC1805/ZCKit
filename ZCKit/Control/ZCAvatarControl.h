@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCLabel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) CGFloat cornerRadius;  /**< 圆角半径，默认0 */
 
-@property (null_resettable, nonatomic, strong) UILabel *descLabel;  /**< 提示视图，懒加载，默认nil */
+@property (null_resettable, nonatomic, strong) ZCLabel *descLabel;  /**< 提示视图，懒加载，默认nil */
 
 @property (nullable, nonatomic, strong) UIImage *localImage;  /**< 赋值显示本地图片，默认nil */
 

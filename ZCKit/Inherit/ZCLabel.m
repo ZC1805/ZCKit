@@ -7,7 +7,6 @@
 //
 
 #import "ZCLabel.h"
-#import "UILabel+ZC.h"
 #import "UIColor+ZC.h"
 
 @interface ZCLabel ()
@@ -252,12 +251,15 @@
                     [attriText addAttributes:dicAtt range:mRange];
                 }
             }
-        }
-        self.attributedText = attriText;
+        } self.attributedText = attriText;
     }
 }
 
-- (CGSize)minToSize {
+- (CGSize)autoAdaptToSize {
+    return [self autoToSizeIsLimitLines:NO isRichText:NO];
+}
+
+- (CGSize)autoToSizeIsLimitLines:(BOOL)isLimitLines isRichText:(BOOL)isRichText {
     CGFloat initWid = self.frame.size.width;
     CGFloat initHei = self.frame.size.height;
     
@@ -271,15 +273,26 @@
     dispatch_once(&onceToken, ^{
         kSpacLabelX = [[ZCLabel alloc] initWithFrame:CGRectZero];
         kSpacLabelX.adjustsFontSizeToFitWidth = NO;
-        kSpacLabelX.numberOfLines = 0;
     });
-    kSpacLabelX.font = self.font;
-    kSpacLabelX.textAlignment = self.textAlignment;
-    kSpacLabelX.insideInsets = self.insideInsets;
-    kSpacLabelX.lineSpace = self.lineSpace;
-    kSpacLabelX.headIndent = self.headIndent;
+    kSpacLabelX.numberOfLines = isLimitLines ? self.numberOfLines : 0;
     kSpacLabelX.frame = CGRectMake(0, 0, (initWid == 0 ? MAXFLOAT : initWid), MAXFLOAT);
-    [kSpacLabelX setText:self.text.copy];
+    if (isRichText) {
+        kSpacLabelX.font = self.font;
+        kSpacLabelX.textAlignment = self.textAlignment;
+        kSpacLabelX.insideInsets = self.insideInsets;
+        kSpacLabelX.lineSpace = 0;
+        kSpacLabelX.headIndent = 0;
+        [kSpacLabelX setText:nil];
+        [kSpacLabelX setAttributedText:self.attributedText.copy];
+    } else {
+        kSpacLabelX.font = self.font;
+        kSpacLabelX.textAlignment = self.textAlignment;
+        kSpacLabelX.insideInsets = self.insideInsets;
+        kSpacLabelX.lineSpace = self.lineSpace;
+        kSpacLabelX.headIndent = self.headIndent;
+        [kSpacLabelX setAttributedText:nil];
+        [kSpacLabelX setText:self.text.copy];
+    }
     [kSpacLabelX setNeedsDisplay];
     [kSpacLabelX sizeToFit];
     

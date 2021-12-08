@@ -10,12 +10,12 @@
 #import "ZCMacro.h"
 #import <QuartzCore/QuartzCore.h>
 
-#pragma mark - ~ UILabelCounterAnim ~
-@interface UILabelCounterLinear : NSObject
+#pragma mark - ~ ZCCountLabelCounterAnim ~
+@interface ZCCountLabelCounterLinear : NSObject
 
 @end
 
-@implementation UILabelCounterLinear
+@implementation ZCCountLabelCounterLinear
 
 - (CGFloat)update:(CGFloat)t {
     return t;
@@ -24,11 +24,11 @@
 @end
 
 
-@interface UILabelCounterEaseIn : NSObject
+@interface ZCCountLabelCounterEaseIn : NSObject
 
 @end
 
-@implementation UILabelCounterEaseIn
+@implementation ZCCountLabelCounterEaseIn
 
 - (CGFloat)update:(CGFloat)t {
     return powf(t, 3.0);
@@ -37,11 +37,11 @@
 @end
 
 
-@interface UILabelCounterEaseOut : NSObject
+@interface ZCCountLabelCounterEaseOut : NSObject
 
 @end
 
-@implementation UILabelCounterEaseOut
+@implementation ZCCountLabelCounterEaseOut
 
 - (CGFloat)update:(CGFloat)t {
     return (1.0 - powf((1.0 - t), 3.0));
@@ -50,11 +50,11 @@
 @end
 
 
-@interface UILabelCounterEaseInOut : NSObject
+@interface ZCCountLabelCounterEaseInOut : NSObject
 
 @end
 
-@implementation UILabelCounterEaseInOut
+@implementation ZCCountLabelCounterEaseInOut
 
 - (CGFloat)update:(CGFloat)t {
     t *= 2;
@@ -138,16 +138,16 @@
     if (self.format == nil) self.format = @"%f";
     switch (self.method) {
         case ZCEnumLabelCountingMethodLinear:
-            self.counter = [[UILabelCounterLinear alloc] init];
+            self.counter = [[ZCCountLabelCounterLinear alloc] init];
             break;
         case ZCEnumLabelCountingMethodEaseIn:
-            self.counter = [[UILabelCounterEaseIn alloc] init];
+            self.counter = [[ZCCountLabelCounterEaseIn alloc] init];
             break;
         case ZCEnumLabelCountingMethodEaseOut:
-            self.counter = [[UILabelCounterEaseOut alloc] init];
+            self.counter = [[ZCCountLabelCounterEaseOut alloc] init];
             break;
         case ZCEnumLabelCountingMethodEaseInOut:
-            self.counter = [[UILabelCounterEaseInOut alloc] init];
+            self.counter = [[ZCCountLabelCounterEaseInOut alloc] init];
             break;
     }
     

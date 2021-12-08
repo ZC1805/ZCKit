@@ -35,7 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** 匹配字符串设置富文本(调用此方法前需initWithColor:font:alignment:adjustsSize:方法前设置了font和color)，只匹配一次，isReverse为是否反向匹配，font为匹配文字的字体(nil时不改变)&color为匹配文字的颜色(nil时不改变)，spacing为lable的行间距，忽略首位缩进 */
 - (void)setText:(NSString *)text matchText:(NSString *)mText isReverse:(BOOL)isReverse font:(nullable UIFont *)font color:(nullable UIColor *)color spacing:(CGFloat)spacing;
 
-- (CGSize)minToSize;  /**< 计算高度或者宽度(会重新设置frame且不适用富文本)，初始时需要传入最大宽度，最好在设置了text、font、space、alignment后调用此方法 */
+/** 计算高度或者宽度且重新设置frame(isLimitLines是否使用当前设置的行数，isRichText是否使用富文本计算)，初始时需要传入最大宽度，最好在设置了text、font、space、alignment后调用此方法 */
+- (CGSize)autoToSizeIsLimitLines:(BOOL)isLimitLines isRichText:(BOOL)isRichText;
+
+/** 不限行高的使用Text计算高度或者宽度且重新设置frame，初始时需要传入最大宽度，最好在设置了text、lines、head、font、space、alignment后调用此方法 */
+- (CGSize)autoAdaptToSize;
 
 @end
 

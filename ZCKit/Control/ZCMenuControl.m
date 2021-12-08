@@ -9,7 +9,6 @@
 #import "ZCMenuControl.h"
 #import "ZCMaskView.h"
 #import "UIView+ZC.h"
-#import "ZCButton.h"
 #import "ZCMacro.h"
 
 @interface ZCMenuControl ()
@@ -32,7 +31,7 @@
 
 + (void)display:(NSArray <NSString *>*)menus width:(CGFloat)width vertex:(CGPoint)vertex
             set:(void(^)(ZCMenuControl *menuControl))set
-         btnSet:(void(^)(NSInteger index, UIButton *btn, UIView *line))btnSet
+         btnSet:(void(^)(NSInteger index, ZCButton *btn, UIView *line))btnSet
           click:(void(^)(NSInteger selectIndex))click {
     ZCMenuControl *menuControl = [[ZCMenuControl alloc] initWithMenus:menus width:(CGFloat)width vertex:vertex click:click];
     [menuControl initProperty];
@@ -104,7 +103,7 @@
 }
 
 #pragma mark - Build
-- (void)initialUI:(void(^)(NSInteger index, UIButton *btn, UIView *line))btnSet {
+- (void)initialUI:(void(^)(NSInteger index, ZCButton *btn, UIView *line))btnSet {
     CGFloat initHei = MIN(self.items.count * self.rowHeight, self.maxLine * self.rowHeight);
     self.backgroundColor = kZCClear;
     self.zc_size = CGSizeMake(self.initWid, initHei + 2.0 * self.topHeight + self.initArrowRect.size.height);

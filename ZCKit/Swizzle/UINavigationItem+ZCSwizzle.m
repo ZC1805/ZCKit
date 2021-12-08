@@ -10,6 +10,7 @@
 #import "ZCSwizzleHeader.h"
 #import "ZCKitBridge.h"
 #import "ZCMacro.h"
+#import "ZCLabel.h"
 
 @implementation UINavigationItem (ZCSwizzle)
 
@@ -26,16 +27,16 @@
 }
 
 - (void)swizzle_setTitle:(NSString *)title {
-    UILabel *titleLabel = (UILabel *)self.titleView;
+    ZCLabel *titleLabel = (ZCLabel *)self.titleView;
     if (!titleLabel) {
-        titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        titleLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:16];
         titleLabel.textColor = [UIColor colorFromHexString:ZCKitBridge.naviBarTitleColor];
         self.titleView = titleLabel;
     }
-    if ([titleLabel isKindOfClass:[UILabel class]]) {
+    if ([titleLabel isKindOfClass:[ZCLabel class]]) {
         titleLabel.text = title;
     }
     [titleLabel sizeToFit];
@@ -45,11 +46,10 @@
 - (NSString *)swizzle_title {
     NSString *title = [self swizzle_title];
     if (title.length) return title;
-    UILabel *titleLabel = (UILabel *)self.titleView;
-    if ([titleLabel isKindOfClass:[UILabel class]]) {
+    ZCLabel *titleLabel = (ZCLabel *)self.titleView;
+    if ([titleLabel isKindOfClass:[ZCLabel class]]) {
         return titleLabel.text;
-    }
-    return nil;
+    } return nil;
 }
 
 @end

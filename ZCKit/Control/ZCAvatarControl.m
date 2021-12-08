@@ -96,9 +96,9 @@
     }
 }
 
-- (UILabel *)descLabel {
+- (ZCLabel *)descLabel {
     if (!_descLabel) {
-        _descLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _descLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _descLabel.textAlignment = NSTextAlignmentCenter;
         _descLabel.textColor = kZCBlack30;
         _descLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];

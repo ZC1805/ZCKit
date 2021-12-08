@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCLabel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL isUseDarkStyle;  /**< 是使用灰色风格，否则白色，默认YES */
 
-@property (nonatomic, strong, readonly) UILabel *titleLabel;  /**< 标题视图 */
+@property (nonatomic, strong, readonly) ZCLabel *titleLabel;  /**< 标题视图 */
 
 @property (nullable, nonatomic, weak) UIView *carrier;  /**< 原image载体视图，可赋值，默认nil */
 

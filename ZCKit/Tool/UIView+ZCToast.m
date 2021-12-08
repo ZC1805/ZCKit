@@ -9,6 +9,7 @@
 #import "UIView+ZCToast.h"
 #import "ZCKitBridge.h"
 #import "ZCMacro.h"
+#import "ZCLabel.h"
 #import <objc/runtime.h>
 
 static const CGFloat ZCToastVerticalPadding = 8.0;
@@ -102,8 +103,8 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
 
 - (UIView *)viewForMessage:(NSString *)message title:(NSString *)title image:(UIImage *)image {
     if ((message == nil) && (title == nil) && (image == nil)) return nil;
-    UILabel *messageLabel = nil;
-    UILabel *titleLabel = nil;
+    ZCLabel *messageLabel = nil;
+    ZCLabel *titleLabel = nil;
     UIImageView *imageView = nil;
     UIView *wrapperView = [[UIView alloc] initWithFrame:CGRectZero];
     wrapperView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
@@ -127,13 +128,10 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
         [wrapperView addSubview:imageView];
     }
     if (title != nil) {
-        titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        titleLabel.numberOfLines = 1;
-        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Bold" size:16];
-        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel = [[ZCLabel alloc] initWithColor:ZCKitBridge.toastTextColor font:[UIFont fontWithName:@"HelveticaNeue-Bold" size:16] alignment:NSTextAlignmentCenter adjustsSize:NO];
         titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        titleLabel.textColor = ZCKitBridge.toastTextColor;
         titleLabel.backgroundColor = kZCClear;
+        titleLabel.numberOfLines = 1;
         titleLabel.text = title;
         CGSize maxSize = CGSizeMake(width, height);
         CGSize titleSize = [self sizeForString:title font:titleLabel.font constrainedToSize:maxSize lineBreakMode:titleLabel.lineBreakMode];
@@ -143,13 +141,10 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
         [wrapperView addSubview:titleLabel];
     }
     if (message != nil) {
-        messageLabel = [[UILabel alloc] initWithFrame:CGRectZero];
-        messageLabel.numberOfLines = 0;
-        messageLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
-        messageLabel.textAlignment = NSTextAlignmentCenter;
+        messageLabel = [[ZCLabel alloc] initWithColor:ZCKitBridge.toastTextColor font:[UIFont fontWithName:@"HelveticaNeue" size:15] alignment:NSTextAlignmentCenter adjustsSize:NO];
         messageLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        messageLabel.textColor = ZCKitBridge.toastTextColor;
         messageLabel.backgroundColor = kZCClear;
+        messageLabel.numberOfLines = 0;
         messageLabel.text = message;
         CGSize maxSize = CGSizeMake(width, height);
         CGSize msgSize = [self sizeForString:message font:messageLabel.font constrainedToSize:maxSize lineBreakMode:messageLabel.lineBreakMode];

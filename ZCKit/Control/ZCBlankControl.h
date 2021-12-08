@@ -8,20 +8,21 @@
 
 #import <UIKit/UIKit.h>
 #import "ZCButton.h"
+#import "ZCLabel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface ZCBlankControl : UIControl  /**< 空白视图，需设置hidden来控制显示和隐藏 */
 
-@property (nonatomic, strong, readonly) UILabel *headerLabel;  /**< 懒加载，头部label */
+@property (nonatomic, strong, readonly) ZCLabel *headerLabel;  /**< 懒加载，头部label */
 
 @property (nonatomic, strong, readonly) UIImageView *imageView;  /**< 懒加载，顶部image、git */
 
-@property (nonatomic, strong, readonly) UILabel *contentLabel;  /**< 懒加载，内容label */
+@property (nonatomic, strong, readonly) ZCLabel *contentLabel;  /**< 懒加载，内容label */
 
 @property (nonatomic, strong, readonly) ZCButton *handleButton;  /**< 懒加载，可点击的Button，不用添加Action */
 
-@property (nonatomic, strong, readonly) UILabel *footerLabel;  /**< 懒加载，底部label */
+@property (nonatomic, strong, readonly) ZCLabel *footerLabel;  /**< 懒加载，底部label */
 
 @property (nonatomic, strong, readonly) UIView *containerView;  /**< 懒加载，底部容器视图 */
 

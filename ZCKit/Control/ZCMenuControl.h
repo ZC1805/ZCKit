@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCButton.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -29,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 /**< 点击背景或者取消时，selectIndex = -1，vertex顶点坐标，set 回调可以设置一些属性 */
 + (void)display:(NSArray <NSString *>*)menus width:(CGFloat)width vertex:(CGPoint)vertex
             set:(nullable void(^)(ZCMenuControl *menuControl))set
-         btnSet:(nullable void(^)(NSInteger index, UIButton *itemBtn, UIView * _Nullable line))btnSet
+         btnSet:(nullable void(^)(NSInteger index, ZCButton *itemBtn, UIView * _Nullable line))btnSet
           click:(nullable void(^)(NSInteger selectIndex))click;
 
 @end

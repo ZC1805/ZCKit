@@ -61,8 +61,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         kFontLabel = [[UILabel alloc] initWithFrame:CGRectZero]; kFontLabel.text = @" ";
-    });
-    kFontLabel.font = self; [kFontLabel sizeToFit];
+    }); kFontLabel.font = self; [kFontLabel sizeToFit];
     return kFontLabel.frame.size.height;
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCLabel.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,7 +27,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @interface ZCCycleCell : UICollectionViewCell
 
-@property (nonatomic, weak, readonly) UILabel *titleLabel;  /**< 显示的文字 */
+@property (nonatomic, weak, readonly) ZCLabel *titleLabel;  /**< 显示的文字 */
 
 @property (nonatomic, weak, readonly) UIImageView *imageView;  /**< 显示的图片 */
 
@@ -94,7 +95,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @property (nullable, nonatomic, weak) id<ZCCycleControlDelegate> delegate;  /**< 回调代理，默认nil */
 
-@property (nullable, nonatomic, copy) void (^titleLableSet)(UILabel *titleLabel);  /**< 文字属性的设置回调，默认nil */
+@property (nullable, nonatomic, copy) void (^titleLableSet)(ZCLabel *titleLabel);  /**< 文字属性的设置回调，默认nil */
 
 @property (nullable, nonatomic, copy) void (^selectAction)(NSInteger currentIndex);  /**< block方式监听点击回调，默认nil */
 

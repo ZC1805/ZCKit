@@ -8,7 +8,6 @@
 
 #import "ZCBlankControl.h"
 #import "UIImage+ZC.h"
-#import "UILabel+ZC.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
 
@@ -96,11 +95,10 @@
 }
 
 #pragma mark - Get
-- (UILabel *)headerLabel {
+- (ZCLabel *)headerLabel {
     if (!_headerLabel) {
-        _headerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:16] color:kZCBlack30];
+        _headerLabel = [[ZCLabel alloc] initWithColor:kZCBlack30 font:[UIFont fontWithName:@"HelveticaNeue" size:16] alignment:NSTextAlignmentCenter adjustsSize:NO];
         _headerLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        _headerLabel.textAlignment = NSTextAlignmentCenter;
         _headerLabel.numberOfLines = 0;
         [self addSubview:_headerLabel];
     }
@@ -116,11 +114,10 @@
     return _imageView;
 }
 
-- (UILabel *)contentLabel {
+- (ZCLabel *)contentLabel {
     if (!_contentLabel) {
-        _contentLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:16] color:kZCBlack80];
+        _contentLabel = [[ZCLabel alloc] initWithColor:kZCBlack80 font:[UIFont fontWithName:@"HelveticaNeue" size:16] alignment:NSTextAlignmentCenter adjustsSize:NO];
         _contentLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        _contentLabel.textAlignment = NSTextAlignmentCenter;
         _contentLabel.numberOfLines = 0;
         [self addSubview:_contentLabel];
     }
@@ -137,11 +134,10 @@
     return _handleButton;
 }
 
-- (UILabel *)footerLabel {
+- (ZCLabel *)footerLabel {
     if (!_footerLabel) {
-        _footerLabel = [[UILabel alloc] initWithFrame:CGRectZero font:[UIFont fontWithName:@"HelveticaNeue" size:14] color:kZCBlack80];
+        _footerLabel = [[ZCLabel alloc] initWithColor:kZCBlack80 font:[UIFont fontWithName:@"HelveticaNeue" size:14] alignment:NSTextAlignmentCenter adjustsSize:NO];
         _footerLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        _footerLabel.textAlignment = NSTextAlignmentCenter;
         _footerLabel.numberOfLines = 0;
         [self addSubview:_footerLabel];
     }

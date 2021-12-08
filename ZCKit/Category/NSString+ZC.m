@@ -10,7 +10,6 @@
 #import "NSNumber+ZC.h"
 #import "NSData+ZC.h"
 #import "ZCMacro.h"
-#import "UILabel+ZC.h"
 
 NSString * const ZCFlagStr = @"^.~!*.^";
 

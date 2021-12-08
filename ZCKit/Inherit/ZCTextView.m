@@ -8,10 +8,11 @@
 
 #import "ZCTextView.h"
 #import "ZCMacro.h"
+#import "ZCLabel.h"
 
 @interface ZCTextView () <UITextViewDelegate>
 
-@property (nonatomic, strong) UILabel *placeholderLabel;
+@property (nonatomic, strong) ZCLabel *placeholderLabel;
 
 @property (nonatomic, copy) BOOL(^shouldChangeText1)(ZCTextView *textView, NSRange range, NSString *string);
 
@@ -153,9 +154,9 @@
     return CGRectMake(placeholderInsets.left, placeholderInsets.top, maxWidth, expectedSize.height);
 }
 
-- (UILabel *)placeholderLabel {
+- (ZCLabel *)placeholderLabel {
     if (!_placeholderLabel) {
-        _placeholderLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+        _placeholderLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _placeholderLabel.autoresizingMask = (UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight);
         _placeholderLabel.lineBreakMode = NSLineBreakByWordWrapping;
         _placeholderLabel.numberOfLines = 0;
@@ -165,8 +166,7 @@
         _placeholderLabel.textColor = [kZCBlackA8 colorWithAlphaComponent:0.7];
         _placeholderLabel.alpha = 0;
         [self addSubview:_placeholderLabel];
-    }
-    return _placeholderLabel;
+    } return _placeholderLabel;
 }
 
 - (id<UITextViewDelegate>)delegate {

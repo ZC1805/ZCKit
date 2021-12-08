@@ -279,7 +279,7 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (void)setupTitleLabel {
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    ZCLabel *titleLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
     _titleLabel = titleLabel;
     _titleLabel.textColor = kZCWhite;
     _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
