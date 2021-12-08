@@ -14,8 +14,7 @@
     if (self = [self initWithFrame:frame]) {
         self.textColor = color;
         self.font = font;
-    }
-    return self;
+    } return self;
 }
 
 @end

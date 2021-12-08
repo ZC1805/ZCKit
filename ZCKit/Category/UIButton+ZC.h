@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface UIButton (ZC)
 
 /** 初始化一个SystemButton，可是设置title和image */
-+ (instancetype)customTitle:(nullable NSString *)title font:(nullable UIFont *)font color:(nullable UIColor *)color image:(nullable NSString *)image target:(nullable id)target action:(nullable SEL)action;
++ (instancetype)customTypeTitle:(nullable NSString *)title font:(nullable UIFont *)font color:(nullable UIColor *)color image:(nullable NSString *)image target:(nullable id)target action:(nullable SEL)action;
 
 @end
 

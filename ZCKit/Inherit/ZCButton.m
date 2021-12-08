@@ -7,7 +7,7 @@
 //
 
 #import "ZCButton.h"
-#import "UIImage+ZC.h"
+#import "ZCMacro.h"
 
 @interface ZCButton ()
 
@@ -54,6 +54,31 @@
     _ignoreConstraintSelector = nil;
     self.touchAction = nil;
     [self layoutSubviews];
+}
+
+#pragma mark - Init
+- (instancetype)initWithTitle:(NSString *)title font:(UIFont *)font color:(UIColor *)color image:(UIImage *)image target:(id)target action:(SEL)action {
+    ZCButton *cusBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
+    if (font) cusBtn.titleLabel.font = font;
+    if (title) [cusBtn setTitle:title forState:UIControlStateNormal];
+    if (color) [cusBtn setTitleColor:color forState:UIControlStateNormal];
+    if (image) [cusBtn setImage:image forState:UIControlStateNormal];
+    cusBtn.titleLabel.adjustsFontSizeToFitWidth = YES;
+    cusBtn.titleLabel.minimumScaleFactor = 0.6;
+    cusBtn.adjustsImageWhenHighlighted = NO;
+    cusBtn.backgroundColor = kZCClear;
+    if (target && action && [target respondsToSelector:action]) {
+        [cusBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    } return cusBtn;
+}
+
+- (instancetype)initWithContainerColor:(UIColor *)color target:(id)target action:(SEL)action {
+    ZCButton *cusBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
+    cusBtn.backgroundColor = color ? color : kZCClear;
+    cusBtn.adjustsImageWhenHighlighted = NO;
+    if (target && action && [target respondsToSelector:action]) {
+        [cusBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+    } return cusBtn;
 }
 
 #pragma mark - Override

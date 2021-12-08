@@ -34,6 +34,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)resetInitProperty;  /**< 重设到初始化属性值 */
 
+- (instancetype)initWithTitle:(nullable NSString *)title font:(nullable UIFont *)font color:(nullable UIColor *)color image:(nullable UIImage *)image target:(nullable id)target action:(nullable SEL)action;
+
+- (instancetype)initWithContainerColor:(nullable UIColor *)color target:(nullable id)target action:(nullable SEL)action;
+
 @end
 
 NS_ASSUME_NONNULL_END
