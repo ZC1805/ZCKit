@@ -25,7 +25,7 @@
     if (color == nil) color = kZCWhite;
     if (!iamgeIm) iamgeIm = ZCKitBridge.naviBackImage;
     iamgeIm = [iamgeIm imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    ZCButton *back = [ZCButton buttonWithType:UIButtonTypeCustom];
+    ZCButton *back = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
     [back setTitle:title forState:UIControlStateNormal];
     [back setTitle:title forState:UIControlStateHighlighted];
     [back setTitleColor:color forState:UIControlStateNormal];
@@ -72,7 +72,7 @@
     CGFloat height = 32.0;
     if (item == nil) item = @"";
     if (color == nil) color = kZCWhite;
-    ZCButton *rightBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
+    ZCButton *rightBtn = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
     UIImage *iamgeIm = [kZIN(item) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     if (iamgeIm) {
         [rightBtn setImage:iamgeIm forState:UIControlStateNormal];
@@ -102,7 +102,7 @@
 - (ZCButton *)itemAddRightImage:(NSString *)image target:(id)target action:(SEL)action {
     CGFloat height = 32.0, width = 30.0, offset = 5.0;
     UIImage *iamgeIm = [kZIN(image) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    ZCButton *rightBtn = [ZCButton buttonWithType:UIButtonTypeCustom]; //size 32 * 32 image 22 * 22
+    ZCButton *rightBtn = [[ZCButton alloc] initWithFrame:CGRectZero color:nil]; //size 32 * 32 image 22 * 22
     [rightBtn setImage:iamgeIm forState:UIControlStateNormal];
     [rightBtn setImage:[iamgeIm imageWithAlpha:0.3] forState:UIControlStateHighlighted];
     if (target && action && [target respondsToSelector:action]) {

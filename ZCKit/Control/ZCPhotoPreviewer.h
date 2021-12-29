@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCImageView.h"
 #import "ZCLabel.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -31,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)display:(nullable UIImage *)image ctor:(nullable void(^)(ZCPhotoPreviewer *previewer))ctor;
 
 /** 显示的imageView，imageURL，radius，carrier都已经赋值，ctor回调中只需给余下的属性赋值，但不可改frame */
-+ (void)displayImageView:(UIImageView *)imageView ctor:(nullable void(^)(ZCPhotoPreviewer *previewer))ctor;
++ (void)displayImageView:(ZCImageView *)imageView ctor:(nullable void(^)(ZCPhotoPreviewer *previewer))ctor;
 
 @end
 

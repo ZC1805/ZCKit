@@ -7,6 +7,7 @@
 //
 
 #import "ZCPartControl.h"
+#import "ZCImageView.h"
 #import "ZCButton.h"
 #import "ZCMacro.h"
 #import "UIView+ZC.h"
@@ -103,9 +104,9 @@ typedef void(^block)(NSInteger touchIndex);
 
 @property (nonatomic, strong) NSMutableArray <UIView *>* allSpaces;
 
-@property (nonatomic, strong) UIImageView *rightAlphaView;
+@property (nonatomic, strong) ZCImageView *rightAlphaView;
 
-@property (nonatomic, strong) UIImageView *leftAlphaView;
+@property (nonatomic, strong) ZCImageView *leftAlphaView;
 
 @property (nonatomic, weak  ) UIScrollView *scrollView;
 
@@ -524,11 +525,11 @@ typedef void(^block)(NSInteger touchIndex);
     _markView = [[UIView alloc] init];
     _markView.backgroundColor = _markColor;
     
-    _rightAlphaView = [[UIImageView alloc] init];
+    _rightAlphaView = [[ZCImageView alloc] initWithFrame:CGRectZero image:nil];
     _rightAlphaView.transform = CGAffineTransformMakeRotation(M_PI);
     _rightAlphaView.hidden = YES;
     
-    _leftAlphaView = [[UIImageView alloc] init];
+    _leftAlphaView = [[ZCImageView alloc] initWithFrame:CGRectZero image:nil];
     _leftAlphaView.hidden = YES;
 }
 
@@ -545,7 +546,7 @@ typedef void(^block)(NSInteger touchIndex);
     [self.allBtns removeAllObjects];
     for (NSInteger i = 0; i < self.items.count; i ++) {
         ZCPartSet *item = self.items[i];
-        ZCButton *button = [ZCButton buttonWithType:UIButtonTypeCustom];
+        ZCButton *button = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
         button.adjustsImageWhenDisabled = NO;
         button.adjustsImageWhenHighlighted = NO;
         if (item.normalAttTitle || item.selectAttTitle) {

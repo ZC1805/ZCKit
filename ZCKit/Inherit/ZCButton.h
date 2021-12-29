@@ -32,11 +32,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSString *ignoreConstraintSelector;  /**< 忽略上面设置的延迟时间、响应间隔的方法，默认nil */
 
-- (void)resetInitProperty;  /**< 重设到初始化属性值 */
-
+/** 初始化方法，color为字体颜色 */
 - (instancetype)initWithTitle:(nullable NSString *)title font:(nullable UIFont *)font color:(nullable UIColor *)color image:(nullable UIImage *)image target:(nullable id)target action:(nullable SEL)action;
 
-- (instancetype)initWithContainerColor:(nullable UIColor *)color target:(nullable id)target action:(nullable SEL)action;
+/** 初始化方法，color为背景颜色 */
+- (instancetype)initWithBKColor:(nullable UIColor *)color target:(nullable id)target action:(nullable SEL)action;
 
 @end
 

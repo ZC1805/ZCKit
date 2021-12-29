@@ -121,10 +121,9 @@
 
     for (int i = 0; i < self.items.count; i ++) {
         UIView *topSep = nil;
-        ZCButton *itemBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
+        ZCButton *itemBtn = [[ZCButton alloc] initWithFrame:CGRectZero color:kZCWhite];
         UIColor *titleColor = kZCBlack;
         itemBtn.tag = 73203 + i;
-        itemBtn.backgroundColor = kZCWhite;
         itemBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
         [itemBtn setTitleColor:titleColor forState:UIControlStateNormal];

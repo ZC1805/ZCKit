@@ -7,13 +7,14 @@
 //
 
 #import "ZCPhotoZoomControl.h"
+#import "ZCImageView.h"
 #import "ZCKitBridge.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
 
 @interface ZCPhotoZoomControl ()
 
-@property (nonatomic, strong) UIImageView *headerIv;
+@property (nonatomic, strong) ZCImageView *headerIv;
 
 @property (nonatomic, strong) UIView *headerMask;
 
@@ -103,9 +104,9 @@ static const float initAdditional = 30.0;
 }
 
 #pragma mark - Get
-- (UIImageView *)headerIv {
+- (ZCImageView *)headerIv {
     if (!_headerIv) {
-        _headerIv = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _headerIv = [[ZCImageView alloc] initWithFrame:CGRectZero image:nil];
         _headerIv.contentMode = UIViewContentModeScaleAspectFill;
         _headerIv.clipsToBounds = YES;
         [self addSubview:_headerIv];

@@ -10,6 +10,7 @@
 #import "UIViewController+ZC.h"
 #import "ZCViewController.h"
 #import "ZCQueueHandler.h"
+#import "ZCImageView.h"
 #import "ZCMacro.h"
 
 NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewControllerWillBeTouchPopNotification";
@@ -36,7 +37,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
 
 @property (nonatomic, strong) UIImage *iPopGesPopFromImage;
 
-@property (nonatomic, strong) UIImageView *iPopGesPopTopImageView;
+@property (nonatomic, strong) ZCImageView *iPopGesPopTopImageView;
 
 @property (nonatomic, strong) NSArray *iGesTempViewControllers;
 
@@ -77,7 +78,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
                 } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
                     UIView *barBKView = self.navigationBar.subviews.firstObject;
                     if (barBKView && !self.iPopGesPopTopImageView) {
-                        self.iPopGesPopTopImageView = [[UIImageView alloc] initWithFrame:barBKView.frame];
+                        self.iPopGesPopTopImageView = [[ZCImageView alloc] initWithFrame:barBKView.frame image:nil];
                         self.iPopGesPopTopImageView.contentMode = barBKView.contentMode;
                         self.iPopGesPopTopImageView.userInteractionEnabled = YES;
                     }

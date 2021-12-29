@@ -27,8 +27,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)imageUrl:(nullable NSString *)url holder:(nullable UIImage *)holder;  /**< 加载网路图片 */
 
-- (void)resetInitProperty;  /**< 重设到初始化属性值 */
-
 @end
 
 NS_ASSUME_NONNULL_END

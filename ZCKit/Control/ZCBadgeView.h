@@ -24,8 +24,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithFrame:(CGRect)frame badgeValue:(NSString *)badgeValue;  /**< 初始化，只需改变位置不必改变size */
 
-- (void)resetInitProperty;  /**< 重设到初始化属性值 */
-
 @end
 
 NS_ASSUME_NONNULL_END

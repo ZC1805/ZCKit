@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCImageView.h"
 #import "ZCButton.h"
 #import "ZCLabel.h"
 
@@ -16,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong, readonly) ZCLabel *headerLabel;  /**< 懒加载，头部label */
 
-@property (nonatomic, strong, readonly) UIImageView *imageView;  /**< 懒加载，顶部image、git */
+@property (nonatomic, strong, readonly) ZCImageView *imageView;  /**< 懒加载，顶部image、git */
 
 @property (nonatomic, strong, readonly) ZCLabel *contentLabel;  /**< 懒加载，内容label */
 

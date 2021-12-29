@@ -32,7 +32,6 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.edgesForExtendedLayout = UIRectEdgeAll;
     
-    
     UITableView *listView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     listView.dataSource = self; listView.delegate = self;
     listView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -41,7 +40,7 @@
     listView.separatorStyle = UITableViewCellSeparatorStyleNone;
     listView.estimatedSectionFooterHeight = 0;
     listView.estimatedSectionHeaderHeight = 0;
-    listView.estimatedRowHeight = UITableViewAutomaticDimension;
+    listView.estimatedRowHeight = 0;
     listView.sectionHeaderHeight = 0;
     listView.sectionFooterHeight = 0;
     listView.rowHeight = UITableViewAutomaticDimension;
@@ -52,8 +51,17 @@
     listView.bounces = YES;
     listView.frame = CGRectMake(0, 64, kZSWid, kZSHei - 64); //这里要设置大些
     listView.backgroundColor = kZCRGB(0xEEEEEE);
-    
     [self.view addSubview:listView];
+    
+    ZCButton *btn1 = [[ZCButton alloc] initWithFrame:CGRectZero color:UIColor.redColor];
+    btn1.frame = CGRectMake(100, 100, 100, 100);
+    [self.view addSubview:btn1];
+    
+    
+}
+
+- (void)AAAA:(ZCButton *)sender {
+    NSLog(@"123");
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -87,8 +95,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    cell.backgroundColor = kZCClear;
     cell.textLabel.text = kZStrFormat(@"%ld", indexPath.row);
+    cell.backgroundColor = kZCClear;
     return cell;
 }
 

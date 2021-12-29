@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCImageView.h"
 #import "ZCLabel.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -29,7 +30,7 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 @property (nonatomic, weak, readonly) ZCLabel *titleLabel;  /**< 显示的文字 */
 
-@property (nonatomic, weak, readonly) UIImageView *imageView;  /**< 显示的图片 */
+@property (nonatomic, weak, readonly) ZCImageView *imageView;  /**< 显示的图片 */
 
 @end
 

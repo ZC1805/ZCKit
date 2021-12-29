@@ -8,6 +8,7 @@
 
 #import "ZCSheetControl.h"
 #import "ZCMaskView.h"
+#import "UIView+ZC.h"
 #import "ZCLabel.h"
 #import "ZCMacro.h"
 
@@ -202,12 +203,11 @@ static const CGFloat sheetFlagTag = 83803;
     for (int i = 0; i < self.items.count; i ++) {
         BOOL isCancel = NO;
         UIView *topSep = nil;
-        ZCButton *itemBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
+        ZCButton *itemBtn = [[ZCButton alloc] initWithFrame:CGRectZero color:kZCWhite];
         itemBtn.delayResponseTime = 0.1;
         UIColor *titleColor = [self isDangerousForIndex:i] ? kZCRGB(0xFF0000) : kZCBlack;
         UIImage *imageBk = [UIImage imageWithColor:[UIColor colorFormHex:0xE1E1E3 alpha:1.0] size:CGSizeMake(1.0, 1.0)];
         itemBtn.tag = sheetFlagTag + i;
-        itemBtn.backgroundColor = kZCWhite;
         itemBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
         [itemBtn setTitleColor:titleColor forState:UIControlStateNormal];

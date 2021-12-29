@@ -24,13 +24,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithColor:(nullable UIColor *)color font:(nullable UIFont *)font alignment:(NSTextAlignment)alignment adjustsSize:(BOOL)adjustsSize;  /**< 初始化，多行的话最好设置字体自适应 */
 
+- (instancetype)initWithColor:(nullable UIColor *)color font:(nullable UIFont *)font;  /**< 初始化，多行的话最好设置字体自适应，alignment_left，adjustsSize_YES */
+
 - (void)resetVerticalCenterAlignmentOffsetTop:(CGFloat)offset;  /**< 居中对齐向上偏移offset，与insideInsets同时设无效，不适用minToSize */
 
 - (void)resetVerticalTopAlignmentOffsetBottom:(CGFloat)offset;  /**< 居上对齐向下偏移offset，与insideInsets同时设无效，不适用minToSize */
 
 - (void)resetVerticalBottomAlignmentOffsetTop:(CGFloat)offset;  /**< 居下对齐向上偏移offset，与insideInsets同时设无效，不适用minToSize */
-
-- (void)resetInitProperty;  /**< 重设到初始化属性值 */
 
 /** 匹配字符串设置富文本(调用此方法前需initWithColor:font:alignment:adjustsSize:方法前设置了font和color)，只匹配一次，isReverse为是否反向匹配，font为匹配文字的字体(nil时不改变)&color为匹配文字的颜色(nil时不改变)，spacing为lable的行间距，忽略首位缩进 */
 - (void)setText:(NSString *)text matchText:(NSString *)mText isReverse:(BOOL)isReverse font:(nullable UIFont *)font color:(nullable UIColor *)color spacing:(CGFloat)spacing;

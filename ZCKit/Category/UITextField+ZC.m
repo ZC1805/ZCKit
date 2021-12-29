@@ -7,6 +7,7 @@
 //
 
 #import "UITextField+ZC.h"
+#import "ZCImageView.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
 
@@ -45,15 +46,15 @@
 }
 
 - (UIImage *)leftImage {
-    if (self.leftView && [self.leftView isKindOfClass:[UIImageView class]]) {
-        return [(UIImageView *)self.leftView image];
+    if (self.leftView && [self.leftView isKindOfClass:[ZCImageView class]]) {
+        return [(ZCImageView *)self.leftView image];
     }
     return nil;
 }
 
 - (void)setLeftImage:(UIImage *)leftImage {
     if (leftImage) {
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        ZCImageView *imageView = [[ZCImageView alloc] initWithFrame:CGRectZero image:nil];
         imageView.image = leftImage;
         imageView.contentMode = UIViewContentModeScaleToFill;
         imageView.contentMode = UIViewContentModeCenter;

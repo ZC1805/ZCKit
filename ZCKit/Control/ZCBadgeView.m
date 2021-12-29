@@ -47,6 +47,7 @@
     self.backgroundColor = kZCClear;
     self.userInteractionEnabled = NO;
     self.badgeValue = nil;
+    [self setNeedsDisplay];
 }
 
 #pragma mark - Set

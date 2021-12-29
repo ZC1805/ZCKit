@@ -165,7 +165,7 @@ static NSString * const ident = @"cycleControlCell";
             ((ZCCycleAnimatedDot *)dotView).dotColor = self.dotColor;
         }
     } else {
-        dotView = [[UIImageView alloc] initWithImage:self.dotImage];
+        dotView = [[ZCImageView alloc] initWithFrame:CGRectZero image:self.dotImage];
         dotView.frame = CGRectMake(0, 0, self.dotSize.width, self.dotSize.height);
     }
     if (dotView) {
@@ -181,7 +181,7 @@ static NSString * const ident = @"cycleControlCell";
         ZCCycleAnimatedDot *abstractDotView = (ZCCycleAnimatedDot *)[self.dots objectAtIndex:index];
         [abstractDotView changeActivityState:active];
     } else if (self.dotImage && self.currentDotImage) {
-        UIImageView *dotView = (UIImageView *)[self.dots objectAtIndex:index];
+        ZCImageView *dotView = (ZCImageView *)[self.dots objectAtIndex:index];
         dotView.image = active ? self.currentDotImage : self.dotImage;
     }
 }
@@ -273,7 +273,7 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (void)setupImageView {
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+    ZCImageView *imageView = [[ZCImageView alloc] initWithFrame:CGRectZero image:nil];
     _imageView = imageView;
     [self.contentView addSubview:imageView];
 }
@@ -379,7 +379,7 @@ static NSString * const ident = @"cycleControlCell";
 
 @property (nonatomic, assign) NSInteger totalItemsCount;
 
-@property (nonatomic, strong) UIImageView *backgroundImageView;
+@property (nonatomic, strong) ZCImageView *backgroundImageView;
 
 @end
 
@@ -477,10 +477,10 @@ static NSString * const ident = @"cycleControlCell";
 - (void)setPlaceholderImage:(UIImage *)placeholderImage {
     _placeholderImage = placeholderImage;
     if (!_backgroundImageView) {
-        UIImageView *bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
-        bgImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self insertSubview:bgImageView belowSubview:_mainView];
-        _backgroundImageView = bgImageView;
+        ZCImageView *bkImageView = [[ZCImageView alloc] initWithFrame:CGRectZero image:nil];
+        bkImageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self insertSubview:bkImageView belowSubview:_mainView];
+        _backgroundImageView = bkImageView;
     }
     _backgroundImageView.image = placeholderImage;
 }

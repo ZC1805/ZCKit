@@ -67,9 +67,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, strong) NSDictionary *flagDic;  /**< 类似tag的标识，默认nil */
 
 
-- (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color;  /**< 带背景颜色初始化 */
+- (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color;  /**< 默认初始化方法，带背景颜色初始化，可供子类重写隐式实现 */
 
-- (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color addTo:(nullable UIView *)superView;  /**< 带背景颜色初始化且加入到父视图 */
+- (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color addTo:(nullable UIView *)superView;  /**< 带背景颜色初始化且加入到父视图，子类一般不会重写隐式实现 */
 
 - (void)removeAllSubviews;  /**< 移除所有子视图 */
 

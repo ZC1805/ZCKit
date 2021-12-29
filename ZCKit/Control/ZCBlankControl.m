@@ -13,7 +13,7 @@
 
 @interface ZCBlankControl ()
 
-@property (nonatomic, strong) UIImageView *originImageView;
+@property (nonatomic, strong) ZCImageView *originImageView;
 
 @end
 
@@ -105,9 +105,9 @@
     return _headerLabel;
 }
 
-- (UIImageView *)imageView {
+- (ZCImageView *)imageView {
     if (!_imageView) {
-        _imageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _imageView = [[ZCImageView alloc] initWithFrame:CGRectZero image:nil];
         _imageView.userInteractionEnabled = NO;
         [self addSubview:_imageView];
     }
@@ -126,7 +126,7 @@
 
 - (ZCButton *)handleButton {
     if (!_handleButton) {
-        _handleButton = [ZCButton buttonWithType:UIButtonTypeCustom];
+        _handleButton = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
         _handleButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         [_handleButton setCorner:3 color:kZCClear width:0];
         [self addSubview:_handleButton];
@@ -152,9 +152,9 @@
     return _containerView;
 }
 
-- (UIImageView *)originImageView {
+- (ZCImageView *)originImageView {
     if (!_originImageView) {
-        _originImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
+        _originImageView = [[ZCImageView alloc] initWithFrame:CGRectZero image:nil];
         _originImageView.contentMode = UIViewContentModeScaleAspectFit;
         _originImageView.userInteractionEnabled = NO;
         _originImageView.backgroundColor = self.backgroundColor;

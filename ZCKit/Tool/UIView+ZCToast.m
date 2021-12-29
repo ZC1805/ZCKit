@@ -7,6 +7,7 @@
 //
 
 #import "UIView+ZCToast.h"
+#import "ZCImageView.h"
 #import "ZCKitBridge.h"
 #import "ZCMacro.h"
 #import "ZCLabel.h"
@@ -105,7 +106,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
     if ((message == nil) && (title == nil) && (image == nil)) return nil;
     ZCLabel *messageLabel = nil;
     ZCLabel *titleLabel = nil;
-    UIImageView *imageView = nil;
+    ZCImageView *imageView = nil;
     UIView *wrapperView = [[UIView alloc] initWithFrame:CGRectZero];
     wrapperView.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin |
                                    UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleBottomMargin;
@@ -119,7 +120,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
     CGFloat left = ZCToastHorizontalPadding, top = ZCToastVerticalPadding;
     CGFloat width = self.bounds.size.width * 0.8 - 2.0 * left, height = self.bounds.size.height * 0.8 - 2.0 * top;
     if (image != nil) {
-        imageView = [[UIImageView alloc] initWithImage:image];
+        imageView = [[ZCImageView alloc] initWithFrame:CGRectZero image:image];
         imageView.contentMode = UIViewContentModeScaleAspectFit;
         [imageView sizeToFit];
         imageView.frame = CGRectMake(left, top, imageView.bounds.size.width, imageView.bounds.size.height);

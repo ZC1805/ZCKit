@@ -7,6 +7,7 @@
 //
 
 #import "ZCLabel.h"
+#import "ZCMacro.h"
 #import "UIColor+ZC.h"
 
 @interface ZCLabel ()
@@ -28,13 +29,13 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self resetInitProperty];
-    }
-    return self;
+    } return self;
 }
 
 - (instancetype)initWithColor:(UIColor *)color font:(UIFont *)font alignment:(NSTextAlignment)alignment adjustsSize:(BOOL)adjustsSize {
     if (self = [super initWithFrame:CGRectZero]) {
         [self resetInitProperty];
+        self.backgroundColor = kZCClear;
         self.lineBreakMode = NSLineBreakByTruncatingTail;
         self.adjustsFontSizeToFitWidth = adjustsSize;
         self.minimumScaleFactor = 0.5;
@@ -42,8 +43,35 @@
         self.textColor = color;
         self.numberOfLines = 1;
         self.font = font;
-    }
-    return self;
+    } return self;
+}
+
+- (instancetype)initWithColor:(UIColor *)color font:(UIFont *)font {
+    if (self = [super initWithFrame:CGRectZero]) {
+        [self resetInitProperty];
+        self.backgroundColor = kZCClear;
+        self.lineBreakMode = NSLineBreakByTruncatingTail;
+        self.adjustsFontSizeToFitWidth = YES;
+        self.minimumScaleFactor = 0.5;
+        self.textAlignment = NSTextAlignmentLeft;
+        self.textColor = color;
+        self.numberOfLines = 1;
+        self.font = font;
+    } return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color { //重新分类方法
+    if (self = [super initWithFrame:frame]) {
+        [self resetInitProperty];
+        self.backgroundColor = color ? color : kZCClear;
+        self.lineBreakMode = NSLineBreakByTruncatingTail;
+        self.adjustsFontSizeToFitWidth = YES;
+        self.minimumScaleFactor = 0.5;
+        self.textAlignment = NSTextAlignmentLeft;
+        self.textColor = kZCBlack30;
+        self.numberOfLines = 1;
+        self.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+    } return self;
 }
 
 - (void)resetInitProperty {
@@ -53,7 +81,10 @@
     _verticalAlignmentType = 0;
     _verticalAlignmentOffset = 0;
     _insideInsets = UIEdgeInsetsZero;
+    _manualColor = nil;
+    _manualFont = nil;
     self.touchAction = nil;
+    [self layoutSubviews];
 }
 
 - (void)setFont:(UIFont *)font {

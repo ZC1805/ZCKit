@@ -19,7 +19,7 @@
 
 @property (nonatomic, strong) UIView *containerView; //容器视图
 
-@property (nonatomic, strong) UIImageView *imageView; //显示的图片
+@property (nonatomic, strong) ZCImageView *imageView; //显示的图片
 
 @property (nonatomic, strong) UITapGestureRecognizer *doubleTapGR; //双击
 
@@ -82,7 +82,7 @@
     self.containerView = [[UIView alloc] init];
     [self.scrollView addSubview:self.containerView];
     
-    self.imageView = [[UIImageView alloc] init];
+    self.imageView = [[ZCImageView alloc] initWithFrame:CGRectZero image:nil];
     self.imageView.clipsToBounds = YES;
     [self.containerView addSubview:self.imageView];
 }
@@ -151,7 +151,7 @@ static void *imageObserveContext = @"imageObserveContext";
     [previewer previewImage:image];
 }
 
-+ (void)displayImageView:(UIImageView *)imageView ctor:(nullable void (^)(ZCPhotoPreviewer * _Nonnull))ctor {
++ (void)displayImageView:(ZCImageView *)imageView ctor:(nullable void (^)(ZCPhotoPreviewer * _Nonnull))ctor {
     if (!imageView) return;
     ZCPhotoPreviewer *previewer = [[ZCPhotoPreviewer alloc] initWithFrame:CGRectZero];
     if (imageView.layer.cornerRadius) previewer.radius = imageView.layer.cornerRadius;

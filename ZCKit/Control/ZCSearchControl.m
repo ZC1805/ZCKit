@@ -42,7 +42,7 @@
 }
 
 - (void)obtainUI {
-    self.eventButton = [ZCButton buttonWithType:UIButtonTypeCustom];
+    self.eventButton = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
     self.eventButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [self.eventButton setTitle:self.holderText forState:UIControlStateNormal];
     [self.eventButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 5.0)];

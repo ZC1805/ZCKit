@@ -841,7 +841,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (ZCButton *)selectButton {
     if (!_selectButton) {
         if (!_lineOneReferView && !_trailingLabel) {self.trailingLabel.hidden = YES; _isTrailingLabel = YES;}
-        _selectButton = [ZCButton buttonWithType:UIButtonTypeCustom];
+        _selectButton = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
         _selectButton.zc_size = CGSizeMake(kZSA(20), kZSA(20));
         _selectButton.titleLabel.font = kZFR(16);
         _selectButton.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -983,7 +983,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 
 - (ZCButton *)clickButton {
     if (!_clickButton) {
-        _clickButton = [ZCButton buttonWithType:UIButtonTypeCustom];
+        _clickButton = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
         _clickButton.zc_size = CGSizeMake(kZSA(30), kZSA(30));
         _clickButton.titleLabel.font = kZFR(16);
         _clickButton.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -1184,7 +1184,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (ZCButton *)bottomClickButton {
     if (!_bottomClickButton) {
         if (!_lineTwoReferView && !_bottomAttachLabel) {self.bottomAttachLabel.hidden = YES; _isAttachLabel = YES;}
-        _bottomClickButton = [ZCButton buttonWithType:UIButtonTypeCustom];
+        _bottomClickButton = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
         _bottomClickButton.zc_size = CGSizeMake(kZSA(30), kZSA(30));
         _bottomClickButton.titleLabel.font = kZFR(16);
         _bottomClickButton.titleLabel.adjustsFontSizeToFitWidth = YES;
@@ -1255,7 +1255,8 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (void)initZCBadgeViewProperty:(ZCBadgeView *)badge {
     if (badge) {
         [self resetViewBaseProperty:badge];
-        [badge resetInitProperty];
+        SEL sel = @selector(resetInitProperty);
+        if ([badge respondsToSelector:sel]) { kZSuppressLeakWarn([badge performSelector:sel]); }
         
         if (badge == _badgeView) {
             //...
@@ -1268,7 +1269,8 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (void)initZCAvatarControlProperty:(ZCAvatarControl *)avatar {
     if (avatar) {
         [self resetViewBaseProperty:avatar];
-        [avatar resetInitProperty];
+        SEL sel = @selector(resetInitProperty);
+        if ([avatar respondsToSelector:sel]) { kZSuppressLeakWarn([avatar performSelector:sel]); }
         
         if (avatar == _avatarControl) {
             avatar.userInteractionEnabled = YES;
@@ -1284,7 +1286,8 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
 - (void)initZCLabelProperty:(ZCLabel *)label {
     if (label) {
         [self resetViewBaseProperty:label];
-        [label resetInitProperty];
+        SEL sel = @selector(resetInitProperty);
+        if ([label respondsToSelector:sel]) { kZSuppressLeakWarn([label performSelector:sel]); }
         
         label.adjustsFontForContentSizeCategory = NO;
         label.lineBreakMode = NSLineBreakByTruncatingTail;
@@ -1341,7 +1344,8 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         button.titleLabel.numberOfLines = 1;
         button.titleLabel.font = nil;
         
-        [button resetInitProperty];
+        SEL sel = @selector(resetInitProperty);
+        if ([button respondsToSelector:sel]) { kZSuppressLeakWarn([button performSelector:sel]); }
         
         if (button == _selectButton) {
             button.titleLabel.font = kZFR(16);
@@ -1738,5 +1742,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         }
     }
 }
+
+- (void)resetInitProperty {}
 
 @end

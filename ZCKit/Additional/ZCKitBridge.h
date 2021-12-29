@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "ZCImageView.h"
 #import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
@@ -14,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @protocol ZCKitExternalRealize <NSObject>  /**< 上层需要实现的方法 */
 
 /** image view图片缓存，上层用此方法实现图片缓存操作 */
-- (void)imageViewWebCache:(UIImageView *)imageView url:(nullable NSURL *)url holder:(nullable UIImage *)holder;
+- (void)imageViewWebCache:(ZCImageView *)imageView url:(nullable NSURL *)url holder:(nullable UIImage *)holder;
 
 /** 图片缓存，层用此方法实现图片缓存操作，assigments视图赋值image操作 */
 - (void)imageWebCache:(UIView *)view url:(nullable NSURL *)url holder:(nullable UIImage *)holder

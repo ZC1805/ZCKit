@@ -121,8 +121,7 @@
     
     if (self.isShowCloseButton) {
         CGFloat top = MIN((self.isUseTopCorner ? 5 : 12), (headerHei - 30)/2.0 - (self.isUseTopCorner ? 4 : 0));
-        ZCButton *closeBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
-        closeBtn.frame = CGRectMake(self.zc_width - 45, top, 30, 30);
+        ZCButton *closeBtn = [[ZCButton alloc] initWithFrame:CGRectMake(self.zc_width - 45, top, 30, 30) color:nil];
         closeBtn.responseAreaExtend = UIEdgeInsetsMake(4, 4, 4, 4);
         [closeBtn setImage:[ZCGlobal ZCImageName:@"zc_image_common_close"] forState:UIControlStateNormal];
         [closeBtn addTarget:self action:@selector(onClose) forControlEvents:UIControlEventTouchUpInside];

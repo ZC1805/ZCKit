@@ -16,11 +16,7 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = kZCClear;
         self.layer.geometryFlipped = YES;
-        _alignment = 0;
-        _descLabel = nil;
-        _cornerRadius = 0;
-        _localImage = nil;
-        _isAspectFit = NO;
+        [self resetInitProperty];
     }
     return self;
 }

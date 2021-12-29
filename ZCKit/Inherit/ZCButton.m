@@ -27,17 +27,48 @@
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        _isManualSize = NO;
-        _isUseGrayImage = NO;
-        _fixSize = CGSizeZero;
-        _centerAlignmentSpace = 0;
-        _imageViewSize = CGSizeZero;
-        _isVerticalCenterAlignment = NO;
-        _responseAreaExtend = UIEdgeInsetsZero;
-        _responseTouchInterval = 0.3;
-        _delayResponseTime = 0;
-    }
-    return self;
+        [self resetInitProperty];
+    } return self;
+}
+
+- (instancetype)initWithTitle:(NSString *)title font:(UIFont *)font color:(UIColor *)color image:(UIImage *)image target:(id)target action:(SEL)action {
+    if (self = [super initWithFrame:CGRectZero]) {
+        [self resetInitProperty];
+        self.backgroundColor = kZCClear;
+        if (font) self.titleLabel.font = font;
+        if (image) [self setImage:image forState:UIControlStateNormal];
+        if (title) [self setTitle:title forState:UIControlStateNormal];
+        if (color) [self setTitleColor:color forState:UIControlStateNormal];
+        self.titleLabel.adjustsFontSizeToFitWidth = YES;
+        self.titleLabel.minimumScaleFactor = 0.6;
+        self.adjustsImageWhenHighlighted = NO;
+        self.adjustsImageWhenDisabled = NO;
+        self.backgroundColor = kZCClear;
+        if (target && action && [target respondsToSelector:action]) {
+            [self addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+        }
+    } return self;
+}
+
+- (instancetype)initWithBKColor:(UIColor *)color target:(id)target action:(SEL)action {
+    if (self = [super initWithFrame:CGRectZero]) {
+        [self resetInitProperty];
+        self.backgroundColor = color ? color : kZCClear;
+        self.adjustsImageWhenHighlighted = NO;
+        self.adjustsImageWhenDisabled = NO;
+        if (target && action && [target respondsToSelector:action]) {
+            [self addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
+        }
+    } return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color { //重新分类方法
+    if (self = [super initWithFrame:frame]) {
+        [self resetInitProperty];
+        self.backgroundColor = color ? color : kZCClear;
+        self.adjustsImageWhenHighlighted = NO;
+        self.adjustsImageWhenDisabled = NO;
+    } return self;
 }
 
 - (void)resetInitProperty {
@@ -54,31 +85,6 @@
     _ignoreConstraintSelector = nil;
     self.touchAction = nil;
     [self layoutSubviews];
-}
-
-#pragma mark - Init
-- (instancetype)initWithTitle:(NSString *)title font:(UIFont *)font color:(UIColor *)color image:(UIImage *)image target:(id)target action:(SEL)action {
-    ZCButton *cusBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
-    if (font) cusBtn.titleLabel.font = font;
-    if (title) [cusBtn setTitle:title forState:UIControlStateNormal];
-    if (color) [cusBtn setTitleColor:color forState:UIControlStateNormal];
-    if (image) [cusBtn setImage:image forState:UIControlStateNormal];
-    cusBtn.titleLabel.adjustsFontSizeToFitWidth = YES;
-    cusBtn.titleLabel.minimumScaleFactor = 0.6;
-    cusBtn.adjustsImageWhenHighlighted = NO;
-    cusBtn.backgroundColor = kZCClear;
-    if (target && action && [target respondsToSelector:action]) {
-        [cusBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-    } return cusBtn;
-}
-
-- (instancetype)initWithContainerColor:(UIColor *)color target:(id)target action:(SEL)action {
-    ZCButton *cusBtn = [ZCButton buttonWithType:UIButtonTypeCustom];
-    cusBtn.backgroundColor = color ? color : kZCClear;
-    cusBtn.adjustsImageWhenHighlighted = NO;
-    if (target && action && [target respondsToSelector:action]) {
-        [cusBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
-    } return cusBtn;
 }
 
 #pragma mark - Override
