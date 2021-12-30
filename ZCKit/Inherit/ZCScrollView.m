@@ -23,23 +23,34 @@
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if (!self.isShieldPriorityEditGestures && [NSStringFromClass([touch.view class]) isEqualToString:@"UITableViewCellContentView"]) {
+    if (!self.isShieldPriorityEditGestures && [NSStringFromClass(touch.view.class) isEqualToString:@"UITableViewCellContentView"]) {
         return NO;
-    } return YES;
+    }
+    return YES;
 }
 
 #pragma mark - Basic
-- (UIScrollView *)initWithFrame:(CGRect)frame isPaging:(BOOL)isPaging isBounces:(BOOL)isBounces {
-    if (self = [self initWithFrame:frame]) {
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
         self.showsHorizontalScrollIndicator = NO;
         self.showsVerticalScrollIndicator = NO;
         self.directionalLockEnabled = YES;
         self.backgroundColor = kZCClear;
+        self.pagingEnabled = NO;
+        self.bounces = YES;
+        self.isInterceptTouchEvent = NO;
+        if (frame.size.height > 0) { self.contentSize = CGSizeMake(frame.size.width, frame.size.height + kZSPixel); }
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame isPaging:(BOOL)isPaging isBounces:(BOOL)isBounces {
+    if (self = [self initWithFrame:frame]) {
         self.pagingEnabled = isPaging;
         self.bounces = isBounces;
-        self.isInterceptTouchEvent = NO;
         if (frame.size.height > 0) { self.contentSize = CGSizeMake(frame.size.width, frame.size.height + (isBounces ? kZSPixel : 0)); }
-    } return self;
+    }
+    return self;
 }
 
 #pragma mark - System

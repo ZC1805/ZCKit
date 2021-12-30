@@ -11,7 +11,7 @@
 #import "UINavigationItem+ZC.h"
 #import "ZCSwizzleHeader.h"
 #import "ZCKitBridge.h"
-#import "UIColor+ZC.h"
+#import "ZCMacro.h"
 
 @implementation UINavigationController (ZCSwizzle)
 
@@ -22,14 +22,14 @@
         SEL sel1x = @selector(swizzle_navi_viewDidLoad);
         SEL sel2 = @selector(viewWillAppear:);
         SEL sel2x = @selector(swizzle_navi_viewWillAppear:);
-        zc_swizzle_exchange_selector([UINavigationController class], sel1, sel1x);
-        zc_swizzle_exchange_selector([UINavigationController class], sel2, sel2x);
+        zc_swizzle_exchange_selector(UINavigationController.class, sel1, sel1x);
+        zc_swizzle_exchange_selector(UINavigationController.class, sel2, sel2x);
     });
 }
 
 - (void)swizzle_navi_viewDidLoad {
     UIImage *image = [ZCKitBridge.naviBackImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    self.view.backgroundColor = [UIColor colorFormHex:0xFFFFFF alpha:1.0];
+    self.view.backgroundColor = kZCWhite;
     self.navigationBar.backIndicatorImage = image;
     self.navigationBar.backIndicatorTransitionMaskImage = image;
     [self swizzle_navi_viewDidLoad];
@@ -59,7 +59,7 @@
 
 - (BOOL)isNormalBar {
     NSNumber *value = objc_getAssociatedObject(self, _cmd);
-    if (value && [value isKindOfClass:[NSNumber class]]) {
+    if (value && [value isKindOfClass:NSNumber.class]) {
         return [value boolValue];
     } else {
         return NO;

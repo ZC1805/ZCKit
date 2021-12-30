@@ -13,8 +13,7 @@
 #import <MessageUI/MessageUI.h>
 #import "ZCQueueHandler.h"
 #import "ZCKitBridge.h"
-#import "UIColor+ZC.h"
-#import "ZCGlobal.h"
+#import "ZCMacro.h"
 
 @interface ZCSystemHandler () <MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate>
 
@@ -173,8 +172,8 @@
 }
 
 - (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    navigationController.navigationBar.barTintColor = [UIColor colorFromHexString:ZCKitBridge.naviBarImageOrColor];
-    navigationController.navigationBar.tintColor = [UIColor colorFromHexString:ZCKitBridge.naviBarTitleColor];
+    navigationController.navigationBar.barTintColor = kZCS(ZCKitBridge.naviBarImageOrColor);
+    navigationController.navigationBar.tintColor = kZCS(ZCKitBridge.naviBarTitleColor);
 }
 
 #pragma mark - Send message

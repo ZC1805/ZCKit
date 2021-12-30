@@ -7,6 +7,7 @@
 //
 
 #import "ZCTextField.h"
+#import "UIView+ZC.h"
 #import "ZCMacro.h"
 
 @interface ZCTextField () <UITextFieldDelegate>
@@ -37,6 +38,7 @@
         _cursorOffset = UIOffsetZero;
         _responseAreaExtend = UIEdgeInsetsZero;
         _underlineEdgeInsets = UIEdgeInsetsZero;
+        self.backgroundColor = kZCClear;
     }
     return self;
 }
@@ -79,8 +81,8 @@
     [super layoutSubviews];
     if (_underlineView) {
         _underlineView.frame = CGRectMake(_underlineEdgeInsets.left,
-                                          self.frame.size.height - _underlineEdgeInsets.top - _underlineEdgeInsets.bottom,
-                                          self.frame.size.width - _underlineEdgeInsets.left - _underlineEdgeInsets.right,
+                                          self.zc_height - _underlineEdgeInsets.top - _underlineEdgeInsets.bottom,
+                                          self.zc_width - _underlineEdgeInsets.left - _underlineEdgeInsets.right,
                                           _underlineEdgeInsets.top);
     }
 }
@@ -142,8 +144,7 @@
     [self removeNotificationObserver];
     _limitTextLength = limitTextLength;
     if (_limitTextLength > 0) {
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(limitHandle:)
-                                                     name:UITextFieldTextDidEndEditingNotification object:self];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(limitHandle:) name:UITextFieldTextDidEndEditingNotification object:self];
     }
 }
 
@@ -201,21 +202,21 @@
 }
 
 #pragma mark - Delegate
-- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
+- (BOOL)textFieldShouldBeginEditing:(ZCTextField *)textField {
     if (textField == self && self.shouldBeginEdit1) {
         return self.shouldBeginEdit1((ZCTextField *)textField);
     }
     return YES;
 }
 
-- (BOOL)textFieldShouldEndEditing:(UITextField *)textField {
+- (BOOL)textFieldShouldEndEditing:(ZCTextField *)textField {
     if (textField == self && self.shouldEndEdit1) {
         return self.shouldEndEdit1((ZCTextField *)textField);
     }
     return YES;
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
+- (BOOL)textFieldShouldReturn:(ZCTextField *)textField {
     [textField endEditing:YES];
     if (textField == self && self.shouldEndReturn1) {
         return self.shouldEndReturn1((ZCTextField *)textField);
@@ -223,20 +224,20 @@
     return YES;
 }
 
-- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+- (BOOL)textField:(ZCTextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     if (textField == self && self.shouldChangeChar1) {
         return self.shouldChangeChar1((ZCTextField *)textField, range, string);
     }
     return YES;
 }
 
-- (void)textFieldDidBeginEditing:(UITextField *)textField {
+- (void)textFieldDidBeginEditing:(ZCTextField *)textField {
     if (textField == self && self.didBeginEdit1) {
         return self.didBeginEdit1((ZCTextField *)textField);
     }
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField {
+- (void)textFieldDidEndEditing:(ZCTextField *)textField {
     if (textField == self && self.didEndEdit1) {
         return self.didEndEdit1((ZCTextField *)textField);
     }

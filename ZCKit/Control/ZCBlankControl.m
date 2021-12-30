@@ -7,7 +7,6 @@
 //
 
 #import "ZCBlankControl.h"
-#import "UIImage+ZC.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
 

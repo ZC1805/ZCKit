@@ -11,6 +11,7 @@
 #import "ZCViewController.h"
 #import "ZCQueueHandler.h"
 #import "ZCImageView.h"
+#import "UIView+ZC.h"
 #import "ZCMacro.h"
 
 NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewControllerWillBeTouchPopNotification";
@@ -103,14 +104,14 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
                     BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseCustomBar)];
                     if (isHideBarFrom || isHideBarTo) { //...
                     } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
                         barBKView.alpha = clearAlpha * self.iPopGesPopToAlpha;
                         self.iPopGesPopTopImageView.alpha = (1.0 - clearAlpha) * self.iPopGesPopFromAlpha;
                     } else if (isClearFrom && !isClearTo && gesture.view) {
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
                         barBKView.alpha = clearAlpha * self.iPopGesPopToAlpha;
                     } else if (!isClearFrom && isClearTo && gesture.view) {
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
                         barBKView.alpha = (1.0 - clearAlpha) * self.iPopGesPopFromAlpha;
                     }
                 }
@@ -127,7 +128,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
                     if (isHideBarFrom || isHideBarTo) { //...
                     } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
                         self.iPopGesPopAnimate = YES;
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
                         [UIView animateWithDuration:0.36 animations:^{
                             barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : 0;
                             self.iPopGesPopTopImageView.alpha = clearAlpha > 0.5 ? 0 : self.iPopGesPopFromAlpha;
@@ -139,7 +140,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
                         }];
                     } else if (isClearFrom && !isClearTo && gesture.view) {
                         self.iPopGesPopAnimate = YES;
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
                         [UIView animateWithDuration:0.36 animations:^{
                             barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : 0;
                         } completion:^(BOOL finished) {
@@ -149,7 +150,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
                         }];
                     } else if (!isClearFrom && isClearTo && gesture.view) {
                         self.iPopGesPopAnimate = YES;
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.frame.size.width;
+                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
                         [UIView animateWithDuration:0.36 animations:^{
                             barBKView.alpha = clearAlpha > 0.5 ? 0 : self.iPopGesPopFromAlpha;
                         } completion:^(BOOL finished) {
@@ -178,7 +179,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
 }
 
 - (void)viewControllerIsPopGes:(BOOL)isPopGes viewController:(UIViewController *)viewController {
-    if (viewController && [viewController isKindOfClass:[ZCViewController class]]) {
+    if (viewController && [viewController isKindOfClass:ZCViewController.class]) {
         [viewController setValue:@(isPopGes) forKey:@"isPopGes"];
     }
 }
@@ -200,7 +201,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
 
 #pragma mark - Override
 - (void)pushViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    if (viewController && self.topViewController && [self.topViewController isKindOfClass:[ZCViewController class]]) {
+    if (viewController && self.topViewController && [self.topViewController isKindOfClass:ZCViewController.class]) {
         ZCViewController *fromVc = (ZCViewController *)self.topViewController;
         void(^willPush)(UIViewController *toVc) = (void(^)(UIViewController *toVc))[fromVc valueForKey:@"willPush"];
         if (willPush) willPush(viewController);
@@ -215,7 +216,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
     if (self.viewControllers.count > 1) {
         viewController = [self.viewControllers objectAtIndex:self.viewControllers.count - 2];
     }
-    if (viewController && self.topViewController && [self.topViewController isKindOfClass:[ZCViewController class]]) {
+    if (viewController && self.topViewController && [self.topViewController isKindOfClass:ZCViewController.class]) {
         ZCViewController *fromVc = (ZCViewController *)self.topViewController;
         void(^willPop)(UIViewController *toVc) = (void(^)(UIViewController *toVc))[fromVc valueForKey:@"willPop"];
         if (willPop) willPop(viewController);
@@ -230,7 +231,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
     if (self.viewControllers.count > 1) {
         viewController = [self.viewControllers objectAtIndex:0];
     }
-    if (viewController && self.topViewController && [self.topViewController isKindOfClass:[ZCViewController class]]) {
+    if (viewController && self.topViewController && [self.topViewController isKindOfClass:ZCViewController.class]) {
         ZCViewController *fromVc = (ZCViewController *)self.topViewController;
         void(^willPop)(UIViewController *toVc) = (void(^)(UIViewController *toVc))[fromVc valueForKey:@"willPop"];
         if (willPop) willPop(viewController);
@@ -247,7 +248,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
             isCanPass = YES;
         }
     }
-    if (isCanPass && self.topViewController && [self.topViewController isKindOfClass:[ZCViewController class]]) {
+    if (isCanPass && self.topViewController && [self.topViewController isKindOfClass:ZCViewController.class]) {
         ZCViewController *fromVc = (ZCViewController *)self.topViewController;
         void(^willPop)(UIViewController *toVc) = (void(^)(UIViewController *toVc))[fromVc valueForKey:@"willPop"];
         if (willPop) willPop(viewController);

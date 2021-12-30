@@ -38,7 +38,8 @@
         self.isHorLayout = isHorLayout;
         self.container_w = containerWidth;
         self.additional_hei = 0;
-    } return self;
+    }
+    return self;
 }
 
 - (void)resetHorSpace:(CGFloat)horSpace verSpace:(CGFloat)verSpace sectionInsets:(UIEdgeInsets)sectionInsets itemHei:(CGFloat)itemHei sectionHeaderHei:(CGFloat)sectionHeaderHei {
@@ -92,7 +93,8 @@
         i_att.frame = CGRectMake(x, y, self.i_w, self.i_h);
         self.is_stop_line = self.line_count < 2 || (idxp.item % self.line_count == self.line_count - 1);
         self.add_hei = y + (self.is_stop_line ? self.i_h : 0);
-    } return i_att;
+    }
+    return i_att;
 }
 
 - (UICollectionViewLayoutAttributes *)layoutAttributesForSupplementaryViewOfKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
@@ -108,7 +110,8 @@
             CGFloat sh_t = self.add_hei + (index > 0 ? self.s_insets.bottom : 0) + (self.is_stop_line ? 0 : self.i_h) + self.s_insets.top;
             sh_att.frame = CGRectMake(self.s_insets.left, sh_t, self.sh_w, self.sh_h);
             self.add_hei = sh_t + self.sh_h;
-        } return sh_att;
+        }
+        return sh_att;
     } else {
         return [super layoutAttributesForSupplementaryViewOfKind:elementKind atIndexPath:indexPath];
     }

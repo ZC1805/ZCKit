@@ -9,11 +9,10 @@
 #import "UIImage+ZC.h"
 #import "ZCPredefine.h"
 #import "ZCKitBridge.h"
-#import "UIColor+ZC.h"
-#import "ZCGlobal.h"
+#import "ZCMacro.h"
 #import <ImageIO/ImageIO.h>
-#import <Accelerate/Accelerate.h>
 #import <CoreText/CoreText.h>
+#import <Accelerate/Accelerate.h>
 
 @implementation UIImage (ZC)
 
@@ -40,7 +39,7 @@
 }
 
 + (UIImage *)imageWithColor:(UIColor *)color size:(CGSize)size {
-    if (!color) color = [UIColor colorFormHex:0xFFFFFF alpha:1.0];
+    if (!color) color = kZCWhite;
     if (size.width <= 0 || size.height <= 0) size = CGSizeMake(MAX(1.0, size.width), MAX(1.0, size.height));
     CGRect rect = CGRectMake(0, 0, size.width, size.height);
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
@@ -75,8 +74,8 @@
 }
 
 + (UIImage *)imageWithColor1:(UIColor *)color1 color2:(UIColor *)color2 size:(CGSize)size isHorizontal:(BOOL)isHorizontal {
-    if (!color1) color1 = [UIColor colorFormHex:0xFFFFFF alpha:1.0];
-    if (!color2) color2 = [UIColor colorFormHex:0xFFFFFF alpha:1.0];
+    if (!color1) color1 = kZCWhite;
+    if (!color2) color2 = kZCWhite;
     if (size.width <= 0 || size.height <= 0) size = CGSizeMake(MAX(1.0, size.width), MAX(1.0, size.height));
     CGRect rect = CGRectMake(0, 0, size.width, size.height);
     UIGraphicsBeginImageContextWithOptions(rect.size, NO, 0);
@@ -91,7 +90,7 @@
 }
 
 + (UIImage *)imageWithGradientColors:(NSArray <UIColor *>*)colors size:(CGSize)size isHorizontal:(BOOL)isHorizontal {
-    if (!colors.count) return [UIImage imageWithColor:[UIColor colorFormHex:0xFFFFFF alpha:0] size:size];
+    if (!colors.count) return [UIImage imageWithColor:kZCRGBA(0xFFFFFF, 0) size:size];
     CAGradientLayer *layer = [CAGradientLayer layer];
     NSMutableArray *CGColors = [NSMutableArray array];
     for (UIColor *color in colors) {[CGColors addObject:(__bridge id)[color CGColor]];}
@@ -117,7 +116,7 @@
     [layer renderInContext:UIGraphicsGetCurrentContext()];
     UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return image ? image : [UIImage imageWithColor:[UIColor colorFormHex:0xFFFFFF alpha:0] size:size];
+    return image ? image : [UIImage imageWithColor:kZCRGBA(0xFFFFFF, 0) size:size];
 }
 
 - (UIImage *)imageWithAlpha:(CGFloat)alpha {
@@ -374,11 +373,11 @@
 + (UIImage *)zc_imageWithPDF:(id)dataOrPath resize:(BOOL)resize size:(CGSize)size {
     if (!dataOrPath) return nil;
     CGPDFDocumentRef pdf = NULL;
-    if ([dataOrPath isKindOfClass:[NSData class]]) {
+    if ([dataOrPath isKindOfClass:NSData.class]) {
         CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)dataOrPath);
         pdf = CGPDFDocumentCreateWithProvider(provider);
         CGDataProviderRelease(provider);
-    } else if ([dataOrPath isKindOfClass:[NSString class]]) {
+    } else if ([dataOrPath isKindOfClass:NSString.class]) {
         pdf = CGPDFDocumentCreateWithURL((__bridge CFURLRef)[NSURL fileURLWithPath:dataOrPath]);
     }
     if (!pdf) return nil;
@@ -665,23 +664,23 @@
 }
 
 - (UIImage *)imageByBlurSoft {
-    return [self imageByBlurRadius:60 tintColor:[UIColor colorFormHex:0xD6D6D6 alpha:0.36] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
+    return [self imageByBlurRadius:60 tintColor:kZCRGBA(0xD6D6D6, 0.36) tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
 }
 
 - (UIImage *)imageByBlurLight {
-    return [self imageByBlurRadius:60 tintColor:[UIColor colorFormHex:0xFFFFFF alpha:0.3] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
+    return [self imageByBlurRadius:60 tintColor:kZCRGBA(0xFFFFFF, 0.3) tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
 }
 
 - (UIImage *)imageByBlurExtraLight {
-    return [self imageByBlurRadius:40 tintColor:[UIColor colorFormHex:0xF7F7F7 alpha:0.82] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
+    return [self imageByBlurRadius:40 tintColor:kZCRGBA(0xF7F7F7, 0.82) tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
 }
 
 - (UIImage *)imageByBlurDark {
-    return [self imageByBlurRadius:40 tintColor:[UIColor colorFormHex:0x1C1C1C alpha:0.73] tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
+    return [self imageByBlurRadius:40 tintColor:kZCRGBA(0x1C1C1C, 0.73) tintMode:kCGBlendModeNormal saturation:1.8 maskImage:nil];
 }
 
 - (UIImage *)imageByBlurWithTint:(UIColor *)tintColor {
-    UIColor *effectColor = [UIColor colorFormHex:tintColor.RGBValue alpha:0.6];
+    UIColor *effectColor = kZCA(tintColor, 0.6);
     return [self imageByBlurRadius:20 tintColor:effectColor tintMode:kCGBlendModeNormal saturation:-1.0 maskImage:nil];
 }
 

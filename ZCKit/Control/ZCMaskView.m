@@ -137,14 +137,14 @@
     self.isShow = YES;
     self.isAnimate = YES;
     self.alpha = self.showAnimate ? 1 : 0;
-    self.superview.backgroundColor = [kZCBlack colorWithAlphaComponent:0];
+    self.superview.backgroundColor = kZCA(kZCBlack, 0);
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
         if (self.showAnimate) {
             self.showAnimate(self.displayView);
         } else {
             self.alpha = 1;
         }
-        self.superview.backgroundColor = [kZCBlack colorWithAlphaComponent:self.isGreyMask ? self.maskAlpha : 0];
+        self.superview.backgroundColor = kZCA(kZCBlack, self.isGreyMask ? self.maskAlpha : 0);
     } completion:^(BOOL finished) {
         self.isAnimate = NO;
     }];
@@ -159,7 +159,7 @@
             } else {
                 self.alpha = 0;
             }
-            self.superview.backgroundColor = [kZCBlack colorWithAlphaComponent:0];
+            self.superview.backgroundColor = kZCA(kZCBlack, 0);
         } completion:^(BOOL finished) {
             [self finish:finishBlock byAutoHide:isByAutoHide];
         }];

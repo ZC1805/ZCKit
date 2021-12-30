@@ -22,7 +22,7 @@
 
 #pragma mark - Misc
 - (id)performSelector:(SEL)selector arguments:(NSArray *)arguments { //执行顺序有问题，不立即返回
-    NSMethodSignature *methodSignature = [[self class] instanceMethodSignatureForSelector:selector];
+    NSMethodSignature *methodSignature = [self.class instanceMethodSignatureForSelector:selector];
     if (methodSignature == nil) {
         @throw [NSException exceptionWithName:@"exception" reason:@"function name is mistake" userInfo:nil];
         return nil;
@@ -34,7 +34,7 @@
         NSInteger resultParamCount = MIN(argumentCount, arguments.count);
         for (NSInteger i = 0; i < resultParamCount; i++) {
             id obj = arguments[i];
-            if ([obj isKindOfClass:[NSNull class]]) continue;
+            if ([obj isKindOfClass:NSNull.class]) continue;
             [invocation setArgument:&obj atIndex:(i + 2)];
         }
         [invocation invoke];
@@ -83,7 +83,7 @@
 
 + (NSArray *)allSubclasses {
     unsigned int numOfClasses;
-    Class myClass = [self class];
+    Class myClass = self.class;
     NSMutableArray *mySubclasses = [NSMutableArray array];
     Class *classes = objc_copyClassList(&numOfClasses);
     for (unsigned int ci = 0; ci < numOfClasses; ci++) {

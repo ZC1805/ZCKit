@@ -7,6 +7,7 @@
 //
 
 #import "ZCSheetControl.h"
+#import "ZCScrollView.h"
 #import "ZCMaskView.h"
 #import "UIView+ZC.h"
 #import "ZCLabel.h"
@@ -23,7 +24,7 @@ static const CGFloat sheetFlagTag = 83803;
 
 @property (nonatomic, copy) NSString *msgText;
 
-@property (nonatomic, strong) UIScrollView *contentView;
+@property (nonatomic, strong) ZCScrollView *contentView;
 
 @property (nonatomic, strong) NSMutableArray <NSString *>*items;
 
@@ -93,7 +94,7 @@ static const CGFloat sheetFlagTag = 83803;
 #pragma mark - Display
 - (void)showItems {
     [ZCWindowView display:self time:0.25 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{[self disappearItems:-1];}) : nil)];
-    self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.frame.size.height);
+    self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.zc_height);
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.transform = CGAffineTransformIdentity;
     } completion:^(BOOL finished) {
@@ -112,7 +113,7 @@ static const CGFloat sheetFlagTag = 83803;
     self.isCanTouch = NO;
     [ZCWindowView dismissSubview];
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-        self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.frame.size.height);
+        self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.zc_height);
     } completion:^(BOOL finished) {
         [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         [self.contentView removeFromSuperview];
@@ -161,7 +162,7 @@ static const CGFloat sheetFlagTag = 83803;
     CGFloat initWid = kZSWid;
     self.backgroundColor = kZCPad;
     self.frame = CGRectMake(0, kZSHei - initHei, initWid, initHei);
-    self.contentView = [[UIScrollView alloc] initWithFrame:CGRectZero];
+    self.contentView = [[ZCScrollView alloc] initWithFrame:CGRectZero color:nil];
     self.contentView.backgroundColor = kZCClear;
     self.contentView.showsVerticalScrollIndicator = NO;
     self.contentView.delaysContentTouches = (conHei + safeHei > self.maxHeight);
@@ -206,12 +207,12 @@ static const CGFloat sheetFlagTag = 83803;
         ZCButton *itemBtn = [[ZCButton alloc] initWithFrame:CGRectZero color:kZCWhite];
         itemBtn.delayResponseTime = 0.1;
         UIColor *titleColor = [self isDangerousForIndex:i] ? kZCRGB(0xFF0000) : kZCBlack;
-        UIImage *imageBk = [UIImage imageWithColor:[UIColor colorFormHex:0xE1E1E3 alpha:1.0] size:CGSizeMake(1.0, 1.0)];
+        UIImage *imageBk = [UIImage imageWithColor:kZCRGBA(0xE1E1E3, 1.0) size:CGSizeMake(1.0, 1.0)];
         itemBtn.tag = sheetFlagTag + i;
         itemBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
         [itemBtn setTitleColor:titleColor forState:UIControlStateNormal];
-        [itemBtn setTitleColor:[titleColor colorWithAlphaComponent:0.2] forState:UIControlStateHighlighted];
+        [itemBtn setTitleColor:kZCA(titleColor, 0.2) forState:UIControlStateHighlighted];
         [itemBtn setBackgroundImage:imageBk forState:UIControlStateHighlighted];
         [itemBtn addTarget:self action:@selector(onItem:) forControlEvents:UIControlEventTouchUpInside];
         if (isOnly && celExist) {

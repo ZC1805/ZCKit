@@ -47,7 +47,7 @@ static __weak id currentSecodResponder;
 //- (void)swizzle_willDisappear:(BOOL)animated {
 //    [self swiz_willDisappear:animated];
 //    UIView *view = (UIView *)[UIResponder currentFirstResponder];
-//    if ([view isKindOfClass:[UIView class]] && view.currentViewController == self) {
+//    if ([view isKindOfClass:UIView.class] && view.currentViewController == self) {
 //        objc_setAssociatedObject(self, &ZCFirstResponderViewAddress, view, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 //        [view resignFirstResponder];
 //    } else {

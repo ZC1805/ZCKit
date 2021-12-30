@@ -7,6 +7,7 @@
 //
 
 #import "ZCTextView.h"
+#import "UIView+ZC.h"
 #import "ZCMacro.h"
 #import "ZCLabel.h"
 
@@ -41,6 +42,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _fixSize = CGSizeZero;
+        self.backgroundColor = kZCClear;
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshIPlaceholder:) name:UITextViewTextDidChangeNotification object:self];
     }
     return self;
@@ -133,7 +135,7 @@
 }
 
 - (void)setPlaceholderTextColor:(UIColor *)placeholderTextColor {
-    if (!placeholderTextColor) placeholderTextColor = [kZCBlackA8 colorWithAlphaComponent:0.7];
+    if (!placeholderTextColor) placeholderTextColor = kZCA(kZCBlackA8, 0.7);
     _placeholderTextColor = placeholderTextColor;
     self.placeholderLabel.textColor = placeholderTextColor;
 }
@@ -148,8 +150,8 @@
 
 - (CGRect)placeholderExpectedFrame {
     UIEdgeInsets placeholderInsets = [self placeholderInsets];
-    CGFloat maxWidth = CGRectGetWidth(self.frame) - placeholderInsets.left - placeholderInsets.right;
-    CGSize size = CGSizeMake(maxWidth, CGRectGetHeight(self.frame) - placeholderInsets.top - placeholderInsets.bottom);
+    CGFloat maxWidth = self.zc_width - placeholderInsets.left - placeholderInsets.right;
+    CGSize size = CGSizeMake(maxWidth, self.zc_height - placeholderInsets.top - placeholderInsets.bottom);
     CGSize expectedSize = [self.placeholderLabel sizeThatFits:size];
     return CGRectMake(placeholderInsets.left, placeholderInsets.top, maxWidth, expectedSize.height);
 }
@@ -163,10 +165,11 @@
         _placeholderLabel.font = self.font;
         _placeholderLabel.textAlignment = self.textAlignment;
         _placeholderLabel.backgroundColor = kZCClear;
-        _placeholderLabel.textColor = [kZCBlackA8 colorWithAlphaComponent:0.7];
+        _placeholderLabel.textColor = kZCA(kZCBlackA8, 0.7);
         _placeholderLabel.alpha = 0;
         [self addSubview:_placeholderLabel];
-    } return _placeholderLabel;
+    }
+    return _placeholderLabel;
 }
 
 - (id<UITextViewDelegate>)delegate {
@@ -183,46 +186,46 @@
 }
 
 #pragma mark - Delegate
-- (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
+- (BOOL)textViewShouldBeginEditing:(ZCTextView *)textView {
     if (textView == self && self.shouldBeginEdit1) {
         return self.shouldBeginEdit1((ZCTextView *)textView);
     }
     return YES;
 }
 
-- (BOOL)textViewShouldEndEditing:(UITextView *)textView {
+- (BOOL)textViewShouldEndEditing:(ZCTextView *)textView {
     if (textView == self && self.shouldEndEdit1) {
         return self.shouldEndEdit1((ZCTextView *)textView);
     }
     return YES;
 }
 
-- (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
+- (BOOL)textView:(ZCTextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {
     if (textView == self && self.shouldChangeText1) {
         return self.shouldChangeText1((ZCTextView *)textView, range, text);
     }
     return YES;
 }
 
-- (void)textViewDidBeginEditing:(UITextView *)textView {
+- (void)textViewDidBeginEditing:(ZCTextView *)textView {
     if (textView == self && self.didBeginEdit1) {
         self.didBeginEdit1((ZCTextView *)textView);
     }
 }
 
-- (void)textViewDidEndEditing:(UITextView *)textView {
+- (void)textViewDidEndEditing:(ZCTextView *)textView {
     if (textView == self && self.didEndEdit1) {
         self.didEndEdit1((ZCTextView *)textView);
     }
 }
 
-- (void)textViewDidChange:(UITextView *)textView {
+- (void)textViewDidChange:(ZCTextView *)textView {
     if (textView == self && self.didChangeText1) {
         self.didChangeText1((ZCTextView *)textView);
     }
 }
 
-- (void)textViewDidChangeSelection:(UITextView *)textView {
+- (void)textViewDidChangeSelection:(ZCTextView *)textView {
     if (textView == self && self.didChangeSelect1) {
         self.didChangeSelect1((ZCTextView *)textView);
     }

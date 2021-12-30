@@ -318,7 +318,7 @@ NS_ASSUME_NONNULL_BEGIN
  
         @implementation YYAttributes
         + (NSDictionary *)modelContainerPropertyGenericClass {
-            return @{@"shadows" : [YYShadow class],
+            return @{@"shadows" : YYShadow.class,
                      @"borders" : YYBorder.class,
                      @"attachments" : @"YYAttachment" };
         }
@@ -343,13 +343,13 @@ NS_ASSUME_NONNULL_BEGIN
 
         + (Class)modelCustomClassForDictionary:(NSDictionary*)dictionary {
             if (dictionary[@"radius"] != nil) {
-                return [YYCircle class];
+                return YYCircle.class;
             } else if (dictionary[@"width"] != nil) {
-                return [YYRectangle class];
+                return YYRectangle.class;
             } else if (dictionary[@"y2"] != nil) {
-                return [YYLine class];
+                return YYLine.class;
             } else {
-                return [self class];
+                return self.class;
             }
         }
 

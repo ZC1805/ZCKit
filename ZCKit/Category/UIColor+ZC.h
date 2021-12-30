@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (UIColor *)colorForRandomColor;  /**< 随机颜色 */
 
-+ (UIColor *)colorFromHexString:(NSString *)hexColorStr;  /**< 十六进制颜色@"0x000000" & @"#000000" & @"000000" */
++ (UIColor *)colorFromHexString:(NSString *)hexColorStr alpha:(float)alpha;  /**< 十六进制颜色@"0x000000" & @"#000000" & @"000000" */
 
 + (UIColor *)colorFormHex:(NSInteger)hexValue alpha:(float)alpha;  /**< 十六进制颜色0x000000 */
 
@@ -32,7 +32,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (uint32_t)RGBAValue;  /**< such as 0x66CCFFFF */
 
+- (UIColor *)colorFromAlpha:(float)alpha;  /**< 按透明度生成新的颜色 */
+
 @end
 
 NS_ASSUME_NONNULL_END
-

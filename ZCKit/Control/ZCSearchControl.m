@@ -23,13 +23,6 @@
 
 @implementation ZCSearchControl
 
-- (instancetype)initWithFrame:(CGRect)frame holder:(NSString *)holder {
-    if (self = [self initWithFrame:CGRectZero]) {
-        self.holderText = holder;
-    }
-    return self;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _itemH = 30.0;
@@ -37,6 +30,13 @@
         _isCenterAlignment = YES;
         [self obtainUI];
         [self setIsGrayStyle:YES];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame holder:(NSString *)holder {
+    if (self = [self initWithFrame:CGRectZero]) {
+        self.holderText = holder;
     }
     return self;
 }

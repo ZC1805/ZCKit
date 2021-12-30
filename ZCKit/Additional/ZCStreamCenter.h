@@ -19,7 +19,7 @@ extern NSString * const ZCStreamValueInvalid;
 
 @property (nullable, nonatomic, copy) id _Nullable(^streamValueFromKVCValue)(id _Nullable KVCValue);  /**< 对象KVC赋值值转成流值 */
 
-- (instancetype)initWithBeObserver:(id)beObserver observeKp:(NSString *)observeKp;  /**< 初始化方法，对于有些如UITextField等观察者抓取Text变化不准确 */
+- (instancetype)initWithBeObserver:(id)beObserver observeKp:(NSString *)observeKp;  /**< 初始化方法，对于有些如TextField等观察者抓取Text变化不准确 */
 
 - (void)manualObservebeObserverValueChanged:(nullable id)streamValue;  /**< 手动调取被观察对象的Value发生变化，传入的为streamValue */
 

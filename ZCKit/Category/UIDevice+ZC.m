@@ -65,10 +65,10 @@
 + (NSString *)wifiSSID {  
     NSString *ssid = nil;
     NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
-    if (ifs && [ifs isKindOfClass:[NSArray class]]) {
+    if (ifs && [ifs isKindOfClass:NSArray.class]) {
         for (NSString *ifnam in ifs) {
             NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
-            if (info && [info isKindOfClass:[NSDictionary class]]) {
+            if (info && [info isKindOfClass:NSDictionary.class]) {
                 ssid = [info objectForKey:@"SSID"]; if (ssid && ssid.length) break;
             }
         }
@@ -79,10 +79,10 @@
 + (NSString *)macBSSID { 
     NSString *bssid = nil;
     NSArray *ifs = (__bridge_transfer id)CNCopySupportedInterfaces();
-    if (ifs && [ifs isKindOfClass:[NSArray class]]) {
+    if (ifs && [ifs isKindOfClass:NSArray.class]) {
         for (NSString *ifnam in ifs) {
             NSDictionary *info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifnam);
-            if (info && [info isKindOfClass:[NSDictionary class]]) {
+            if (info && [info isKindOfClass:NSDictionary.class]) {
                 bssid = [info objectForKey:@"BSSID"]; if (bssid && bssid.length) break;
             }
         }

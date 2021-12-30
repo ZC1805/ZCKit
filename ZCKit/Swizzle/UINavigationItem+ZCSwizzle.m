@@ -21,8 +21,8 @@
         SEL sel1x = @selector(swizzle_setTitle:);
         SEL sel2 = @selector(title);
         SEL sel2x = @selector(swizzle_title);
-        zc_swizzle_exchange_selector([UINavigationItem class], sel1, sel1x);
-        zc_swizzle_exchange_selector([UINavigationItem class], sel2, sel2x);
+        zc_swizzle_exchange_selector(UINavigationItem.class, sel1, sel1x);
+        zc_swizzle_exchange_selector(UINavigationItem.class, sel2, sel2x);
     });
 }
 
@@ -33,10 +33,10 @@
         titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:16];
-        titleLabel.textColor = [UIColor colorFromHexString:ZCKitBridge.naviBarTitleColor];
+        titleLabel.textColor = kZCS(ZCKitBridge.naviBarTitleColor);
         self.titleView = titleLabel;
     }
-    if ([titleLabel isKindOfClass:[ZCLabel class]]) {
+    if ([titleLabel isKindOfClass:ZCLabel.class]) {
         titleLabel.text = title;
     }
     [titleLabel sizeToFit];
@@ -47,9 +47,10 @@
     NSString *title = [self swizzle_title];
     if (title.length) return title;
     ZCLabel *titleLabel = (ZCLabel *)self.titleView;
-    if ([titleLabel isKindOfClass:[ZCLabel class]]) {
+    if ([titleLabel isKindOfClass:ZCLabel.class]) {
         return titleLabel.text;
-    } return nil;
+    }
+    return nil;
 }
 
 @end

@@ -65,7 +65,7 @@
 
 //主要针对数组或字典属性，(字典写value类型，key默认为str)。
 //返回容器类中的所需要存放的数据类型，(以 Class 或 Class Name 的形式)。
-//expl return @{@"shadows" : [Shadow class],
+//expl return @{@"shadows" : Shadow.class,
 //              @"borders" : Border.class,
 //              @"attachments" : @"Attachment" };
 + (nullable NSDictionary<NSString *, id> *)modelContainerPropertyGenericClass {

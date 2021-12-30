@@ -45,7 +45,7 @@
     } else {
         aimColor = [UIColor colorWithRed:intR/255.0 green:intG/255.0 blue:intB/255.0 alpha:alpha];
     }
-    int intA = MIN(MAX((int)floorf(alpha * 255), 255), 0);
+    int intA = MAX(MIN((int)floorf(alpha * 255), 255), 0);
     aimColor.cRGBHexValue = (intR << 24) + (intG << 16) + (intB << 8) + (intA << 0);
     return aimColor;
 }
@@ -63,13 +63,13 @@
                                     blue:((float)((hexValue & 0xFF) >> 0))/255.0
                                    alpha:alpha];
     }
-    int intA = MIN(MAX((int)floorf(alpha * 255), 255), 0);
+    int intA = MAX(MIN((int)floorf(alpha * 255), 255), 0);
     aimColor.cRGBHexValue = (((hexValue & 0xFF0000) >> 16) << 24) + (((hexValue & 0xFF00) >> 8) << 16) + (((hexValue & 0xFF) >> 0) << 8) + (intA << 0);
     return aimColor;
 }
 
-+ (UIColor *)colorFromHexString:(NSString *)hexColorStr {
-    if (!hexColorStr) return [UIColor colorFormHex:0x000000 alpha:1.0];
++ (UIColor *)colorFromHexString:(NSString *)hexColorStr alpha:(float)alpha {
+    if (!hexColorStr) return [UIColor colorFormHex:0x000000 alpha:alpha];
     if (hexColorStr.length == 6) hexColorStr = [@"0x" stringByAppendingString:hexColorStr];
     if (hexColorStr.length == 7) hexColorStr = [hexColorStr stringByReplacingOccurrencesOfString:@"#" withString:@"0x"];
     if (hexColorStr && hexColorStr.length == 8) {
@@ -82,14 +82,15 @@
         [[NSScanner scannerWithString:bStr] scanHexInt:&b];
         UIColor *aimColor = nil;
         if (@available(iOS 10.0, *)) {
-            aimColor = [UIColor colorWithDisplayP3Red:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0];
+            aimColor = [UIColor colorWithDisplayP3Red:r/255.0 green:g/255.0 blue:b/255.0 alpha:alpha];
         } else {
-            aimColor = [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:1.0];
+            aimColor = [UIColor colorWithRed:r/255.0 green:g/255.0 blue:b/255.0 alpha:alpha];
         }
-        aimColor.cRGBHexValue = (r << 24) + (g << 16) + (b << 8) + 255;
+        int intA = MAX(MIN((int)floorf(alpha * 255), 255), 0);
+        aimColor.cRGBHexValue = (r << 24) + (g << 16) + (b << 8) + (intA << 0);
         return aimColor;
     } else {
-        return [UIColor colorFormHex:0x000000 alpha:1.0];
+        return [UIColor colorFormHex:0x000000 alpha:alpha];
     }
 }
 
@@ -99,12 +100,28 @@
     if (colors.firstObject) {
         color.cRGBHexValue = colors.firstObject.cRGBHexValue;
     } else {
-        color.cRGBHexValue = 0xFFFFFF00;
+        color.cRGBHexValue = 0x00000000;
     }
     return color;
 }
 
 #pragma mark - Instance
+- (UIColor *)colorFromAlpha:(float)alpha {
+    uint32_t cHex = (uint32_t)(self.cRGBHexValue);
+    if (cHex != -1) {
+        uint8_t oldHexA = cHex & 0xFF;
+        if (alpha > 1.0) alpha = 1.0;
+        if (alpha < 0) alpha = 0;
+        if (alpha != 0 && oldHexA != 0) {
+            return [UIColor colorFormHex:(cHex >> 8) alpha:(oldHexA / 255.0 * alpha)];
+        } else {
+            return [UIColor colorFormHex:(cHex >> 8) alpha:0];
+        }
+    } else {
+        return [self colorWithAlphaComponent:alpha];
+    }
+}
+
 - (uint32_t)RGBValue {
     uint32_t cHex = (uint32_t)(self.cRGBHexValue);
     if (cHex != -1) {
@@ -112,7 +129,7 @@
     } else {
         CGFloat r = 0, g = 0, b = 0, a = 0;
         [self getRed:&r green:&g blue:&b alpha:&a];
-        int8_t red = r * 255;
+        uint8_t red = r * 255;
         uint8_t green = g * 255;
         uint8_t blue = b * 255;
         return (red << 16) + (green << 8) + blue;
@@ -126,7 +143,7 @@
     } else {
         CGFloat r = 0, g = 0, b = 0, a = 0;
         [self getRed:&r green:&g blue:&b alpha:&a];
-        int8_t red = r * 255;
+        uint8_t red = r * 255;
         uint8_t green = g * 255;
         uint8_t blue = b * 255;
         uint8_t alpha = a * 255;
@@ -135,7 +152,7 @@
 }
 
 - (BOOL)isClear {
-    if ([self isEqual:[UIColor clearColor]]) return YES;
+    if ([self isEqual:UIColor.clearColor]) return YES;
     if (CGColorGetAlpha(self.CGColor) < 0.01) return YES;
     return NO;
 }
@@ -143,42 +160,5 @@
 - (CGColorSpaceModel)colorSpaceType {
     return CGColorSpaceGetModel(CGColorGetColorSpace(self.CGColor));
 }
-
-//- (NSString *)hexString {
-//    return [self hexStringWithAlpha:NO];
-//}
-//
-//- (NSString *)hexStringWithAlpha {
-//    return [self hexStringWithAlpha:YES];
-//}
-//
-//- (NSString *)hexStringWithAlpha:(BOOL)withAlpha {
-//    CGColorRef color = self.CGColor;
-//    size_t count = CGColorGetNumberOfComponents(color);
-//    const CGFloat *components = CGColorGetComponents(color);
-//    static NSString *kColorStringFormat = @"%02x%02x%02x";
-//    NSString *hex = nil;
-//    if (count == 2) {
-//        NSUInteger white = (NSUInteger)(components[0] * 255.0);
-//        hex = [NSString stringWithFormat:kColorStringFormat, white, white, white];
-//    } else if (count == 4) {
-//        hex = [NSString stringWithFormat:kColorStringFormat,
-//               (NSUInteger)(components[0] * 255.0),
-//               (NSUInteger)(components[1] * 255.0),
-//               (NSUInteger)(components[2] * 255.0)];
-//    }
-//    if (hex && withAlpha) {
-//        hex = [hex stringByAppendingFormat:@"%02lx", (unsigned long)(CGColorGetAlpha(self.CGColor) * 255.0 + 0.5)];
-//    }
-//    return hex;
-//}
-//
-//- (uint32_t)RGBValue {
-//    NSString *hexStr = [self hexString];
-//    if (!hexStr && hexStr.length != 6)  return 0;
-//    const char *hexChar = [hexStr cStringUsingEncoding:NSUTF8StringEncoding];
-//    int hexNum; sscanf(hexChar, "%x", &hexNum);
-//    return (uint32_t)hexNum;
-//}
 
 @end

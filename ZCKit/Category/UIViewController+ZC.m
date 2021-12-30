@@ -88,19 +88,19 @@
 }
 
 - (void)backToUpControllerAnimated:(BOOL)animated { //最多向下找两层
-    if ([self isKindOfClass:[UINavigationController class]]) {
+    if ([self isKindOfClass:UINavigationController.class]) {
         if (self.parentViewController) { //在此默认上层为UITabbarController，请手动完成
             NSAssert(0, @"ZCKit: this need manual completion");
         } else {
             [self dismissViewControllerAnimated:animated completion:nil];
         }
-    } else if ([self isKindOfClass:[UITabBarController class]]) {
+    } else if ([self isKindOfClass:UITabBarController.class]) {
         if (self.parentViewController) { //在此默认上层为UINavigationController，请手动完成
             NSAssert(0, @"ZCKit: this need manual completion");
         } else {
             [self dismissViewControllerAnimated:animated completion:nil];
         }
-    } else if ([self isKindOfClass:[UISplitViewController class]]) {
+    } else if ([self isKindOfClass:UISplitViewController.class]) {
         if (self.parentViewController) { //在此默认上层为UINavigationController，请手动完成
             NSAssert(0, @"ZCKit: this need manual completion");
         } else {

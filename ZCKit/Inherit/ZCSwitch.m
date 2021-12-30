@@ -7,8 +7,16 @@
 //
 
 #import "ZCSwitch.h"
+#import "ZCMacro.h"
 
 @implementation ZCSwitch
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = kZCClear;
+    }
+    return self;
+}
 
 - (void)setTouchAction:(void (^)(ZCSwitch * _Nonnull))touchAction {
     _touchAction = touchAction;

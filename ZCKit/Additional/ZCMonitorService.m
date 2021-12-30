@@ -7,6 +7,7 @@
 //
 
 #import "ZCMonitorService.h"
+#import "ZCKitBridge.h"
 #import <UIKit/UIKit.h>
 
 const ZCMonitorType ZCMonitorTypeNone = 0;  /**< 用于获取监听类型等 */
@@ -24,6 +25,19 @@ const ZCMonitorType ZCMonitorTypeNone = 0;  /**< 用于获取监听类型等 */
         _ids = [NSArray array];
         _infos = [NSDictionary dictionary];
         _priority = ZCEnumMonitorPriorityNormal;
+    }
+    return self;
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _rank = 0;
+        _type = ZCMonitorTypeEvent;
+        _issuer = nil;
+        _ids = [NSArray array];
+        _infos = [NSDictionary dictionary];
+        _priority = ZCEnumMonitorPriorityNormal;
+        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: monitor init fail");
     }
     return self;
 }

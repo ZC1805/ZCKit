@@ -24,6 +24,10 @@
     [[VCIdManager share].vcs addObject:NSStringFromClass(self)];
 }
 
+//#define kZCA(x, a)      ([x isKindOfClass:UIColor.class] ? [(UIColor *)x colorWithAlphaComponent:a] : ([x isKindOfClass:NSString.class] ? [UIColor colorFromHexString:(NSString *)x] : [UIColor colorFormHex:(NSInteger)x alpha:1.0]))
+
+//#define kZCA(x, a)      (x ? [UIColor colorFormHex:(NSInteger)x alpha:1.0] : [(UIColor *)x colorWithAlphaComponent:a])
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"1";
@@ -52,9 +56,10 @@
     listView.frame = CGRectMake(0, 64, kZSWid, kZSHei - 64); //这里要设置大些
     listView.backgroundColor = kZCRGB(0xEEEEEE);
     [self.view addSubview:listView];
-    
-    ZCButton *btn1 = [[ZCButton alloc] initWithFrame:CGRectZero color:UIColor.redColor];
+    UIColor *a = kZCA(UIColor.whiteColor, 0.5);
+    ZCButton *btn1 = [[ZCButton alloc] initWithFrame:CGRectZero color:a];
     btn1.frame = CGRectMake(100, 100, 100, 100);
+    NSLog(@"%p, %p, %x", a, btn1.backgroundColor, a.RGBAValue);
     [self.view addSubview:btn1];
     
     

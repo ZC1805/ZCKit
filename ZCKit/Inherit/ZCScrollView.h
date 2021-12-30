@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Basic
 /**< 初始化scrollView，别第一个加入到容器view中，可在addSubView之前加入一个一个无用的View(ios9.0的问题) */
-- (UIScrollView *)initWithFrame:(CGRect)frame isPaging:(BOOL)isPaging isBounces:(BOOL)isBounces;
+- (instancetype)initWithFrame:(CGRect)frame isPaging:(BOOL)isPaging isBounces:(BOOL)isBounces;
 
 @end
 

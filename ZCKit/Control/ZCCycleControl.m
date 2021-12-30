@@ -111,7 +111,7 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (void)initialization {
-    self.dotViewClass = NSStringFromClass([ZCCycleAnimatedDot class]);
+    self.dotViewClass = NSStringFromClass(ZCCycleAnimatedDot.class);
     self.spacingBetweenDots = 7.0;
     self.numberOfPages = 0;
     self.currentPage = 0;
@@ -161,7 +161,7 @@ static NSString * const ident = @"cycleControlCell";
     UIView *dotView = nil;
     if (self.dotViewClass) {
         dotView = [[NSClassFromString(self.dotViewClass) alloc] initWithFrame:CGRectMake(0, 0, self.dotSize.width, self.dotSize.height)];
-        if ([dotView isKindOfClass:[ZCCycleAnimatedDot class]] && self.dotColor) {
+        if ([dotView isKindOfClass:ZCCycleAnimatedDot.class] && self.dotColor) {
             ((ZCCycleAnimatedDot *)dotView).dotColor = self.dotColor;
         }
     } else {
@@ -283,7 +283,7 @@ static NSString * const ident = @"cycleControlCell";
     _titleLabel = titleLabel;
     _titleLabel.textColor = kZCWhite;
     _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:14];
-    _titleLabel.backgroundColor = [kZCBlack colorWithAlphaComponent:0.4];
+    _titleLabel.backgroundColor = kZCA(kZCBlack, 0.4);
     _titleLabel.textAlignment = NSTextAlignmentLeft;
     _titleLabel.zc_height = 30.0;
     _titleLabel.hidden = YES;
@@ -488,7 +488,7 @@ static NSString * const ident = @"cycleControlCell";
 - (void)setPageControlDotSize:(CGSize)pageControlDotSize {
     _pageControlDotSize = pageControlDotSize;
     [self setupPageControl];
-    if ([self.pageControl isKindOfClass:[ZCCyclePageControl class]]) {
+    if ([self.pageControl isKindOfClass:ZCCyclePageControl.class]) {
         ZCCyclePageControl *pageContol = (ZCCyclePageControl *)_pageControl;
         pageContol.dotSize = pageControlDotSize;
     }
@@ -497,7 +497,7 @@ static NSString * const ident = @"cycleControlCell";
 - (void)setPageControlSpacing:(CGFloat)pageControlSpacing {
     _pageControlSpacing = pageControlSpacing;
     [self setupPageControl];
-    if ([self.pageControl isKindOfClass:[ZCCyclePageControl class]]) {
+    if ([self.pageControl isKindOfClass:ZCCyclePageControl.class]) {
         ZCCyclePageControl *pageContol = (ZCCyclePageControl *)_pageControl;
         pageContol.spacingBetweenDots = pageControlSpacing;
     }
@@ -510,7 +510,7 @@ static NSString * const ident = @"cycleControlCell";
 
 - (void)setPageDotSelectColor:(UIColor *)pageDotSelectColor {
     _pageDotSelectColor = pageDotSelectColor;
-    if ([self.pageControl isKindOfClass:[ZCCyclePageControl class]]) {
+    if ([self.pageControl isKindOfClass:ZCCyclePageControl.class]) {
         ZCCyclePageControl *pageControl = (ZCCyclePageControl *)_pageControl;
         pageControl.dotColor = pageDotSelectColor;
     } else {
@@ -521,7 +521,7 @@ static NSString * const ident = @"cycleControlCell";
 
 - (void)setPageDotColor:(UIColor *)pageDotColor {
     _pageDotColor = pageDotColor;
-    if ([self.pageControl isKindOfClass:[UIPageControl class]]) {
+    if ([self.pageControl isKindOfClass:UIPageControl.class]) {
         UIPageControl *pageControl = (UIPageControl *)_pageControl;
         pageControl.pageIndicatorTintColor = pageDotColor;
     }
@@ -545,7 +545,7 @@ static NSString * const ident = @"cycleControlCell";
 
 - (void)setCustomPageControlDotImage:(UIImage *)image isCurrentPageDot:(BOOL)isCurrentPageDot {
     if (!image || !self.pageControl) return;
-    if ([self.pageControl isKindOfClass:[ZCCyclePageControl class]]) {
+    if ([self.pageControl isKindOfClass:ZCCyclePageControl.class]) {
         ZCCyclePageControl *pageControl = (ZCCyclePageControl *)_pageControl;
         if (isCurrentPageDot) {
             pageControl.currentDotImage = image;
@@ -605,9 +605,9 @@ static NSString * const ident = @"cycleControlCell";
     NSMutableArray *temp = [NSMutableArray array];
     [_imageURLStringsGroup enumerateObjectsUsingBlock:^(NSString * obj, NSUInteger idx, BOOL * stop) {
         NSString *urlString;
-        if ([obj isKindOfClass:[NSString class]]) {
+        if ([obj isKindOfClass:NSString.class]) {
             urlString = obj;
-        } else if ([obj isKindOfClass:[NSURL class]]) {
+        } else if ([obj isKindOfClass:NSURL.class]) {
             NSURL *url = (NSURL *)obj;
             urlString = [url absoluteString];
         }
@@ -738,7 +738,7 @@ static NSString * const ident = @"cycleControlCell";
 - (void)layoutSubviews {
     [super layoutSubviews];
     if (_itemHorSpace <= 0) {
-        _flowLayout.itemSize = self.frame.size;
+        _flowLayout.itemSize = self.zc_size;
     }
     _mainView.frame = self.bounds;
     if (_mainView.contentOffset.x == 0 && _totalItemsCount) {
@@ -752,7 +752,7 @@ static NSString * const ident = @"cycleControlCell";
     }
     
     CGSize size = CGSizeZero;
-    if ([self.pageControl isKindOfClass:[ZCCyclePageControl class]]) {
+    if ([self.pageControl isKindOfClass:ZCCyclePageControl.class]) {
         ZCCyclePageControl *pageControl = (ZCCyclePageControl *)_pageControl;
         if (!(self.pageDotImage && self.currentPageDotImage && CGSizeEqualToSize(kDefaultDotSize, self.pageControlDotSize))) {
             pageControl.dotSize = self.pageControlDotSize;
@@ -767,7 +767,7 @@ static NSString * const ident = @"cycleControlCell";
     }
     CGFloat y = _mainView.zc_height - size.height - 10.0;
     
-    if ([self.pageControl isKindOfClass:[ZCCyclePageControl class]]) {
+    if ([self.pageControl isKindOfClass:ZCCyclePageControl.class]) {
         ZCCyclePageControl *pageControl = (ZCCyclePageControl *)_pageControl;
         [pageControl sizeToFit];
     }
@@ -813,7 +813,7 @@ static NSString * const ident = @"cycleControlCell";
     ZCCycleCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ident forIndexPath:indexPath];
     int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:indexPath.item];
     NSString *imagePath = self.imagePathsGroup[indexOnPageControl];
-    if (!self.isOnlyDisplayText && [imagePath isKindOfClass:[NSString class]]) {
+    if (!self.isOnlyDisplayText && [imagePath isKindOfClass:NSString.class]) {
         if ([imagePath hasPrefix:@"http"]) {
             [ZCKitBridge.realize imageViewWebCache:cell.imageView url:[NSURL URLWithString:imagePath] holder:self.placeholderImage];
         } else {
@@ -821,7 +821,7 @@ static NSString * const ident = @"cycleControlCell";
             if (!image) [UIImage imageWithContentsOfFile:imagePath];
             cell.imageView.image = image;
         }
-    } else if (!self.isOnlyDisplayText && [imagePath isKindOfClass:[UIImage class]]) {
+    } else if (!self.isOnlyDisplayText && [imagePath isKindOfClass:UIImage.class]) {
         cell.imageView.image = (UIImage *)imagePath;
     }
     if (_titlesGroup.count && indexOnPageControl < _titlesGroup.count) {
@@ -854,7 +854,7 @@ static NSString * const ident = @"cycleControlCell";
     if (!self.imagePathsGroup.count) return; //解决清除timer时偶尔会出现的问题
     int itemIndex = [self currentIndex];
     int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:itemIndex];
-    if ([self.pageControl isKindOfClass:[ZCCyclePageControl class]]) {
+    if ([self.pageControl isKindOfClass:ZCCyclePageControl.class]) {
         ZCCyclePageControl *pageControl = (ZCCyclePageControl *)_pageControl;
         pageControl.currentPage = indexOnPageControl;
     } else {

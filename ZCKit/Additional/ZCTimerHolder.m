@@ -8,6 +8,7 @@
 
 #import "ZCTimerHolder.h"
 #import <UIKit/UIKit.h>
+#import "ZCKitBridge.h"
 
 static const long zc_max_allow_cache_count = 100;
 
@@ -156,6 +157,17 @@ static const long zc_max_allow_cache_count = 100;
 @end
 
 @implementation ZCAssembleFirer
+
+- (instancetype)init {
+    if (self = [super init]) {
+        [self startTimer:1 interval:1 maxAssemble:10];
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center addObserver:self selector:@selector(lostActive:) name:UIApplicationWillResignActiveNotification object:nil];
+        [center addObserver:self selector:@selector(becomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: assemble init fail");
+    }
+    return self;
+}
 
 - (instancetype)initWithSleepTimeoutCount:(NSUInteger)timeoutCount interval:(NSTimeInterval)interval maxAssemble:(NSUInteger)maxAssemble {
     if (self = [super init]) {

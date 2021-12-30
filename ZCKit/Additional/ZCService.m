@@ -8,8 +8,8 @@
 
 #import "ZCService.h"
 #import "ZCKitBridge.h"
-#import "ZCMacro.h"
 #import <UIKit/UIKit.h>
+#import "ZCMacro.h"
 
 #pragma mark - ~ ZCServiceImpl ~
 @interface ZCServiceImpl : NSObject
@@ -150,7 +150,7 @@
 @implementation ZCService
 
 + (instancetype)sharedService {
-    return [[ZCServiceManager sharedManager] singletonByClass:[self class]];
+    return [[ZCServiceManager sharedManager] singletonByClass:self.class];
 }
 
 - (void)start {
@@ -159,7 +159,7 @@
 
 - (void)stop {
     if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: service %@ stop", self);
-    [[ZCServiceManager sharedManager] stopSingletonByClass:[self class]];
+    [[ZCServiceManager sharedManager] stopSingletonByClass:self.class];
 }
 
 @end

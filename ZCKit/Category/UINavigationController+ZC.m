@@ -57,7 +57,7 @@
 
 - (BOOL)isShowRootControllerBackArrow {
     NSNumber *value = objc_getAssociatedObject(self, _cmd);
-    if (value && [value isKindOfClass:[NSNumber class]]) {
+    if (value && [value isKindOfClass:NSNumber.class]) {
         return [value boolValue];
     } else {
         return NO;

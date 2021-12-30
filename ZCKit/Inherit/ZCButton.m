@@ -28,47 +28,36 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self resetInitProperty];
-    } return self;
+        self.backgroundColor = kZCClear;
+        self.adjustsImageWhenHighlighted = NO;
+        self.adjustsImageWhenDisabled = NO;
+    }
+    return self;
 }
 
 - (instancetype)initWithTitle:(NSString *)title font:(UIFont *)font color:(UIColor *)color image:(UIImage *)image target:(id)target action:(SEL)action {
-    if (self = [super initWithFrame:CGRectZero]) {
-        [self resetInitProperty];
-        self.backgroundColor = kZCClear;
+    if (self = [self initWithFrame:CGRectZero]) {
         if (font) self.titleLabel.font = font;
         if (image) [self setImage:image forState:UIControlStateNormal];
         if (title) [self setTitle:title forState:UIControlStateNormal];
         if (color) [self setTitleColor:color forState:UIControlStateNormal];
         self.titleLabel.adjustsFontSizeToFitWidth = YES;
         self.titleLabel.minimumScaleFactor = 0.6;
-        self.adjustsImageWhenHighlighted = NO;
-        self.adjustsImageWhenDisabled = NO;
-        self.backgroundColor = kZCClear;
         if (target && action && [target respondsToSelector:action]) {
             [self addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
         }
-    } return self;
+    }
+    return self;
 }
 
 - (instancetype)initWithBKColor:(UIColor *)color target:(id)target action:(SEL)action {
-    if (self = [super initWithFrame:CGRectZero]) {
-        [self resetInitProperty];
-        self.backgroundColor = color ? color : kZCClear;
-        self.adjustsImageWhenHighlighted = NO;
-        self.adjustsImageWhenDisabled = NO;
+    if (self = [self initWithFrame:CGRectZero]) {
+        if (color) self.backgroundColor = color;
         if (target && action && [target respondsToSelector:action]) {
             [self addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
         }
-    } return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color { //重新分类方法
-    if (self = [super initWithFrame:frame]) {
-        [self resetInitProperty];
-        self.backgroundColor = color ? color : kZCClear;
-        self.adjustsImageWhenHighlighted = NO;
-        self.adjustsImageWhenDisabled = NO;
-    } return self;
+    }
+    return self;
 }
 
 - (void)resetInitProperty {

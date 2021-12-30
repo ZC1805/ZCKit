@@ -11,7 +11,6 @@
 #import "ZCViewController.h"
 #import "ZCQueueHandler.h"
 #import "ZCKitBridge.h"
-#import "UIView+ZC.h"
 #import "ZCButton.h"
 #import "ZCMacro.h"
 
@@ -25,11 +24,11 @@
     if (color == nil) color = kZCWhite;
     if (!iamgeIm) iamgeIm = ZCKitBridge.naviBackImage;
     iamgeIm = [iamgeIm imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    ZCButton *back = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
+    ZCButton *back = [[ZCButton alloc] initWithFrame:CGRectZero];
     [back setTitle:title forState:UIControlStateNormal];
     [back setTitle:title forState:UIControlStateHighlighted];
     [back setTitleColor:color forState:UIControlStateNormal];
-    [back setTitleColor:kZCAlpha(color, 0.3) forState:UIControlStateHighlighted];
+    [back setTitleColor:kZCA(color, 0.3) forState:UIControlStateHighlighted];
     [back setImage:iamgeIm forState:UIControlStateNormal];
     [back setImage:[iamgeIm imageWithAlpha:0.3] forState:UIControlStateHighlighted];
     [back addTarget:self action:@selector(onManualPop:) forControlEvents:UIControlEventTouchUpInside];
@@ -38,7 +37,8 @@
     back.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
     CGSize size = [back.titleLabel sizeThatFits:CGSizeMake(100.0, height)];
     size = CGSizeMake(ceilf(size.width), ceilf(size.height));
-    back.zc_size = CGSizeMake(MAX(size.width + 18.0, height), height);
+    CGRect bframe = back.frame; bframe.size = CGSizeMake(MAX(size.width + 18.0, height), height);
+    back.frame = bframe;
     back.responseTouchInterval = 0.3;
     back.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     back.imageEdgeInsets = UIEdgeInsetsMake(-kZSPixel, -offset, 0, 0);
@@ -72,8 +72,8 @@
     CGFloat height = 32.0;
     if (item == nil) item = @"";
     if (color == nil) color = kZCWhite;
-    ZCButton *rightBtn = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
-    UIImage *iamgeIm = [kZIN(item) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    ZCButton *rightBtn = [[ZCButton alloc] initWithFrame:CGRectZero];
+    UIImage *iamgeIm = [[UIImage imageNamed:item] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     if (iamgeIm) {
         [rightBtn setImage:iamgeIm forState:UIControlStateNormal];
         [rightBtn setImage:[iamgeIm imageWithAlpha:0.3] forState:UIControlStateHighlighted];
@@ -81,7 +81,7 @@
         [rightBtn setTitle:item forState:UIControlStateNormal];
         [rightBtn setTitle:item forState:UIControlStateHighlighted];
         [rightBtn setTitleColor:color forState:UIControlStateNormal];
-        [rightBtn setTitleColor:kZCAlpha(color, 0.3) forState:UIControlStateHighlighted];
+        [rightBtn setTitleColor:kZCA(color, 0.3) forState:UIControlStateHighlighted];
     }
     if (target && action && [target respondsToSelector:action]) {
         [rightBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
@@ -92,7 +92,8 @@
     rightBtn.titleLabel.numberOfLines = 0;
     CGSize size = [rightBtn.titleLabel sizeThatFits:CGSizeMake(100.0, height)];
     size = CGSizeMake(ceilf(size.width), ceilf(size.height));
-    rightBtn.zc_size = CGSizeMake(MAX(size.width, 30.0), height);
+    CGRect bframe = rightBtn.frame; bframe.size = CGSizeMake(MAX(size.width, 30.0), height);
+    rightBtn.frame = bframe;
     rightBtn.responseTouchInterval = 0.3;
     rightBtn.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     self.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
@@ -101,15 +102,16 @@
 
 - (ZCButton *)itemAddRightImage:(NSString *)image target:(id)target action:(SEL)action {
     CGFloat height = 32.0, width = 30.0, offset = 5.0;
-    UIImage *iamgeIm = [kZIN(image) imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    ZCButton *rightBtn = [[ZCButton alloc] initWithFrame:CGRectZero color:nil]; //size 32 * 32 image 22 * 22
+    UIImage *iamgeIm = [[UIImage imageNamed:image] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    ZCButton *rightBtn = [[ZCButton alloc] initWithFrame:CGRectZero]; //size 32 * 32 image 22 * 22
     [rightBtn setImage:iamgeIm forState:UIControlStateNormal];
     [rightBtn setImage:[iamgeIm imageWithAlpha:0.3] forState:UIControlStateHighlighted];
     if (target && action && [target respondsToSelector:action]) {
         [rightBtn addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     }
     rightBtn.adjustsImageWhenHighlighted = YES;
-    rightBtn.zc_size = CGSizeMake(width, height);
+    CGRect bframe = rightBtn.frame; bframe.size = CGSizeMake(width, height);
+    rightBtn.frame = bframe;
     rightBtn.responseTouchInterval = 0.3;
     rightBtn.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     CGFloat edgeLeft = width - (height - 2.0 * offset), edgeRight = 0;

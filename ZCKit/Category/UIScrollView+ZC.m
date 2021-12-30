@@ -8,7 +8,6 @@
 
 #import "UIScrollView+ZC.h"
 #import <objc/runtime.h>
-#import "UIView+ZC.h"
 #import "ZCMacro.h"
 
 @implementation UIScrollView (ZC)
@@ -58,11 +57,12 @@
 - (UIView *)topExpandOffsetView { //frame&contentSize变化不联动
     UIView *topv = objc_getAssociatedObject(self, _cmd);
     if (!topv) {
-        topv = [[UIView alloc] initWithFrame:CGRectZero color:self.backgroundColor];
+        topv = [[UIView alloc] initWithFrame:CGRectZero];
+        topv.backgroundColor = self.backgroundColor;
         objc_setAssociatedObject(self, _cmd, topv, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self addSubview:topv];
     }
-    topv.frame = CGRectMake(-200.0, -self.zc_height - 200.0, MAX(self.zc_height, self.zc_sizeWidth) + 400.0, self.zc_height + 200.0);
+    topv.frame = CGRectMake(-200.0, -self.frame.size.height - 200.0, MAX(self.frame.size.height, self.zc_sizeWidth) + 400.0, self.frame.size.height + 200.0);
     [self sendSubviewToBack:topv];
     return topv;
 }
@@ -70,12 +70,13 @@
 - (UIView *)bottomExpandOffsetView { //frame&contentSize变化不联动
     UIView *bottomv = objc_getAssociatedObject(self, _cmd);
     if (!bottomv) {
-        bottomv = [[UIView alloc] initWithFrame:CGRectZero color:self.backgroundColor];
+        bottomv = [[UIView alloc] initWithFrame:CGRectZero];
+        bottomv.backgroundColor = self.backgroundColor;
         objc_setAssociatedObject(self, _cmd, bottomv, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         [self addSubview:bottomv];
     }
     CGFloat top = self.zc_sizeHeight - self.contentInset.bottom;
-    bottomv.frame = CGRectMake(-200.0, top, MAX(self.zc_height, self.zc_sizeWidth) + 400.0, self.zc_height + 500.0);
+    bottomv.frame = CGRectMake(-200.0, top, MAX(self.frame.size.height, self.zc_sizeWidth) + 400.0, self.frame.size.height + 500.0);
     [self sendSubviewToBack:bottomv];
     return bottomv;
 }
@@ -147,22 +148,22 @@ static void *directionContext = @"scrollViewDirectionContext";
 }
 
 #pragma mark - Private
-- (void)shieldNavigationInteractivePop { //使系统导航手势失效，不可逆
-    UIViewController *controller = self.currentViewController;
-    if (controller && controller.navigationController && controller.parentViewController == controller.navigationController) {
-        [self.panGestureRecognizer requireGestureRecognizerToFail:controller.navigationController.interactivePopGestureRecognizer];
-    }
-}
+//- (void)shieldNavigationInteractivePop { //使系统导航手势失效，不可逆
+//    UIViewController *controller = self.currentViewController;
+//    if (controller && controller.navigationController && controller.parentViewController == controller.navigationController) {
+//        [self.panGestureRecognizer requireGestureRecognizerToFail:controller.navigationController.interactivePopGestureRecognizer];
+//    }
+//}
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    if ([otherGestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]] && [otherGestureRecognizer.view isKindOfClass:NSClassFromString(@"UILayoutContainerView")]) {
+    if ([otherGestureRecognizer isKindOfClass:UIScreenEdgePanGestureRecognizer.class] && [otherGestureRecognizer.view isKindOfClass:NSClassFromString(@"UILayoutContainerView")]) {
         if (otherGestureRecognizer.state == UIGestureRecognizerStateBegan && self.contentOffset.x == 0) return YES;
     }
     return NO;
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRequireFailureOfGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-    if ([otherGestureRecognizer isKindOfClass:[UIScreenEdgePanGestureRecognizer class]] && [otherGestureRecognizer.view isKindOfClass:NSClassFromString(@"UILayoutContainerView")]) {
+    if ([otherGestureRecognizer isKindOfClass:UIScreenEdgePanGestureRecognizer.class] && [otherGestureRecognizer.view isKindOfClass:NSClassFromString(@"UILayoutContainerView")]) {
         if (otherGestureRecognizer.state == UIGestureRecognizerStateBegan && self.contentOffset.x == 0) return YES;
     }
     return NO;

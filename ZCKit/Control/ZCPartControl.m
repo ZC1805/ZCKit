@@ -8,11 +8,11 @@
 
 #import "ZCPartControl.h"
 #import "ZCImageView.h"
-#import "ZCButton.h"
-#import "ZCMacro.h"
-#import "UIView+ZC.h"
 #import "NSArray+ZC.h"
 #import "UIColor+ZC.h"
+#import "UIView+ZC.h"
+#import "ZCButton.h"
+#import "ZCMacro.h"
 
 #pragma mark - ~ ZCPartSet ~
 @interface ZCPartSet ()
@@ -33,9 +33,9 @@
 
 @implementation ZCPartSet
 
-- (instancetype)initWithTitle:(NSString *)title {
+- (instancetype)init {
     if (self = [super init]) {
-        self.title = title;
+        self.title = nil;
         self.normalImage = nil;
         self.selectImage = nil;
         self.normalTitleFont = [UIFont fontWithName:@"HelveticaNeue" size:15];
@@ -49,6 +49,13 @@
         self.itemSelCalwid = 20.0;
         self.itemSelMarkSize = CGSizeMake(6.0, 2.0);
         self.isUseFixSelMarkSize = YES;
+    }
+    return self;
+}
+
+- (instancetype)initWithTitle:(NSString *)title {
+    if (self = [self init]) {
+        self.title = title;
     }
     return self;
 }
@@ -108,9 +115,9 @@ typedef void(^block)(NSInteger touchIndex);
 
 @property (nonatomic, strong) ZCImageView *leftAlphaView;
 
-@property (nonatomic, weak  ) UIScrollView *scrollView;
+@property (nonatomic, weak  ) ZCScrollView *scrollView;
 
-@property (nonatomic, strong) UIScrollView *barView;
+@property (nonatomic, strong) ZCScrollView *barView;
 
 @property (nonatomic, strong) UIView *markView;
 
@@ -131,6 +138,16 @@ typedef void(^block)(NSInteger touchIndex);
 @end
 
 @implementation ZCPartControl
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        _isBottomMark = NO;
+        _isFixItemWid = NO;
+        [self initialSet];
+        [self initialload];
+    }
+    return self;
+}
 
 - (instancetype)initWithFrame:(CGRect)frame normalMark:(BOOL)bottomMark fixWidth:(BOOL)fixWidth {
     if (self = [super initWithFrame:frame]) {
@@ -176,9 +193,9 @@ typedef void(^block)(NSInteger touchIndex);
     if (!_items) _items = [[NSMutableArray alloc] initWithCapacity:items.count];
     [_items removeAllObjects];
     for (id item in items) {
-        if ([item isKindOfClass:[NSString class]]) {
+        if ([item isKindOfClass:NSString.class]) {
             [_items addObject:[[ZCPartSet alloc] initWithTitle:item]];
-        } else if ([item isKindOfClass:[ZCPartSet class]]) {
+        } else if ([item isKindOfClass:ZCPartSet.class]) {
             [_items addObject:item];
         } else {
             [_items addObject:[[ZCPartSet alloc] initWithTitle:@""]]; NSAssert(0, @"ZCKit: item is fail");
@@ -257,7 +274,7 @@ typedef void(^block)(NSInteger touchIndex);
     }
 }
 
-- (void)associateScrollView:(UIScrollView *)scrollView {
+- (void)associateScrollView:(ZCScrollView *)scrollView {
     [self releaseAssociateScrollView];
     self.scrollView = scrollView;
     [scrollView addObserver:self forKeyPath:kvo_observe_offset options:NSKeyValueObservingOptionNew|NSKeyValueObservingOptionOld context:kvo_context_offset];
@@ -417,7 +434,7 @@ typedef void(^block)(NSInteger touchIndex);
         CGFloat R = [sc[0] floatValue] - ([sc[0] floatValue] - [nc[0] floatValue]) * v;
         CGFloat G = [sc[1] floatValue] - ([sc[1] floatValue] - [nc[1] floatValue]) * v;
         CGFloat B = [sc[2] floatValue] - ([sc[2] floatValue] - [nc[2] floatValue]) * v;
-        return [UIColor colorFormRad:(int)R green:(int)G blue:(int)B alpha:1.0];
+        return kZCRGBV(R, G, B, 1.0);
     }
     return nil;
 }
@@ -516,7 +533,7 @@ typedef void(^block)(NSInteger touchIndex);
     _backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
     _backgroundView.backgroundColor = kZCClear;
     
-    _barView = [[UIScrollView alloc] init];
+    _barView = [[ZCScrollView alloc] initWithFrame:CGRectZero color:nil];
     _barView.backgroundColor = _barColor;
     _barView.showsHorizontalScrollIndicator = NO;
     _barView.showsVerticalScrollIndicator = NO;

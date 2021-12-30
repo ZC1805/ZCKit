@@ -8,7 +8,6 @@
 
 #import "UITextField+ZC.h"
 #import "ZCImageView.h"
-#import "UIView+ZC.h"
 #import "ZCMacro.h"
 
 @implementation UITextField (ZC)
@@ -17,10 +16,13 @@
     if (leftSpace > 0) {
         if (self.leftView) {
             if (self.leftView.tag == 189001) {
-                self.leftView.zc_width = leftSpace;
+                CGRect frame = self.leftView.frame;
+                frame.size.width = leftSpace;
+                self.leftView.frame = frame;
             }
         } else {
-            self.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftSpace, 1) color:kZCClear];
+            self.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, leftSpace, 1)];
+            self.leftView.backgroundColor = kZCClear;
             self.leftViewMode = UITextFieldViewModeAlways;
             self.leftView.tag = 189001;
         }
@@ -33,7 +35,7 @@
 
 - (CGFloat)leftSpace {
     if (self.leftView && self.leftView.tag == 189001) {
-        return self.leftView.zc_width;
+        return self.leftView.frame.size.width;
     }
     return 0;
 }
@@ -46,7 +48,7 @@
 }
 
 - (UIImage *)leftImage {
-    if (self.leftView && [self.leftView isKindOfClass:[ZCImageView class]]) {
+    if (self.leftView && [self.leftView isKindOfClass:ZCImageView.class]) {
         return [(ZCImageView *)self.leftView image];
     }
     return nil;

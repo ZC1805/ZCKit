@@ -68,7 +68,7 @@
         }
     }
     NSNumberFormatter *formatter = self.numberFormatters[digits];
-    if (![formatter isKindOfClass:[NSNumberFormatter class]]) {
+    if (![formatter isKindOfClass:NSNumberFormatter.class]) {
         formatter = [[NSNumberFormatter alloc] init];
         formatter.roundingMode = NSNumberFormatterRoundFloor;
         NSString *positiveFormat = @"0.";
@@ -182,7 +182,7 @@
     NSDecimalNumberHandler *handler = [self decimalHandler:2 type:ZCEnumRoundTypeRound];
     NSDecimalNumber *decimal = nil;
     if (number != nil) {
-        if ([number isKindOfClass:[NSDecimalNumber class]]) {
+        if ([number isKindOfClass:NSDecimalNumber.class]) {
             decimal = (NSDecimalNumber *)number;
         } else {
             decimal = [NSDecimalNumber decimalNumberWithDecimal:[number decimalValue]];

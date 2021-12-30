@@ -7,8 +7,8 @@
 //
 
 #import "ZCAdaptBar.h"
-#import "ZCMacro.h"
 #import "UIView+ZC.h"
+#import "ZCMacro.h"
 
 @interface ZCAdaptBar ()
 

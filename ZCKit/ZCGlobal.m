@@ -7,6 +7,7 @@
 //
 
 #import "ZCGlobal.h"
+#import "UIView+ZC.h"
 #import "ZCViewController.h"
 
 @interface ZCGlobal ()
@@ -276,7 +277,7 @@
         navvc = (UINavigationController *)topvc;
     }
     if (navvc && !navvc.navigationBarHidden && !navvc.navigationBar.hidden) {
-        return navvc.navigationBar.frame.size.height;
+        return navvc.navigationBar.zc_height;
     }
     return 0;
 }
@@ -324,7 +325,7 @@
         tabvc = (UITabBarController *)rootvc;
     }
     if (tabvc && tabvc.view.subviews.count != 1 && !tabvc.tabBar.hidden) {
-        bottom = tabvc.tabBar.frame.size.height - 49.0;
+        bottom = tabvc.tabBar.zc_height - 49.0;
     } else {
         if (@available(iOS 11.0, *)) {
             if (rootvc) bottom = rootvc.view.safeAreaInsets.bottom;
@@ -354,7 +355,7 @@
                 return 0;
             }
         }
-        return tabvc.tabBar.frame.size.height;
+        return tabvc.tabBar.zc_height;
     }
     return 0;
 }

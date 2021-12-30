@@ -50,7 +50,7 @@ NSString * const ZCFlagStr = @"^.~!*.^";
 
 - (NSDictionary *)jsonDictionaryObject {
     id object = [self jsonObject];
-    if (object && [object isKindOfClass:[NSDictionary class]]) {
+    if (object && [object isKindOfClass:NSDictionary.class]) {
         return object;
     }
     return [NSDictionary dictionary];
@@ -58,7 +58,7 @@ NSString * const ZCFlagStr = @"^.~!*.^";
 
 - (NSArray *)jsonArrayObject {
     id object = [self jsonObject];
-    if (object && [object isKindOfClass:[NSArray class]]) {
+    if (object && [object isKindOfClass:NSArray.class]) {
         return object;
     }
     return [NSArray array];

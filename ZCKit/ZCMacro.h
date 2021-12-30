@@ -17,26 +17,40 @@
 #import "ZCGlobal.h"
 
 
+/** --- image --- */
+#define kZIN(image_name)        [UIImage imageNamed:(image_name)]                 /**< 获取图片，缓存，                                                               仅供外部用 */
+#define kZIA(image, _a)         [image imageWithAlpha:_a]                         /**< 返回新的指定透明度的图片，                                             仅供外部用 */
+#define kZIC(image_hex_color)   [UIImage imageWithColor:kZCRGB(image_hex_color)]  /**< 返回新的指定颜色图片(1.px，1.px)，                                 仅供外部用 */
+#define kZIF(image_file_name)   [UIImage imageWithContentsOfFile:kZFilePath(nil, image_file_name, @"png")]  /**< 获取图片，                仅供外部用 */
+
+
+/** --- font --- */
+#define kZFR(adt_size)          [UIFont fontWithName:@"HelveticaNeue" size:kZSA(adt_size)]         /**< 适配了的均匀系统regular字体，    仅供外部用 */
+#define kZFB(adt_size)          [UIFont fontWithName:@"HelveticaNeue-Bold" size:kZSA(adt_size)]    /**< 适配了的粗体系统bold字体，        仅供外部用 */
+#define kZFL(adt_size)          [UIFont fontWithName:@"HelveticaNeue-Light" size:kZSA(adt_size)]   /**< 适配了的粗体系统light字体，         仅供外部用 */
+#define kZFM(adt_size)          [UIFont fontWithName:@"HelveticaNeue-Medium" size:kZSA(adt_size)]  /**< 适配了的粗体系统medium字体，   仅供外部用 */
+
+
 /** --- normal --- */
-#define kZIsiPad            (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)    /**< 是否是iPad */
-#define kZIsiPhone          (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)  /**< 是否是iPhone */
-#define kZIsiPhoneX         [ZCGlobal isiPhoneX]    /**< 当前是否是iPhoneX */
-#define kZIslandscape       [ZCGlobal isLandscape]  /**< 当前是否是横屏 */
+#define kZIsiPad                (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)      /**< 是否是iPad */
+#define kZIsiPhone              (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)    /**< 是否是iPhone */
+#define kZIsiPhoneX             [ZCGlobal isiPhoneX]                                        /**< 当前是否是iPhoneX */
+#define kZIslandscape           [ZCGlobal isLandscape]                                      /**< 当前是否是横屏 */
 
 
 /** --- misc --- */
-#define kZArrNonnil(arr)    ((NSArray *)((arr && [arr isKindOfClass:NSArray.class]) ? arr : @[]))           /**< 返回非nil数组类型，用@[]替换nil或非arr类型数据 */
-#define kZStrNonnil(str)    ((NSString *)((str && [str isKindOfClass:NSString.class]) ? str : @""))         /**< 返回非nil字符串型，用@""替换nil或非str类型数据 */
-#define kZDicNonnil(dic)    ((NSDictionary *)((dic && [dic isKindOfClass:NSDictionary.class]) ? dic : @{})) /**< 返回非nil字典类型，用@{}替换nil或非dic类型数据 */
-#define kZStrIsValid(str)   [ZCGlobal isValidString:str]                                /**< 返回布尔型，判断字符串是否有效 & 非空格 */
-#define kZArrIsValid(arr)   [ZCGlobal isValidArray:arr]                                 /**< 返回布尔型，判断数组是否有效 & 有count */
-#define kZDicIsValid(dic)   [ZCGlobal isValidDictionary:dic]                            /**< 返回布尔型，判断字典是否有效 & 有count */
-#define kZStrFormat(format, ...) [NSString stringWithFormat:format, ##__VA_ARGS__]      /**< 返回格式化字符串 */
-#define kZObjAppoint(origin, appoint) [ZCGlobal appointInvalid:origin default:appoint]  /**< 对无效对象替换 */
+#define kZArrNonnil(arr)        ((NSArray *)((arr && [arr isKindOfClass:NSArray.class]) ? arr : @[]))           /**< 返回非nil数组类型，用@[]替换nil或非arr类型数据 */
+#define kZStrNonnil(str)        ((NSString *)((str && [str isKindOfClass:NSString.class]) ? str : @""))         /**< 返回非nil字符串型，用@""替换nil或非str类型数据 */
+#define kZDicNonnil(dic)        ((NSDictionary *)((dic && [dic isKindOfClass:NSDictionary.class]) ? dic : @{})) /**< 返回非nil字典类型，用@{}替换nil或非dic类型数据 */
+#define kZStrIsValid(str)       [ZCGlobal isValidString:str]                                                    /**< 返回布尔型，判断字符串是否有效 & 非空格 */
+#define kZArrIsValid(arr)       [ZCGlobal isValidArray:arr]                                                     /**< 返回布尔型，判断数组是否有效 & 有count */
+#define kZDicIsValid(dic)       [ZCGlobal isValidDictionary:dic]                                                /**< 返回布尔型，判断字典是否有效 & 有count */
+#define kZUrlStr(str)           [NSURL URLWithString:kZStrNonnil(str)]                                          /**< 返回非nilRUL类型  */
+#define kZStrFormat(format, ...) [NSString stringWithFormat:format, ##__VA_ARGS__]                              /**< 返回格式化字符串 */
+#define kZObjAppoint(o, appoint) [ZCGlobal appointInvalid:o default:appoint]                                    /**< 对无效对象替换 */
 
 
 /** --- color --- */
-
 #define kZCClear                [UIColor clearColor]                       /**< 透明 */
 #define kZCWhite                [UIColor colorFormHex:0xFFFFFF alpha:1.0]  /**< 白色 */
 #define kZCBlack                [UIColor colorFormHex:0x000000 alpha:1.0]  /**< 黑色 */
@@ -52,25 +66,12 @@
 
 
 /** --- color --- */
-#define kZCS(hex_str)           [UIColor colorFromHexString:hex_str]              /**< 十六进制颜色#&0x& */
-#define kZCRGB(hex_rgb)         [UIColor colorFormHex:hex_rgb alpha:1.0]          /**< 十六进制颜色0x开头 */
-#define kZCAlpha(color, _a)     [color colorWithAlphaComponent:_a]                /**< 返回指定透明度颜色 */
-#define kZCRGBA(hex_rgb, _a)    [UIColor colorFormHex:hex_rgb alpha:_a]           /**< 十六进制颜色0x开头 & 透明度 */
-#define kZCRGBV(r, g, b, _a)    [UIColor colorFormRad:r green:g blue:b alpha:_a]  /**< 十进制颜色 & 透明度 */
-
-
-/** --- image --- */
-#define kZIN(image_name)        [UIImage imageNamed:(image_name)]                 /**< 获取图片，缓存 */
-#define kZIA(image, _a)         [image imageWithAlpha:_a]                         /**< 返回新的指定透明度的图片 */
-#define kZIC(image_hex_color)   [UIImage imageWithColor:kZCRGB(image_hex_color)]  /**< 返回新的指定颜色图片(1.px，1.px) */
-#define kZIF(image_file_name)   [UIImage imageWithContentsOfFile:kZFilePath(nil, image_file_name, @"png")]  /**< 获取图片 */
-
-
-/** --- font --- */
-#define kZFR(adt_size)          [UIFont fontWithName:@"HelveticaNeue" size:kZSA(adt_size)]         /**< 适配了的均匀系统regular字体 */
-#define kZFB(adt_size)          [UIFont fontWithName:@"HelveticaNeue-Bold" size:kZSA(adt_size)]    /**< 适配了的粗体系统bold字体 */
-#define kZFL(adt_size)          [UIFont fontWithName:@"HelveticaNeue-Light" size:kZSA(adt_size)]   /**< 适配了的粗体系统light字体 */
-#define kZFM(adt_size)          [UIFont fontWithName:@"HelveticaNeue-Medium" size:kZSA(adt_size)]  /**< 适配了的粗体系统medium字体 */
+#define kZCA(color, a)          [color colorFromAlpha:a]                                        /**< 返回指定透明度颜色 */
+#define kZCS(hex_str)           [UIColor colorFromHexString:hex_str alpha:1.0]                  /**< 十六进制颜色#&0x& */
+#define kZCSA(hex_str, a)       [UIColor colorFromHexString:hex_str alpha:a]                    /**< 十六进制颜色#&0x& */
+#define kZCRGB(hex_rgb)         [UIColor colorFormHex:hex_rgb alpha:1.0]                        /**< 十六进制颜色0x开头 */
+#define kZCRGBA(hex_rgb, a)     [UIColor colorFormHex:hex_rgb alpha:a]                          /**< 十六进制颜色0x开头 & 透明度 */
+#define kZCRGBV(r, g, b, a)     [UIColor colorFormRad:(int)r green:(int)g blue:(int)b alpha:a]  /**< 十进制颜色 & 透明度 */
 
 
 /** --- adapt --- */
@@ -96,8 +97,8 @@
 #define kZFAbove(a, b)          (fabs((a) - (b)) >= FLT_EPSILON && (a) > (b))  /**< a > b */
 #define kZFBelow(a, b)          (fabs((a) - (b)) >= FLT_EPSILON && (a) < (b))  /**< a < b */
 #define kZFNotEqual(a, b)       (fabs((a) - (b)) >= FLT_EPSILON)               /**< a != b */
-#define kZFAboveEqual(a, b)     (kZFAbove((a), (b)) || kZFEqual((a), (b)))       /**< a >= b */
-#define kZFBelowEqual(a, b)     (kZFBelow((a), (b)) || kZFEqual((a), (b)))       /**< a <= b */
+#define kZFAboveEqual(a, b)     (kZFAbove((a), (b)) || kZFEqual((a), (b)))     /**< a >= b */
+#define kZFBelowEqual(a, b)     (kZFBelow((a), (b)) || kZFEqual((a), (b)))     /**< a <= b */
 
 
 /** --- 文件路径 --- */

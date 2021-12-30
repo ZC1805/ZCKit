@@ -14,9 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** 符合指定内容模式矩形 */
 CGRect ZCRectFitWithContentMode(CGRect rect, CGSize size, UIViewContentMode mode);
 
-/** 实例方法方法交换 */
-static inline void ZCExchangeInstanceMethod(Class clazz, SEL originalSelector, SEL swizzledSelector);
-
 /** 将度转换为弧度 */
 static inline CGFloat ZCDegreesToRadians(CGFloat degrees) {
     return degrees * M_PI / 180;
@@ -28,4 +25,3 @@ static inline CGFloat ZCRadiansToDegrees(CGFloat radians) {
 }
 
 NS_ASSUME_NONNULL_END
-

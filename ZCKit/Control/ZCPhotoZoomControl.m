@@ -22,7 +22,7 @@
 
 @property (nonatomic, assign) BOOL isAutoOfset;
 
-@property (nonatomic, weak) UIScrollView *scrollView;
+@property (nonatomic, weak) ZCScrollView *scrollView;
 
 @end
 
@@ -139,7 +139,7 @@ static const float initAdditional = 30.0;
     [self updateHeaderImageFrame:self.scrollView];
 }
 
-- (void)updateHeaderImageFrame:(UIScrollView *)scrollView {
+- (void)updateHeaderImageFrame:(ZCScrollView *)scrollView {
     if (!scrollView) return;
     if (self.scrollView != scrollView) self.scrollView = scrollView;
     CGFloat offsetY = [self convertToVisualOffsetFromContentOffset:scrollView.contentOffset scrollView:scrollView].y;
@@ -158,7 +158,7 @@ static const float initAdditional = 30.0;
 }
 
 #pragma mark - Misc
-- (CGPoint)convertToContentOffsetFromVisualOffset:(CGPoint)visualOffset scrollView:(UIScrollView *)scrollView { //转换成content offset
+- (CGPoint)convertToContentOffsetFromVisualOffset:(CGPoint)visualOffset scrollView:(ZCScrollView *)scrollView { //转换成content offset
     if (@available(iOS 11.0, *)) {
         if (scrollView.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentNever) {
             return visualOffset;
@@ -177,7 +177,7 @@ static const float initAdditional = 30.0;
     }
 }
 
-- (CGPoint)convertToVisualOffsetFromContentOffset:(CGPoint)contentOffset scrollView:(UIScrollView *)scrollView { //转换成visual offset
+- (CGPoint)convertToVisualOffsetFromContentOffset:(CGPoint)contentOffset scrollView:(ZCScrollView *)scrollView { //转换成visual offset
     if (@available(iOS 11.0, *)) {
         if (scrollView.contentInsetAdjustmentBehavior == UIScrollViewContentInsetAdjustmentNever) {
             return contentOffset;

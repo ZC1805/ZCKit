@@ -8,6 +8,7 @@
 
 #import "ZCBadgeView.h"
 #import "NSString+ZC.h"
+#import "UIView+ZC.h"
 #import "ZCMacro.h"
 
 @interface ZCBadgeView ()
@@ -113,10 +114,10 @@
 
 - (void)badgeFrameStr:(NSString *)badgeStr {
     if (!badgeStr.length) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, 0, 0); return;
+        self.frame = CGRectMake(self.zc_left, self.zc_top, 0, 0); return;
     }
     CGSize size = [self badgeSizeStr:badgeStr];
-    self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y,
+    self.frame = CGRectMake(self.zc_left, self.zc_top,
                             size.width + self.badgeLeftPadding * 2.0 + self.badgeCircleWidth * 2.0,
                             size.height + self.badgeTopPadding * 2.0 + self.badgeCircleWidth * 2.0); //8=2*2(红圈-文字)+2*2(白圈-红圈)
 }

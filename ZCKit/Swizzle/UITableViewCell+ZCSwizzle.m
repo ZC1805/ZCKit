@@ -18,7 +18,7 @@
     dispatch_once(&onceToken, ^{
         SEL sel1 = @selector(hitTest:withEvent:);
         SEL sel1x = @selector(swizzle1_hitTest:withEvent:);
-        zc_swizzle_exchange_selector([UITableViewCell class], sel1, sel1x);
+        zc_swizzle_exchange_selector(UITableViewCell.class, sel1, sel1x);
     });
 }
 

@@ -7,6 +7,7 @@
 //
 
 #import "ZCMenuControl.h"
+#import "ZCScrollView.h"
 #import "ZCMaskView.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
@@ -19,7 +20,7 @@
 
 @property (nonatomic, assign) CGPoint initVertex;
 
-@property (nonatomic, strong) UIScrollView *contentView;
+@property (nonatomic, strong) ZCScrollView *contentView;
 
 @property (nonatomic, strong) NSMutableArray <NSString *>*items;
 
@@ -110,7 +111,7 @@
     self.zc_origin = CGPointMake(self.initVertex.x - self.initArrowRect.origin.x - self.initArrowRect.size.width / 2.0, self.initVertex.y);
     [self initialBKlayer];
 
-    self.contentView = [[UIScrollView alloc] initWithFrame:CGRectZero];
+    self.contentView = [[ZCScrollView alloc] initWithFrame:CGRectZero color:nil];
     self.contentView.backgroundColor = kZCClear;
     self.contentView.showsVerticalScrollIndicator = NO;
     self.contentView.bounces = NO;
@@ -127,7 +128,7 @@
         itemBtn.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:17];
         [itemBtn setTitle:self.items[i] forState:UIControlStateNormal];
         [itemBtn setTitleColor:titleColor forState:UIControlStateNormal];
-        [itemBtn setTitleColor:[titleColor colorWithAlphaComponent:0.25] forState:UIControlStateHighlighted];
+        [itemBtn setTitleColor:kZCA(titleColor, 0.25) forState:UIControlStateHighlighted];
         [itemBtn addTarget:self action:@selector(onItem:) forControlEvents:UIControlEventTouchUpInside];
         itemBtn.frame = CGRectMake(0, i * self.rowHeight, self.initWid, self.rowHeight);
         if (i != 0) topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * self.rowHeight, self.initWid, 0.35)];

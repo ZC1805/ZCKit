@@ -115,7 +115,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
     wrapperView.layer.shadowOffset = CGSizeMake(1.5, 1.5);
     wrapperView.layer.shadowOpacity = 0.6;
     wrapperView.layer.shadowRadius = 5.0;
-    wrapperView.backgroundColor = [ZCKitBridge.toastBackGroundColor colorWithAlphaComponent:0.8];
+    wrapperView.backgroundColor = kZCA(ZCKitBridge.toastBackGroundColor, 0.8);
     
     CGFloat left = ZCToastHorizontalPadding, top = ZCToastVerticalPadding;
     CGFloat width = self.bounds.size.width * 0.8 - 2.0 * left, height = self.bounds.size.height * 0.8 - 2.0 * top;

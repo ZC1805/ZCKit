@@ -7,6 +7,7 @@
 //
 
 #import "ZCIndicatorView.h"
+#import "UIView+ZC.h"
 #import "ZCMacro.h"
 
 @interface ZCIndicatorView ()
@@ -19,19 +20,19 @@
 
 @implementation ZCIndicatorView
 
-- (instancetype)initWithFrame:(CGRect)frame diameter:(CGFloat)diameter {
-    if (self = [self initWithFrame:frame]) {
-        self.diameter = diameter;
-    }
-    return self;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _tintColor = kZCBlack80;
         _diameter = frame.size.width / 9;
         self.backgroundColor = kZCRGB(0xFF0000);
-        [self indicatorSize:self.frame.size];
+        [self indicatorSize:self.zc_size];
+    }
+    return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame diameter:(CGFloat)diameter {
+    if (self = [self initWithFrame:frame]) {
+        self.diameter = diameter;
     }
     return self;
 }
@@ -48,7 +49,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    [self resetIndicator:self.frame.size];
+    [self resetIndicator:self.zc_size];
 }
 
 - (void)resetIndicator:(CGSize)size {
@@ -64,8 +65,7 @@
     self.gradientLayer.position = CGPointMake(self.diameter / 2.0, self.diameter / 2.0);
     self.gradientLayer.cornerRadius = self.diameter / 2.0;
     self.gradientLayer.borderColor = self.tintColor.CGColor;
-    self.gradientLayer.colors = @[(id)[self.tintColor colorWithAlphaComponent:0.25].CGColor,
-                                  (id)self.tintColor.CGColor, (id)[self.tintColor colorWithAlphaComponent:0.01].CGColor];
+    self.gradientLayer.colors = @[(id)kZCA(self.tintColor, 0.25).CGColor, (id)self.tintColor.CGColor, (id)kZCA(self.tintColor, 0.01).CGColor];
 }
 
 - (void)indicatorSize:(CGSize)size {
@@ -81,8 +81,7 @@
     self.animationLayer.transform = CATransform3DMakeScale(0.01, 0.01, 0.01);
     
     self.gradientLayer = [[CAGradientLayer alloc] init];
-    self.gradientLayer.colors = @[(id)[self.tintColor colorWithAlphaComponent:0.25].CGColor,
-                                  (id)self.tintColor.CGColor, (id)[self.tintColor colorWithAlphaComponent:0.01].CGColor];
+    self.gradientLayer.colors = @[(id)kZCA(self.tintColor, 0.25).CGColor, (id)self.tintColor.CGColor, (id)kZCA(self.tintColor, 0.01).CGColor];
     self.gradientLayer.frame = CGRectMake(0, 0, self.diameter, self.diameter);
     self.gradientLayer.position = CGPointMake(self.diameter / 2.0, self.diameter / 2.0);
     self.gradientLayer.cornerRadius = self.diameter / 2.0;

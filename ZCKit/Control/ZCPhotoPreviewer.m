@@ -7,6 +7,7 @@
 //
 
 #import "ZCPhotoPreviewer.h"
+#import "ZCScrollView.h"
 #import "ZCKitBridge.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
@@ -15,7 +16,7 @@
 
 @property (nonatomic, strong) UIVisualEffectView *blurBKView; //背景视图
 
-@property (nonatomic, strong) UIScrollView *scrollView; //滑动视图
+@property (nonatomic, strong) ZCScrollView *scrollView; //滑动视图
 
 @property (nonatomic, strong) UIView *containerView; //容器视图
 
@@ -69,7 +70,7 @@
     longPress.minimumPressDuration = 0.5;
     [self addGestureRecognizer:longPress];
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:self.bounds];
+    self.scrollView = [[ZCScrollView alloc] initWithFrame:self.bounds color:nil];
     self.scrollView.bounces = YES;
     self.scrollView.delegate = self;
     self.scrollView.bouncesZoom = YES;
@@ -122,7 +123,7 @@ static void *imageObserveContext = @"imageObserveContext";
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     if ([keyPath isEqualToString:observeImageKey] && object == self.carrier && context == imageObserveContext) {
         UIImage *image = [change objectForKey:NSKeyValueChangeNewKey];
-        if ([image isKindOfClass:[UIImage class]]) {
+        if ([image isKindOfClass:UIImage.class]) {
             [self layoutFrame:image.size];
             self.imageView.image = image;
             self.imageView.frame = self.containerView.bounds;
@@ -252,11 +253,11 @@ static void *imageObserveContext = @"imageObserveContext";
 }
 
 #pragma mark - UIScrollViewDelegate
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
+- (UIView *)viewForZoomingInScrollView:(ZCScrollView *)scrollView {
     return self.containerView;
 }
 
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
+- (void)scrollViewDidZoom:(ZCScrollView *)scrollView {
     CGFloat offsetX = 0, offsetY = 0;
     if (scrollView.bounds.size.width > scrollView.contentSize.width) {
         offsetX = (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5;

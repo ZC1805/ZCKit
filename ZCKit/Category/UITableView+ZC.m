@@ -8,7 +8,6 @@
 
 #import "UITableView+ZC.h"
 #import <objc/runtime.h>
-#import "UIView+ZC.h"
 #import "ZCMacro.h"
 
 @implementation UITableView (ZC)

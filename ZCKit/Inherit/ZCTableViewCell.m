@@ -1570,7 +1570,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
         [view setRightLineInsets:UIEdgeInsetsZero color:nil];
         #pragma clang diagnostic pop
         
-        if ([view isKindOfClass:[UIControl class]]) {
+        if ([view isKindOfClass:UIControl.class]) {
             ((UIControl *)view).enabled = YES;
             ((UIControl *)view).selected = NO;
             ((UIControl *)view).highlighted = NO;
@@ -1592,7 +1592,7 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
             #pragma clang diagnostic pop
         }
         
-        if ([view isKindOfClass:[UIScrollView class]]) {
+        if ([view isKindOfClass:UIScrollView.class]) {
             ((UIScrollView *)view).contentSize = CGSizeZero;
             ((UIScrollView *)view).contentOffset = CGPointZero;
             ((UIScrollView *)view).contentInset = UIEdgeInsetsZero;

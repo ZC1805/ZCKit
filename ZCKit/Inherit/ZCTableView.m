@@ -563,7 +563,7 @@
         ZCSectionOperate *slice = _sections[indexPath.section];
         ZCRowOperate *unit = slice.rows[indexPath.row];
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:unit.identifier forIndexPath:indexPath];
-        if ([cell isKindOfClass:[ZCTableViewCell class]]) {
+        if ([cell isKindOfClass:ZCTableViewCell.class]) {
             if (!self.isShieldResetZCCell) [((ZCTableViewCell *)cell) resetAllItemHiddenAndProperty];
             BOOL islast = indexPath.row == slice.rows.count - 1;
             ((ZCTableViewCell *)cell).topSeparatorInset = UIEdgeInsetsMake(0, 0, indexPath.row ? 0 : kZSPixel, 0);

@@ -8,6 +8,7 @@
 
 #import "ZCStreamCenter.h"
 #import <objc/runtime.h>
+#import "ZCKitBridge.h"
 
 
 @class ZCStreamCoat;
@@ -66,6 +67,17 @@ NSString * const ZCStreamValueInvalid = @"ZCStreamValueInvalid";
 
 - (void)dealloc {
     [self resetAimObjectObserve:NO];
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        _lockSymbol = 0;
+        _unitKp = [@"aimObject." stringByAppendingString:@"n"];
+        _unit = [[ZCStreamUnit alloc] initWithBindObject:nil keyPath:@"n"];
+        [self resetAimObjectObserve:YES];
+        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: stream init fail");
+    }
+    return self;
 }
 
 - (instancetype)initWithBeObserver:(id)beObserver observeKp:(NSString *)observeKp {

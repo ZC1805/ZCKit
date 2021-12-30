@@ -30,11 +30,11 @@
         SEL sel4x = @selector(swizzle_viewDidLayoutSubviews);
         SEL sel5 = @selector(viewWillDisappear:);
         SEL sel5x = @selector(swizzle_viewWillDisappear:);
-        zc_swizzle_exchange_selector([UIViewController class], sel1, sel1x);
-        zc_swizzle_exchange_selector([UIViewController class], sel2, sel2x);
-        zc_swizzle_exchange_selector([UIViewController class], sel3, sel3x);
-        zc_swizzle_exchange_selector([UIViewController class], sel4, sel4x);
-        zc_swizzle_exchange_selector([UIViewController class], sel5, sel5x);
+        zc_swizzle_exchange_selector(UIViewController.class, sel1, sel1x);
+        zc_swizzle_exchange_selector(UIViewController.class, sel2, sel2x);
+        zc_swizzle_exchange_selector(UIViewController.class, sel3, sel3x);
+        zc_swizzle_exchange_selector(UIViewController.class, sel4, sel4x);
+        zc_swizzle_exchange_selector(UIViewController.class, sel5, sel5x);
     });
 }
 
@@ -55,8 +55,8 @@
 
 - (void)swizzle_viewWillAppear:(BOOL)animated {
     if (ZCKitBridge.isPrintLog) {
-        if ([self isKindOfClass:[UIViewController class]] && ![self isKindOfClass:[UINavigationController class]]) {
-            if (ZCKitBridge.isPrintLog) NSLog(@"\nZCKit: --------- %@ --------- appear\n", NSStringFromClass([self class]));
+        if ([self isKindOfClass:UIViewController.class] && ![self isKindOfClass:UINavigationController.class]) {
+            if (ZCKitBridge.isPrintLog) NSLog(@"\nZCKit: --------- %@ --------- appear\n", NSStringFromClass(self.class));
         }
     }
     if (self.navigationController && self.parentViewController == self.navigationController) {
@@ -68,7 +68,7 @@
                 UIImage *imageBar = [[UIImage alloc] init];
                 UIImage *imageShadow = [[UIImage alloc] init];
                 if (@available(iOS 13.0, *)) { //导航过渡需要的
-                    imageBar = kZIN(ZCKitBridge.naviBarImageOrColor);
+                    imageBar = [UIImage imageNamed:ZCKitBridge.naviBarImageOrColor];
                     if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
                     imageShadow = [UIImage imageWithColor:kZCSplit size:CGSizeMake(kZSWid, kZSPixel)];
                 }
@@ -78,7 +78,7 @@
                 [self.navigationController.navigationBar setShadow:kZCClear offset:CGSizeZero radius:1];
                 [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
             } else if ([self swizzle_isShieldBarShadow]) {
-                UIImage *imageBar = kZIN(ZCKitBridge.naviBarImageOrColor);
+                UIImage *imageBar = [UIImage imageNamed:ZCKitBridge.naviBarImageOrColor];
                 if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
                 self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
                 [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
@@ -92,7 +92,7 @@
                 [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
             } else {
                 if (!self.navigationController.isNormalBar) {
-                    UIImage *imageBar = kZIN(ZCKitBridge.naviBarImageOrColor);
+                    UIImage *imageBar = [UIImage imageNamed:ZCKitBridge.naviBarImageOrColor];
                     if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
                     UIImage *imageShadow = [UIImage imageWithColor:kZCSplit size:CGSizeMake(kZSWid, kZSPixel)];
                     UIColor *shadowColor = [self swizzle_isUseNaviBarShadowColor] ? kZCSplit : kZCClear;

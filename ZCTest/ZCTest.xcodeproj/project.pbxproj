@@ -101,6 +101,7 @@
 		58D0232A26A991E200D8D316 /* UIView+ZCToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D026A991E200D8D316 /* UIView+ZCToast.m */; };
 		58D0232B26A991E200D8D316 /* ZCFlowSectionLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D126A991E200D8D316 /* ZCFlowSectionLayout.m */; };
 		58D0232C26A991E200D8D316 /* ZCPredefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D426A991E200D8D316 /* ZCPredefine.m */; };
+		58DD401C277DAA8A00967AC1 /* UIViewController+XX.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DD401B277DAA8A00967AC1 /* UIViewController+XX.m */; };
 		58F435D926AAAA0C00CEA1BF /* ZCSubsetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F435D826AAAA0C00CEA1BF /* ZCSubsetItem.m */; };
 /* End PBXBuildFile section */
 
@@ -294,6 +295,8 @@
 		58D022D226A991E200D8D316 /* UIView+ZCToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ZCToast.h"; sourceTree = "<group>"; };
 		58D022D326A991E200D8D316 /* ZCFlowSectionLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCFlowSectionLayout.h; sourceTree = "<group>"; };
 		58D022D426A991E200D8D316 /* ZCPredefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCPredefine.m; sourceTree = "<group>"; };
+		58DD401A277DAA8A00967AC1 /* UIViewController+XX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+XX.h"; sourceTree = "<group>"; };
+		58DD401B277DAA8A00967AC1 /* UIViewController+XX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+XX.m"; sourceTree = "<group>"; };
 		58F435D726AAAA0C00CEA1BF /* ZCSubsetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCSubsetItem.h; sourceTree = "<group>"; };
 		58F435D826AAAA0C00CEA1BF /* ZCSubsetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCSubsetItem.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -309,6 +312,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		5883A5B2277C608900F88FED /* WaitClass */ = {
+			isa = PBXGroup;
+			children = (
+				58D022AB26A991E200D8D316 /* ZCGrowView.h */,
+				58D022BC26A991E200D8D316 /* ZCGrowView.m */,
+				58D0222726A991E100D8D316 /* UISearchBar+ZC.h */,
+				58D0223D26A991E100D8D316 /* UISearchBar+ZC.m */,
+			);
+			path = WaitClass;
+			sourceTree = "<group>";
+		};
 		58D0200326A94B8500D8D316 = {
 			isa = PBXGroup;
 			children = (
@@ -338,6 +352,9 @@
 				5839B5CC26B29B3F004493B8 /* VCIdManager.m */,
 				5839B5CF26B29C7A004493B8 /* UIViewController+VC.h */,
 				5839B5D026B29C7A004493B8 /* UIViewController+VC.m */,
+				58DD401A277DAA8A00967AC1 /* UIViewController+XX.h */,
+				58DD401B277DAA8A00967AC1 /* UIViewController+XX.m */,
+				5883A5B2277C608900F88FED /* WaitClass */,
 				58D0202F26A958BE00D8D316 /* screen.storyboard */,
 				58D0201B26A94B8500D8D316 /* Assets.xcassets */,
 				58D0202026A94B8500D8D316 /* Info.plist */,
@@ -405,8 +422,6 @@
 				58D0224F26A991E200D8D316 /* UIView+ZC.m */,
 				58D0222E26A991E100D8D316 /* UITextField+ZC.h */,
 				58D0224726A991E200D8D316 /* UITextField+ZC.m */,
-				58D0222726A991E100D8D316 /* UISearchBar+ZC.h */,
-				58D0223D26A991E100D8D316 /* UISearchBar+ZC.m */,
 				58D0222426A991E100D8D316 /* UITableView+ZC.h */,
 				58D0223F26A991E100D8D316 /* UITableView+ZC.m */,
 				58D0222326A991E100D8D316 /* UIScrollView+ZC.h */,
@@ -555,8 +570,6 @@
 				58D022CC26A991E200D8D316 /* ZCFPSLabel.m */,
 				58D022AA26A991E200D8D316 /* ZCCountLabel.h */,
 				58D022BB26A991E200D8D316 /* ZCCountLabel.m */,
-				58D022AB26A991E200D8D316 /* ZCGrowView.h */,
-				58D022BC26A991E200D8D316 /* ZCGrowView.m */,
 				58D022C226A991E200D8D316 /* ZCMaskView.h */,
 				58D022B126A991E200D8D316 /* ZCMaskView.m */,
 				58D022AD26A991E200D8D316 /* ZCBadgeView.h */,
@@ -638,7 +651,7 @@
 		58D0200426A94B8500D8D316 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 1230;
+				LastUpgradeCheck = 1310;
 				TargetAttributes = {
 					58D0200B26A94B8500D8D316 = {
 						CreatedOnToolsVersion = 12.3;
@@ -737,6 +750,7 @@
 				58D022F626A991E200D8D316 /* ZCImageView.m in Sources */,
 				5839B5CD26B29B3F004493B8 /* VCIdManager.m in Sources */,
 				58D0230226A991E200D8D316 /* UIGestureRecognizer+ZCSwizzle.m in Sources */,
+				58DD401C277DAA8A00967AC1 /* UIViewController+XX.m in Sources */,
 				58D022EF26A991E200D8D316 /* NSNumber+ZC.m in Sources */,
 				58D022D526A991E200D8D316 /* NSObject+YYModel.m in Sources */,
 				58D022EE26A991E200D8D316 /* UIView+ZC.m in Sources */,
@@ -830,7 +844,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -883,7 +897,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -899,7 +913,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WUSQWGPQM7;
 				INFOPLIST_FILE = ZCTest/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -918,7 +932,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = WUSQWGPQM7;
 				INFOPLIST_FILE = ZCTest/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

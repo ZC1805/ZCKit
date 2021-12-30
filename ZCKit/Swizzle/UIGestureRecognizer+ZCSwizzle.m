@@ -22,9 +22,9 @@ NSNotificationName const ZCGestureGenerateEventNotification = @"ZCGestureGenerat
 //        SEL sel2x = @selector(swizzle_initWithTarget:action:);
 //        SEL sel3 = @selector(removeTarget:action:);
 //        SEL sel3x = @selector(swizzle_removeTarget:action:);
-//        zc_swizzle_exchange_selector([UIGestureRecognizer class], sel1, sel1x);
-//        zc_swizzle_exchange_selector([UIGestureRecognizer class], sel2, sel2x);
-//        zc_swizzle_exchange_selector([UIGestureRecognizer class], sel3, sel3x);
+//        zc_swizzle_exchange_selector(UIGestureRecognizer.class, sel1, sel1x);
+//        zc_swizzle_exchange_selector(UIGestureRecognizer.class, sel2, sel2x);
+//        zc_swizzle_exchange_selector(UIGestureRecognizer.class, sel3, sel3x);
     });
 }
 

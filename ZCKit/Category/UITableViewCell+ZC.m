@@ -14,7 +14,7 @@
     UIGestureRecognizer *ges = nil;
     if (self.contentView && self.contentView.gestureRecognizers) {
         for (UIGestureRecognizer *gesture in self.contentView.gestureRecognizers) {
-            if ([gesture isKindOfClass:[UILongPressGestureRecognizer class]]) {
+            if ([gesture isKindOfClass:UILongPressGestureRecognizer.class]) {
                 ges = gesture; break;
             }
         }
@@ -25,7 +25,7 @@
 - (UITableView *)currentTableView {
     UIView *view = self.superview;
     for (int i = 0; (view && i < 5); i ++) { //最多循环5次，没拿到返回nil
-        if ([view isKindOfClass:[UITableView class]]) {
+        if ([view isKindOfClass:UITableView.class]) {
             return (UITableView *)view;
         } else {
             view = view.superview;

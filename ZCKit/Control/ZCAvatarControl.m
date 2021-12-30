@@ -8,6 +8,7 @@
 
 #import "ZCAvatarControl.h"
 #import "ZCKitBridge.h"
+#import "UIView+ZC.h"
 #import "ZCMacro.h"
 
 @implementation ZCAvatarControl
@@ -109,7 +110,7 @@
 }
 
 - (void)drawRect:(CGRect)rect {
-    if (!self.frame.size.width || !self.frame.size.height) return;
+    if (!self.zc_width || !self.zc_height) return;
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSaveGState(context);
     if (_cornerRadius > 0) {
@@ -118,9 +119,9 @@
     }
     UIImage *image = _localImage;
     if (image && image.size.height && image.size.width) { //ScaleAspectFill模式
-        CGPoint center = CGPointMake(self.frame.size.width / 2.0, self.frame.size.height / 2.0);
-        CGFloat widScale = image.size.width / self.frame.size.width;
-        CGFloat heiScale = image.size.height / self.frame.size.height;
+        CGPoint center = CGPointMake(self.zc_width / 2.0, self.zc_height / 2.0);
+        CGFloat widScale = image.size.width / self.zc_width;
+        CGFloat heiScale = image.size.height / self.zc_height;
         CGFloat scale = self.isAspectFit ? MAX(widScale, heiScale) : MIN(widScale, heiScale);
         CGSize size = CGSizeMake(image.size.width / scale, image.size.height / scale);
         CGRect draw = CGRectMake(center.x - (size.width / 2.0), center.y - (size.height / 2.0), size.width, size.height);
@@ -129,9 +130,9 @@
         } else if (self.alignment == 2) {
             draw.origin.x = 0;
         } else if (self.alignment == 3) {
-            draw.origin.y = self.frame.size.height - size.height;
+            draw.origin.y = self.zc_height - size.height;
         } else if (self.alignment == 4) {
-            draw.origin.x = self.frame.size.width - size.width;
+            draw.origin.x = self.zc_width - size.width;
         }
         CGContextDrawImage(context, draw, image.CGImage);
     }

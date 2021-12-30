@@ -97,7 +97,7 @@
         _spellCache = nil;
         if ([[NSFileManager defaultManager] fileExistsAtPath:_filePath]) {
             NSDictionary *dict = [NSKeyedUnarchiver unarchiveObjectWithFile:_filePath];
-            if ([dict isKindOfClass:[NSDictionary class]]) {
+            if ([dict isKindOfClass:NSDictionary.class]) {
                 _spellCache = [[NSMutableDictionary alloc] initWithDictionary:dict];
             }
         }

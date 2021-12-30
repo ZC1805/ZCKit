@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCScrollView.h"
 
 @class ZCButton;
 
@@ -110,7 +111,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)reloadItems:(NSArray *)items;
 
 /** 关联滑动的scroll view，会校验下设置的index，最好在reloadItems后设置 */
-- (void)associateScrollView:(UIScrollView *)scrollView;
+- (void)associateScrollView:(ZCScrollView *)scrollView;
 
 /** 释放滑动的scroll view，适当时候手动释放(注意:如果不是添加在当前控制器的View上需要在dealloc中手动调用此方法) */
 - (void)releaseAssociateScrollView;

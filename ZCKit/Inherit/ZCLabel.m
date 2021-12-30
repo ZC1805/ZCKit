@@ -8,7 +8,7 @@
 
 #import "ZCLabel.h"
 #import "ZCMacro.h"
-#import "UIColor+ZC.h"
+#import "UIView+ZC.h"
 
 @interface ZCLabel ()
 
@@ -29,49 +29,34 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self resetInitProperty];
-    } return self;
+        self.backgroundColor = kZCClear;
+        self.lineBreakMode = NSLineBreakByTruncatingTail;
+        self.minimumScaleFactor = 0.5;
+        self.numberOfLines = 1;
+        self.adjustsFontSizeToFitWidth = YES;
+        self.textAlignment = NSTextAlignmentLeft;
+        self.textColor = kZCBlack30;
+        self.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
+    }
+    return self;
 }
 
 - (instancetype)initWithColor:(UIColor *)color font:(UIFont *)font alignment:(NSTextAlignment)alignment adjustsSize:(BOOL)adjustsSize {
-    if (self = [super initWithFrame:CGRectZero]) {
-        [self resetInitProperty];
-        self.backgroundColor = kZCClear;
-        self.lineBreakMode = NSLineBreakByTruncatingTail;
+    if (self = [self initWithFrame:CGRectZero]) {
         self.adjustsFontSizeToFitWidth = adjustsSize;
-        self.minimumScaleFactor = 0.5;
         self.textAlignment = alignment;
         self.textColor = color;
-        self.numberOfLines = 1;
         self.font = font;
-    } return self;
+    }
+    return self;
 }
 
 - (instancetype)initWithColor:(UIColor *)color font:(UIFont *)font {
-    if (self = [super initWithFrame:CGRectZero]) {
-        [self resetInitProperty];
-        self.backgroundColor = kZCClear;
-        self.lineBreakMode = NSLineBreakByTruncatingTail;
-        self.adjustsFontSizeToFitWidth = YES;
-        self.minimumScaleFactor = 0.5;
-        self.textAlignment = NSTextAlignmentLeft;
+    if (self = [self initWithFrame:CGRectZero]) {
         self.textColor = color;
-        self.numberOfLines = 1;
         self.font = font;
-    } return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color { //重新分类方法
-    if (self = [super initWithFrame:frame]) {
-        [self resetInitProperty];
-        self.backgroundColor = color ? color : kZCClear;
-        self.lineBreakMode = NSLineBreakByTruncatingTail;
-        self.adjustsFontSizeToFitWidth = YES;
-        self.minimumScaleFactor = 0.5;
-        self.textAlignment = NSTextAlignmentLeft;
-        self.textColor = kZCBlack30;
-        self.numberOfLines = 1;
-        self.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
-    } return self;
+    }
+    return self;
 }
 
 - (void)resetInitProperty {
@@ -254,7 +239,7 @@
         }
         if (mRange.location != NSNotFound && mRange.length) {
             UIFont *ofont = self.manualFont ? self.manualFont : [UIFont fontWithName:@"HelveticaNeue" size:12];
-            UIColor *ocolor = self.manualColor ? self.manualColor : [UIColor colorFormHex:0xFFFFFF alpha:1.0];
+            UIColor *ocolor = self.manualColor ? self.manualColor : kZCWhite;
             NSDictionary *dicAtt = @{NSFontAttributeName:(font?font:ofont),NSForegroundColorAttributeName:(color?color:ocolor)};
             NSDictionary *oriAtt = @{NSFontAttributeName:ofont,NSForegroundColorAttributeName:ocolor};
             if (isReverse) {
@@ -291,11 +276,11 @@
 }
 
 - (CGSize)autoToSizeIsLimitLines:(BOOL)isLimitLines isRichText:(BOOL)isRichText {
-    CGFloat initWid = self.frame.size.width;
-    CGFloat initHei = self.frame.size.height;
+    CGFloat initWid = self.zc_width;
+    CGFloat initHei = self.zc_height;
     
     if (!CGSizeEqualToSize(self.fixSize, CGSizeZero)) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, self.fixSize.width, self.fixSize.height);
+        self.frame = CGRectMake(self.zc_left, self.zc_top, self.fixSize.width, self.fixSize.height);
         return self.fixSize;
     }
 
@@ -327,20 +312,20 @@
     [kSpacLabelX setNeedsDisplay];
     [kSpacLabelX sizeToFit];
     
-    CGFloat newWid = ceilf(kSpacLabelX.frame.size.width);
-    CGFloat newHei = ceilf(kSpacLabelX.frame.size.height);
+    CGFloat newWid = ceilf(kSpacLabelX.zc_width);
+    CGFloat newHei = ceilf(kSpacLabelX.zc_height);
     if (initHei == 0 && initWid == 0) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, newWid, newHei);
+        self.frame = CGRectMake(self.zc_left, self.zc_top, newWid, newHei);
     } else if (initHei == 0) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, initWid, newHei);
+        self.frame = CGRectMake(self.zc_left, self.zc_top, initWid, newHei);
     } else if (initWid == 0) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, newWid, initHei);
+        self.frame = CGRectMake(self.zc_left, self.zc_top, newWid, initHei);
     } else if (newHei > initHei) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, initWid, newHei);
+        self.frame = CGRectMake(self.zc_left, self.zc_top, initWid, newHei);
     } else if (newWid < initWid) {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, newWid, initHei);
+        self.frame = CGRectMake(self.zc_left, self.zc_top, newWid, initHei);
     } else {
-        self.frame = CGRectMake(self.frame.origin.x, self.frame.origin.y, newWid, newHei);
+        self.frame = CGRectMake(self.zc_left, self.zc_top, newWid, newHei);
     }
     return CGSizeMake(newWid, newHei);
 }

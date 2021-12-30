@@ -21,7 +21,7 @@
 
 #pragma mark - Prty
 - (CGFloat)visibleAlpha {
-    if ([self isKindOfClass:[UIWindow class]]) {
+    if ([self isKindOfClass:UIWindow.class]) {
         if (self.hidden) return 0;
         return self.alpha;
     }
@@ -40,7 +40,7 @@
 
 - (UITableViewCell *)currentCell {
     for (UIView *view = self; view; view = view.superview) {
-        if ([view isKindOfClass:[UITableViewCell class]]) {
+        if ([view isKindOfClass:UITableViewCell.class]) {
             return (UITableViewCell *)view;
         }
     }
@@ -61,7 +61,7 @@
 - (UIViewController *)currentViewController {
     for (UIView *view = self; view; view = view.superview) {
         UIResponder *nextResponder = [view nextResponder];
-        if ([nextResponder isKindOfClass:[UIViewController class]]) {
+        if ([nextResponder isKindOfClass:UIViewController.class]) {
             return (UIViewController *)nextResponder;
         }
     }
@@ -98,14 +98,8 @@
 - (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color {
     if (self = [self initWithFrame:frame]) {
         if (color) self.backgroundColor = color;
-    } return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color addTo:(UIView *)superView {
-    if (self = [self initWithFrame:frame]) {
-        if (color) self.backgroundColor = color;
-        if (superView) [superView addSubview:self];
-    } return self;
+    }
+    return self;
 }
 
 - (void)removeAllSubviews {

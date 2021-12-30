@@ -15,40 +15,31 @@
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = kZCClear;
         self.userInteractionEnabled = NO;
-    } return self;
+    }
+    return self;
 }
 
 - (instancetype)initWithImage:(UIImage *)image {
     if (self = [super initWithImage:image]) {
         self.backgroundColor = kZCClear;
         self.userInteractionEnabled = NO;
-    } return self;
+    }
+    return self;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image interact:(BOOL)interact {
-    if (self = [super initWithFrame:frame]) {
+    if (self = [self initWithFrame:frame]) {
         self.userInteractionEnabled = interact;
-        self.backgroundColor = kZCClear;
         self.image = image;
     }
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame image:(nullable UIImage *)image {
-    if (self = [super initWithFrame:frame]) {
-        self.userInteractionEnabled = NO;
-        self.backgroundColor = kZCClear;
+- (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image {
+    if (self = [self initWithFrame:frame]) {
         self.image = image;
     }
     return self;
-}
-
-- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color { //重新分类方法
-    if (self = [super initWithFrame:frame]) {
-        self.backgroundColor = color ? color : kZCClear;
-        self.userInteractionEnabled = NO;
-        self.image = nil;
-    } return self;
 }
 
 @end

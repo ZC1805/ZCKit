@@ -69,8 +69,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color;  /**< 默认初始化方法，带背景颜色初始化，可供子类重写隐式实现 */
 
-- (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color addTo:(nullable UIView *)superView;  /**< 带背景颜色初始化且加入到父视图，子类一般不会重写隐式实现 */
-
 - (void)removeAllSubviews;  /**< 移除所有子视图 */
 
 - (NSArray <UIView *>*)containAllSubviews;  /**< 所有子视图集合 */
@@ -115,4 +113,3 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 NS_ASSUME_NONNULL_END
-

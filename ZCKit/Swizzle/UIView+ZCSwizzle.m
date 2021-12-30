@@ -22,9 +22,9 @@
         SEL sel2x = @selector(swizzle_layoutSubviews);
         SEL sel3 = @selector(hitTest:withEvent:);
         SEL sel3x = @selector(swizzle_hitTest:withEvent:);
-        zc_swizzle_exchange_selector([UIView class], sel1, sel1x);
-        zc_swizzle_exchange_selector([UIView class], sel2, sel2x);
-        zc_swizzle_exchange_selector([UIView class], sel3, sel3x);
+        zc_swizzle_exchange_selector(UIView.class, sel1, sel1x);
+        zc_swizzle_exchange_selector(UIView.class, sel2, sel2x);
+        zc_swizzle_exchange_selector(UIView.class, sel3, sel3x);
     });
 }
 
@@ -34,7 +34,7 @@
         UIEdgeInsets insetsTop = [lineTopView convertHolderLineViewInsets];
         lineTopView.frame = CGRectMake(insetsTop.left,
                                        insetsTop.top,
-                                       self.zc_width - insetsTop.left - insetsTop.right,
+                                       self.frame.size.width - insetsTop.left - insetsTop.right,
                                        insetsTop.bottom);
     }
     UIView *lineLeftView = [self valueForKey:@"holderLineLeftView"];
@@ -43,30 +43,30 @@
         lineLeftView.frame = CGRectMake(insetsLeft.left,
                                         insetsLeft.top,
                                         insetsLeft.right,
-                                        self.zc_height - insetsLeft.top - insetsLeft.bottom);
+                                        self.frame.size.height - insetsLeft.top - insetsLeft.bottom);
     }
     UIView *lineBottomView = [self valueForKey:@"holderLineBottomView"];
     if (lineBottomView) {
         UIEdgeInsets insetsBottom = [lineBottomView convertHolderLineViewInsets];
         lineBottomView.frame = CGRectMake(insetsBottom.left,
-                                          self.zc_height - insetsBottom.bottom - insetsBottom.top,
-                                          self.zc_width - insetsBottom.left - insetsBottom.right,
+                                          self.frame.size.height - insetsBottom.bottom - insetsBottom.top,
+                                          self.frame.size.width - insetsBottom.left - insetsBottom.right,
                                           insetsBottom.top);
     }
     UIView *lineRightView = [self valueForKey:@"holderLineRightView"];
     if (lineRightView) {
         UIEdgeInsets insetsRight = [lineRightView convertHolderLineViewInsets];
-        lineRightView.frame = CGRectMake(self.zc_width - insetsRight.left - insetsRight.right,
+        lineRightView.frame = CGRectMake(self.frame.size.width - insetsRight.left - insetsRight.right,
                                          insetsRight.top,
                                          insetsRight.left,
-                                         self.zc_height - insetsRight.top - insetsRight.bottom);
+                                         self.frame.size.height - insetsRight.top - insetsRight.bottom);
     }
     [self swizzle_layoutSubviews];
 }
 
 - (UIEdgeInsets)convertHolderLineViewInsets {
     NSValue *value = [self valueForKey:@"holderLineViewInsets"];
-    if (value && [value isKindOfClass:[NSValue class]]) {
+    if (value && [value isKindOfClass:NSValue.class]) {
         return [value UIEdgeInsetsValue];
     }
     return UIEdgeInsetsZero;
