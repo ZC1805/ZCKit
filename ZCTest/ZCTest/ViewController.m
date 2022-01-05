@@ -12,6 +12,7 @@
 #import "ZCDateManager.h"
 #import "ZCKitBridge.h"
 #import "VCIdManager.h"
+#import "ZCMaskView.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -23,10 +24,6 @@
     NSLog(@"1-%@", NSStringFromClass(self));
     [[VCIdManager share].vcs addObject:NSStringFromClass(self)];
 }
-
-//#define kZCA(x, a)      ([x isKindOfClass:UIColor.class] ? [(UIColor *)x colorWithAlphaComponent:a] : ([x isKindOfClass:NSString.class] ? [UIColor colorFromHexString:(NSString *)x] : [UIColor colorFormHex:(NSInteger)x alpha:1.0]))
-
-//#define kZCA(x, a)      (x ? [UIColor colorFormHex:(NSInteger)x alpha:1.0] : [(UIColor *)x colorWithAlphaComponent:a])
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -53,7 +50,7 @@
     listView.separatorInset = UIEdgeInsetsZero;
     listView.directionalLockEnabled = YES;
     listView.bounces = YES;
-    listView.frame = CGRectMake(0, 64, kZSWid, kZSHei - 64); //这里要设置大些
+    listView.frame = CGRectMake(0, 64, kZSWid, kZSHei - 64 - 200); //这里要设置大些
     listView.backgroundColor = kZCRGB(0xEEEEEE);
     [self.view addSubview:listView];
     UIColor *a = kZCA(UIColor.whiteColor, 0.5);
@@ -61,16 +58,24 @@
     btn1.frame = CGRectMake(100, 100, 100, 100);
     NSLog(@"%p, %p, %x", a, btn1.backgroundColor, a.RGBAValue);
     [self.view addSubview:btn1];
-    
-    
-}
-
-- (void)AAAA:(ZCButton *)sender {
-    NSLog(@"123");
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self.navigationController pushViewController:[NSClassFromString(@"NextViewController") new] animated:YES];
+    //[self.navigationController pushViewController:[NSClassFromString(@"NextViewController") new] animated:YES];
+    [ZCMaskView dismissSubview];
+    
+    ZCLabel *label = [[ZCLabel alloc] initWithFrame:CGRectMake(100, 200, 200, 50)];
+    label.text = @"哈哈哈哈哈哈哈哈哈 we auto releass!";
+    label.backgroundColor = kZCS(@"#EEEEEE");
+    
+    [ZCMaskView display:label didHide:^(BOOL isByAutoHide) {
+        
+    }];
+    
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [ZCMaskView dismissSubview];
+    });
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

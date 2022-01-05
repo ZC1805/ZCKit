@@ -51,6 +51,8 @@
 
 @property (nonatomic, weak) UIView *displayView;
 
+@property (nonatomic, assign) NSTimeInterval animateTime;
+
 @end
 
 @implementation ZCMaskView
@@ -60,6 +62,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         mask = [[ZCMaskView alloc] initWithFrame:CGRectZero];
+        mask.animateTime = 0.25;
         mask.maskAlpha = 0.5;
     });
     return mask;
@@ -87,7 +90,7 @@
     ZCMaskView *mask = ZCMaskView.sharedView;
     __weak typeof(mask) weakMask = mask;
     if (mask.isAnimate) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((mask.animateTime * 1.5) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [mask hideIsAuto:YES finish:^{
                 weakMask.isAutoHide = autoHide;
                 weakMask.isGreyMask = !clearMask;
@@ -133,12 +136,17 @@
     [mask hideIsAuto:isByAutoHide finish:nil];
 }
 
++ (NSTimeInterval)animateDuration {
+    ZCMaskView *mask = ZCMaskView.sharedView;
+    return mask.animateTime;
+}
+
 - (void)show {
     self.isShow = YES;
     self.isAnimate = YES;
     self.alpha = self.showAnimate ? 1 : 0;
     self.superview.backgroundColor = kZCA(kZCBlack, 0);
-    [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+    [UIView animateWithDuration:self.animateTime delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
         if (self.showAnimate) {
             self.showAnimate(self.displayView);
         } else {
@@ -153,7 +161,7 @@
 - (void)hideIsAuto:(BOOL)isByAutoHide finish:(void(^)(void))finishBlock {
     if (self.isShow) {
         self.isAnimate = YES;
-        [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        [UIView animateWithDuration:self.animateTime delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
             if (self.hideAnimate) {
                 self.hideAnimate(self.displayView);
             } else {
