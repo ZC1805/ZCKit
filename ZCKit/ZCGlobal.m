@@ -12,7 +12,7 @@
 
 @interface ZCGlobal ()
 
-@property (nonatomic, assign) CGFloat radio360; //比例
+@property (nonatomic, assign) CGFloat radio375; //比例
 
 @property (nonatomic, assign) BOOL isFullScreen; //全面屏
 
@@ -32,7 +32,7 @@
         CGFloat scale = [UIScreen mainScreen].bounds.size.height / [UIScreen mainScreen].bounds.size.width;
         CGFloat minvl = MIN([UIScreen mainScreen].bounds.size.height, [UIScreen mainScreen].bounds.size.width);
         instance.isFullScreen = (scale > 2.0 || scale < 0.5);
-        instance.radio360 = minvl / 360.0;
+        instance.radio375 = minvl / 375.0;
     });
     return instance;
 }
@@ -53,7 +53,7 @@
 
 #pragma mark - Misc
 + (CGFloat)ratio {
-    return [ZCGlobal sharedGlobal].radio360;
+    return [ZCGlobal sharedGlobal].radio375;
 }
 
 + (BOOL)isiPhoneX {

@@ -62,8 +62,8 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         mask = [[ZCMaskView alloc] initWithFrame:CGRectZero];
-        mask.animateTime = 0.25;
-        mask.maskAlpha = 0.5;
+        mask.animateTime = 0.32;
+        mask.maskAlpha = 0.52;
     });
     return mask;
 }
@@ -144,16 +144,21 @@
 - (void)show {
     self.isShow = YES;
     self.isAnimate = YES;
-    self.alpha = self.showAnimate ? 1 : 0;
+    self.alpha = self.showAnimate ? 1.0 : 0;
+    CATransform3D originTransform = self.displayView.layer.transform;
+    CATransform3D startTransform = CATransform3DScale(originTransform, 0.2, 0.2, 0.2);
+    self.displayView.layer.transform = self.showAnimate ? originTransform : startTransform;
     self.superview.backgroundColor = kZCA(kZCBlack, 0);
-    [UIView animateWithDuration:self.animateTime delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+    UIViewAnimationOptions ops = (UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews | UIViewAnimationOptionCurveEaseInOut);
+    [UIView animateWithDuration:self.animateTime delay:0 options:ops animations:^{
         if (self.showAnimate) {
             self.showAnimate(self.displayView);
         } else {
-            self.alpha = 1;
-        }
-        self.superview.backgroundColor = kZCA(kZCBlack, self.isGreyMask ? self.maskAlpha : 0);
+            self.alpha = 1.0;
+            self.displayView.layer.transform = CATransform3DScale(startTransform, 5.0, 5.0, 5.0);
+        } self.superview.backgroundColor = kZCA(kZCBlack, self.isGreyMask ? self.maskAlpha : 0);
     } completion:^(BOOL finished) {
+        self.displayView.layer.transform = originTransform;
         self.isAnimate = NO;
     }];
 }
@@ -161,16 +166,30 @@
 - (void)hideIsAuto:(BOOL)isByAutoHide finish:(void(^)(void))finishBlock {
     if (self.isShow) {
         self.isAnimate = YES;
-        [UIView animateWithDuration:self.animateTime delay:0 options:UIViewAnimationOptionCurveLinear animations:^{
+        CATransform3D originTransform = self.displayView.layer.transform;
+        self.displayView.layer.transform = originTransform;
+        UIViewAnimationOptions ops1 = (UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews | UIViewAnimationOptionCurveEaseInOut);
+        [UIView animateWithDuration:self.animateTime delay:0 options:ops1 animations:^{
             if (self.hideAnimate) {
                 self.hideAnimate(self.displayView);
             } else {
-                self.alpha = 0;
-            }
-            self.superview.backgroundColor = kZCA(kZCBlack, 0);
+                self.displayView.layer.transform = CATransform3DScale(originTransform, 1.08, 1.08, 1.08);
+            } self.superview.backgroundColor = kZCA(kZCBlack, 0);
         } completion:^(BOOL finished) {
-            [self finish:finishBlock byAutoHide:isByAutoHide];
+            if (self.hideAnimate) {
+                self.displayView.layer.transform = originTransform;
+                [self finish:finishBlock byAutoHide:isByAutoHide];
+            }
         }];
+        if (!self.hideAnimate) {
+            UIViewAnimationOptions ops2 = (UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews | UIViewAnimationOptionCurveEaseOut);
+            [UIView animateWithDuration:(self.animateTime + 0.08) delay:0 options:ops2 animations:^{
+                self.alpha = 0;
+            } completion:^(BOOL finished) {
+                self.displayView.layer.transform = originTransform;
+                [self finish:finishBlock byAutoHide:isByAutoHide];
+            }];
+        }
     } else {
         [self finish:finishBlock byAutoHide:isByAutoHide];
     }

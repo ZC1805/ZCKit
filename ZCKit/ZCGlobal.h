@@ -23,7 +23,7 @@ typedef id ZCJsonValue;  /**< 只可为 nil & NSString & NSNumber & NSArray & NS
 @interface ZCGlobal : NSObject  /**< 全局管理类 */
 
 #pragma mark - Misc
-+ (CGFloat)ratio;  /**< 按360适配的单位比例点 */
++ (CGFloat)ratio;  /**< 按375适配的单位比例点 */
 
 + (BOOL)isiPhoneX;  /**< 是否是iPhoneX系列手机 */
 

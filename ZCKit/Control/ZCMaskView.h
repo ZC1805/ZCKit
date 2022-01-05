@@ -45,9 +45,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** 主动隐藏或者点击背景能隐藏时会触发Action回调，subview是nil时候，能隐藏时只要获取到了焦点就会隐藏 */
 + (void)dismissSubview;
 
-/** 显示&隐藏动画的时间 */
-+ (NSTimeInterval)animateDuration;
-
 @end
 
 
