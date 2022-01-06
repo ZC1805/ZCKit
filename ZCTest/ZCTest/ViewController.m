@@ -61,6 +61,8 @@
     btn1.frame = CGRectMake(100, 100, 100, 100);
     NSLog(@"%p, %p, %x", a, btn1.backgroundColor, a.RGBAValue);
     [self.view addSubview:btn1];
+    
+#warning - ZCTableView分类初始化方法
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -83,7 +85,7 @@
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];
         __weak typeof(box) wbox = box;
         tap.touchAction = ^(UITapGestureRecognizer * _Nonnull sender) {
-            [ZCBoxView dismiss:box];
+            [ZCBoxView dismiss:wbox];
         };
         [label2 addGestureRecognizer:tap];
 
@@ -93,7 +95,7 @@
         }];
     } else {
         box.zc_top = -kZSA(200);
-        [ZCBoxView display:box above:self.view autoHide:NO clearMask:NO showAnimate:^(UIView * _Nonnull displayView) {
+        [ZCBoxView display:box above:self.view autoHide:NO clearCover:NO showAnimate:^(UIView * _Nonnull displayView) {
             box.zc_top = kZSA(100);
         } hideAnimate:^(UIView * _Nonnull displayView) {
             box.zc_top = kZSA(300);

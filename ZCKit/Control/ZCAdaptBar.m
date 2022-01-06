@@ -45,7 +45,7 @@
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    if (!kZFZero(self.reserveHei) && !kZFEqual(self.zc_height, self.recordHei + self.reserveHei)) {
+    if (self.reserveHei != 0 && self.zc_height != (self.recordHei + self.reserveHei)) {
         self.recordHei = self.zc_height;
         if (self.adaptPosition) {
             self.frame = CGRectMake(0, self.zc_bottom - self.recordHei - self.reserveHei, kZSWid, self.recordHei + self.reserveHei);
@@ -56,7 +56,7 @@
             self.contentView.frame = CGRectMake(0, self.reserveHei, kZSWid, self.recordHei);
             self.reserveView.frame = CGRectMake(0, 0, kZSWid, self.reserveHei);
         }
-    } else if (kZFZero(self.reserveHei)) {
+    } else if (self.reserveHei == 0) {
         self.contentView.frame = self.bounds;
         self.reserveView.frame = CGRectZero;
     }

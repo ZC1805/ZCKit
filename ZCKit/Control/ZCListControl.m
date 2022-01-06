@@ -7,7 +7,6 @@
 //
 
 #import "ZCListControl.h"
-#import "ZCTableViewCell.h"
 #import "NSDictionary+ZC.h"
 #import "NSArray+ZC.h"
 #import "ZCMaskView.h"
@@ -50,13 +49,14 @@
     self.isCanTouch = NO;
     self.isMaskHide = YES;
     self.isMaskClear = NO;
-    self.isUseTopCorner = NO;
     self.minContentHei = 100;
     self.maxContentHei = 400;
     self.cellResueBlock = nil;
     self.cellClickBlock = nil;
     self.isShowCloseButton = NO;
     self.sectionIndexTitleKey = nil;
+    self.isUseTopCorner = kZIsiPhoneX;
+    self.cellClassName = @"UITableViewCell";
 }
 
 #pragma mark - Display
@@ -148,7 +148,7 @@
     listView.directionalLockEnabled = YES;
     listView.bounces = YES;
     listView.frame = CGRectMake(0, line.zc_bottom, self.zc_width, 1000); //这里要设置大些
-    [listView registerClass:(self.rowHei == 0 ? ZCTableViewCell.class : UITableViewCell.class) forCellReuseIdentifier:@"listCellx"];
+    [listView registerClass:NSClassFromString(self.cellClassName) forCellReuseIdentifier:@"listCellx"];
     [self addSubview:listView];
     [listView reloadData];
     [listView reloadSectionIndexTitles];

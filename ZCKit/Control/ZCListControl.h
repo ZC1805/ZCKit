@@ -20,11 +20,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL isMaskClear;  /**< 是否使用透明背景，默认NO，用灰色 */
 
-@property (nonatomic, assign) BOOL isUseTopCorner;  /**< 是否顶部使用圆角，默认NO，不使用 */
+@property (nonatomic, assign) BOOL isUseTopCorner;  /**< 是否顶部使用圆角，默认自适应 */
 
 @property (nonatomic, assign) BOOL isShowCloseButton;  /**< 是否显示关闭按钮，默认NO，不显示 */
 
-@property (nonatomic, assign) CGFloat rowHei;  /**< 行高，值为0的话则使用ZCTableViewCell，默认0 */
+@property (nonatomic, assign) CGFloat rowHei;  /**< 行高，值为0的话则是自动行高，默认0 */
+
+@property (nonatomic, copy) NSString *cellClassName;  /**< 使用的cell，默认是UITableViewCell */
 
 @property (nullable, nonatomic, copy) NSString *sectionIndexTitleKey;  /**< 取值左边索引的键，外部需先排序，默认nil */
 

@@ -75,8 +75,8 @@
 
 
 /** --- adapt --- */
-#define kZSInvl                 kZSA(15.0)                                  /**< 按比例标准边距值 */
-#define kZSA(radix)             ((radix) * [ZCGlobal ratio])                /**< 按比例适配计算值 */
+#define kZSInvl                 kZSA(15.0)                                  /**< 按比例标准边距值，          仅供外部用 */
+#define kZSA(radix)             ((radix) * [ZCGlobal ratio])                /**< 按比例适配计算值，          仅供外部用 */
 #define kZSWid                  ([UIScreen mainScreen].bounds.size.width)   /**< 屏幕宽 */
 #define kZSHei                  ([UIScreen mainScreen].bounds.size.height)  /**< 屏幕高 */
 #define kZSScreen               (CGRectMake(0, 0, kZSWid, kZSHei))          /**< 全屏幕 */
@@ -92,13 +92,13 @@
 
 
 /** --- float --- */
-#define kZFZero(a)              (fabs((a)) < FLT_EPSILON)                      /**< a = 0 */
-#define kZFEqual(a, b)          (fabs((a) - (b)) < FLT_EPSILON)                /**< a = b */
-#define kZFAbove(a, b)          (fabs((a) - (b)) >= FLT_EPSILON && (a) > (b))  /**< a > b */
-#define kZFBelow(a, b)          (fabs((a) - (b)) >= FLT_EPSILON && (a) < (b))  /**< a < b */
-#define kZFNotEqual(a, b)       (fabs((a) - (b)) >= FLT_EPSILON)               /**< a != b */
-#define kZFAboveEqual(a, b)     (kZFAbove((a), (b)) || kZFEqual((a), (b)))     /**< a >= b */
-#define kZFBelowEqual(a, b)     (kZFBelow((a), (b)) || kZFEqual((a), (b)))     /**< a <= b */
+#define kZFZero(a)              (fabs((a)) < FLT_EPSILON)                      /**< a = 0，              仅供外部用 */
+#define kZFEqual(a, b)          (fabs((a) - (b)) < FLT_EPSILON)                /**< a = b，              仅供外部用 */
+#define kZFAbove(a, b)          (fabs((a) - (b)) >= FLT_EPSILON && (a) > (b))  /**< a > b，              仅供外部用 */
+#define kZFBelow(a, b)          (fabs((a) - (b)) >= FLT_EPSILON && (a) < (b))  /**< a < b，              仅供外部用 */
+#define kZFNotEqual(a, b)       (fabs((a) - (b)) >= FLT_EPSILON)               /**< a != b，             仅供外部用 */
+#define kZFAboveEqual(a, b)     (kZFAbove((a), (b)) || kZFEqual((a), (b)))     /**< a >= b，            仅供外部用 */
+#define kZFBelowEqual(a, b)     (kZFBelow((a), (b)) || kZFEqual((a), (b)))     /**< a <= b，            仅供外部用 */
 
 
 /** --- 文件路径 --- */
