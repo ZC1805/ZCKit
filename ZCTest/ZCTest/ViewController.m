@@ -12,7 +12,7 @@
 #import "ZCDateManager.h"
 #import "ZCKitBridge.h"
 #import "VCIdManager.h"
-#import "ZCMaskView.h"
+#import "ZCBoxView.h"
 #import "XXView.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -68,9 +68,6 @@
     
     XXView *box = [[XXView alloc] initWithFrame:CGRectMake(kZSA(25), kZSA(100), kZSA(325), kZSA(200)) color:kZCS(@"#FFFFFF")];
     if (self.isA) {
-
-
-
         ZCLabel *label1 = [[ZCLabel alloc] initWithFrame:CGRectMake(25, 25, 100, 50)];
         label1.text = @"哈哈哈哈哈哈哈哈哈";
         label1.backgroundColor = kZCS(@"#EEEEEE");
@@ -81,31 +78,33 @@
         label2.textColor = kZCRGB(0xFFFFFF);
         label2.font = kZFB(18);
         label2.backgroundColor = kZCS(@"#32EE98");
+        label2.userInteractionEnabled = YES;
         [box addSubview:label2];
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];
+        __weak typeof(box) wbox = box;
+        tap.touchAction = ^(UITapGestureRecognizer * _Nonnull sender) {
+            [ZCBoxView dismiss:box];
+        };
+        [label2 addGestureRecognizer:tap];
 
         [box setCorner:kZSA(24) color:nil width:0];
-        [ZCMaskView display:box didHide:^(BOOL isByAutoHide) {
+        [ZCBoxView display:box above:self.view didHide:^(BOOL isByAutoHide) {
 
         }];
-
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [ZCMaskView dismissSubview];
-        });
     } else {
         box.zc_top = -kZSA(200);
-        [ZCMaskView display:box autoHide:NO clearMask:NO showAnimate:^(UIView * _Nonnull displayView) {
+        [ZCBoxView display:box above:self.view autoHide:NO clearMask:NO showAnimate:^(UIView * _Nonnull displayView) {
             box.zc_top = kZSA(100);
         } hideAnimate:^(UIView * _Nonnull displayView) {
             box.zc_top = kZSA(300);
         } willHide:^(BOOL isByAutoHide) {
-            NSLog(@"1->%f", NSDate.date.timeIntervalSince1970);
+            
         } didHide:^(BOOL isByAutoHide) {
-            NSLog(@"2->%f", NSDate.date.timeIntervalSince1970);
+            
         }];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            NSLog(@"0->%f", NSDate.date.timeIntervalSince1970);
-            [ZCMaskView dismissSubview];
+            [ZCBoxView dismiss:box];
         });
     }
     self.isA = !self.isA;

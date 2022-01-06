@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5836AEF9278594A6001F05B1 /* XXView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5836AEF8278594A6001F05B1 /* XXView.m */; };
+		5836AEFC2785B2E0001F05B1 /* ZCBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5836AEFB2785B2E0001F05B1 /* ZCBoxView.m */; };
 		5839B5CD26B29B3F004493B8 /* VCIdManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5839B5CC26B29B3F004493B8 /* VCIdManager.m */; };
 		5839B5D126B29C7A004493B8 /* UIViewController+VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5839B5D026B29C7A004493B8 /* UIViewController+VC.m */; };
 		58D0201126A94B8500D8D316 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0201026A94B8500D8D316 /* AppDelegate.m */; };
@@ -109,6 +110,8 @@
 /* Begin PBXFileReference section */
 		5836AEF7278594A6001F05B1 /* XXView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = XXView.h; sourceTree = "<group>"; };
 		5836AEF8278594A6001F05B1 /* XXView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = XXView.m; sourceTree = "<group>"; };
+		5836AEFA2785B2E0001F05B1 /* ZCBoxView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZCBoxView.h; sourceTree = "<group>"; };
+		5836AEFB2785B2E0001F05B1 /* ZCBoxView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZCBoxView.m; sourceTree = "<group>"; };
 		5839B5CB26B29B3F004493B8 /* VCIdManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCIdManager.h; sourceTree = "<group>"; };
 		5839B5CC26B29B3F004493B8 /* VCIdManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCIdManager.m; sourceTree = "<group>"; };
 		5839B5CF26B29C7A004493B8 /* UIViewController+VC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+VC.h"; sourceTree = "<group>"; };
@@ -577,6 +580,8 @@
 				58D022BB26A991E200D8D316 /* ZCCountLabel.m */,
 				58D022C226A991E200D8D316 /* ZCMaskView.h */,
 				58D022B126A991E200D8D316 /* ZCMaskView.m */,
+				5836AEFA2785B2E0001F05B1 /* ZCBoxView.h */,
+				5836AEFB2785B2E0001F05B1 /* ZCBoxView.m */,
 				58D022AD26A991E200D8D316 /* ZCBadgeView.h */,
 				58D022C526A991E200D8D316 /* ZCBadgeView.m */,
 				58D022AC26A991E200D8D316 /* ZCRotateView.h */,
@@ -717,6 +722,7 @@
 				58D0230126A991E200D8D316 /* UIView+ZCSwizzle.m in Sources */,
 				58D0231126A991E200D8D316 /* ZCQueueHandler.m in Sources */,
 				58D0232126A991E200D8D316 /* ZCRotateView.m in Sources */,
+				5836AEFC2785B2E0001F05B1 /* ZCBoxView.m in Sources */,
 				58D0232A26A991E200D8D316 /* UIView+ZCToast.m in Sources */,
 				58D022EA26A991E200D8D316 /* CALayer+ZC.m in Sources */,
 				58D0230F26A991E200D8D316 /* ZCTimerHolder.m in Sources */,

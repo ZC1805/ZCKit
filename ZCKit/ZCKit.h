@@ -33,6 +33,7 @@
 //#import "ZCCountLabel.h"
 //#import "ZCGrowView.h"
 //#import "ZCMaskView.h"
+//#import "ZCBoxView.h"
 //#import "ZCBadgeView.h"
 //#import "ZCRotateView.h"
 //#import "ZCGradientView.h"
