@@ -39,6 +39,8 @@ typedef id ZCJsonValue;  /**< 只可为 nil & NSString & NSNumber & NSArray & NS
 
 + (BOOL)isValidDictionary:(nullable NSDictionary *)dictionary;  /**< 判断对象是否是有效的字典 & count不为零 */
 
++ (BOOL)isExplicitElementTypeArray:(nullable NSArray *)array elementClass:(Class)elementClass;  /**< 判断数组是否是指定元素类型的数组，空数组时返回YES */
+
 + (nullable id)appointInvalid:(nullable id)originObj default:(nullable id)defaultObj;  /**< 指定无效对象的默认对象，原无效换成默认 */
 
 + (nullable NSString *)resourcePath:(nullable NSString *)bundle name:(NSString *)name ext:(NSString *)ext;  /**< 资源文件路径 */

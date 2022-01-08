@@ -21,15 +21,6 @@
     self.transform = d;
 }
 
-- (UIImage *)snapshotImage {
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    [self renderInContext:context];
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return image;
-}
-
 - (NSData *)snapshotPDF {
     CGRect bounds = self.bounds;
     NSMutableData *data = [NSMutableData data];

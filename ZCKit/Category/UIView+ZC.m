@@ -224,20 +224,25 @@
     return NO;
 }
 
-- (UIImage *)snapshotImageAfterScreenUpdates:(BOOL)afterUpdates {
-    if (![self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
-        return [self snapshotImage];
-    }
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
-    [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:afterUpdates];
-    UIImage *snap = UIGraphicsGetImageFromCurrentImageContext();
+- (UIImage *)clipToSubAreaImage:(CGRect)subArea {
+    UIGraphicsBeginImageContextWithOptions(self.zc_size, NO, 0);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    CGContextSaveGState(context);
+    UIRectClip(subArea);
+    [self.layer renderInContext:context];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
-    return snap;
+    return image;
 }
 
-- (UIImage *)snapshotImage {
-    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
-    [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+- (UIImage *)clipToImage {
+    if (CGSizeEqualToSize(self.zc_size, CGSizeZero)) return nil;
+    UIGraphicsBeginImageContextWithOptions(self.zc_size, self.opaque, 0);
+    if ([self respondsToSelector:@selector(drawViewHierarchyInRect:afterScreenUpdates:)]) {
+        [self drawViewHierarchyInRect:self.bounds afterScreenUpdates:NO];
+    } else {
+        [self.layer renderInContext:UIGraphicsGetCurrentContext()];
+    }
     UIImage *snap = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return snap;

@@ -13,13 +13,16 @@
 @implementation UIColor (ZC)
 
 #pragma mark - Get & Set
-- (NSInteger)cRGBHexValue { //如0xFF0000FF
+- (long)cRGBHexValue { //如0xFF0000FF
     NSNumber *hexValue = objc_getAssociatedObject(self, _cmd);
-    return (hexValue ? hexValue.integerValue : -1);
+    long hex = -1;
+    if (hexValue != nil && [hexValue isKindOfClass:NSNumber.class]) hex = hexValue.longValue;
+    if (hex > 0xFFFFFFFF || hex < 0x00000000) hex = -1;
+    return hex;
 }
 
-- (void)setCRGBHexValue:(NSInteger)cRGBHexValue {
-    NSNumber *hexValue = [NSNumber numberWithInteger:cRGBHexValue];
+- (void)setCRGBHexValue:(long)cRGBHexValue {
+    NSNumber *hexValue = [NSNumber numberWithLong:cRGBHexValue];
     objc_setAssociatedObject(self, @selector(cRGBHexValue), hexValue, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -50,8 +53,9 @@
     return aimColor;
 }
 
-+ (UIColor *)colorFormHex:(NSInteger)hexValue alpha:(float)alpha {
++ (UIColor *)colorFormHex:(long)hexValue alpha:(float)alpha {
     UIColor *aimColor = nil;
+    if (hexValue < 0) hexValue = 0;
     if (@available(iOS 10.0, *)) {
         aimColor = [UIColor colorWithDisplayP3Red:((float)((hexValue & 0xFF0000) >> 16))/255.0
                                             green:((float)((hexValue & 0xFF00) >> 8))/255.0
@@ -97,11 +101,7 @@
 + (UIColor *)colorFromGradientColors:(NSArray <UIColor *>*)colors isHorizontal:(BOOL)isHorizontal {
     UIImage *image = [UIImage imageWithGradientColors:colors size:CGSizeMake(100.0, 100.0) isHorizontal:isHorizontal];
     UIColor *color = [UIColor colorWithPatternImage:image];
-    if (colors.firstObject) {
-        color.cRGBHexValue = colors.firstObject.cRGBHexValue;
-    } else {
-        color.cRGBHexValue = 0x00000000;
-    }
+    color.cRGBHexValue = 0x00000000;
     return color;
 }
 

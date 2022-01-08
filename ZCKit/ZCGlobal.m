@@ -144,6 +144,20 @@
     return NO;
 }
 
++ (BOOL)isExplicitElementTypeArray:(nullable NSArray *)array elementClass:(Class)elementClass {
+    BOOL isExplicitElement = YES;
+    if (array && [array isKindOfClass:NSArray.class]) {
+        if (elementClass) {
+            for (id element in array) {
+                if (![element isKindOfClass:elementClass]) { isExplicitElement = NO; break; }
+            }
+        }
+    } else {
+        isExplicitElement = NO;
+    }
+    return isExplicitElement;
+}
+
 + (nullable id)appointInvalid:(nullable id)originObj default:(nullable id)defaultObj {
     if (originObj == nil || ([originObj isKindOfClass:NSString.class] && [(NSString *)originObj length] == 0)) {
         return defaultObj;

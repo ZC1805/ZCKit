@@ -39,15 +39,16 @@
 
 
 /** --- misc --- */
-#define kZArrNonnil(arr)        ((NSArray *)((arr && [arr isKindOfClass:NSArray.class]) ? arr : @[]))           /**< 返回非nil数组类型，用@[]替换nil或非arr类型数据 */
-#define kZStrNonnil(str)        ((NSString *)((str && [str isKindOfClass:NSString.class]) ? str : @""))         /**< 返回非nil字符串型，用@""替换nil或非str类型数据 */
-#define kZDicNonnil(dic)        ((NSDictionary *)((dic && [dic isKindOfClass:NSDictionary.class]) ? dic : @{})) /**< 返回非nil字典类型，用@{}替换nil或非dic类型数据 */
-#define kZStrIsValid(str)       [ZCGlobal isValidString:str]                                                    /**< 返回布尔型，判断字符串是否有效 & 非空格 */
-#define kZArrIsValid(arr)       [ZCGlobal isValidArray:arr]                                                     /**< 返回布尔型，判断数组是否有效 & 有count */
-#define kZDicIsValid(dic)       [ZCGlobal isValidDictionary:dic]                                                /**< 返回布尔型，判断字典是否有效 & 有count */
-#define kZUrlStr(str)           [NSURL URLWithString:kZStrNonnil(str)]                                          /**< 返回非nilRUL类型  */
-#define kZStrFormat(format, ...) [NSString stringWithFormat:format, ##__VA_ARGS__]                              /**< 返回格式化字符串 */
-#define kZObjAppoint(o, appoint) [ZCGlobal appointInvalid:o default:appoint]                                    /**< 对无效对象替换 */
+#define kZArrNonnil(arr)         ((NSArray *)((arr && [arr isKindOfClass:NSArray.class]) ? arr : @[]))                  /**< 返回非nil数组类型，用@[]替换nil或非arr类型数据 */
+#define kZStrNonnil(str)         ((NSString *)((str && [str isKindOfClass:NSString.class]) ? str : @""))                /**< 返回非nil字符串型，用@""替换nil或非str类型数据 */
+#define kZDicNonnil(dic)         ((NSDictionary *)((dic && [dic isKindOfClass:NSDictionary.class]) ? dic : @{}))        /**< 返回非nil字典类型，用@{}替换nil或非dic类型数据 */
+#define kZStrIsValid(str)        [ZCGlobal isValidString:str]                                                           /**< 返回布尔型，判断字符串是否有效 & 非空格 */
+#define kZArrIsValid(arr)        [ZCGlobal isValidArray:arr]                                                            /**< 返回布尔型，判断数组是否有效 & 有count */
+#define kZDicIsValid(dic)        [ZCGlobal isValidDictionary:dic]                                                       /**< 返回布尔型，判断字典是否有效 & 有count */
+#define kZUrlStr(str)            [NSURL URLWithString:kZStrNonnil(str)]                                                 /**< 返回非nilRUL类型  */
+#define kZStrFormat(format, ...) [NSString stringWithFormat:format, ##__VA_ARGS__]                                      /**< 返回格式化字符串 */
+#define kZObjAppoint(o, appoint) [ZCGlobal appointInvalid:o default:appoint]                                            /**< 对无效对象替换 */
+#define kZArrExplicit(arr, ele)  ((NSArray *)([ZCGlobal isExplicitElementTypeArray:arr elementClass:ele] ? arr : @[]))  /**< 若原arr为nil或非数组类型或元素类型与指定的不同，则返回nil */
 
 
 /** --- color --- */

@@ -62,7 +62,7 @@
     NSLog(@"%p, %p, %x", a, btn1.backgroundColor, a.RGBAValue);
     [self.view addSubview:btn1];
     
-#warning - ZCTableView分类初始化方法
+#warning - ZCTableView分类初始化方法 & JSON object & 自定义导航替换问题
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -94,19 +94,14 @@
 
         }];
     } else {
-        box.zc_top = -kZSA(200);
-        [ZCBoxView display:box above:self.view autoHide:NO clearCover:NO showAnimate:^(UIView * _Nonnull displayView) {
-            box.zc_top = kZSA(100);
-        } hideAnimate:^(UIView * _Nonnull displayView) {
-            box.zc_top = kZSA(300);
-        } willHide:^(BOOL isByAutoHide) {
-            
-        } didHide:^(BOOL isByAutoHide) {
-            
-        }];
         
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [ZCBoxView dismiss:box];
+        UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(100, 100, 100, 200)];
+        iv.backgroundColor = UIColor.yellowColor;
+        UIImage *image = [self.view clipToSubAreaImage:CGRectMake(0, 0, 100, 200)];
+        iv.image = image;
+        [ZCBoxView display:iv above:self.view didHide:nil];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [ZCBoxView dismiss:iv];
         });
     }
     self.isA = !self.isA;

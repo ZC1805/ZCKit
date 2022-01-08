@@ -103,6 +103,10 @@
         int (*func_stat)(const char*, struct stat*) = stat;
         char *dylib_name = "/usr/lib/system/libsystem_kernel.dylib";
         if ((ret = dladdr(func_stat, &dylib_info)) && strncmp(dylib_info.dli_fname, dylib_name, strlen(dylib_name))) {
+            #pragma clang diagnostic push
+            #pragma clang diagnostic ignored "-Wunused-value"
+            ret;
+            #pragma clang diagnostic pop
             struct stat stat_info;
             if (0 != stat("/Applications/Cydia.app", &stat_info)) {
                 isJailBreak = YES;

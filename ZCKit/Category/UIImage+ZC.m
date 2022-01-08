@@ -18,7 +18,7 @@
 
 #pragma mark - Usually
 + (UIImage *)imageWithPDF:(id)dataOrPath {
-    return [self zc_imageWithPDF:dataOrPath resize:NO size:CGSizeZero];
+    return [self zcImageWithPDF:dataOrPath resize:NO size:CGSizeZero];
 }
 
 + (UIImage *)imageGIFAnimated:(NSString *)name {
@@ -216,8 +216,7 @@
 - (UIImage *)imageAddSubImage:(UIImage *)image {
     UIGraphicsBeginImageContextWithOptions(self.size, NO, 0);
     [self drawInRect:CGRectMake(0, 0, self.size.width, self.size.height)];
-    [image drawInRect:CGRectMake((self.size.width - image.size.width) / 2.0, (self.size.height - image.size.height) / 2.0,
-                                 image.size.width, image.size.height)];
+    [image drawInRect:CGRectMake((self.size.width - image.size.width) / 2.0, (self.size.height - image.size.height) / 2.0, image.size.width, image.size.height)];
     UIImage *resultingImage = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     return resultingImage;
@@ -370,7 +369,7 @@
 }
 
 #pragma mark - Misc
-+ (UIImage *)zc_imageWithPDF:(id)dataOrPath resize:(BOOL)resize size:(CGSize)size {
++ (UIImage *)zcImageWithPDF:(id)dataOrPath resize:(BOOL)resize size:(CGSize)size {
     if (!dataOrPath) return nil;
     CGPDFDocumentRef pdf = NULL;
     if ([dataOrPath isKindOfClass:NSData.class]) {
@@ -596,7 +595,7 @@
     return img;
 }
 
-- (UIImage *)zc_flipHorizontal:(BOOL)horizontal vertical:(BOOL)vertical {
+- (UIImage *)zcFlipHorizontal:(BOOL)horizontal vertical:(BOOL)vertical {
     if (!self.CGImage) return nil;
     size_t width = (size_t)CGImageGetWidth(self.CGImage);
     size_t height = (size_t)CGImageGetHeight(self.CGImage);
@@ -636,15 +635,15 @@
 }
 
 - (UIImage *)imageByRotate180 {
-    return [self zc_flipHorizontal:YES vertical:YES];
+    return [self zcFlipHorizontal:YES vertical:YES];
 }
 
 - (UIImage *)imageByFlipVertical {
-    return [self zc_flipHorizontal:NO vertical:YES];
+    return [self zcFlipHorizontal:NO vertical:YES];
 }
 
 - (UIImage *)imageByFlipHorizontal {
-    return [self zc_flipHorizontal:YES vertical:NO];
+    return [self zcFlipHorizontal:YES vertical:NO];
 }
 
 #pragma mark - Image effect
@@ -715,7 +714,7 @@
     BOOL opaque = NO;
     
     if (!hasBlur && !hasSaturation) {
-        return [self zc_mergeImageRef:imageRef tintColor:tintColor tintBlendMode:tintBlendMode maskImage:maskImage opaque:opaque];
+        return [self zcMergeImageRef:imageRef tintColor:tintColor tintBlendMode:tintBlendMode maskImage:maskImage opaque:opaque];
     }
     
     vImage_Buffer effect = { 0 }, scratch = { 0 };
@@ -811,7 +810,7 @@
             free(input->data);
         }
         free(output->data);
-        outputImage = [self zc_mergeImageRef:effectCGImage tintColor:tintColor tintBlendMode:tintBlendMode maskImage:maskImage opaque:opaque];
+        outputImage = [self zcMergeImageRef:effectCGImage tintColor:tintColor tintBlendMode:tintBlendMode maskImage:maskImage opaque:opaque];
         CGImageRelease(effectCGImage);
     } else {
         CGImageRef effectCGImage;
@@ -821,7 +820,7 @@
         if (input == &effect) effectImage = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
         effectCGImage = effectImage.CGImage;
-        outputImage = [self zc_mergeImageRef:effectCGImage tintColor:tintColor tintBlendMode:tintBlendMode maskImage:maskImage opaque:opaque];
+        outputImage = [self zcMergeImageRef:effectCGImage tintColor:tintColor tintBlendMode:tintBlendMode maskImage:maskImage opaque:opaque];
     }
     return outputImage;
 }
@@ -832,11 +831,11 @@ static void _yy_cleanupBuffer(void *userData, void *buf_data) {
 }
 
 //Helper function to add tint and mask.
-- (UIImage *)zc_mergeImageRef:(CGImageRef)effectCGImage
-                     tintColor:(UIColor *)tintColor
-                 tintBlendMode:(CGBlendMode)tintBlendMode
-                     maskImage:(UIImage *)maskImage
-                        opaque:(BOOL)opaque {
+- (UIImage *)zcMergeImageRef:(CGImageRef)effectCGImage
+                   tintColor:(UIColor *)tintColor
+               tintBlendMode:(CGBlendMode)tintBlendMode
+                   maskImage:(UIImage *)maskImage
+                      opaque:(BOOL)opaque {
     BOOL hasTint = tintColor != nil && CGColorGetAlpha(tintColor.CGColor) > __FLT_EPSILON__;
     BOOL hasMask = maskImage != nil;
     CGSize size = self.size;

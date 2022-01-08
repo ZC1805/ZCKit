@@ -16,9 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
 /** 变换深度，m34值，-1/1000是是很好的值，应该在其他转换快捷方式之前设置 */
 @property (nonatomic, assign) CGFloat transformDepth;
 
-/** 不带变换的快照，图像的大小等于bounds */
-- (nullable UIImage *)snapshotImage;
-
 /** 不带转换的快照，PDF的页面大小等于bounds */
 - (nullable NSData *)snapshotPDF;
 

@@ -87,7 +87,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)containSubViewOfClassType:(Class)aClass;  /**< 递归向上，找到最顶层 */
 
-- (nullable UIImage *)snapshotImageAfterScreenUpdates:(BOOL)afterUpdates;  /**< 快照 */
+- (nullable UIImage *)clipToSubAreaImage:(CGRect)subArea;  /**< 指定区域截图，其余部分为透明颜色 */
+
+- (nullable UIImage *)clipToImage;  /**< 当前视图的快照 */
 
 - (void)setShadow:(UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius;  /**< 阴影 */
 
