@@ -10,6 +10,7 @@
 #import "NSData+ZC.h"
 #import "ZCKitBridge.h"
 #import "NSNumber+ZC.h"
+#import "NSString+ZC.h"
 
 #pragma mark - ~ NSArray ~
 @implementation NSArray (ZC)
@@ -225,22 +226,16 @@
     if ([obj isKindOfClass:NSString.class]) {
         if ([obj isEqualToString:@"<null>"] || [obj isEqualToString:@"(null)"]) {
             if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse string obj is null");
+        } else if (ZCKitBridge.isStrToAccurateFloat && ![obj isPureInteger] && [obj isPureDouble]) { //对纯数字字符串检查是否是不精确的浮点类型
+            NSDecimalNumber *decimal = [NSDecimalNumber decimalString:obj];
+            if (decimal.isANumber) {
+                strvalue = [decimal stringValue];
+            } else {
+                strvalue = obj;
+            }
         } else {
             strvalue = obj;
         }
-//        暂时对字符串不检查是否是不精确的浮点类型
-//        if ([obj isEqualToString:@"<null>"] || [obj isEqualToString:@"(null)"]) {
-//            if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse string obj is null");
-//        } else if (![obj isPureInteger] && [obj isPureDouble]) {
-//            NSDecimalNumber *decimal = [NSDecimalNumber decimalString:obj];
-//            if (decimal.isANumber) {
-//                strvalue = [decimal stringValue];
-//            } else {
-//                strvalue = obj;
-//            }
-//        } else {
-//            strvalue = obj;
-//        }
     } else if ([obj isKindOfClass:NSNumber.class]) {
         NSDecimalNumber *decimal = [[NSDecimalNumber decimalNumber:obj] decimalRound:6 mode:ZCEnumRoundTypeRound];
         if (decimal.isANumber) {

@@ -121,10 +121,10 @@
 - (void)countFrom:(CGFloat)startValue to:(CGFloat)endValue withDuration:(NSTimeInterval)duration {
     self.startingValue = startValue;
     self.destinationValue = endValue;
-    [self.timer invalidate]; //remove any (possible) old timers
+    [self.timer invalidate];
     self.timer = nil;
     
-    if (duration == 0) { //No animation
+    if (duration == 0) {
         [self setTextValue:endValue];
         [self runCompletionBlock];
         return;
@@ -159,7 +159,7 @@
 }
 
 - (void)updateValue:(NSTimer *)timer {
-    NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate]; //update progress
+    NSTimeInterval now = [NSDate timeIntervalSinceReferenceDate];
     self.progress += now - self.lastUpdate;
     self.lastUpdate = now;
     if (self.progress >= self.totalTime) {
@@ -178,7 +178,7 @@
         self.attributedText = self.attributedFormatBlock(value);
     } else if (self.formatBlock) {
         self.text = self.formatBlock(value);
-    } else { //check if counting with ints - cast to int
+    } else {
         if ([self.format rangeOfString:@"%(.*)d" options:NSRegularExpressionSearch].location != NSNotFound ||
             [self.format rangeOfString:@"%(.*)i"].location != NSNotFound) {
             self.text = [NSString stringWithFormat:self.format, (int)value];
@@ -190,7 +190,7 @@
 
 - (void)setFormat:(NSString *)format {
     _format = format;
-    [self setTextValue:self.currentValue]; //update label with new format
+    [self setTextValue:self.currentValue]; 
 }
 
 - (void)runCompletionBlock {

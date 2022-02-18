@@ -29,6 +29,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic, assign) BOOL isPrintLog;  /**< 是否需要打印日志，默认NO */
 
+@property (class, nonatomic, assign) BOOL isStrToAccurateFloat;  /**< 是否对数字字符串转成精确字符串，默认NO */
+
 @property (class, nonatomic, copy) NSString *naviBarImageOrColor;  /**< 导航栏背景图或者背景颜色，默认"0xF7F7F8" */
 
 @property (class, nonatomic, copy) NSString *naviBarTitleColor;  /**< 导航栏标题字体颜色，默认"0x303030" */

@@ -148,13 +148,6 @@ static void *directionContext = @"scrollViewDirectionContext";
 }
 
 #pragma mark - Private
-//- (void)shieldNavigationInteractivePop { //使系统导航手势失效，不可逆
-//    UIViewController *controller = self.currentViewController;
-//    if (controller && controller.navigationController && controller.parentViewController == controller.navigationController) {
-//        [self.panGestureRecognizer requireGestureRecognizerToFail:controller.navigationController.interactivePopGestureRecognizer];
-//    }
-//}
-
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
     if ([otherGestureRecognizer isKindOfClass:UIScreenEdgePanGestureRecognizer.class] && [otherGestureRecognizer.view isKindOfClass:NSClassFromString(@"UILayoutContainerView")]) {
         if (otherGestureRecognizer.state == UIGestureRecognizerStateBegan && self.contentOffset.x == 0) return YES;

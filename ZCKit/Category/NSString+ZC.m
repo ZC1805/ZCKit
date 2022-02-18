@@ -159,24 +159,6 @@ NSString * const ZCFlagStr = @"^.~!*.^";
     NSString *final = [comps componentsJoinedByString:@" "];
     if (lastSpace) final = [final stringByAppendingString:lastSpace];
     return final;
-    
-//    /* 在右对齐的情况下输入空格问题 */
-//    // 如果string是@""，说明是删除字符（剪切删除操作），则直接返回YES，不做处理
-//    // 如果把这段删除，在删除字符时光标位置会出现错误
-//    if ([string isEqualToString:@""]) return YES;
-//    /* 在输入单个字符或者粘贴内容时做如下处理，已确定光标应该停留的正确位置，
-//     没有下段从字符中间插入或者粘贴光标位置会出错 */
-//    // 首先使用 non-breaking space 代替默认输入的@“ ”空格
-//    string = [string stringByReplacingOccurrencesOfString:@" " withString:@"\u00a0"];
-//    textField.text = [textField.text stringByReplacingCharactersInRange:range withString:string];
-//    //确定输入或者粘贴字符后光标位置
-//    UITextPosition *beginning = textField.beginningOfDocument;
-//    UITextPosition *cursorLoc = [textField positionFromPosition:beginning offset:range.location + string.length];
-//    //选中文本起使位置和结束为止设置同一位置
-//    UITextRange *textRange = [textField textRangeFromPosition:cursorLoc toPosition:cursorLoc];
-//    //选中字符范围（由于textRange范围的起始结束位置一样所以并没有选中字符）
-//    [textField setSelectedTextRange:textRange];
-//    return NO;
 }
 
 - (NSString *)stringByDiacritics {

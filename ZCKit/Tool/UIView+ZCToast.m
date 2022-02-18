@@ -77,9 +77,7 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
 
 - (void)handleToastTapped:(UITapGestureRecognizer *)recognizer {
     void(^action)(void) = objc_getAssociatedObject(self, &ZCToastTapActionKey);
-    if (action) {
-        action(); action = nil; //暂时是等延迟执行到了时间再销毁
-    }
+    if (action) { action(); action = nil; } //暂时是等延迟执行到了时间再销毁
     [self hideToast:recognizer.view tap:action];
 }
 

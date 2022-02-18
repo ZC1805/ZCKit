@@ -18,7 +18,7 @@
 
 @implementation ZCKitBridge
 
-@dynamic naviBackImage, sideArrowImage, isPrintLog;
+@dynamic naviBackImage, sideArrowImage, isPrintLog, isStrToAccurateFloat;
 @dynamic toastTextColor, toastBackGroundColor, realize, naviBarImageOrColor, naviBarTitleColor;
 @dynamic aimLocale, aimTimeZone;
 
@@ -29,6 +29,7 @@ static UIImage *_naviBackImage = nil;
 static NSString *_naviBarImageOrColor = nil;
 static NSString *_naviBarTitleColor = nil;
 static BOOL _isPrintLog = NO;
+static BOOL _isStrToAccurateFloat = NO;
 static NSLocale *_aimLocale = nil;
 static NSTimeZone *_aimTimeZone = nil;
 
@@ -126,6 +127,14 @@ static NSTimeZone *_aimTimeZone = nil;
 
 + (void)setIsPrintLog:(BOOL)isPrintLog {
     _isPrintLog = isPrintLog;
+}
+
++ (BOOL)isStrToAccurateFloat {
+    return _isStrToAccurateFloat;
+}
+
++ (void)setIsStrToAccurateFloat:(BOOL)isStrToAccurateFloat {
+    _isStrToAccurateFloat = isStrToAccurateFloat;
 }
 
 + (id<ZCKitExternalRealize>)realize {
