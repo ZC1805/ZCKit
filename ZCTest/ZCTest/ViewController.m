@@ -13,11 +13,9 @@
 #import "ZCKitBridge.h"
 #import "VCIdManager.h"
 #import "ZCBoxView.h"
-#import "XXView.h"
+#import "UIResponder+ZC.h"
 
 @interface ViewController () <UITableViewDelegate, UITableViewDataSource>
-
-@property (nonatomic, assign) BOOL isA;
 
 @end
 
@@ -56,55 +54,13 @@
     listView.frame = CGRectMake(0, 64, kZSWid, kZSHei - 64 - 200); //这里要设置大些
     listView.backgroundColor = kZCRGB(0xEEEEEE);
     [self.view addSubview:listView];
-    UIColor *a = kZCA(UIColor.whiteColor, 0.5);
-    ZCButton *btn1 = [[ZCButton alloc] initWithFrame:CGRectZero color:a];
-    btn1.frame = CGRectMake(100, 100, 100, 100);
-    NSLog(@"%p, %p, %x", a, btn1.backgroundColor, a.RGBAValue);
-    [self.view addSubview:btn1];
-    
 #warning - ZCTableView分类初始化方法 & JSON object & 自定义导航替换问题
+    
+    
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    //[self.navigationController pushViewController:[NSClassFromString(@"NextViewController") new] animated:YES];
     
-    XXView *box = [[XXView alloc] initWithFrame:CGRectMake(kZSA(25), kZSA(100), kZSA(325), kZSA(200)) color:kZCS(@"#FFFFFF")];
-    if (self.isA) {
-        ZCLabel *label1 = [[ZCLabel alloc] initWithFrame:CGRectMake(25, 25, 100, 50)];
-        label1.text = @"哈哈哈哈哈哈哈哈哈";
-        label1.backgroundColor = kZCS(@"#EEEEEE");
-        [box addSubview:label1];
-
-        ZCLabel *label2 = [[ZCLabel alloc] initWithFrame:CGRectMake(75, 100, 100, 50)];
-        label2.text = @"啦啦啦啦啦啦啦";
-        label2.textColor = kZCRGB(0xFFFFFF);
-        label2.font = kZFB(18);
-        label2.backgroundColor = kZCS(@"#32EE98");
-        label2.userInteractionEnabled = YES;
-        [box addSubview:label2];
-        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] init];
-        __weak typeof(box) wbox = box;
-        tap.touchAction = ^(UITapGestureRecognizer * _Nonnull sender) {
-            [ZCBoxView dismiss:wbox];
-        };
-        [label2 addGestureRecognizer:tap];
-
-        [box setCorner:kZSA(24) color:nil width:0];
-        [ZCBoxView display:box above:self.view didHide:^(BOOL isByAutoHide) {
-
-        }];
-    } else {
-        
-        UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(100, 100, 100, 200)];
-        iv.backgroundColor = UIColor.yellowColor;
-        UIImage *image = [self.view clipToSubAreaImage:CGRectMake(0, 0, 100, 200)];
-        iv.image = image;
-        [ZCBoxView display:iv above:self.view didHide:nil];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            [ZCBoxView dismiss:iv];
-        });
-    }
-    self.isA = !self.isA;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

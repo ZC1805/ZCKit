@@ -14,8 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable instancetype)currentFirstResponder;
 
-+ (nullable instancetype)currentSecondResponder;
-
 @end
 
 NS_ASSUME_NONNULL_END

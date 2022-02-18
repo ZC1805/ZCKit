@@ -1,11 +1,11 @@
 //
-//  UIViewController+VC.m
+//  ViewController+VC.m
 //  ZCTest
 //
 //  Created by zjy on 2021/7/29.
 //
 
-#import "UIViewController+VC.h"
+#import "ViewController+VC.h"
 
 @implementation ViewController (VC)
 
@@ -13,8 +13,8 @@
     NSLog(@"load-%@", NSStringFromClass(self));
 }
 
-//+ (void)initialize {
-//    NSLog(@"init-%@", NSStringFromClass(self));
-//}
++ (void)initialize {
+    NSLog(@"init-%@", NSStringFromClass(self));
+}
 
 @end

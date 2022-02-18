@@ -23,23 +23,23 @@ NSNotificationName const ZCControlGenerateEventNotification = @"ZCControlGenerat
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
 //        SEL sel2 = @selector(addTarget:action:forControlEvents:);
-//        SEL sel2x = @selector(swizzle_addTarget:action:forControlEvents:);
+//        SEL sel2x = @selector(swizzle1_ctor_addTarget:action:forControlEvents:);
 //        SEL sel3 = @selector(removeTarget:action:forControlEvents:);
-//        SEL sel3x = @selector(swizzle_removeTarget:action:forControlEvents:);
+//        SEL sel3x = @selector(swizzle1_ctor_removeTarget:action:forControlEvents:);
 //        zc_swizzle_exchange_selector(UIControl.class, sel2, sel2x);
 //        zc_swizzle_exchange_selector(UIControl.class, sel3, sel3x);
     });
 }
 
-- (void)swizzle_addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents {
-    [self swizzle_addTarget:target action:action forControlEvents:controlEvents];
+- (void)swizzle1_ctor_addTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents {
+    [self swizzle1_ctor_addTarget:target action:action forControlEvents:controlEvents];
     if (target && action && [target respondsToSelector:action]) {
         UIControlEvents collectEvent = [self confirmCollectControlEvents:controlEvents];
         SEL collectSel = @selector(receiveCollectControlEvent:);
         NSArray <NSString *>*collectActions = [self actionsForTarget:self forControlEvent:collectEvent];
         if (!collectActions || ![collectActions containsObject:NSStringFromSelector(collectSel)]) {
             if (collectEvent && [self respondsToSelector:collectSel]) {
-                [self swizzle_addTarget:self action:collectSel forControlEvents:collectEvent];
+                [self swizzle1_ctor_addTarget:self action:collectSel forControlEvents:collectEvent];
                 if ([self respondsToSelector:@selector(setIgnoreFlagSelector:)]) {
                     [self setIgnoreFlagSelector:collectSel];
                 }
@@ -48,8 +48,8 @@ NSNotificationName const ZCControlGenerateEventNotification = @"ZCControlGenerat
     }
 }
 
-- (void)swizzle_removeTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents {
-    [self swizzle_removeTarget:target action:action forControlEvents:controlEvents];
+- (void)swizzle1_ctor_removeTarget:(id)target action:(SEL)action forControlEvents:(UIControlEvents)controlEvents {
+    [self swizzle1_ctor_removeTarget:target action:action forControlEvents:controlEvents];
     if (self.allTargets && [self.allTargets containsObject:self]) {
         BOOL isOnlyCollectTarget = YES;
         for (id target in self.allTargets) {
@@ -63,7 +63,7 @@ NSNotificationName const ZCControlGenerateEventNotification = @"ZCControlGenerat
             NSArray <NSString *>*collectActions = [self actionsForTarget:self forControlEvent:collectEvent];
             if (collectActions && collectActions.count == 1 && [collectActions containsObject:NSStringFromSelector(collectSel)]) {
                 if (collectEvent && [self respondsToSelector:collectSel]) {
-                    [self swizzle_removeTarget:self action:collectSel forControlEvents:collectEvent];
+                    [self swizzle1_ctor_removeTarget:self action:collectSel forControlEvents:collectEvent];
                     if ([self respondsToSelector:@selector(setIgnoreFlagSelector:)]) {
                         [self setIgnoreFlagSelector:nil];
                     }

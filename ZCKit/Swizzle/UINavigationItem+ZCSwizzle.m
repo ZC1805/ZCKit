@@ -18,15 +18,15 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         SEL sel1 = @selector(setTitle:);
-        SEL sel1x = @selector(swizzle_setTitle:);
+        SEL sel1x = @selector(swizzle1_item_setTitle:);
         SEL sel2 = @selector(title);
-        SEL sel2x = @selector(swizzle_title);
+        SEL sel2x = @selector(swizzle1_item_title);
         zc_swizzle_exchange_selector(UINavigationItem.class, sel1, sel1x);
         zc_swizzle_exchange_selector(UINavigationItem.class, sel2, sel2x);
     });
 }
 
-- (void)swizzle_setTitle:(NSString *)title {
+- (void)swizzle1_item_setTitle:(NSString *)title {
     ZCLabel *titleLabel = (ZCLabel *)self.titleView;
     if (!titleLabel) {
         titleLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
@@ -43,8 +43,8 @@
     [titleLabel.superview setNeedsLayout];
 }
 
-- (NSString *)swizzle_title {
-    NSString *title = [self swizzle_title];
+- (NSString *)swizzle1_item_title {
+    NSString *title = [self swizzle1_item_title];
     if (title.length) return title;
     ZCLabel *titleLabel = (ZCLabel *)self.titleView;
     if ([titleLabel isKindOfClass:ZCLabel.class]) {

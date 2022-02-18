@@ -17,44 +17,44 @@ NSNotificationName const ZCGestureGenerateEventNotification = @"ZCGestureGenerat
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
 //        SEL sel1 = @selector(addTarget:action:);
-//        SEL sel1x = @selector(swizzle_addTarget:action:);
+//        SEL sel1x = @selector(swizzle1_ges_addTarget:action:);
 //        SEL sel2 = @selector(initWithTarget:action:);
-//        SEL sel2x = @selector(swizzle_initWithTarget:action:);
+//        SEL sel2x = @selector(swizzle1_ges_initWithTarget:action:);
 //        SEL sel3 = @selector(removeTarget:action:);
-//        SEL sel3x = @selector(swizzle_removeTarget:action:);
+//        SEL sel3x = @selector(swizzle1_ges_removeTarget:action:);
 //        zc_swizzle_exchange_selector(UIGestureRecognizer.class, sel1, sel1x);
 //        zc_swizzle_exchange_selector(UIGestureRecognizer.class, sel2, sel2x);
 //        zc_swizzle_exchange_selector(UIGestureRecognizer.class, sel3, sel3x);
     });
 }
 
-- (void)swizzle_addTarget:(id)target action:(SEL)action {
-    [self swizzle_addTarget:target action:action];
+- (void)swizzle1_ges_addTarget:(id)target action:(SEL)action {
+    [self swizzle1_ges_addTarget:target action:action];
     if (target && action && [target respondsToSelector:action]) {
         self.currentTargetCount++;
         SEL collectSel = @selector(receiveCollectGestureEvent:);
         if ([self confirmCollectGesture] && [self respondsToSelector:collectSel] && self.isCollectReceive != 1) {
-            [self swizzle_addTarget:self action:collectSel];
+            [self swizzle1_ges_addTarget:self action:collectSel];
             self.isCollectReceive = 1;
         }
     }
 }
 
-- (instancetype)swizzle_initWithTarget:(id)target action:(SEL)action {
-    id instance = [self swizzle_initWithTarget:target action:action];
+- (instancetype)swizzle1_ges_initWithTarget:(id)target action:(SEL)action {
+    id instance = [self swizzle1_ges_initWithTarget:target action:action];
     if (target && action && [target respondsToSelector:action]) {
         self.currentTargetCount++;
         SEL collectSel = @selector(receiveCollectGestureEvent:);
         if ([self confirmCollectGesture] && [self respondsToSelector:collectSel] && self.isCollectReceive != 1) {
-            [self swizzle_addTarget:self action:collectSel];
+            [self swizzle1_ges_addTarget:self action:collectSel];
             self.isCollectReceive = 1;
         }
     }
     return instance;
 }
 
-- (void)swizzle_removeTarget:(id)target action:(SEL)action {
-    [self swizzle_removeTarget:target action:action];
+- (void)swizzle1_ges_removeTarget:(id)target action:(SEL)action {
+    [self swizzle1_ges_removeTarget:target action:action];
     if (target == nil || action == nil) {
         self.currentTargetCount = 0;
     } else {
@@ -63,7 +63,7 @@ NSNotificationName const ZCGestureGenerateEventNotification = @"ZCGestureGenerat
     if (self.currentTargetCount == 0) {
         SEL collectSel = @selector(receiveCollectGestureEvent:);
         if ([self confirmCollectGesture] && [self respondsToSelector:collectSel] && self.isCollectReceive == 1) {
-            [self swizzle_removeTarget:self action:collectSel];
+            [self swizzle1_ges_removeTarget:self action:collectSel];
         }
     }
 }

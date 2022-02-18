@@ -19,23 +19,23 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         SEL sel1 = @selector(viewDidLoad);
-        SEL sel1x = @selector(swizzle_navi_viewDidLoad);
+        SEL sel1x = @selector(swizzle1_navi_viewDidLoad);
         SEL sel2 = @selector(viewWillAppear:);
-        SEL sel2x = @selector(swizzle_navi_viewWillAppear:);
+        SEL sel2x = @selector(swizzle1_navi_viewWillAppear:);
         zc_swizzle_exchange_selector(UINavigationController.class, sel1, sel1x);
         zc_swizzle_exchange_selector(UINavigationController.class, sel2, sel2x);
     });
 }
 
-- (void)swizzle_navi_viewDidLoad {
+- (void)swizzle1_navi_viewDidLoad {
     UIImage *image = [ZCKitBridge.naviBackImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     self.view.backgroundColor = kZCWhite;
     self.navigationBar.backIndicatorImage = image;
     self.navigationBar.backIndicatorTransitionMaskImage = image;
-    [self swizzle_navi_viewDidLoad];
+    [self swizzle1_navi_viewDidLoad];
 }
 
-- (void)swizzle_navi_viewWillAppear:(BOOL)animated {
+- (void)swizzle1_navi_viewWillAppear:(BOOL)animated {
     if (self.backArrowImage) {
         UIImage *image = [self.backArrowImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
         self.navigationBar.backIndicatorImage = image;
@@ -49,7 +49,7 @@
             [rootVc.navigationItem itemCustomBackTitle:nil color:nil image:self.navigationBar.backIndicatorImage];
         }
     }
-    [self swizzle_navi_viewWillAppear:animated];
+    [self swizzle1_navi_viewWillAppear:animated];
 }
 
 #pragma mark - Set & Get
