@@ -29,7 +29,7 @@ void main_delayPop(dispatch_block_t block) {
 
 #pragma mark - Serial
 static const void * const serialSyncQueueKey = &serialSyncQueueKey;
-dispatch_queue_t dispatchSerialSyncQueue() {
+dispatch_queue_t dispatchSerialSyncQueue(void) {
     static dispatch_queue_t queue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -48,7 +48,7 @@ void sync_serial(dispatch_block_t block) {
 }
 
 static const void * const serialAsyncQueueKey = &serialAsyncQueueKey;
-dispatch_queue_t dispatchSerialAsyncQueue() {
+dispatch_queue_t dispatchSerialAsyncQueue(void) {
     static dispatch_queue_t queue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -68,7 +68,7 @@ void async_serial(dispatch_block_t block) {
 
 #pragma mark - Concurrent
 static const void * const concurrentAsyncQueueKey = &concurrentAsyncQueueKey;
-dispatch_queue_t dispatchConcurrentAsyncQueue() {
+dispatch_queue_t dispatchConcurrentAsyncQueue(void) {
     static dispatch_queue_t queue;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -90,28 +90,60 @@ void async_concurrent(dispatch_block_t block) {
 void apply_concurrent(int count, void(^operate)(int index)) {
     dispatch_queue_t queue = dispatch_queue_create("apply_concurrent_queue", DISPATCH_QUEUE_CONCURRENT);
     dispatch_apply(count, queue, ^(size_t i) {
-        if (operate) {operate((int)i);}
+        if (operate) { operate((int)i); }
     });
 }
 
 #pragma mark - Group
 void group_concurrent(int operateCount, bool waitCompletion,
-                      void(^operate)(int index, void(^operateCompletion)(void)),
-                      void(^ _Nullable groupCompletion)(void)) {
+                      void(^operate)(int index, void(^operateCompletion)(BOOL isSuccess)),
+                      void(^ _Nullable groupCompletion)(NSArray <NSNumber *>*failIndexs)) {
     dispatch_queue_t queue = dispatch_queue_create("group_concurrent_queue", DISPATCH_QUEUE_CONCURRENT);
     dispatch_group_t group = dispatch_group_create();
+    NSMutableArray *fails = [NSMutableArray array];
     for (int i = 0; i < operateCount; i ++) {
         dispatch_group_enter(group);
         dispatch_group_async(group, queue, ^{
-            if (operate) {operate(i, ^(){dispatch_group_leave(group);});}
+            if (operate) { operate(i, ^(BOOL isSuccess){
+                if (!isSuccess) { [fails addObject:@(i)]; };
+                dispatch_group_leave(group); });
+            } else {
+                dispatch_group_leave(group);
+            }
         });
     }
     if (waitCompletion) {
         dispatch_group_wait(group, DISPATCH_TIME_FOREVER);
     }
     dispatch_group_notify(group, dispatch_get_main_queue(), ^{
-        if (groupCompletion) {groupCompletion();}
+        if (groupCompletion) { groupCompletion(fails.copy); }
     });
+}
+
+#pragma mark - Barrier
+void barrier_concurrent(int beforeOperateCount, void(^beforeOperateImp)(int index),
+                        void(^barrierOperateImp)(void),
+                        int afterOperateCount, void(^afterOperateImp)(int index)) {
+    dispatch_queue_t queue = dispatch_queue_create("barrier_concurrent_queue", DISPATCH_QUEUE_CONCURRENT);
+    for (int i = 0; i < beforeOperateCount; i ++) {
+        if (beforeOperateImp) {
+            dispatch_async(queue, ^{
+                beforeOperateImp(i);
+            });
+        }
+    }
+    if (barrierOperateImp) {
+        dispatch_barrier_async(queue, ^{
+            barrierOperateImp();
+        });
+    }
+    for (int i = 0; i < afterOperateCount; i ++) {
+        if (afterOperateImp) {
+            dispatch_async(queue, ^{
+                afterOperateImp(i);
+            });
+        }
+    }
 }
 
 @end
