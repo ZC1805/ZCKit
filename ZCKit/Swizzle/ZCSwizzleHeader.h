@@ -31,7 +31,11 @@ static inline void zc_swizzle_exchange_class_selector(Class clazz, SEL originalS
     Class metaClass = object_getClass(clazz);
     Method originalMethod = class_getInstanceMethod(metaClass, originalSelector);
     Method swizzledMethod = class_getInstanceMethod(metaClass, swizzledSelector);
-    if (!originalMethod || !swizzledMethod) { return; }
+    if (!swizzledMethod) { return; }
+    if (!originalMethod) { //防止原方法没有实现时出现死循环
+        class_addMethod(metaClass, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+        method_setImplementation(swizzledMethod, imp_implementationWithBlock(^(id self, SEL _cmd){ }));
+    }
     BOOL success = class_addMethod(metaClass, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
     if (success) {
         class_replaceMethod(metaClass, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod));
