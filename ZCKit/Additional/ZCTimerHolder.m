@@ -236,7 +236,7 @@ static const long zc_max_allow_cache_count = 100;
     if (!assemblePart || assemblePart.type == ZCMonitorTypeNone) return;
     NSNumber *key = [NSNumber numberWithUnsignedInteger:assemblePart.type];
     NSMutableArray *parts = [self.cachePool objectForKey:key];
-    if (!parts) {parts = [NSMutableArray array]; [self.cachePool setObject:parts forKey:key];}
+    if (!parts) { parts = [NSMutableArray array]; [self.cachePool setObject:parts forKey:key]; }
     NSArray <id>* cons = [assemblePart contents];
     NSArray <NSString *>* fids = [assemblePart fireIds];
     for (int i = 0; i < fids.count; i ++) {
@@ -259,10 +259,10 @@ static const long zc_max_allow_cache_count = 100;
 }
 
 - (void)partsForType:(ZCMonitorType)type addPart:(ZCAssemblePart *)part {
-    if (self.isInstantSent) {[self issueAssembleParts:@[part]]; return;}
+    if (self.isInstantSent) { [self issueAssembleParts:@[part]]; return; }
     NSNumber *key = [NSNumber numberWithUnsignedInteger:type];
     NSMutableArray *parts = [self.cachePool objectForKey:key];
-    if (!parts) {parts = [NSMutableArray array]; [self.cachePool setObject:parts forKey:key];}
+    if (!parts) { parts = [NSMutableArray array]; [self.cachePool setObject:parts forKey:key]; }
     if (parts.count <= zc_max_allow_cache_count) [parts addObject:part];
     if (self.isActive || !self.isOnlyActivateIssue) {
         if (self.isAllowOverflowIssue && parts.count > (NSUInteger)floorf(self.maxAssemble * 1.5)) {
@@ -276,7 +276,7 @@ static const long zc_max_allow_cache_count = 100;
 - (void)issueAssembleParts:(NSArray <ZCAssemblePart *>*)parts {
     if (!parts || !parts.count) return;
     ZCAssemblePart *last = parts.lastObject;
-    for (ZCAssemblePart *part in parts) {[last.fireIds addObject:part.fireId]; [last.contents addObject:part.content];}
+    for (ZCAssemblePart *part in parts) { [last.fireIds addObject:part.fireId]; [last.contents addObject:part.content]; }
     ZCMonitorBroadcast *broadcast = [ZCMonitorBroadcast broadcastType:last.type issuer:nil];
     [broadcast resetObject:last ids:last.fireIds infos:nil];
     [ZCMonitorService issue_broadcast:broadcast];

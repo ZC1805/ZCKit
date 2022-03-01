@@ -100,8 +100,8 @@
         BOOL album = [self photoLibraryAvailable];
         NSMutableArray *items = [NSMutableArray array];
         NSMutableArray *sourceTypes = [NSMutableArray array];
-        if (camera) {[items addObject:NSLocalizedString(@"Photograph", nil)]; [sourceTypes addObject:@(UIImagePickerControllerSourceTypeCamera)];} //拍照
-        if (album) {[items addObject:NSLocalizedString(@"Select from album", nil)]; [sourceTypes addObject:@(UIImagePickerControllerSourceTypePhotoLibrary)];} //从相册选取
+        if (camera) { [items addObject:NSLocalizedString(@"Photograph", nil)]; [sourceTypes addObject:@(UIImagePickerControllerSourceTypeCamera)]; } //拍照
+        if (album) { [items addObject:NSLocalizedString(@"Select from album", nil)]; [sourceTypes addObject:@(UIImagePickerControllerSourceTypePhotoLibrary)]; } //从相册选取
         if (items.count == 2) {
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:message message:nil preferredStyle:UIAlertControllerStyleActionSheet];
             UIAlertAction *ac1 = [UIAlertAction actionWithTitle:items[0] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

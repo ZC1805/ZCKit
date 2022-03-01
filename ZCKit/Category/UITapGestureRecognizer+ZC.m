@@ -14,7 +14,7 @@
 - (void)setTouchAction:(void (^)(UITapGestureRecognizer * _Nonnull))touchAction {
     objc_setAssociatedObject(self, @selector(touchAction), touchAction, OBJC_ASSOCIATION_COPY_NONATOMIC);
     [self removeTarget:self action:@selector(onTouchActionZC:)];
-    if (touchAction) {[self addTarget:self action:@selector(onTouchActionZC:)];}
+    if (touchAction) { [self addTarget:self action:@selector(onTouchActionZC:)]; }
 }
 
 - (void (^)(UITapGestureRecognizer * _Nonnull))touchAction {

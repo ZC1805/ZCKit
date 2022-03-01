@@ -18,7 +18,7 @@
 
 @implementation ZCKitBridge
 
-@dynamic naviBackImage, sideArrowImage, isPrintLog, isStrToAccurateFloat;
+@dynamic naviBackImage, sideArrowImage, isPrintLog, isStrToAccurateFloat, classNamePrefix;
 @dynamic toastTextColor, toastBackGroundColor, realize, naviBarImageOrColor, naviBarTitleColor;
 @dynamic aimLocale, aimTimeZone;
 
@@ -28,6 +28,7 @@ static UIImage *_sideArrowImage = nil;
 static UIImage *_naviBackImage = nil;
 static NSString *_naviBarImageOrColor = nil;
 static NSString *_naviBarTitleColor = nil;
+static NSString *_classNamePrefix = nil;
 static BOOL _isPrintLog = NO;
 static BOOL _isStrToAccurateFloat = NO;
 static NSLocale *_aimLocale = nil;
@@ -79,6 +80,19 @@ static NSTimeZone *_aimTimeZone = nil;
 + (void)setNaviBarTitleColor:(NSString *)naviBarTitleColor {
     if (naviBarTitleColor) {
         _naviBarTitleColor = [naviBarTitleColor copy];
+    }
+}
+
++ (NSString *)classNamePrefix {
+    if (_classNamePrefix == nil) {
+        _classNamePrefix = @"";
+    }
+    return _classNamePrefix;
+}
+
++ (void)setClassNamePrefix:(NSString *)classNamePrefix {
+    if (classNamePrefix) {
+        _classNamePrefix = [classNamePrefix copy];
     }
 }
 
@@ -139,18 +153,18 @@ static NSTimeZone *_aimTimeZone = nil;
 
 + (id<ZCKitExternalRealize>)realize {
     id <ZCKitExternalRealize> singleRealize = [ZCKitBridge sharedBridge].singleRealize;
-    if (!singleRealize) {if (self.isPrintLog) NSLog(@"ZCKit: kit manager delegate is nil");}
+    if (!singleRealize) { if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: kit manager delegate is nil"); }
     return singleRealize;
 }
 
 + (void)setRealize:(id<ZCKitExternalRealize>)realize {
     if ([ZCKitBridge sharedBridge].singleRealize) {
-        if (self.isPrintLog) NSLog(@"ZCKit: single delegate only registration once");
+        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: single delegate only registration once");
     }
     if (realize) {
         [ZCKitBridge sharedBridge].singleRealize = realize;
     } else {
-        if (self.isPrintLog) NSLog(@"ZCKit: kit manager delegate is nil");
+        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: kit manager delegate is nil");
     }
 }
 

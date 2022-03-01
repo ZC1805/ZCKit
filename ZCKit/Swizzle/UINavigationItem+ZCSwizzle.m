@@ -21,8 +21,8 @@
         SEL sel1x = @selector(swizzle1_item_setTitle:);
         SEL sel2 = @selector(title);
         SEL sel2x = @selector(swizzle1_item_title);
-        zc_swizzle_exchange_selector(UINavigationItem.class, sel1, sel1x);
-        zc_swizzle_exchange_selector(UINavigationItem.class, sel2, sel2x);
+        zc_swizzle_exchange_instance_selector(UINavigationItem.class, sel1, sel1x);
+        zc_swizzle_exchange_instance_selector(UINavigationItem.class, sel2, sel2x);
     });
 }
 

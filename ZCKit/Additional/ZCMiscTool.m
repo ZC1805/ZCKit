@@ -132,7 +132,7 @@
                 NSString *ipStr = [NSString stringWithContentsOfURL:ipURL encoding:NSUTF8StringEncoding error:&ipError];
                 if (ipError || !ipStr || ![UIDevice isValidateIP:ipStr]) ipStr = @"";
                 [ZCMiscTool sharedTool].wifiIpv4Address = ipStr;
-                main_imp(^{if (block) block([ipStr copy]);});
+                main_imp(^{ if (block) block([ipStr copy]); });
             }]];
         }
     } else {

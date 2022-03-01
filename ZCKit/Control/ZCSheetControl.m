@@ -93,7 +93,7 @@ static const CGFloat sheetFlagTag = 83803;
 
 #pragma mark - Display
 - (void)showItems {
-    [ZCWindowView display:self time:0.25 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{[self disappearItems:-1];}) : nil)];
+    [ZCWindowView display:self time:0.25 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{ [self disappearItems:-1]; }) : nil)];
     self.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.zc_height);
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.transform = CGAffineTransformIdentity;
@@ -117,7 +117,7 @@ static const CGFloat sheetFlagTag = 83803;
     } completion:^(BOOL finished) {
         [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         [self.contentView removeFromSuperview];
-        if (self.sheetBlock) {self.sheetBlock(selectIndex); self.sheetBlock = nil;}
+        if (self.sheetBlock) { self.sheetBlock(selectIndex); self.sheetBlock = nil; }
     }];
 }
 
@@ -199,7 +199,7 @@ static const CGFloat sheetFlagTag = 83803;
             line.backgroundColor = kZCBlackDC;
             [msglabel addSubview:line];
         }
-        if (self.msgLabelCtor) {self.msgLabelCtor(msglabel); self.msgLabelCtor = nil;}
+        if (self.msgLabelCtor) { self.msgLabelCtor(msglabel); self.msgLabelCtor = nil; }
     }
     for (int i = 0; i < self.items.count; i ++) {
         BOOL isCancel = NO;
@@ -245,9 +245,9 @@ static const CGFloat sheetFlagTag = 83803;
         else [self.contentView addSubview:itemBtn];
         if (topSep) [self.contentView addSubview:topSep];
         
-        if (self.itemBtnCtor) {self.itemBtnCtor(itemBtn, i, isCancel);}
+        if (self.itemBtnCtor) { self.itemBtnCtor(itemBtn, i, isCancel); }
     }
-    if (self.itemBtnCtor) {self.itemBtnCtor = nil;}
+    if (self.itemBtnCtor) { self.itemBtnCtor = nil; }
 }
 
 @end

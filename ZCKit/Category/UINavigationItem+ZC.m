@@ -115,7 +115,7 @@
     rightBtn.responseTouchInterval = 0.3;
     rightBtn.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     CGFloat edgeLeft = width - (height - 2.0 * offset), edgeRight = 0;
-    if (self.rightBarButtonItems.count) {edgeLeft = edgeLeft / 2.0; edgeRight = edgeLeft;}
+    if (self.rightBarButtonItems.count) { edgeLeft = edgeLeft / 2.0; edgeRight = edgeLeft; }
     rightBtn.imageView.contentMode = UIViewContentModeScaleToFill;
     rightBtn.imageEdgeInsets = UIEdgeInsetsMake(offset, edgeLeft, offset, edgeRight);
     UIBarButtonItem *rightItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];

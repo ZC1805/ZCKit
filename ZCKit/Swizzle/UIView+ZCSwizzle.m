@@ -22,9 +22,9 @@
         SEL sel2x = @selector(swizzle1_vi_layoutSubviews);
         SEL sel3 = @selector(hitTest:withEvent:);
         SEL sel3x = @selector(swizzle1_vi_hitTest:withEvent:);
-        zc_swizzle_exchange_selector(UIView.class, sel1, sel1x);
-        zc_swizzle_exchange_selector(UIView.class, sel2, sel2x);
-        zc_swizzle_exchange_selector(UIView.class, sel3, sel3x);
+        zc_swizzle_exchange_instance_selector(UIView.class, sel1, sel1x);
+        zc_swizzle_exchange_instance_selector(UIView.class, sel2, sel2x);
+        zc_swizzle_exchange_instance_selector(UIView.class, sel3, sel3x);
     });
 }
 

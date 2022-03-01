@@ -77,7 +77,7 @@
     if (isRefresh && list) [(NSMutableArray *)_dataItems removeAllObjects];
     if (list.count) {
         if (isInsert) {
-            NSUInteger iidx = 0; for (id item in list) {[(NSMutableArray *)_dataItems insertObject:item atIndex:iidx++];}
+            NSUInteger iidx = 0; for (id item in list) { [(NSMutableArray *)_dataItems insertObject:item atIndex:iidx++]; }
         } else {
             [(NSMutableArray *)_dataItems addObjectsFromArray:list];
         }

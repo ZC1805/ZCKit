@@ -278,7 +278,7 @@ NSString * const ZCFlagStr = @"^.~!*.^";
     if (!aString) aString = @"";
     NSString *str = self.copy;
     for (NSString *iStr in strings) {
-        if (iStr.length && str.length) {str = [str stringByReplacingOccurrencesOfString:iStr withString:aString];}
+        if (iStr.length && str.length) { str = [str stringByReplacingOccurrencesOfString:iStr withString:aString]; }
     }
     return kZStrNonnil(str);
 }
@@ -491,7 +491,7 @@ NSString * const ZCFlagStr = @"^.~!*.^";
         digit = [digitsOnly characterAtIndex:i] - '0';
         if (timesTwo) {
             addend = digit * 2;
-            if (addend > 9) {addend -= 9;}
+            if (addend > 9) { addend -= 9; }
         } else {
             addend = digit;
         }
@@ -633,12 +633,12 @@ NSString * const ZCFlagStr = @"^.~!*.^";
     for (int i = 0; i < self.length; i++) {
         unichar iC = [self characterAtIndex:i];
         NSString *ics = [NSString stringWithFormat:@"%c", iC];
-        if ([chars containsString:ics]) {same ++;}
-        else {[chars appendString:ics];}
+        if ([chars containsString:ics]) { same ++; }
+        else { [chars appendString:ics]; }
         if (iC == last1C + 1) incr ++;
-        else {incrMax = MAX(incrMax, incr); incr = 0;}
+        else { incrMax = MAX(incrMax, incr); incr = 0; }
         if (iC == last2C - 1) decr ++;
-        else {decrMax = MAX(decrMax, decr); decr = 0;}
+        else { decrMax = MAX(decrMax, decr); decr = 0; }
         incrMax = MAX(incrMax, incr);
         decrMax = MAX(decrMax, decr);
         last1C = iC;

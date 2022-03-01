@@ -70,7 +70,7 @@
 + (NSDateFormatter *)dateFormatter:(NSString *)format {
     if (!format || !format.length) format = @"yyyy-MM-dd HH:mm:ss";
     ZCDateManager *manager = [ZCDateManager sharedManager];
-    if ([manager.formatMaps containsObjectForKey:format]) {return [manager.formatMaps objectForKey:format];}
+    if ([manager.formatMaps containsObjectForKey:format]) { return [manager.formatMaps objectForKey:format]; }
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:format];
     [formatter setLocale:self.appLocale];

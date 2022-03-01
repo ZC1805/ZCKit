@@ -8,14 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		5836AEFC2785B2E0001F05B1 /* ZCBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5836AEFB2785B2E0001F05B1 /* ZCBoxView.m */; };
-		5839B5CD26B29B3F004493B8 /* VCIdManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5839B5CC26B29B3F004493B8 /* VCIdManager.m */; };
-		5839B5D126B29C7A004493B8 /* ViewController+VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5839B5D026B29C7A004493B8 /* ViewController+VC.m */; };
+		58710A3227C6286F00E8E1FF /* SwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58710A3127C6286F00E8E1FF /* SwiftViewController.swift */; };
+		58710A3427C62BFF00E8E1FF /* PageSwiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58710A3327C62BFF00E8E1FF /* PageSwiftVC.swift */; };
 		58D0201126A94B8500D8D316 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0201026A94B8500D8D316 /* AppDelegate.m */; };
-		58D0201726A94B8500D8D316 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0201626A94B8500D8D316 /* ViewController.m */; };
+		58D0201726A94B8500D8D316 /* KKViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0201626A94B8500D8D316 /* KKViewController.m */; };
 		58D0201C26A94B8500D8D316 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 58D0201B26A94B8500D8D316 /* Assets.xcassets */; };
 		58D0202226A94B8500D8D316 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0202126A94B8500D8D316 /* main.m */; };
 		58D0203026A958BE00D8D316 /* screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 58D0202F26A958BE00D8D316 /* screen.storyboard */; };
-		58D0203526A9590000D8D316 /* NextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0203426A9590000D8D316 /* NextViewController.m */; };
+		58D0203526A9590000D8D316 /* KKNextViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0203426A9590000D8D316 /* KKNextViewController.m */; };
 		58D022D526A991E200D8D316 /* NSObject+YYModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0221C26A991E100D8D316 /* NSObject+YYModel.m */; };
 		58D022D626A991E200D8D316 /* ZCClassInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0221D26A991E100D8D316 /* ZCClassInfo.m */; };
 		58D022D726A991E200D8D316 /* UIBezierPath+ZC.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0222226A991E100D8D316 /* UIBezierPath+ZC.m */; };
@@ -102,28 +102,27 @@
 		58D0232A26A991E200D8D316 /* UIView+ZCToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D026A991E200D8D316 /* UIView+ZCToast.m */; };
 		58D0232B26A991E200D8D316 /* ZCFlowSectionLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D126A991E200D8D316 /* ZCFlowSectionLayout.m */; };
 		58D0232C26A991E200D8D316 /* ZCPredefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D426A991E200D8D316 /* ZCPredefine.m */; };
-		58DD401C277DAA8A00967AC1 /* UIViewController+XX.m in Sources */ = {isa = PBXBuildFile; fileRef = 58DD401B277DAA8A00967AC1 /* UIViewController+XX.m */; };
 		58F435D926AAAA0C00CEA1BF /* ZCSubsetItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 58F435D826AAAA0C00CEA1BF /* ZCSubsetItem.m */; };
+		58FBE0F627CE13DA00494922 /* NSObject+ZCSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58FBE0F527CE13DA00494922 /* NSObject+ZCSwizzle.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		5836AEFA2785B2E0001F05B1 /* ZCBoxView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZCBoxView.h; sourceTree = "<group>"; };
 		5836AEFB2785B2E0001F05B1 /* ZCBoxView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZCBoxView.m; sourceTree = "<group>"; };
-		5839B5CB26B29B3F004493B8 /* VCIdManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VCIdManager.h; sourceTree = "<group>"; };
-		5839B5CC26B29B3F004493B8 /* VCIdManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VCIdManager.m; sourceTree = "<group>"; };
-		5839B5CF26B29C7A004493B8 /* ViewController+VC.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ViewController+VC.h"; sourceTree = "<group>"; };
-		5839B5D026B29C7A004493B8 /* ViewController+VC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "ViewController+VC.m"; sourceTree = "<group>"; };
+		58710A3027C6286E00E8E1FF /* ZCTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZCTest-Bridging-Header.h"; sourceTree = "<group>"; };
+		58710A3127C6286F00E8E1FF /* SwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftViewController.swift; sourceTree = "<group>"; };
+		58710A3327C62BFF00E8E1FF /* PageSwiftVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSwiftVC.swift; sourceTree = "<group>"; };
 		58D0200C26A94B8500D8D316 /* ZCTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZCTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		58D0200F26A94B8500D8D316 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		58D0201026A94B8500D8D316 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		58D0201526A94B8500D8D316 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		58D0201626A94B8500D8D316 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		58D0201526A94B8500D8D316 /* KKViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KKViewController.h; sourceTree = "<group>"; };
+		58D0201626A94B8500D8D316 /* KKViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KKViewController.m; sourceTree = "<group>"; };
 		58D0201B26A94B8500D8D316 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		58D0202026A94B8500D8D316 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		58D0202126A94B8500D8D316 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		58D0202F26A958BE00D8D316 /* screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = screen.storyboard; sourceTree = "<group>"; };
-		58D0203326A9590000D8D316 /* NextViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NextViewController.h; sourceTree = "<group>"; };
-		58D0203426A9590000D8D316 /* NextViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NextViewController.m; sourceTree = "<group>"; };
+		58D0203326A9590000D8D316 /* KKNextViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KKNextViewController.h; sourceTree = "<group>"; };
+		58D0203426A9590000D8D316 /* KKNextViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KKNextViewController.m; sourceTree = "<group>"; };
 		58D0221A26A991E100D8D316 /* ZCKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCKit.h; sourceTree = "<group>"; };
 		58D0221C26A991E100D8D316 /* NSObject+YYModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+YYModel.m"; sourceTree = "<group>"; };
 		58D0221D26A991E100D8D316 /* ZCClassInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCClassInfo.m; sourceTree = "<group>"; };
@@ -298,10 +297,10 @@
 		58D022D226A991E200D8D316 /* UIView+ZCToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ZCToast.h"; sourceTree = "<group>"; };
 		58D022D326A991E200D8D316 /* ZCFlowSectionLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCFlowSectionLayout.h; sourceTree = "<group>"; };
 		58D022D426A991E200D8D316 /* ZCPredefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCPredefine.m; sourceTree = "<group>"; };
-		58DD401A277DAA8A00967AC1 /* UIViewController+XX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+XX.h"; sourceTree = "<group>"; };
-		58DD401B277DAA8A00967AC1 /* UIViewController+XX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+XX.m"; sourceTree = "<group>"; };
 		58F435D726AAAA0C00CEA1BF /* ZCSubsetItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCSubsetItem.h; sourceTree = "<group>"; };
 		58F435D826AAAA0C00CEA1BF /* ZCSubsetItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCSubsetItem.m; sourceTree = "<group>"; };
+		58FBE0F427CE13DA00494922 /* NSObject+ZCSwizzle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+ZCSwizzle.h"; sourceTree = "<group>"; };
+		58FBE0F527CE13DA00494922 /* NSObject+ZCSwizzle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+ZCSwizzle.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -347,16 +346,12 @@
 			children = (
 				58D0200F26A94B8500D8D316 /* AppDelegate.h */,
 				58D0201026A94B8500D8D316 /* AppDelegate.m */,
-				58D0203326A9590000D8D316 /* NextViewController.h */,
-				58D0203426A9590000D8D316 /* NextViewController.m */,
-				58D0201526A94B8500D8D316 /* ViewController.h */,
-				58D0201626A94B8500D8D316 /* ViewController.m */,
-				5839B5CB26B29B3F004493B8 /* VCIdManager.h */,
-				5839B5CC26B29B3F004493B8 /* VCIdManager.m */,
-				5839B5CF26B29C7A004493B8 /* ViewController+VC.h */,
-				5839B5D026B29C7A004493B8 /* ViewController+VC.m */,
-				58DD401A277DAA8A00967AC1 /* UIViewController+XX.h */,
-				58DD401B277DAA8A00967AC1 /* UIViewController+XX.m */,
+				58D0201526A94B8500D8D316 /* KKViewController.h */,
+				58D0201626A94B8500D8D316 /* KKViewController.m */,
+				58D0203326A9590000D8D316 /* KKNextViewController.h */,
+				58D0203426A9590000D8D316 /* KKNextViewController.m */,
+				58710A3127C6286F00E8E1FF /* SwiftViewController.swift */,
+				58710A3327C62BFF00E8E1FF /* PageSwiftVC.swift */,
 				58D0202F26A958BE00D8D316 /* screen.storyboard */,
 				58D0201B26A94B8500D8D316 /* Assets.xcassets */,
 				58D0202026A94B8500D8D316 /* Info.plist */,
@@ -364,6 +359,7 @@
 				5883A5B2277C608900F88FED /* WaitClass */,
 				58F435DF26AABED800CEA1BF /* ZCBasic */,
 				58D0221926A991E100D8D316 /* ZCKit */,
+				58710A3027C6286E00E8E1FF /* ZCTest-Bridging-Header.h */,
 			);
 			path = ZCTest;
 			sourceTree = "<group>";
@@ -498,6 +494,8 @@
 			isa = PBXGroup;
 			children = (
 				58D0227726A991E200D8D316 /* ZCSwizzleHeader.h */,
+				58FBE0F427CE13DA00494922 /* NSObject+ZCSwizzle.h */,
+				58FBE0F527CE13DA00494922 /* NSObject+ZCSwizzle.m */,
 				58D0227E26A991E200D8D316 /* UITableViewCell+ZCSwizzle.h */,
 				58D0228326A991E200D8D316 /* UITableViewCell+ZCSwizzle.m */,
 				58D0228426A991E200D8D316 /* UINavigationItem+ZCSwizzle.h */,
@@ -660,6 +658,7 @@
 				TargetAttributes = {
 					58D0200B26A94B8500D8D316 = {
 						CreatedOnToolsVersion = 12.3;
+						LastSwiftMigration = 1310;
 					};
 				};
 			};
@@ -729,6 +728,7 @@
 				58D022E026A991E200D8D316 /* UIFont+ZC.m in Sources */,
 				58D0230926A991E200D8D316 /* ZCYYModel.m in Sources */,
 				58D0232026A991E200D8D316 /* ZCGrowView.m in Sources */,
+				58710A3227C6286F00E8E1FF /* SwiftViewController.swift in Sources */,
 				58D0231426A991E200D8D316 /* ZCPinyinHandler.m in Sources */,
 				58D022F926A991E200D8D316 /* ZCViewController.m in Sources */,
 				58D0230C26A991E200D8D316 /* ZCKitBridge.m in Sources */,
@@ -750,13 +750,11 @@
 				58D0230D26A991E200D8D316 /* ZCSystemHandler.m in Sources */,
 				58D0230626A991E200D8D316 /* UIViewController+ZCSwizzle.m in Sources */,
 				58D0231826A991E200D8D316 /* ZCGradientView.m in Sources */,
-				58D0201726A94B8500D8D316 /* ViewController.m in Sources */,
-				5839B5D126B29C7A004493B8 /* ViewController+VC.m in Sources */,
+				58FBE0F627CE13DA00494922 /* NSObject+ZCSwizzle.m in Sources */,
+				58D0201726A94B8500D8D316 /* KKViewController.m in Sources */,
 				58D022D626A991E200D8D316 /* ZCClassInfo.m in Sources */,
 				58D022F626A991E200D8D316 /* ZCImageView.m in Sources */,
-				5839B5CD26B29B3F004493B8 /* VCIdManager.m in Sources */,
 				58D0230226A991E200D8D316 /* UIGestureRecognizer+ZCSwizzle.m in Sources */,
-				58DD401C277DAA8A00967AC1 /* UIViewController+XX.m in Sources */,
 				58D022EF26A991E200D8D316 /* NSNumber+ZC.m in Sources */,
 				58D022D526A991E200D8D316 /* NSObject+YYModel.m in Sources */,
 				58D022EE26A991E200D8D316 /* UIView+ZC.m in Sources */,
@@ -765,13 +763,14 @@
 				58D0230526A991E200D8D316 /* UIControl+ZCSwizzle.m in Sources */,
 				58F435D926AAAA0C00CEA1BF /* ZCSubsetItem.m in Sources */,
 				58D022E626A991E200D8D316 /* UIImage+ZC.m in Sources */,
-				58D0203526A9590000D8D316 /* NextViewController.m in Sources */,
+				58D0203526A9590000D8D316 /* KKNextViewController.m in Sources */,
 				58D0232426A991E200D8D316 /* ZCBadgeView.m in Sources */,
 				58D0201126A94B8500D8D316 /* AppDelegate.m in Sources */,
 				58D022F526A991E200D8D316 /* ZCScrollView.m in Sources */,
 				58D022DB26A991E200D8D316 /* NSString+ZC.m in Sources */,
 				58D022FA26A991E200D8D316 /* ZCTabBarController.m in Sources */,
 				58D0232826A991E200D8D316 /* ZCFPSLabel.m in Sources */,
+				58710A3427C62BFF00E8E1FF /* PageSwiftVC.swift in Sources */,
 				58D0231C26A991E200D8D316 /* ZCListControl.m in Sources */,
 				58D0232626A991E200D8D316 /* ZCMenuControl.m in Sources */,
 				58D0231526A991E200D8D316 /* ZCKeychain.m in Sources */,
@@ -916,7 +915,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = WUSQWGPQM7;
 				INFOPLIST_FILE = ZCTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -926,6 +927,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "sas.xxxs.iii-zjy.ZCTest";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ZCTest/ZCTest-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -935,7 +939,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = WUSQWGPQM7;
 				INFOPLIST_FILE = ZCTest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -945,6 +951,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "sas.xxxs.iii-zjy.ZCTest";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "ZCTest/ZCTest-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

@@ -335,7 +335,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
         [self setNavigationBarHidden:YES];
         [self setNavigationBarHidden:NO];
     }
-    main_delay(0.3, ^{self.isPopAnimating = NO;});
+    main_delay(0.3, ^{ self.isPopAnimating = NO; });
     return shouldPop;
 }
 

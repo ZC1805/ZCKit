@@ -65,7 +65,7 @@
 
 #pragma mark - Display
 - (void)showItems {
-    [ZCWindowView display:self time:0.25 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{[self disappearItems:-1];}) : nil)];
+    [ZCWindowView display:self time:0.25 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{ [self disappearItems:-1]; }) : nil)];
     if (self.initArrowRect.size.height) {
         self.layer.opacity = 0;
         self.layer.anchorPoint = CGPointMake(1, 0);
@@ -99,7 +99,7 @@
     } completion:^(BOOL finished) {
         [self.contentView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         [self.contentView removeFromSuperview];
-        if (self.menuBlock) {self.menuBlock(selectIndex); self.menuBlock = nil;}
+        if (self.menuBlock) { self.menuBlock(selectIndex); self.menuBlock = nil; }
     }];
 }
 

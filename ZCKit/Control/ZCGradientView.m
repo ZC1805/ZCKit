@@ -39,7 +39,7 @@
 - (void)resetAlphaGradientColors:(NSArray<UIColor *>*)colors isAxial:(BOOL)isAxial startPoint:(CGPoint)startPoint endPoint:(CGPoint)endPoint location:(NSArray<NSNumber *> *)locations {
     self.bk1Colors = colors.copy;
     NSMutableArray *CGColors = [NSMutableArray array];
-    for (UIColor *color in colors) {[CGColors addObject:(id)(color.CGColor)];}
+    for (UIColor *color in colors) { [CGColors addObject:(id)(color.CGColor)]; }
     self.dBKGradient.startPoint = startPoint;
     self.dBKGradient.endPoint = endPoint;
     self.dBKGradient.colors = CGColors;

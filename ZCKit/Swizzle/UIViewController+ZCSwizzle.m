@@ -30,11 +30,11 @@
         SEL sel4x = @selector(swizzle1_vc_viewDidLayoutSubviews);
         SEL sel5 = @selector(viewWillDisappear:);
         SEL sel5x = @selector(swizzle1_vc_viewWillDisappear:);
-        zc_swizzle_exchange_selector(UIViewController.class, sel1, sel1x);
-        zc_swizzle_exchange_selector(UIViewController.class, sel2, sel2x);
-        zc_swizzle_exchange_selector(UIViewController.class, sel3, sel3x);
-        zc_swizzle_exchange_selector(UIViewController.class, sel4, sel4x);
-        zc_swizzle_exchange_selector(UIViewController.class, sel5, sel5x);
+        zc_swizzle_exchange_instance_selector(UIViewController.class, sel1, sel1x);
+        zc_swizzle_exchange_instance_selector(UIViewController.class, sel2, sel2x);
+        zc_swizzle_exchange_instance_selector(UIViewController.class, sel3, sel3x);
+        zc_swizzle_exchange_instance_selector(UIViewController.class, sel4, sel4x);
+        zc_swizzle_exchange_instance_selector(UIViewController.class, sel5, sel5x);
     });
 }
 

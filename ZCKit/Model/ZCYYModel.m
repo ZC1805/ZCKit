@@ -52,7 +52,7 @@
 
 #pragma mark - Optional (默认属性为自定义类的话会自动转)
 //返回一个 dict，将实例属性名对映射到json的key。
-//expl return @{@"name" : @"n", @"page" : @"p", @"desc" : @"ext.desc", @"bookID" : @[@"id",@"ID",@"book_id"]};
+//expl return @{ @"name" : @"n", @"page" : @"p", @"desc" : @"ext.desc", @"bookID" : @[@"id",@"ID",@"book_id"]};
 //1.在json->model时，如果一个属性对应了多个json key，那么转换过程会按顺序查找，并使用第一个不为空的值。
 //2.在model->json时，如果一个属性对应了多个json key，那么转换过程仅会处理第一个json key。
 //3.如果多个属性对应了同一个json key，则转换过过程会使用其中任意一个不为空的值。

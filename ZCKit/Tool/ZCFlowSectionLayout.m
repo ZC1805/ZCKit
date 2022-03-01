@@ -120,7 +120,7 @@
 - (NSArray <UICollectionViewLayoutAttributes *>*)layoutAttributesForElementsInRect:(CGRect)rect {
     NSMutableArray *atts = [NSMutableArray array];
     [atts addObjectsFromArray:self.sh_atts];
-    for (NSArray *i_atts in self.s_atts) {[atts addObjectsFromArray:i_atts];}
+    for (NSArray *i_atts in self.s_atts) { [atts addObjectsFromArray:i_atts]; }
     return atts.copy;
 }
 

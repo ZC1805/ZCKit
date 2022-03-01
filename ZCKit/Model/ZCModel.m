@@ -156,7 +156,7 @@
                     }
                 }
             } else {
-                NSAssert(0, @"parameter type is mistake");
+                NSAssert(0, @"ZCKit: parameter type is mistake");
             }
         }
     }];
@@ -183,7 +183,7 @@
         } else if ([NSClassFromString(ivar_type) isSubclassOfClass:ZCShareModel.class]) {
             [self setValue:[self json:jsonDic objectKey:ivar_name objectCalss:ivar_type type:4 mask:ivar_mask] forKey:ivar_name];
         } else {
-            NSAssert(0, @"parameter type is mistake");
+            NSAssert(0, @"ZCKit: parameter type is mistake");
         }
     }];
 }
@@ -199,7 +199,7 @@
     __block NSString *aimKey = objectKey;
     if (!jsonDic) jsonDic = [NSDictionary dictionary];
     [self.class.shareModelDataKeyToObjectKey enumerateKeysAndObjectsUsingBlock:^(NSString *key, NSString *obj, BOOL *stop) {
-        if ([obj isEqualToString:objectKey]) {aimKey = key; *stop = YES;} //找到第一个就返回
+        if ([obj isEqualToString:objectKey]) { aimKey = key; *stop = YES; } //找到第一个就返回
     }];
     if (type == 0) {
         if ([jsonDic.allKeys containsObject:aimKey]) {
@@ -270,7 +270,7 @@
         } else if ([originItem isKindOfClass:NSNumber.class]) {
             [newmArr addObject:originItem];
         } else {
-            NSAssert(0, @"parameter type is mistake");
+            NSAssert(0, @"ZCKit: parameter type is mistake");
         }
     }
     return newmArr.copy;
@@ -290,7 +290,7 @@
         } else if ([originItem isKindOfClass:NSNumber.class]) {
             [newmArr addObject:originItem];
         } else {
-            NSAssert(0, @"parameter type is mistake");
+            NSAssert(0, @"ZCKit: parameter type is mistake");
         }
     }
     return newmArr;
@@ -337,12 +337,12 @@
                 [ipaType isEqualToString:stringType] || [ipaType isEqualToString:arrayType] ||
                 [NSClassFromString(ipaType) isSubclassOfClass:ZCShareModel.class]) {
                 int ipaMask = 0;
-                if ([ipaType isEqualToString:longType] || [ipaType isEqualToString:floatType]) {initMask ++; ipaMask = initMask;}
-                if (ipaMask > 60) {NSAssert(0, @"parameter count is mistake");}
+                if ([ipaType isEqualToString:longType] || [ipaType isEqualToString:floatType]) { initMask ++; ipaMask = initMask; }
+                if (ipaMask > 60) { NSAssert(0, @"ZCKit: parameter count is mistake"); }
                 NSString *arrSubClassType = [[self shareModelObjectArrayKeyClassName] stringValueForKey:name];
                 if (!arrSubClassType.length) arrSubClassType = NSStringFromClass(ZCShareModel.class);
                 if (![NSClassFromString(arrSubClassType) isSubclassOfClass:ZCShareModel.class]) {
-                    NSAssert(0, @"array must sub ZCShareModel type");
+                    NSAssert(0, @"ZCKit: array must sub ZCShareModel type");
                     arrSubClassType = NSStringFromClass(ZCShareModel.class);
                 }
                 NSArray *ipaArr = @[ipaType, [NSString stringWithFormat:@"%d", ipaMask], arrSubClassType];

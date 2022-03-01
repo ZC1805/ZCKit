@@ -1,23 +1,21 @@
 //
-//  NextViewController.m
+//  KKNextViewController.m
 //  ZCTest
 //
 //  Created by zjy on 2021/7/22.
 //
 
-#import "NextViewController.h"
+#import "KKNextViewController.h"
 #import "ZCKit.h"
-#import "VCIdManager.h"
 
-@interface NextViewController ()
+@interface KKNextViewController ()
 
 @end
 
-@implementation NextViewController
+@implementation KKNextViewController
 
 + (void)load {
     NSLog(@"2-%@", NSStringFromClass(self));
-    [[VCIdManager share].vcs addObject:NSStringFromClass(self)];
 }
 
 - (void)viewDidLoad {
@@ -25,5 +23,13 @@
     self.navigationItem.title = @"2";
     self.view.backgroundColor = kZCRGB(0xEEEEEE);
 }
+
++ (void)aa {
+    
+}
+
+//+ (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
+//    return nil;
+//}
 
 @end

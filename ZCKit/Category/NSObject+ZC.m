@@ -11,15 +11,6 @@
 
 @implementation NSObject (ZC)
 
-#pragma mark - Kvc
-- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
-    NSAssert(0, @"ZCKit: kvc set value for key fail -> key: %@", key);
-}
-
-- (id)valueForUndefinedKey:(NSString *)key {
-    NSAssert(0, @"ZCKit: kvc get value for key fail -> key: %@", key); return nil;
-}
-
 #pragma mark - Misc
 - (id)performSelector:(SEL)selector arguments:(NSArray *)arguments { //执行顺序有问题，不立即返回
     NSMethodSignature *methodSignature = [self.class instanceMethodSignatureForSelector:selector];
@@ -88,7 +79,7 @@
     Class *classes = objc_copyClassList(&numOfClasses);
     for (unsigned int ci = 0; ci < numOfClasses; ci++) {
         Class superClass = classes[ci];
-        do {superClass = class_getSuperclass(superClass);}
+        do { superClass = class_getSuperclass(superClass); }
         while (superClass && superClass != myClass);
         if (superClass) [mySubclasses addObject: classes[ci]];
     }

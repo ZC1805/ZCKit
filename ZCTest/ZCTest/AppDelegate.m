@@ -6,7 +6,7 @@
 //
 
 #import "AppDelegate.h"
-#import "ViewController.h"
+#import "KKViewController.h"
 #import "ZCKitBridge.h"
 
 @interface AppDelegate ()
@@ -20,11 +20,13 @@
     
     
     ZCKitBridge.isPrintLog = YES;
+    ZCKitBridge.classNamePrefix = @"KK";
     ZCKitBridge.isStrToAccurateFloat = YES;
     
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[ViewController alloc] init]];
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[KKViewController alloc] init]];
+    self.window.rootViewController.view.backgroundColor = UIColor.whiteColor;
     self.window.rootViewController.view.backgroundColor = UIColor.whiteColor;
     self.window.backgroundColor = UIColor.whiteColor;
     [self.window makeKeyAndVisible];

@@ -22,8 +22,8 @@
         SEL sel1x = @selector(swizzle1_navi_viewDidLoad);
         SEL sel2 = @selector(viewWillAppear:);
         SEL sel2x = @selector(swizzle1_navi_viewWillAppear:);
-        zc_swizzle_exchange_selector(UINavigationController.class, sel1, sel1x);
-        zc_swizzle_exchange_selector(UINavigationController.class, sel2, sel2x);
+        zc_swizzle_exchange_instance_selector(UINavigationController.class, sel1, sel1x);
+        zc_swizzle_exchange_instance_selector(UINavigationController.class, sel2, sel2x);
     });
 }
 

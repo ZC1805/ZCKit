@@ -262,7 +262,7 @@ const ZCMonitorType ZCMonitorTypeNone = 0;  /**< 用于获取监听类型等 */
     for (ZCMonitorListener *listen in self.listeners) {
         if (listen.listener && (listen.listenType & subbro.type)) {
             if ((listen.mask3 & subbro.type) && [listen joinLazyBroadcast:subbro]) {}
-            else {[maps addObject:listen];}
+            else { [maps addObject:listen]; }
         }
     }
     [maps sortUsingComparator:^NSComparisonResult(ZCMonitorListener *_Nonnull obj1, ZCMonitorListener *_Nonnull obj2) {

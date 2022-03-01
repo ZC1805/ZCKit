@@ -188,7 +188,7 @@
 
 + (nullable UIImage *)ZCImageName:(NSString *)imageName {
     NSString *path = [self resourcePath:@"ZCFiles" name:imageName ext:@"png"];
-    if (path) {return [UIImage imageWithContentsOfFile:path];}
+    if (path) { return [UIImage imageWithContentsOfFile:path]; }
     return nil;
 }
 

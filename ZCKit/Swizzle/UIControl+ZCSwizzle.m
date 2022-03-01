@@ -26,8 +26,8 @@ NSNotificationName const ZCControlGenerateEventNotification = @"ZCControlGenerat
 //        SEL sel2x = @selector(swizzle1_ctor_addTarget:action:forControlEvents:);
 //        SEL sel3 = @selector(removeTarget:action:forControlEvents:);
 //        SEL sel3x = @selector(swizzle1_ctor_removeTarget:action:forControlEvents:);
-//        zc_swizzle_exchange_selector(UIControl.class, sel2, sel2x);
-//        zc_swizzle_exchange_selector(UIControl.class, sel3, sel3x);
+//        zc_swizzle_exchange_instance_selector(UIControl.class, sel2, sel2x);
+//        zc_swizzle_exchange_instance_selector(UIControl.class, sel3, sel3x);
     });
 }
 

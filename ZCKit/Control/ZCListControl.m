@@ -61,7 +61,7 @@
 
 #pragma mark - Display
 - (void)displayItems {
-    [ZCWindowView display:self time:0.25 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{[self disappearItems:-1];}) : nil)];
+    [ZCWindowView display:self time:0.25 blur:NO clear:self.isMaskClear action:(self.isMaskHide ? (^{ [self disappearItems:-1]; }) : nil)];
     self.zc_top = kZSHei;
     [UIView animateWithDuration:0.25 delay:0 options:UIViewAnimationOptionCurveEaseOut animations:^{
         self.zc_top = kZSHei - self.zc_height;
@@ -78,7 +78,7 @@
         self.zc_top = kZSHei;
     } completion:^(BOOL finished) {
         NSDictionary *item = [self.items objectOrNilAtIndex:selectIndex];
-        if (self.cellClickBlock) {self.cellClickBlock(selectIndex, item);};
+        if (self.cellClickBlock) { self.cellClickBlock(selectIndex, item); };
         [self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
         [self initProperty:nil];
     }];
@@ -197,7 +197,7 @@
     cell.backgroundView = [[UIView alloc] initWithFrame:cell.bounds color:kZCWhite];
     cell.selectedBackgroundView = [[UIView alloc] initWithFrame:cell.bounds color:kZCSplit];
     NSDictionary *item = [self.items dictionaryValueForIndex:indexPath.row];
-    if (cell && self.cellResueBlock) {self.cellResueBlock(cell, indexPath, item);}
+    if (cell && self.cellResueBlock) { self.cellResueBlock(cell, indexPath, item); }
     return cell;
 }
 

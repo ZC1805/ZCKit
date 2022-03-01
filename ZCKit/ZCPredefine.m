@@ -81,7 +81,7 @@ CGRect ZCRectFitWithContentMode(CGRect rect, CGSize size, UIViewContentMode mode
         } break;
         case UIViewContentModeScaleToFill:
         case UIViewContentModeRedraw:
-        default: {rect = rect;}
+        default: { rect = rect; }
     }
     return rect;
 }

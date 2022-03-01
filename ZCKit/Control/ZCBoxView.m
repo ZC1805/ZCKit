@@ -81,7 +81,7 @@
 }
 
 - (void)autoDismiss:(BOOL)isByAutoHide {
-    if (self.willHideBlock) {self.willHideBlock(isByAutoHide);}
+    if (self.willHideBlock) { self.willHideBlock(isByAutoHide); }
     [self onHideIsAuto:isByAutoHide];
 }
 
@@ -145,7 +145,7 @@
     if (self.hideAnimate) self.hideAnimate = nil;
     if (self.displayView) self.displayView = nil;
     if (self.aboveView) self.aboveView = nil;
-    if (self.didHideBlock) {self.didHideBlock(isByAutoHide);}
+    if (self.didHideBlock) { self.didHideBlock(isByAutoHide); }
     if (self.didHideBlock) self.didHideBlock = nil;
 }
 

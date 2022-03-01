@@ -117,9 +117,9 @@ NSString * const ZCStreamValueInvalid = @"ZCStreamValueInvalid";
                 if ([oldValue isKindOfClass:NSNull.class]) oldValue = nil;
                 id newValue = [change objectForKey:NSKeyValueChangeNewKey];
                 if ([newValue isKindOfClass:NSNull.class]) newValue = nil;
-                if (_streamValueFromObserveValue) {newValue = _streamValueFromObserveValue(newValue);}
+                if (_streamValueFromObserveValue) { newValue = _streamValueFromObserveValue(newValue); }
                 if (!_center.isSetStart && newValue != ZCStreamValueInvalid && _center.streamValueDidChanged) {
-                    if (_streamValueFromObserveValue) {oldValue = _streamValueFromObserveValue(oldValue);}
+                    if (_streamValueFromObserveValue) { oldValue = _streamValueFromObserveValue(oldValue); }
                 }
                 [_center resetStreamValue:newValue oldValue:oldValue ignoreSymbol:NO];
                 _lockSymbol = 0;
@@ -139,7 +139,7 @@ NSString * const ZCStreamValueInvalid = @"ZCStreamValueInvalid";
     if (ignoreSymbol) {
         if (_unit.aimObject && _unit.aimKp.length) {
             if ([newValue isKindOfClass:NSNull.class]) newValue = nil;
-            if (_KVCValueFromStreamValue) {newValue = _KVCValueFromStreamValue(newValue);}
+            if (_KVCValueFromStreamValue) { newValue = _KVCValueFromStreamValue(newValue); }
             [_unit.aimObject setValue:newValue forKey:_unit.aimKp];
         }
     } else {
@@ -147,7 +147,7 @@ NSString * const ZCStreamValueInvalid = @"ZCStreamValueInvalid";
             if (_unit.aimObject && _unit.aimKp.length) {
                 _lockSymbol = 2;
                 if ([newValue isKindOfClass:NSNull.class]) newValue = nil;
-                if (_KVCValueFromStreamValue) {newValue = _KVCValueFromStreamValue(newValue);}
+                if (_KVCValueFromStreamValue) { newValue = _KVCValueFromStreamValue(newValue); }
                 [_unit.aimObject setValue:newValue forKey:_unit.aimKp];
                 _lockSymbol = 0;
             }
@@ -164,7 +164,7 @@ NSString * const ZCStreamValueInvalid = @"ZCStreamValueInvalid";
     if (_unit.aimObject && _unit.aimKp.length) {
         id value = [_unit.aimObject valueForKey:_unit.aimKp];
         if ([value isKindOfClass:NSNull.class]) value = nil;
-        if (_streamValueFromKVCValue) {value = _streamValueFromKVCValue(value);}
+        if (_streamValueFromKVCValue) { value = _streamValueFromKVCValue(value); }
         return value;
     }
     return ZCStreamValueInvalid;

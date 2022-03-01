@@ -35,7 +35,7 @@
     });
     id num = kNumberMapDic[str];
     if (num) {
-        if (num == [NSNull null]) {return nil;}
+        if (num == [NSNull null]) { return nil; }
         return num;
     }
     

@@ -475,7 +475,7 @@
 /** 当从dict按keys取值然后按keys注入到self字典中，为nil则不注入 */
 - (void)extractKeyValueFromDictionary:(NSDictionary *)dictionary forKeys:(NSArray *)keys {
     if (!keys.count || !dictionary.count) return;
-    for (NSString *key in keys) {if (key && [key isKindOfClass:NSString.class]) {
+    for (NSString *key in keys) { if (key && [key isKindOfClass:NSString.class]) {
         id object = [dictionary objectForKey:key];
         if (object) [self setObject:object forKey:key];
     }}

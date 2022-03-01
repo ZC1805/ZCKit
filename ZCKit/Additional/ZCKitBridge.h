@@ -35,6 +35,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic, copy) NSString *naviBarTitleColor;  /**< 导航栏标题字体颜色，默认"0x303030" */
 
+@property (class, nonatomic, copy) NSString *classNamePrefix;  /**< 类名前缀逗号隔开，默认@"" */
+
 @property (class, nonatomic, strong) UIImage *naviBackImage;  /**< 导航的返回箭头图片，默认"zc_image_back_arrow" */
 
 @property (class, nonatomic, strong) UIImage *sideArrowImage;  /**< 侧边箭头图片，默认"zc_image_common_side_arrow" */

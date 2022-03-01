@@ -46,8 +46,8 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 - (void)viewDidLoad {
     [super viewDidLoad];
     __weak typeof(self) wkself = self;
-    self.willPop = ^(UIViewController *toVc) {wkself.willPopToVc = toVc; wkself.isWillPush = NO;};
-    self.willPush = ^(UIViewController *toVc) {wkself.willPushToVc = toVc; wkself.isWillPush = YES;};
+    self.willPop = ^(UIViewController *toVc) { wkself.willPopToVc = toVc; wkself.isWillPush = NO; };
+    self.willPush = ^(UIViewController *toVc) { wkself.willPushToVc = toVc; wkself.isWillPush = YES; };
 }
 
 - (void)didReceiveMemoryWarning {

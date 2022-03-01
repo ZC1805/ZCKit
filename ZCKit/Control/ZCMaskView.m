@@ -132,7 +132,7 @@
 
 + (void)autoDismiss:(BOOL)isByAutoHide {
     ZCMaskView *mask = ZCMaskView.sharedView;
-    if (mask.willHideBlock) {mask.willHideBlock(isByAutoHide);}
+    if (mask.willHideBlock) { mask.willHideBlock(isByAutoHide); }
     [mask hideIsAuto:isByAutoHide finish:nil];
 }
 
@@ -205,7 +205,7 @@
     if (self.displayView) self.displayView = nil;
     self.isAnimate = NO;
     self.isShow = NO;
-    if (finishBlock == nil && self.didHideBlock) {self.didHideBlock(isByAutoHide);}
+    if (finishBlock == nil && self.didHideBlock) { self.didHideBlock(isByAutoHide); }
     if (self.didHideBlock) self.didHideBlock = nil;
     if (finishBlock) finishBlock();
 }
@@ -302,7 +302,7 @@
     self.maskView.alpha = 0;
     self.maskView.isCanResponse = nil;
     self.maskView.responseAction = nil;
-    for (UIView *subview in self.contentView.subviews) {if (subview != self.maskView) [subview removeFromSuperview];}
+    for (UIView *subview in self.contentView.subviews) { if (subview != self.maskView) [subview removeFromSuperview]; }
     self.visualView.hidden = YES;
     self.visualView.alpha = 0;
     self.maskWindow.hidden = YES;
@@ -315,7 +315,7 @@
     self.animationTime = time;
     self.visualView.hidden = !blur;
     self.maskView.backgroundColor = clear ? kZCClear : kZCBlack;
-    self.maskView.isCanResponse = ^BOOL(CGPoint focus) {return !CGRectContainsPoint(view.frame, focus);};
+    self.maskView.isCanResponse = ^BOOL(CGPoint focus) { return !CGRectContainsPoint(view.frame, focus); };
     self.maskView.responseAction = action;
     [self.contentView addSubview:view];
     [self.view setNeedsLayout];
