@@ -17,9 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSString *title;  /**< 默认nil */
 
-@property (nullable, nonatomic, copy) NSAttributedString *normalAttTitle; /**< 默认nil，设置了此的话则需包含设置color、font */
+@property (nullable, nonatomic, copy) NSAttributedString *normalAttTitle;  /**< 默认nil，设置了此的话则需包含设置color、font */
 
-@property (nullable, nonatomic, copy) NSAttributedString *selectAttTitle; /**< 默认nil，设置了此的话则需包含设置color、font */
+@property (nullable, nonatomic, copy) NSAttributedString *selectAttTitle;  /**< 默认nil，设置了此的话则需包含设置color、font */
 
 @property (nullable, nonatomic, strong) UIImage *normalImage;  /**< 默认nil */
 

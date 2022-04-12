@@ -33,7 +33,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 需要解析的属性类型只能为ZCShareModel子类、NSString、NSArray、float、long五种类型，不需要解析的属性名以var_开头 */
 /** 属性字段类型NSString初始值@""、NSArray初始值@[]、long初始值0、float初始值0、ZCShareModel子类初始值为空对象(即所有属性为无效值)或nil */
-
 /** 将对象所有非var_开头的属性按KeyValue构造成一个可变字典对象(容器内为NSMutableDictionary、NSMutableArray、NSNumber、NSString四种类型) */
 /** 注意1: shareModelNeedBeExtractKey非nil则按此数组成员作本对象的键来取值(值可能为@"",@[],@{},空ZCShareModel不被提取)，如果为nil则按下面规则 */
 /** 注意2: 取值long和float类型属性时，属性未被标记或者属性的值为0时，取值时候都会当无效值而被过滤，不会提取到可变字典中 */

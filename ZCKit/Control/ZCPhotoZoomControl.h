@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)imageUrl:(NSString *)url holder:(nullable UIImage *)holder;  /**< 加载网路图片 */
 
-- (void)updateHeaderImageFrame:(ZCScrollView *)scrollView;  /** scrollViewDidScroll:中调用此方法 */
+- (void)updateHeaderImageFrame:(ZCScrollView *)scrollView;  /**< scrollViewDidScroll:中调用此方法 */
 
 @end
 

@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) CGSize itemSize;  /**< 每项的大小 */
 
-@property (nonatomic, assign, readonly) CGSize sectionHeaderSize; /**< 分区头的大小 */
+@property (nonatomic, assign, readonly) CGSize sectionHeaderSize;  /**< 分区头的大小 */
 
 /** 初始化方法，分别为宽度、每行数、是否水平排列即是否水平左右滑动 */
 - (instancetype)initWithContainerWidth:(CGFloat)containerWidth lineCount:(int)lineCount isHorLayout:(BOOL)isHorLayout;

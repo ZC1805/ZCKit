@@ -95,3 +95,8 @@ class PageSwiftVC: UIViewController,UITableViewDelegate,UITableViewDataSource {
         
     }
 }
+
+
+struct Dict<K: Hashable, V> {
+    var a: Int
+}

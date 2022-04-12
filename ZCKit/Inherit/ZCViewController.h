@@ -31,11 +31,9 @@ extern NSNotificationName const ZCViewControllerDidBeGesPopNotification;  /**< �
 
 @protocol ZCViewControllerPrivateProtocol <NSObject>  /**< 一些私有的设置协议 */
 
-/** 当Present出来时是否使用Push动画，默认NO */
-@property (nonatomic, assign) BOOL isUsePushStyleToPresent;
+@property (nonatomic, assign) BOOL isUsePushStyleToPresent;  /**< 当Present出来时是否使用Push动画，默认NO */
 
-/** 返回当前可见的子视图控制器，addChildVc切换需Vc时，重新赋值返回当先正在显示的childVc，默认返回nil */
-@property (nullable, nonatomic, weak) UIViewController *visibleChildViewController;
+@property (nullable, nonatomic, weak) UIViewController *visibleChildViewController;  /**< 返回当前可见的子视图控制器，addChildVc切换需Vc时，重新赋值返回当先正在显示的childVc，默认返回nil */
 
 @end
 

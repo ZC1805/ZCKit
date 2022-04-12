@@ -15,14 +15,11 @@
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    
     
     ZCKitBridge.isPrintLog = YES;
     ZCKitBridge.classNamePrefix = @"KK";
     ZCKitBridge.isStrToAccurateFloat = YES;
-    
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[KKViewController alloc] init]];

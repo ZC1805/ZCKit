@@ -28,10 +28,6 @@
 
 @implementation KKViewController
 
-+ (void)load {
-    NSLog(@"1-%@", NSStringFromClass(self));
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.navigationItem.title = @"1";
@@ -63,14 +59,8 @@
     #warning - ZCTableView分类初始化方法 & JSON object & 自定义导航替换问题
     
     main_delay(2, ^{
-        //][self tx];
-        
-//        NSString *a1 = [KKNextViewController.new performSelector:@selector(onOk:) withObject:@"AA"];
-//        NSString *a2 = [KKNextViewController.class performSelector:@selector(onOk:) withObject:@"AA"];
-//        NSLog(@"a1=%@ a2=%@", a1, a2);
         
     });
-    
 }
 
 
@@ -79,8 +69,10 @@
 
 
 
+
+
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self.navigationController pushViewController:[[PageSwiftVC alloc] init] animated:YES];
+    [self.navigationController pushViewController:[[KKNextViewController alloc] init] animated:YES];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {

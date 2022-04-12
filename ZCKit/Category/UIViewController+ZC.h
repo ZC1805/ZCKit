@@ -48,11 +48,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) NSString *hierarchicalRoute;  /**< 当前控制器层级链，可能返回@"" */
 
-/** 返回到上一次控制器，dissmiss或者pop */
-- (void)backToUpControllerAnimated:(BOOL)animated;
+- (void)backToUpControllerAnimated:(BOOL)animated;  /**< 返回到上一次控制器，dissmiss或者pop */
 
-/** dismiss所有从当前控制器present出来的控制器 */
-- (void)dismissAllViewControllerAnimated:(BOOL)animated completion:(nullable void(^)(void))completion;
+- (void)dismissAllViewControllerAnimated:(BOOL)animated completion:(nullable void(^)(void))completion;  /**< dismiss所有从当前控制器present出来的控制器 */
 
 @end
 

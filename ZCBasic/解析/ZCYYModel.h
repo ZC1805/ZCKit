@@ -69,19 +69,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)instanceForDescription;
 
 #pragma mark - Subclass rewriting (not invocation)
-//属性 -> key 的映射
+/** 属性 -> key 的映射 */
 + (nullable NSDictionary<NSString *, id> *)transformPropertyToKeyMappingRelation;
 
-//容器属性 -> Class 的映射
+ /** 容器属性 -> Class 的映射 */
 + (nullable NSDictionary<NSString *, id> *)transformContainerPropertyToClassMappingRelation;
 
-//需要忽略的属性
+ /** 需要忽略的属性 */
 + (nullable NSArray <NSString *> *)transformIgnoreProperty;
 
-//json -> 对象 是否允许转换通过
+ /** json -> 对象 是否允许转换通过 */
 - (BOOL)transformCheckInstanceFromInformation:(NSDictionary *)dic;
 
-//对象 -> json 是否允许转换通过
+ /** 对象 -> json 是否允许转换通过 */
 - (BOOL)transformCheckInstanceToInformation:(NSDictionary *)dic;
 
 @end

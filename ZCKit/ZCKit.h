@@ -24,7 +24,6 @@
 
 //---------------------
 #import "ZCModel.h"
-//#import "ZCYYModel.h"
 
 
 //---------------------
@@ -71,7 +70,6 @@
 //#import "UIBezierPath+ZC.h"
 //#import "UIResponder+ZC.h"
 //#import "UIApplication+ZC.h"
-#import "UINavigationItem+ZC.h"
 #import "UIViewController+ZC.h"
 #import "UINavigationController+ZC.h"
 #import "UITapGestureRecognizer+ZC.h"

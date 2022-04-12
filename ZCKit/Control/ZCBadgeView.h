@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, strong) UIColor *badgeBKColor;  /**< 画布颜色，默认红色 */
 
-@property (nonatomic, strong) UIColor *badgeTextColor;  /** 内容文字颜色，默认白色 */
+@property (nonatomic, strong) UIColor *badgeTextColor;  /**< 内容文字颜色，默认白色 */
 
 @property (nonatomic, strong) UIColor *badgeBorderColor;  /**< 外部描边颜色，默认白色 */
 

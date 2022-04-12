@@ -8,7 +8,6 @@
 
 #import "UINavigationController+ZCSwizzle.h"
 #import "UINavigationController+ZC.h"
-#import "UINavigationItem+ZC.h"
 #import "ZCSwizzleHeader.h"
 #import "ZCKitBridge.h"
 #import "ZCMacro.h"

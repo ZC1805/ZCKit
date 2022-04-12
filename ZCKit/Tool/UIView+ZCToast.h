@@ -22,8 +22,7 @@ typedef NS_ENUM(NSInteger, ZCEnumToastPosition) {
 
 - (void)makeToast:(NSString *)message duration:(NSTimeInterval)interval position:(ZCEnumToastPosition)position;
 
-- (void)makeToast:(nullable NSString *)message duration:(NSTimeInterval)interval position:(ZCEnumToastPosition)position
-            title:(nullable NSString *)title image:(nullable UIImage *)image;
+- (void)makeToast:(nullable NSString *)message duration:(NSTimeInterval)interval position:(ZCEnumToastPosition)position title:(nullable NSString *)title image:(nullable UIImage *)image;
 
 - (void)showToast:(UIView *)toast;  /**< 显示图片内容，默认居中持续显示2秒 */
 

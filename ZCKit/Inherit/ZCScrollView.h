@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL isShieldPriorityEditGestures;  /**< 屏蔽优先识别子TableView侧滑编辑手势 */
 
-@property (nonatomic, assign) BOOL isInterceptTouchEvent; /**< 是否截取Touch事件，默认NO(即不截取可向上再传递) */
+@property (nonatomic, assign) BOOL isInterceptTouchEvent;  /**< 是否截取Touch事件，默认NO(即不截取可向上再传递) */
 
 #pragma mark - Basic
 /**< 初始化scrollView，别第一个加入到容器view中，可在addSubView之前加入一个一个无用的View(ios9.0的问题) */
