@@ -42,12 +42,6 @@
     }
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     self.navigationBar.topItem.backBarButtonItem = item;
-    if (self.isShowRootControllerBackArrow && self.viewControllers.count) {
-        UIViewController *rootVc = self.viewControllers.firstObject;
-        if (!rootVc.navigationItem.leftBarButtonItem) {
-            [rootVc.navigationItem itemCustomBackTitle:nil color:nil image:self.navigationBar.backIndicatorImage];
-        }
-    }
     [self swizzle1_navi_viewWillAppear:animated];
 }
 

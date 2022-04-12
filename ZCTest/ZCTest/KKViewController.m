@@ -56,7 +56,7 @@
     listView.frame = CGRectMake(0, 64, kZSWid, kZSHei - 64 - 200); //这里要设置大些
     listView.backgroundColor = kZCRGB(0xEEEEEE);
     [self.view addSubview:listView];
-    #warning - ZCTableView分类初始化方法 & JSON object & 自定义导航替换问题
+    #warning - ZCTableView分类初始化方法 & JSON object & 自定义导航替换问题 & :(BOOL)    dissmiss时候通知发送的问题等
     
     main_delay(2, ^{
         

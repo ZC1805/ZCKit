@@ -27,9 +27,10 @@
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image interact:(BOOL)interact {
+- (instancetype)initWithFrame:(CGRect)frame image:(UIImage *)image isInteract:(BOOL)isInteract isAspectFit:(BOOL)isAspectFit {
     if (self = [self initWithFrame:frame]) {
-        self.userInteractionEnabled = interact;
+        self.contentMode = isAspectFit ? UIViewContentModeScaleAspectFit : UIViewContentModeScaleToFill;
+        self.userInteractionEnabled = isInteract;
         self.image = image;
     }
     return self;

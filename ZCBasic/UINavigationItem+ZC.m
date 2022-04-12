@@ -50,17 +50,28 @@
     return back;
 }
 
+- (void)x { //这可以隐藏返回箭头
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.leftItemsSupplementBackButton = NO;
+        self.hidesBackButton = YES;
+        //下面三种情况系统侧滑返回手势会失效
+        //1. 自定义了navigationItem的leftBarButtonItem或leftBarButtonItems
+        //2. self.navigationItem.hidesBackButton = YES
+        //3. self.navigationItem.leftItemsSupplementBackButton = NO
+    });
+}
+
 - (void)onManualPop:(id)sender {
     UIViewController *vc = [ZCGlobal currentController];
     if (vc == nil) return;
     BOOL isCanBack = YES;
-    if ([vc respondsToSelector:@selector(isCanResponseTouchPop)]) {
-        isCanBack = [(id<ZCViewControllerBackProtocol>)vc isCanResponseTouchPop];
+    if ([vc respondsToSelector:@selector(isPageCanResponseTouchPop)]) {
+        isCanBack = [(id<ZCViewControllerPageBackProtocol>)vc isPageCanResponseTouchPop];
     }
     if (isCanBack) {
         main_imp(^{
-            if ([vc respondsToSelector:@selector(onCustomTapBackAction)]) {
-                [(id<ZCViewControllerBackProtocol>)vc onCustomTapBackAction];
+            if ([vc respondsToSelector:@selector(onPageCustomTapBackAction)]) {
+                [(id<ZCViewControllerPageBackProtocol>)vc onPageCustomTapBackAction];
             } else {
                 [vc backToUpControllerAnimated:YES];
             }

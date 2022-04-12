@@ -46,8 +46,8 @@
     self.eventButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentCenter;
     [self.eventButton setTitle:self.holderText forState:UIControlStateNormal];
     [self.eventButton setImageEdgeInsets:UIEdgeInsetsMake(0, 0, 0, 5.0)];
-    self.eventButton.layer.cornerRadius = 4.0;
     self.eventButton.adjustsImageWhenHighlighted = NO;
+    self.eventButton.layer.cornerRadius = 4.0;
     [self addSubview:self.eventButton];
 }
 

@@ -37,8 +37,8 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 
 @implementation ZCViewController
 
-#pragma mark - ZCViewControllerBackProtocol
-- (BOOL)isHiddenNavigationBar {
+#pragma mark - ZCViewControllerPageBackProtocol
+- (BOOL)isPageHiddenNavigationBar {
     return NO;
 }
 
@@ -60,8 +60,8 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
     [self setNeedsStatusBarAppearanceUpdate];
     if (@available(iOS 11.0, *)) [self setNeedsUpdateOfHomeIndicatorAutoHidden];
     if (@available(iOS 11.0, *)) [self setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
-    if (!self.presentedViewController && self.navigationController && [self respondsToSelector:@selector(isHiddenNavigationBar)]) {
-        [self.navigationController setNavigationBarHidden:[self isHiddenNavigationBar] animated:animated];
+    if (!self.presentedViewController && self.navigationController && [self respondsToSelector:@selector(isPageHiddenNavigationBar)]) {
+        [self.navigationController setNavigationBarHidden:[self isPageHiddenNavigationBar] animated:animated];
     }
 }
 
@@ -70,18 +70,18 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
     [self setNeedsStatusBarAppearanceUpdate];
     if (@available(iOS 11.0, *)) [self setNeedsUpdateOfHomeIndicatorAutoHidden];
     if (@available(iOS 11.0, *)) [self setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
-    if (!self.presentedViewController && self.navigationController && [self respondsToSelector:@selector(isHiddenNavigationBar)]) {
+    if (!self.presentedViewController && self.navigationController && [self respondsToSelector:@selector(isPageHiddenNavigationBar)]) {
         BOOL isWillBarHide = NO;
         if (self.isWillPush) {
-            if (self.willPushToVc && [self.willPushToVc respondsToSelector:@selector(isHiddenNavigationBar)]) {
-                isWillBarHide = [(id<ZCViewControllerBackProtocol>)self.willPushToVc isHiddenNavigationBar];
+            if (self.willPushToVc && [self.willPushToVc respondsToSelector:@selector(isPageHiddenNavigationBar)]) {
+                isWillBarHide = [(id<ZCViewControllerPageBackProtocol>)self.willPushToVc isPageHiddenNavigationBar];
             }
         } else {
-            if (self.willPopToVc && [self.willPopToVc respondsToSelector:@selector(isHiddenNavigationBar)]) {
-                isWillBarHide = [(id<ZCViewControllerBackProtocol>)self.willPopToVc isHiddenNavigationBar];
+            if (self.willPopToVc && [self.willPopToVc respondsToSelector:@selector(isPageHiddenNavigationBar)]) {
+                isWillBarHide = [(id<ZCViewControllerPageBackProtocol>)self.willPopToVc isPageHiddenNavigationBar];
             }
         }
-        if ([self isHiddenNavigationBar] != isWillBarHide) {
+        if ([self isPageHiddenNavigationBar] != isWillBarHide) {
             [self.navigationController setNavigationBarHidden:isWillBarHide animated:animated];
         }
     }

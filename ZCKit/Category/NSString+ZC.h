@@ -26,7 +26,7 @@ extern NSString * const ZCFlagStr;
 
 - (NSDictionary *)jsonDictionaryObject;  /**< jsos字符串转dict，可能为空dictionary */
 
-- (NSArray *)jsonArrayObject;  /**<jsos字符串转arr，可能为空array */
+- (NSArray *)jsonArrayObject;  /**< jsos字符串转arr，可能为空array */
 
 - (NSString *)md5String;  /**< md5大写加密 */
 

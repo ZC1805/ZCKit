@@ -583,7 +583,7 @@ typedef void(^block)(NSInteger touchIndex);
         if (item.normalImage) [button setImage:item.normalImage forState:UIControlStateHighlighted|UIControlStateNormal];
         if (item.selectImage) [button setImage:item.selectImage forState:UIControlStateSelected];
         if (item.selectImage) [button setImage:item.selectImage forState:UIControlStateHighlighted|UIControlStateSelected];
-        button.responseAreaExtend = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
+        button.responseAreaExtend = UIEdgeInsetsMake(5, 5, 5, 5);
         button.responseTouchInterval = 0.35;
         if (item.normalImage) {
             button.imageViewSize = item.imageSize;

@@ -51,17 +51,4 @@
     return objc_getAssociatedObject(self, _cmd);
 }
 
-- (void)setIsShowRootControllerBackArrow:(BOOL)isShowRootControllerBackArrow {
-    objc_setAssociatedObject(self, @selector(isShowRootControllerBackArrow), [NSNumber numberWithBool:isShowRootControllerBackArrow], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)isShowRootControllerBackArrow {
-    NSNumber *value = objc_getAssociatedObject(self, _cmd);
-    if (value && [value isKindOfClass:NSNumber.class]) {
-        return [value boolValue];
-    } else {
-        return NO;
-    }
-}
-
 @end

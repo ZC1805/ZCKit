@@ -29,8 +29,8 @@
     if (self = [super initWithFrame:frame]) {
         [self resetInitProperty];
         self.backgroundColor = kZCClear;
-        self.adjustsImageWhenHighlighted = NO;
         self.adjustsImageWhenDisabled = NO;
+        self.adjustsImageWhenHighlighted = NO;
     }
     return self;
 }

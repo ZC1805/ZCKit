@@ -69,12 +69,12 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
             if (gesture.state == UIGestureRecognizerStateBegan) {
                 self.iPopGesPopToVc = self.topViewController;
                 self.iPopGesPopToAlpha = -1;
-                BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isHiddenNavigationBar];
-                BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isHiddenNavigationBar];
-                BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopFromVc isUseClearBar];
-                BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopToVc isUseClearBar];
-                BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseCustomBar)];
-                BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseCustomBar)];
+                BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isPageHiddenNavigationBar];
+                BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isPageHiddenNavigationBar];
+                BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopFromVc isNaviUseClearBar];
+                BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopToVc isNaviUseClearBar];
+                BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(onNaviUseCustomBar)];
+                BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(onNaviUseCustomBar)];
                 if (isHideBarFrom || isHideBarTo) { //...
                 } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
                     UIView *barBKView = self.navigationBar.subviews.firstObject;
@@ -96,12 +96,12 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
                 UIView *barBKView = self.navigationBar.subviews.firstObject;
                 if (self.iPopGesPopToAlpha == -1) self.iPopGesPopToAlpha = barBKView.alpha;
                 if (self.iPopGesPopFromVc && self.iPopGesPopToVc) {
-                    BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isHiddenNavigationBar];
-                    BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isHiddenNavigationBar];
-                    BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopFromVc isUseClearBar];
-                    BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopToVc isUseClearBar];
-                    BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseCustomBar)];
-                    BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseCustomBar)];
+                    BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isPageHiddenNavigationBar];
+                    BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isPageHiddenNavigationBar];
+                    BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopFromVc isNaviUseClearBar];
+                    BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopToVc isNaviUseClearBar];
+                    BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(onNaviUseCustomBar)];
+                    BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(onNaviUseCustomBar)];
                     if (isHideBarFrom || isHideBarTo) { //...
                     } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
                         CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
@@ -119,12 +119,12 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
                 UIView *barBKView = self.navigationBar.subviews.firstObject;
                 if (self.iPopGesPopToAlpha == -1) self.iPopGesPopToAlpha = barBKView.alpha;
                 if (self.iPopGesPopFromVc && self.iPopGesPopToVc) {
-                    BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isHiddenNavigationBar];
-                    BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isHiddenNavigationBar];
-                    BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopFromVc isUseClearBar];
-                    BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseClearBar)] && [self.iPopGesPopToVc isUseClearBar];
-                    BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isUseCustomBar)];
-                    BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(isUseCustomBar)];
+                    BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isPageHiddenNavigationBar];
+                    BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isPageHiddenNavigationBar];
+                    BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopFromVc isNaviUseClearBar];
+                    BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopToVc isNaviUseClearBar];
+                    BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(onNaviUseCustomBar)];
+                    BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(onNaviUseCustomBar)];
                     if (isHideBarFrom || isHideBarTo) { //...
                     } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
                         self.iPopGesPopAnimate = YES;
@@ -265,13 +265,13 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
         self.iPopGesPopFromImage = [self.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault];
         if (self.iPopGesPopAnimate || self.iGesPopDelay) return NO;
         if (self.viewControllers.count <= 1) return NO;
-        if ([topVc respondsToSelector:@selector(onCustomTapBackAction)] && ![topVc respondsToSelector:@selector(onCustomPanBackAction)]) return NO;
-        BOOL isCan = NO; SEL sel = @selector(isShieldInteractivePop);
+        if ([topVc respondsToSelector:@selector(onPageCustomTapBackAction)] && ![topVc respondsToSelector:@selector(onPageCustomPanBackAction)]) return NO;
+        BOOL isCan = NO; SEL sel = @selector(isPageShieldInteractivePop);
         if ([topVc respondsToSelector:sel]) {
             kZSuppressLeakWarn(isCan = (BOOL)[topVc performSelector:sel]);
         }
-        if (!isCan && gestureRecognizer.state == UIGestureRecognizerStatePossible && [topVc respondsToSelector:@selector(onCustomPanBackAction)]) { //可以手动返回
-            UIViewController *aimVc = [(id<ZCViewControllerBackProtocol>)topVc onCustomPanBackAction];
+        if (!isCan && gestureRecognizer.state == UIGestureRecognizerStatePossible && [topVc respondsToSelector:@selector(onPageCustomPanBackAction)]) { //可以手动返回
+            UIViewController *aimVc = [(id<ZCViewControllerPageBackProtocol>)topVc onPageCustomPanBackAction];
             if (aimVc && [self.viewControllers containsObject:aimVc]) {
                 NSInteger aimIndex = [self.viewControllers indexOfObject:aimVc];
                 if (aimIndex < self.viewControllers.count - 2) {
@@ -311,15 +311,15 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
         self.isPopAnimating = NO; return YES;
     }
     UIViewController *vc = self.topViewController;
-    if ([vc respondsToSelector:@selector(isCanResponseTouchPop)]) {
-        shouldPop = [(id<ZCViewControllerBackProtocol>)vc isCanResponseTouchPop];
+    if ([vc respondsToSelector:@selector(isPageCanResponseTouchPop)]) {
+        shouldPop = [(id<ZCViewControllerPageBackProtocol>)vc isPageCanResponseTouchPop];
     }
     
     if (shouldPop) {
         main_imp(^{
             [[NSNotificationCenter defaultCenter] postNotificationName:ZCViewControllerWillBeTouchPopNotification object:self.topViewController];
-            if ([vc respondsToSelector:@selector(onCustomTapBackAction)]) {
-                [(id<ZCViewControllerBackProtocol>)vc onCustomTapBackAction];
+            if ([vc respondsToSelector:@selector(onPageCustomTapBackAction)]) {
+                [(id<ZCViewControllerPageBackProtocol>)vc onPageCustomTapBackAction];
                 if (@available(iOS 13.0, *)) {
                     shouldPop = NO;
                 }

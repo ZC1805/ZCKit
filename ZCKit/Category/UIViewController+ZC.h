@@ -10,19 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ZCViewControllerBarProtocol <NSObject>  /**< 回调可实现的方法 */
+@protocol ZCViewControllerNaviBarProtocol <NSObject>  /**< 回调可实现的方法，只调用一次且不可逆 */
 
 @optional
 
-- (void)isUseCustomBar;  /**< 使用自定义导航栏的实现 */
+- (void)onNaviUseCustomBar;  /**< 使用自定义系统导航栏的实现 */
 
-- (BOOL)isUseClearBar;  /**< 使用全透明导航栏，默认NO */
+- (BOOL)isNaviUseClearBar;  /**< 使用全透明导航栏，默认NO */
 
-- (BOOL)isShieldBarShadow;  /**< 屏蔽导航栏阴影线，默认NO */
+- (BOOL)isNaviUseBarBottomLine;  /**< 屏蔽导航栏阴影线，默认NO */
 
-- (BOOL)isUseTranslucentBar;  /**< 使用半透明导航栏，默认NO */
+- (BOOL)isNaviUseTranslucentBar;  /**< 使用半透明导航栏，默认NO */
 
-- (BOOL)isUseNaviBarShadowColor;  /**< 使用导航栏阴影色，默认NO */
+- (BOOL)isNaviUseBarShadowColor;  /**< 使用导航栏阴影色，默认NO */
 
 @end
 
@@ -42,7 +42,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@interface UIViewController (ZC) <ZCViewControllerBarProtocol, ZCViewControllerViewProtocol>
+@interface UIViewController (ZC) <ZCViewControllerNaviBarProtocol, ZCViewControllerViewProtocol>
 
 @property (nonatomic, readonly) UIViewController *presentFromViewController;  /**< 当前控制器顶部的Present控制器 */
 

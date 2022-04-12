@@ -60,11 +60,11 @@
         }
     }
     if (self.navigationController && self.parentViewController == self.navigationController) {
-        if ([self vc_isHiddenNavigationBar]) {
+        if ([self vc_isPageHiddenNavigationBar]) {
             self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
             [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
         } else {
-            if ([self vc_isUseClearBar]) {
+            if ([self vc_isNaviUseClearBar]) {
                 UIImage *imageBar = [[UIImage alloc] init];
                 UIImage *imageShadow = [[UIImage alloc] init];
                 if (@available(iOS 13.0, *)) { //导航过渡需要的
@@ -77,7 +77,7 @@
                 [self.navigationController.navigationBar setShadowImage:imageShadow];
                 [self.navigationController.navigationBar setShadow:kZCClear offset:CGSizeZero radius:1];
                 [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
-            } else if ([self vc_isShieldBarShadow]) {
+            } else if (![self vc_isNaviUseBarBottomLine]) {
                 UIImage *imageBar = [UIImage imageNamed:ZCKitBridge.naviBarImageOrColor];
                 if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
                 self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
@@ -85,8 +85,8 @@
                 [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
                 [self.navigationController.navigationBar setShadow:kZCClear offset:CGSizeZero radius:1];
                 [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
-            } else if ([self vc_isUseCustomBar]) {
-                UIColor *shadowColor = [self vc_isUseNaviBarShadowColor] ? kZCSplit : kZCClear;
+            } else if ([self vc_onNaviUseCustomBar]) {
+                UIColor *shadowColor = [self vc_isNaviUseBarShadowColor] ? kZCSplit : kZCClear;
                 self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
                 [self.navigationController.navigationBar setShadow:shadowColor offset:CGSizeZero radius:1];
                 [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
@@ -95,7 +95,7 @@
                     UIImage *imageBar = [UIImage imageNamed:ZCKitBridge.naviBarImageOrColor];
                     if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
                     UIImage *imageShadow = [UIImage imageWithColor:kZCSplit size:CGSizeMake(kZSWid, kZSPixel)];
-                    UIColor *shadowColor = [self vc_isUseNaviBarShadowColor] ? kZCSplit : kZCClear;
+                    UIColor *shadowColor = [self vc_isNaviUseBarShadowColor] ? kZCSplit : kZCClear;
                     self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
                     [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
                     [self.navigationController.navigationBar setShadowImage:imageShadow];
@@ -103,10 +103,10 @@
                     if (@available(iOS 14.0, *)) {} else { //iOS14以上不用在此刷新下这地方
                     [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:NO];
                     [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:NO];}
-                    [self.navigationController setValue:@(![self vc_isUseNaviBarShadowColor]) forKey:@"isNormalBar"];
+                    [self.navigationController setValue:@(![self vc_isNaviUseBarShadowColor]) forKey:@"isNormalBar"];
                 }
             }
-            if ([self vc_isUseTranslucentBar] || [self vc_isUseClearBar]) {
+            if ([self vc_isNaviUseTranslucentBar] || [self vc_isNaviUseClearBar]) {
                 self.navigationController.navigationBar.barTintColor = nil;
                 self.navigationController.navigationBar.translucent = YES;
                 self.extendedLayoutIncludesOpaqueBars = NO;
@@ -144,48 +144,48 @@
 }
 
 #pragma mark - Private
-- (BOOL)vc_isUseCustomBar {
-    SEL sel = @selector(isUseCustomBar);
+- (BOOL)vc_onNaviUseCustomBar {
+    SEL sel = @selector(onNaviUseCustomBar);
     if ([self respondsToSelector:sel]) {
         kZSuppressLeakWarn([self performSelector:sel]); return YES;
     }
     return NO;
 }
 
-- (BOOL)vc_isUseClearBar {
-    BOOL use = NO; SEL sel = @selector(isUseClearBar);
+- (BOOL)vc_isNaviUseClearBar {
+    BOOL use = NO; SEL sel = @selector(isNaviUseClearBar);
     if ([self respondsToSelector:sel]) {
         kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }
     return use;
 }
 
-- (BOOL)vc_isShieldBarShadow {
-    BOOL use = NO; SEL sel = @selector(isShieldBarShadow);
+- (BOOL)vc_isNaviUseBarBottomLine {
+    BOOL use = NO; SEL sel = @selector(isNaviUseBarBottomLine);
     if ([self respondsToSelector:sel]) {
         kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }
     return use;
 }
 
-- (BOOL)vc_isUseTranslucentBar {
-    BOOL use = NO; SEL sel = @selector(isUseTranslucentBar);
+- (BOOL)vc_isNaviUseTranslucentBar {
+    BOOL use = NO; SEL sel = @selector(isNaviUseTranslucentBar);
     if ([self respondsToSelector:sel]) {
         kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }
     return use;
 }
 
-- (BOOL)vc_isUseNaviBarShadowColor {
-    BOOL use = NO; SEL sel = @selector(isUseNaviBarShadowColor);
+- (BOOL)vc_isNaviUseBarShadowColor {
+    BOOL use = NO; SEL sel = @selector(isNaviUseBarShadowColor);
     if ([self respondsToSelector:sel]) {
         kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }
     return use;
 }
 
-- (BOOL)vc_isHiddenNavigationBar {
-    BOOL use = NO; SEL sel = @selector(isHiddenNavigationBar);
+- (BOOL)vc_isPageHiddenNavigationBar {
+    BOOL use = NO; SEL sel = @selector(isPageHiddenNavigationBar);
     if ([self respondsToSelector:sel]) {
         kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }

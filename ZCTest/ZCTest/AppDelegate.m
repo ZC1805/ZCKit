@@ -8,6 +8,7 @@
 #import "AppDelegate.h"
 #import "KKViewController.h"
 #import "ZCKitBridge.h"
+#import "ZCGlobal.h"
 
 @interface AppDelegate ()
 
@@ -20,6 +21,7 @@
     ZCKitBridge.isPrintLog = YES;
     ZCKitBridge.classNamePrefix = @"KK";
     ZCKitBridge.isStrToAccurateFloat = YES;
+    ZCKitBridge.naviBackImage = [ZCGlobal ZCImageName:@"zc_image_back_black"];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[KKViewController alloc] init]];

@@ -23,15 +23,12 @@
 
 
 //---------------------
-#import "ZCModel.h"
-
-
-//---------------------
 //#import "ZCAdaptBar.h"
 //#import "ZCFPSLabel.h"
 //#import "ZCCountLabel.h"
 //#import "ZCMaskView.h"
 //#import "ZCBoxView.h"
+//#import "ZCNaviView.h"
 //#import "ZCBadgeView.h"
 //#import "ZCRotateView.h"
 //#import "ZCGradientView.h"
@@ -45,7 +42,6 @@
 //#import "ZCAvatarControl.h"
 //#import "ZCSearchControl.h"
 //#import "ZCPhotoPreviewer.h"
-//#import "ZCPhotoZoomControl.h"
 
 
 //---------------------
@@ -68,7 +64,6 @@
 //#import "UIDevice+ZC.h"
 //#import "UIWindow+ZC.h"
 //#import "UIBezierPath+ZC.h"
-//#import "UIResponder+ZC.h"
 //#import "UIApplication+ZC.h"
 #import "UIViewController+ZC.h"
 #import "UINavigationController+ZC.h"
@@ -76,6 +71,7 @@
 
 
 //---------------------
+#import "ZCModel.h"
 #import "ZCService.h"
 //#import "ZCKitBridge.h"
 #import "ZCMiscTool.h"

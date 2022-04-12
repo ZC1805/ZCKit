@@ -6,7 +6,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ZCViewController.h"
 
-@interface KKViewController : UIViewController
+@interface KKViewController : ZCViewController
 
 @end

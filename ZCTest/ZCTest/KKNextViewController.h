@@ -7,10 +7,11 @@
 
 #import <UIKit/UIKit.h>
 #import "KKViewController.h"
+#import "ZCViewController.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface KKNextViewController : UIViewController
+@interface KKNextViewController : ZCViewController
 
 @end
 
