@@ -257,8 +257,8 @@
                 self.lineShadowView.backgroundColor = kZCClear;
             }
         }
-        if ([self.associate respondsToSelector:@selector(isNaviUseBarBottomLine)]) {
-            if (![(id<ZCViewControllerNaviBarProtocol>)self.associate isNaviUseBarBottomLine]) {
+        if ([self.associate respondsToSelector:@selector(isNaviUseShieldBarLine)]) {
+            if ([(id<ZCViewControllerNaviBarProtocol>)self.associate isNaviUseShieldBarLine]) {
                 self.lineShadowView.backgroundColor = kZCClear;
             }
         }

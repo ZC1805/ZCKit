@@ -77,7 +77,7 @@
                 [self.navigationController.navigationBar setShadowImage:imageShadow];
                 [self.navigationController.navigationBar setShadow:kZCClear offset:CGSizeZero radius:1];
                 [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
-            } else if (![self vc_isNaviUseBarBottomLine]) {
+            } else if ([self vc_isNaviUseShieldBarLine]) {
                 UIImage *imageBar = [UIImage imageNamed:ZCKitBridge.naviBarImageOrColor];
                 if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
                 self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
@@ -160,8 +160,8 @@
     return use;
 }
 
-- (BOOL)vc_isNaviUseBarBottomLine {
-    BOOL use = NO; SEL sel = @selector(isNaviUseBarBottomLine);
+- (BOOL)vc_isNaviUseShieldBarLine {
+    BOOL use = NO; SEL sel = @selector(isNaviUseShieldBarLine);
     if ([self respondsToSelector:sel]) {
         kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
     }

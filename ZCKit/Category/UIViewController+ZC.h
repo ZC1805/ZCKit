@@ -18,7 +18,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (BOOL)isNaviUseClearBar;  /**< 使用全透明导航栏，默认NO */
 
-- (BOOL)isNaviUseBarBottomLine;  /**< 屏蔽导航栏阴影线，默认NO */
+- (BOOL)isNaviUseShieldBarLine;  /**< 屏蔽导航栏阴影线，默认NO */
 
 - (BOOL)isNaviUseTranslucentBar;  /**< 使用半透明导航栏，默认NO */
 
