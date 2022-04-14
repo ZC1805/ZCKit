@@ -12,8 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UINavigationController (ZCSwizzle)
 
-@property (nonatomic, assign, readonly) BOOL isNormalBar;  /**< 是否是通常的Bar，默认NO */
-
 @end
 
 NS_ASSUME_NONNULL_END

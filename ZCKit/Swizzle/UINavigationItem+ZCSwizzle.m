@@ -7,6 +7,7 @@
 //
 
 #import "UINavigationItem+ZCSwizzle.h"
+#import "ZCViewController.h"
 #import "ZCSwizzleHeader.h"
 #import "ZCKitBridge.h"
 #import "ZCMacro.h"
@@ -27,30 +28,42 @@
 }
 
 - (void)swizzle1_item_setTitle:(NSString *)title {
-    ZCLabel *titleLabel = (ZCLabel *)self.titleView;
-    if (!titleLabel) {
-        titleLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
-        titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
-        titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:16];
-        titleLabel.textColor = kZCS(ZCKitBridge.naviBarTitleColor);
-        self.titleView = titleLabel;
+    UIViewController *vc = [ZCGlobal currentController];
+    if ([vc isKindOfClass:NSClassFromString(@"ZCViewController")] && vc.navigationItem == self) {
+        ZCLabel *titleLabel = (ZCLabel *)self.titleView;
+        if (!titleLabel) {
+            titleLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
+            titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
+            titleLabel.textAlignment = NSTextAlignmentCenter;
+            titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Medium" size:17];
+            self.titleView = titleLabel;
+        }
+        if ([titleLabel isKindOfClass:ZCLabel.class]) {
+            ZCViewControllerCustomPageSet *customPageSet = [vc valueForKey:@"customPageSet"];
+            titleLabel.text = title;
+            UIColor *titleColor = kZCS(ZCKitBridge.naviBarTitleColor);
+            if (customPageSet.naviUseCustomTitleColor.length) { titleColor = kZCS(customPageSet.naviUseCustomTitleColor); }
+            titleLabel.textColor = titleColor;
+        }
+        [titleLabel sizeToFit];
+        [titleLabel.superview setNeedsLayout];
+    } else {
+        [self swizzle1_item_setTitle:title];
     }
-    if ([titleLabel isKindOfClass:ZCLabel.class]) {
-        titleLabel.text = title;
-    }
-    [titleLabel sizeToFit];
-    [titleLabel.superview setNeedsLayout];
 }
 
 - (NSString *)swizzle1_item_title {
-    NSString *title = [self swizzle1_item_title];
-    if (title.length) return title;
-    ZCLabel *titleLabel = (ZCLabel *)self.titleView;
-    if ([titleLabel isKindOfClass:ZCLabel.class]) {
-        return titleLabel.text;
+    UIViewController *vc = [ZCGlobal currentController];
+    if ([vc isKindOfClass:NSClassFromString(@"ZCViewController")] && vc.navigationItem == self) {
+        ZCLabel *titleLabel = (ZCLabel *)self.titleView;
+        if ([titleLabel isKindOfClass:ZCLabel.class]) {
+            return titleLabel.text;
+        } else {
+            return [self swizzle1_item_title];
+        }
+    } else {
+        return [self swizzle1_item_title];
     }
-    return nil;
 }
 
 @end

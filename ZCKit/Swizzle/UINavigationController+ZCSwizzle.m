@@ -7,7 +7,6 @@
 //
 
 #import "UINavigationController+ZCSwizzle.h"
-#import "UINavigationController+ZC.h"
 #import "ZCSwizzleHeader.h"
 #import "ZCKitBridge.h"
 #import "ZCMacro.h"
@@ -27,36 +26,16 @@
 }
 
 - (void)swizzle1_navi_viewDidLoad {
-    UIImage *image = [ZCKitBridge.naviBackImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    self.view.backgroundColor = kZCWhite;
-    self.navigationBar.backIndicatorImage = image;
-    self.navigationBar.backIndicatorTransitionMaskImage = image;
+    UIImage *arrowImage = ZCKitBridge.naviBackImage;
+    if (arrowImage) arrowImage = [arrowImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    self.navigationBar.backIndicatorImage = arrowImage;
+    self.navigationBar.backIndicatorTransitionMaskImage = arrowImage;
     [self swizzle1_navi_viewDidLoad];
 }
 
 - (void)swizzle1_navi_viewWillAppear:(BOOL)animated {
-    if (self.backArrowImage) {
-        UIImage *image = [self.backArrowImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-        self.navigationBar.backIndicatorImage = image;
-        self.navigationBar.backIndicatorTransitionMaskImage = image;
-    }
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-    self.navigationBar.topItem.backBarButtonItem = item;
+    self.navigationBar.topItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     [self swizzle1_navi_viewWillAppear:animated];
-}
-
-#pragma mark - Set & Get
-- (void)setIsNormalBar:(BOOL)isNormalBar {
-    objc_setAssociatedObject(self, @selector(isNormalBar), [NSNumber numberWithBool:isNormalBar], OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (BOOL)isNormalBar {
-    NSNumber *value = objc_getAssociatedObject(self, _cmd);
-    if (value && [value isKindOfClass:NSNumber.class]) {
-        return [value boolValue];
-    } else {
-        return NO;
-    }
 }
 
 @end

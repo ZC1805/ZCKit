@@ -31,15 +31,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic, assign) BOOL isStrToAccurateFloat;  /**< 是否对数字字符串转成精确字符串，默认NO */
 
+@property (class, nonatomic, copy) NSString *classNamePrefix;  /**< 类名前缀逗号隔开，默认@"" */
+
 @property (class, nonatomic, copy) NSString *naviBarImageOrColor;  /**< 导航栏背景图或者背景颜色，默认"0xF7F7F8" */
 
 @property (class, nonatomic, copy) NSString *naviBarTitleColor;  /**< 导航栏标题字体颜色，默认"0x303030" */
 
-@property (class, nonatomic, copy) NSString *classNamePrefix;  /**< 类名前缀逗号隔开，默认@"" */
-
-@property (class, nonatomic, strong) UIImage *naviBackImage;  /**< 导航的返回箭头图片，默认"zc_image_back_arrow" */
-
-@property (class, nonatomic, strong) UIImage *sideArrowImage;  /**< 侧边箭头图片，默认"zc_image_common_side_arrow" */
+@property (class, nonatomic, strong) UIImage *naviBackImage;  /**< 导航的返回箭头图片，默认"zc_image_back_white" */
 
 @property (class, nonatomic, strong) UIColor *toastBackGroundColor;  /**< toast背景颜色，默认@"0x000000 black" */
 

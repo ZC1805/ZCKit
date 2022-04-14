@@ -7,8 +7,9 @@
 
 #import "AppDelegate.h"
 #import "KKViewController.h"
+#import "ZCTabBarController.h"
+#import "ZCNavigationController.h"
 #import "ZCKitBridge.h"
-#import "ZCGlobal.h"
 
 @interface AppDelegate ()
 
@@ -18,16 +19,25 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    
     ZCKitBridge.isPrintLog = YES;
     ZCKitBridge.classNamePrefix = @"KK";
     ZCKitBridge.isStrToAccurateFloat = YES;
-    ZCKitBridge.naviBackImage = [ZCGlobal ZCImageName:@"zc_image_back_black"];
+    ZCKitBridge.naviBarImageOrColor = @"#CCCCCC";
+    ZCKitBridge.naviBarTitleColor = @"#0000FF";
+
+    
+    UINavigationController *nvc = [[ZCNavigationController alloc] initWithRootViewController:[[KKViewController alloc] init]];
+    nvc.view.backgroundColor = UIColor.whiteColor;
+    nvc.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemHistory tag:0];
+    UITabBarController *tab = [[ZCTabBarController alloc] init];
+    tab.view.backgroundColor = UIColor.whiteColor;
+    tab.viewControllers = @[nvc];
+    
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:[[KKViewController alloc] init]];
-    self.window.rootViewController.view.backgroundColor = UIColor.whiteColor;
-    self.window.rootViewController.view.backgroundColor = UIColor.whiteColor;
     self.window.backgroundColor = UIColor.whiteColor;
+    self.window.rootViewController = tab;
     [self.window makeKeyAndVisible];
     return YES;
 }

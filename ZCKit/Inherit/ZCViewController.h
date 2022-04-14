@@ -12,7 +12,28 @@ NS_ASSUME_NONNULL_BEGIN
 
 extern NSNotificationName const ZCViewControllerDidBeGesPopNotification;  /**< 系统手动侧滑返回成功Pop事件通知，object为当前top控制器 */
 
-@protocol ZCViewControllerPageBackProtocol <NSObject>  /**< 关于导航的设置协议 */
+@interface ZCViewControllerCustomPageSet : NSObject  /**< 回调可实现的方法，每次进页面时会使用这些属性一次，有些属性需要配合ZCNavigationController使用 */
+
+@property (nonatomic, assign) BOOL isPageShieldInteractivePop;  /**< 是否屏蔽手动返回，若实现了onPageCustomTapBackAction而没实现onPageCustomPanBackAction则自动返回YES，默认NO */
+
+@property (nonatomic, assign) BOOL isPageHiddenNavigationBar;  /**< 是否在viewWillAppear&viewWillDisappear内设置导航隐藏，默认NO */
+
+@property (nonatomic, assign) BOOL isNaviUseClearBar;  /**< 使用全透明导航栏，默认NO */
+
+@property (nonatomic, assign) BOOL isNaviUseShieldBarLine;  /**< 屏蔽导航栏阴影线，默认NO */
+
+@property (nonatomic, assign) BOOL isNaviUseBarShadowColor;  /**< 使用导航栏阴影色，默认NO */
+
+@property (nullable, nonatomic, copy) NSString *naviUseCustomTitleColor;  /**< 使用自定义导航标题颜色，默认nil */
+
+@property (nullable, nonatomic, copy) NSString *naviUseCustomBackgroundName;  /**< 使用自定义导航背景颜色或图片名，默认nil */
+
+@property (nullable, nonatomic, strong) UIImage *naviUseCustomBackArrowImage;  /**< 使用自定义导航背景返回箭头，默认nil */
+
+@end
+
+
+@protocol ZCViewControllerPageBackProtocol <NSObject>  /**< 关于导航的设置协议，需要配合ZCNavigationController使用 */
 
 @optional
 
@@ -20,11 +41,7 @@ extern NSNotificationName const ZCViewControllerDidBeGesPopNotification;  /**< �
 
 - (void)onPageCustomTapBackAction;  /**< 自定义点击返回按钮的实现，注意手动返回将不走此方法 */
 
-- (BOOL)isPageShieldInteractivePop;  /**< 是否屏蔽手动返回，若实现了onPageCustomTapBackAction而没实现onPageCustomPanBackAction则自动返回YES，默认NO */
-
-- (BOOL)isPageCanResponseTouchPop;  /**< 是否能手动点击返回，默认YES */
-
-- (BOOL)isPageHiddenNavigationBar;  /**< 是否在viewWillAppear&viewWillDisappear内设置导航隐藏，默认NO */
+- (void)onPageCustomInitSet:(ZCViewControllerCustomPageSet *)customPageSet;  /**< 可对页面或者导航进行自定义设置 */
 
 @end
 

@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@protocol ZCViewLayoutProtocol <NSObject>  /**< 回调可实现的方法 */
+@protocol ZCViewSyncLayoutProtocol <NSObject>  /**< 回调可实现的方法 */
 
 @optional
 
@@ -24,7 +24,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-@interface UIView (ZC) <ZCViewLayoutProtocol>
+@interface UIView (ZC) <ZCViewSyncLayoutProtocol>
 
 @property (nonatomic) CGFloat zc_top;  /**< 视图顶部距离父视图顶部距离 */
 
@@ -53,10 +53,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) CGFloat zc_centerY;  /**< 视图y轴位置，在设置高度后(或size)再设置centerY */
 
 @property (nonatomic, readonly) CGFloat visibleAlpha;  /**< 返回屏幕上可见的alpha，考虑到超视窗和窗口 */
-
-@property (nullable, nonatomic, readonly) UITableViewCell *currentCell;  /**< 返回当前所在最近的cell */
-
-@property (nullable, nonatomic, readonly) NSIndexPath *currentCellIndexPath;  /**< 返回当前cell显示时的indexPath */
 
 @property (nullable, nonatomic, readonly) UIViewController *currentViewController;  /**< 返回当前所在最近的controller */
 

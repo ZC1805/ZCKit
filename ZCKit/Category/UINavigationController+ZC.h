@@ -12,8 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UINavigationController (ZC)
 
-@property (nullable, nonatomic, strong) UIImage *backArrowImage;  /**< 返回箭头图片 */
-
 - (void)popToViewControllerLike:(Class)likeClass isOtherwiseRoot:(BOOL)isOtherwiseRoot animated:(BOOL)animated;  /**< pop到倒序寻找到第一个likeClassController */
 
 - (nullable __kindof UIViewController *)containViewControllerLike:(Class)likeClass;  /**< 返回容器栈内倒序寻找到第一个likeClassController */

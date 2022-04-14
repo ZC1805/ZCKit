@@ -8,9 +8,19 @@
 
 #import "ZCViewController.h"
 #import "UIViewController+ZC.h"
+#import "ZCKitBridge.h"
+#import "UIView+ZC.h"
+#import "ZCMacro.h"
 
 NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewControllerDidBeGesPopNotification";
 
+#pragma mark - ~ ZCViewControllerCustomPageSet ~
+@implementation ZCViewControllerCustomPageSet
+
+@end
+
+
+#pragma mark - ~ ZCViewController ~
 @interface ZCViewController ()
 
 @property (nonatomic, assign) BOOL isPushToPresent;
@@ -33,16 +43,22 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 
 @property (nonatomic, assign) BOOL isParentNaviContainer;
 
+@property (nonatomic, strong) ZCViewControllerCustomPageSet *customPageSet;
+
 @end
 
 @implementation ZCViewController
 
-#pragma mark - ZCViewControllerPageBackProtocol
-- (BOOL)isPageHiddenNavigationBar {
-    return NO;
+#pragma mark - System
+- (instancetype)init {
+    if (self = [super init]) {
+        self.customPageSet = [[ZCViewControllerCustomPageSet alloc] init];
+        if ([self respondsToSelector:@selector(onPageCustomInitSet:)]) {
+            [(id<ZCViewControllerPageBackProtocol>)self onPageCustomInitSet:self.customPageSet];
+        }
+    } return self;
 }
 
-#pragma mark - System
 - (void)viewDidLoad {
     [super viewDidLoad];
     __weak typeof(self) wkself = self;
@@ -57,11 +73,12 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self onResetNaviBarUserInterface];
     [self setNeedsStatusBarAppearanceUpdate];
     if (@available(iOS 11.0, *)) [self setNeedsUpdateOfHomeIndicatorAutoHidden];
     if (@available(iOS 11.0, *)) [self setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
-    if (!self.presentedViewController && self.navigationController && [self respondsToSelector:@selector(isPageHiddenNavigationBar)]) {
-        [self.navigationController setNavigationBarHidden:[self isPageHiddenNavigationBar] animated:animated];
+    if (!self.presentedViewController && self.navigationController) {
+        [self.navigationController setNavigationBarHidden:self.customPageSet.isPageHiddenNavigationBar animated:animated];
     }
 }
 
@@ -70,21 +87,71 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
     [self setNeedsStatusBarAppearanceUpdate];
     if (@available(iOS 11.0, *)) [self setNeedsUpdateOfHomeIndicatorAutoHidden];
     if (@available(iOS 11.0, *)) [self setNeedsUpdateOfScreenEdgesDeferringSystemGestures];
-    if (!self.presentedViewController && self.navigationController && [self respondsToSelector:@selector(isPageHiddenNavigationBar)]) {
+    if (!self.presentedViewController && self.navigationController) {
         BOOL isWillBarHide = NO;
         if (self.isWillPush) {
-            if (self.willPushToVc && [self.willPushToVc respondsToSelector:@selector(isPageHiddenNavigationBar)]) {
-                isWillBarHide = [(id<ZCViewControllerPageBackProtocol>)self.willPushToVc isPageHiddenNavigationBar];
+            if (self.willPushToVc && [self.willPushToVc isKindOfClass:NSClassFromString(@"ZCViewController")]) {
+                ZCViewControllerCustomPageSet *customPageSet = [self.willPushToVc valueForKey:@"customPageSet"];
+                isWillBarHide = customPageSet.isPageHiddenNavigationBar;
             }
         } else {
-            if (self.willPopToVc && [self.willPopToVc respondsToSelector:@selector(isPageHiddenNavigationBar)]) {
-                isWillBarHide = [(id<ZCViewControllerPageBackProtocol>)self.willPopToVc isPageHiddenNavigationBar];
+            if (self.willPopToVc && [self.willPopToVc isKindOfClass:NSClassFromString(@"ZCViewController")]) {
+                ZCViewControllerCustomPageSet *customPageSet = [self.willPopToVc valueForKey:@"customPageSet"];
+                isWillBarHide = customPageSet.isPageHiddenNavigationBar;
             }
         }
-        if ([self isPageHiddenNavigationBar] != isWillBarHide) {
+        if (self.customPageSet.isPageHiddenNavigationBar != isWillBarHide) {
             [self.navigationController setNavigationBarHidden:isWillBarHide animated:animated];
         }
     }
+}
+
+#pragma mark - NaviBarUI
+- (void)onResetNaviBarUserInterface {
+    if (self.navigationController && self.parentViewController == self.navigationController) {
+        NSString *backName = ZCKitBridge.naviBarImageOrColor;
+        if (self.customPageSet.naviUseCustomBackgroundName.length) backName = self.customPageSet.naviUseCustomBackgroundName;
+        UIImage *backImage = [UIImage imageNamed:backName];
+        if (!backImage) backImage = [UIImage imageWithColor:kZCS(backName)];
+        
+        UIImage *shadowImage = [UIImage imageWithColor:kZCSplit size:CGSizeMake(kZSWid, kZSPixel)];
+        if (self.customPageSet.isNaviUseShieldBarLine) shadowImage = [UIImage imageWithColor:kZCClear size:CGSizeMake(kZSWid, kZSPixel)];
+        
+        UIColor *shadowColor = (!self.customPageSet.isNaviUseShieldBarLine && self.customPageSet.isNaviUseBarShadowColor) ? kZCSplit : kZCClear;
+        CGFloat alpha = self.customPageSet.isNaviUseClearBar ? 0 : 1;
+        [self resetiOS15BackImage:backImage shadowImage:shadowImage shadowColor:shadowColor alpha:alpha];
+        
+        if (@available(iOS 14.0, *)) {} else {
+            [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:NO];
+            [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:NO];
+        }
+    }
+}
+
+- (void)resetiOS15BackImage:(UIImage *)backImage shadowImage:(UIImage *)shadowImage shadowColor:(UIColor *)shadowColor alpha:(CGFloat)alpha {
+    UIImage *arrowImage = ZCKitBridge.naviBackImage;
+    if (self.customPageSet.naviUseCustomBackArrowImage) { arrowImage = self.customPageSet.naviUseCustomBackArrowImage; }
+    if (arrowImage) arrowImage = [arrowImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    if (@available(iOS 15.0, *)) {
+        UINavigationBarAppearance *appperance = [[UINavigationBarAppearance alloc] init];
+        appperance.backgroundEffect = nil;
+        appperance.backgroundImage = backImage;
+        appperance.backgroundColor = nil;
+        appperance.shadowImage = shadowImage;
+        [appperance setBackIndicatorImage:arrowImage transitionMaskImage:arrowImage];
+        self.navigationController.navigationBar.standardAppearance = appperance;
+        self.navigationController.navigationBar.scrollEdgeAppearance = appperance;
+    } else {
+        self.navigationController.navigationBar.backIndicatorImage = arrowImage;
+        self.navigationController.navigationBar.backIndicatorTransitionMaskImage = arrowImage;
+        [self.navigationController.navigationBar setBackgroundImage:backImage forBarMetrics:UIBarMetricsDefault];
+        [self.navigationController.navigationBar setShadowImage:shadowImage];
+    }
+    self.navigationController.navigationBar.subviews.firstObject.alpha = alpha;
+    self.navigationController.navigationBar.barTintColor = nil;
+    self.navigationController.navigationBar.translucent = NO;
+    self.extendedLayoutIncludesOpaqueBars = YES;
+    [self.navigationController.navigationBar setShadow:shadowColor offset:CGSizeZero radius:1];
 }
 
 #pragma mark - Override

@@ -51,6 +51,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.isPopAnimating = NO;
+    self.view.backgroundColor = kZCWhite;
     self.interactivePopGestureRecognizer.enabled = YES;
     if (self.navigationBar.delegate != self) self.navigationBar.delegate = self;
     if (self.interactivePopGestureRecognizer.delegate != self) self.interactivePopGestureRecognizer.delegate = self;
@@ -69,97 +70,118 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
             if (gesture.state == UIGestureRecognizerStateBegan) {
                 self.iPopGesPopToVc = self.topViewController;
                 self.iPopGesPopToAlpha = -1;
-                BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isPageHiddenNavigationBar];
-                BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isPageHiddenNavigationBar];
-                BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopFromVc isNaviUseClearBar];
-                BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopToVc isNaviUseClearBar];
-                BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(onNaviUseCustomBar)];
-                BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(onNaviUseCustomBar)];
-                if (isHideBarFrom || isHideBarTo) { //...
-                } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
-                    UIView *barBKView = self.navigationBar.subviews.firstObject;
-                    if (barBKView && !self.iPopGesPopTopImageView) {
-                        self.iPopGesPopTopImageView = [[ZCImageView alloc] initWithFrame:barBKView.frame image:nil];
-                        self.iPopGesPopTopImageView.contentMode = barBKView.contentMode;
-                        self.iPopGesPopTopImageView.userInteractionEnabled = YES;
-                    }
-                    if (self.iPopGesPopTopImageView && self.iPopGesPopFromImage) {
-                        self.iPopGesPopTopImageView.image = self.iPopGesPopFromImage;
-                        self.iPopGesPopTopImageView.alpha = self.iPopGesPopFromAlpha;
-                    }
-                    [self.iPopGesPopTopImageView removeFromSuperview];
-                    if (barBKView && self.iPopGesPopTopImageView && ![self.iPopGesPopTopImageView isDescendantOfView:self.navigationBar]) {
-                        [self.navigationBar insertSubview:self.iPopGesPopTopImageView aboveSubview:barBKView];
+                ZCViewControllerCustomPageSet *fromVccustomPageSet = nil;
+                if ([self.iPopGesPopFromVc isKindOfClass:NSClassFromString(@"ZCViewController")]) {
+                    fromVccustomPageSet = [self.iPopGesPopFromVc valueForKey:@"customPageSet"];
+                }
+                ZCViewControllerCustomPageSet *toVccustomPageSet = nil;
+                if ([self.iPopGesPopToVc isKindOfClass:NSClassFromString(@"ZCViewController")]) {
+                    toVccustomPageSet = [self.iPopGesPopToVc valueForKey:@"customPageSet"];
+                }
+                if (fromVccustomPageSet && toVccustomPageSet && !fromVccustomPageSet.isPageHiddenNavigationBar && !toVccustomPageSet.isPageHiddenNavigationBar) {
+                    BOOL isClearFrom = fromVccustomPageSet.isNaviUseClearBar;
+                    BOOL isClearTo = toVccustomPageSet.isNaviUseClearBar;
+                    BOOL isCustomFrom = fromVccustomPageSet.naviUseCustomBackgroundName.length;
+                    BOOL isCustomTo = toVccustomPageSet.naviUseCustomBackgroundName.length;
+                    if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
+                        UIView *barBKView = self.navigationBar.subviews.firstObject;
+                        if (barBKView && !self.iPopGesPopTopImageView) {
+                            self.iPopGesPopTopImageView = [[ZCImageView alloc] initWithFrame:barBKView.frame image:nil];
+                            self.iPopGesPopTopImageView.contentMode = barBKView.contentMode;
+                            self.iPopGesPopTopImageView.userInteractionEnabled = YES;
+                        }
+                        if (self.iPopGesPopTopImageView && self.iPopGesPopFromImage) {
+                            self.iPopGesPopTopImageView.image = self.iPopGesPopFromImage;
+                            self.iPopGesPopTopImageView.alpha = self.iPopGesPopFromAlpha;
+                        }
+                        [self.iPopGesPopTopImageView removeFromSuperview];
+                        if (barBKView && self.iPopGesPopTopImageView && ![self.iPopGesPopTopImageView isDescendantOfView:self.navigationBar]) {
+                            [self.navigationBar insertSubview:self.iPopGesPopTopImageView aboveSubview:barBKView];
+                        }
                     }
                 }
             } else if (gesture.state == UIGestureRecognizerStateChanged) {
                 UIView *barBKView = self.navigationBar.subviews.firstObject;
                 if (self.iPopGesPopToAlpha == -1) self.iPopGesPopToAlpha = barBKView.alpha;
                 if (self.iPopGesPopFromVc && self.iPopGesPopToVc) {
-                    BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isPageHiddenNavigationBar];
-                    BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isPageHiddenNavigationBar];
-                    BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopFromVc isNaviUseClearBar];
-                    BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopToVc isNaviUseClearBar];
-                    BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(onNaviUseCustomBar)];
-                    BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(onNaviUseCustomBar)];
-                    if (isHideBarFrom || isHideBarTo) { //...
-                    } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
-                        barBKView.alpha = clearAlpha * self.iPopGesPopToAlpha;
-                        self.iPopGesPopTopImageView.alpha = (1.0 - clearAlpha) * self.iPopGesPopFromAlpha;
-                    } else if (isClearFrom && !isClearTo && gesture.view) {
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
-                        barBKView.alpha = clearAlpha * self.iPopGesPopToAlpha;
-                    } else if (!isClearFrom && isClearTo && gesture.view) {
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
-                        barBKView.alpha = (1.0 - clearAlpha) * self.iPopGesPopFromAlpha;
+                    ZCViewControllerCustomPageSet *fromVccustomPageSet = nil;
+                    if ([self.iPopGesPopFromVc isKindOfClass:NSClassFromString(@"ZCViewController")]) {
+                        fromVccustomPageSet = [self.iPopGesPopFromVc valueForKey:@"customPageSet"];
+                    }
+                    ZCViewControllerCustomPageSet *toVccustomPageSet = nil;
+                    if ([self.iPopGesPopToVc isKindOfClass:NSClassFromString(@"ZCViewController")]) {
+                        toVccustomPageSet = [self.iPopGesPopToVc valueForKey:@"customPageSet"];
+                    }
+                    if (fromVccustomPageSet && toVccustomPageSet && !fromVccustomPageSet.isPageHiddenNavigationBar && !toVccustomPageSet.isPageHiddenNavigationBar) {
+                        BOOL isClearFrom = fromVccustomPageSet.isNaviUseClearBar;
+                        BOOL isClearTo = toVccustomPageSet.isNaviUseClearBar;
+                        BOOL isCustomFrom = fromVccustomPageSet.naviUseCustomBackgroundName.length;
+                        BOOL isCustomTo = toVccustomPageSet.naviUseCustomBackgroundName.length;
+                        if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
+                            CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
+                            barBKView.alpha = clearAlpha * self.iPopGesPopToAlpha;
+                            self.iPopGesPopTopImageView.alpha = (1.0 - clearAlpha) * self.iPopGesPopFromAlpha;
+                        } else if (isClearFrom && !isClearTo && gesture.view) {
+                            CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
+                            barBKView.alpha = clearAlpha * self.iPopGesPopToAlpha;
+                        } else if (!isClearFrom && isClearTo && gesture.view) {
+                            CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
+                            barBKView.alpha = (1.0 - clearAlpha) * self.iPopGesPopFromAlpha;
+                        }
                     }
                 }
             } else if (gesture.state == UIGestureRecognizerStateEnded) {
                 UIView *barBKView = self.navigationBar.subviews.firstObject;
                 if (self.iPopGesPopToAlpha == -1) self.iPopGesPopToAlpha = barBKView.alpha;
                 if (self.iPopGesPopFromVc && self.iPopGesPopToVc) {
-                    BOOL isHideBarFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopFromVc isPageHiddenNavigationBar];
-                    BOOL isHideBarTo = [self.iPopGesPopToVc respondsToSelector:@selector(isPageHiddenNavigationBar)] && [(ZCViewController *)self.iPopGesPopToVc isPageHiddenNavigationBar];
-                    BOOL isClearFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopFromVc isNaviUseClearBar];
-                    BOOL isClearTo = [self.iPopGesPopToVc respondsToSelector:@selector(isNaviUseClearBar)] && [self.iPopGesPopToVc isNaviUseClearBar];
-                    BOOL isCustomFrom = [self.iPopGesPopFromVc respondsToSelector:@selector(onNaviUseCustomBar)];
-                    BOOL isCustomTo = [self.iPopGesPopToVc respondsToSelector:@selector(onNaviUseCustomBar)];
-                    if (isHideBarFrom || isHideBarTo) { //...
-                    } else if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
-                        self.iPopGesPopAnimate = YES;
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
-                        [UIView animateWithDuration:0.36 animations:^{
-                            barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : 0;
-                            self.iPopGesPopTopImageView.alpha = clearAlpha > 0.5 ? 0 : self.iPopGesPopFromAlpha;
-                        } completion:^(BOOL finished) {
-                            barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
-                            self.iPopGesPopTopImageView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
+                    ZCViewControllerCustomPageSet *fromVccustomPageSet = nil;
+                    if ([self.iPopGesPopFromVc isKindOfClass:NSClassFromString(@"ZCViewController")]) {
+                        fromVccustomPageSet = [self.iPopGesPopFromVc valueForKey:@"customPageSet"];
+                    }
+                    ZCViewControllerCustomPageSet *toVccustomPageSet = nil;
+                    if ([self.iPopGesPopToVc isKindOfClass:NSClassFromString(@"ZCViewController")]) {
+                        toVccustomPageSet = [self.iPopGesPopToVc valueForKey:@"customPageSet"];
+                    }
+                    if (fromVccustomPageSet && toVccustomPageSet && !fromVccustomPageSet.isPageHiddenNavigationBar && !toVccustomPageSet.isPageHiddenNavigationBar) {
+                        BOOL isClearFrom = fromVccustomPageSet.isNaviUseClearBar;
+                        BOOL isClearTo = toVccustomPageSet.isNaviUseClearBar;
+                        BOOL isCustomFrom = fromVccustomPageSet.naviUseCustomBackgroundName.length;
+                        BOOL isCustomTo = toVccustomPageSet.naviUseCustomBackgroundName.length;
+                        if ((isCustomFrom && !isClearTo) || (isCustomTo && !isClearFrom)) {
+                            self.iPopGesPopAnimate = YES;
+                            CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
+                            [UIView animateWithDuration:0.36 animations:^{
+                                barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : 0;
+                                self.iPopGesPopTopImageView.alpha = clearAlpha > 0.5 ? 0 : self.iPopGesPopFromAlpha;
+                            } completion:^(BOOL finished) {
+                                barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
+                                self.iPopGesPopTopImageView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
+                                [self.iPopGesPopTopImageView removeFromSuperview];
+                                self.iPopGesPopAnimate = NO;
+                            }];
+                        } else if (isClearFrom && !isClearTo && gesture.view) {
+                            self.iPopGesPopAnimate = YES;
+                            CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
+                            [UIView animateWithDuration:0.36 animations:^{
+                                barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : 0;
+                            } completion:^(BOOL finished) {
+                                barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
+                                [self.iPopGesPopTopImageView removeFromSuperview];
+                                self.iPopGesPopAnimate = NO;
+                            }];
+                        } else if (!isClearFrom && isClearTo && gesture.view) {
+                            self.iPopGesPopAnimate = YES;
+                            CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
+                            [UIView animateWithDuration:0.36 animations:^{
+                                barBKView.alpha = clearAlpha > 0.5 ? 0 : self.iPopGesPopFromAlpha;
+                            } completion:^(BOOL finished) {
+                                barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
+                                [self.iPopGesPopTopImageView removeFromSuperview];
+                                self.iPopGesPopAnimate = NO;
+                            }];
+                        } else {
                             [self.iPopGesPopTopImageView removeFromSuperview];
-                            self.iPopGesPopAnimate = NO;
-                        }];
-                    } else if (isClearFrom && !isClearTo && gesture.view) {
-                        self.iPopGesPopAnimate = YES;
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
-                        [UIView animateWithDuration:0.36 animations:^{
-                            barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : 0;
-                        } completion:^(BOOL finished) {
-                            barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
-                            [self.iPopGesPopTopImageView removeFromSuperview];
-                            self.iPopGesPopAnimate = NO;
-                        }];
-                    } else if (!isClearFrom && isClearTo && gesture.view) {
-                        self.iPopGesPopAnimate = YES;
-                        CGFloat clearAlpha = [(UIScreenEdgePanGestureRecognizer *)gesture translationInView:gesture.view].x / gesture.view.zc_width;
-                        [UIView animateWithDuration:0.36 animations:^{
-                            barBKView.alpha = clearAlpha > 0.5 ? 0 : self.iPopGesPopFromAlpha;
-                        } completion:^(BOOL finished) {
-                            barBKView.alpha = clearAlpha > 0.5 ? self.iPopGesPopToAlpha : self.iPopGesPopFromAlpha;
-                            [self.iPopGesPopTopImageView removeFromSuperview];
-                            self.iPopGesPopAnimate = NO;
-                        }];
-                    } else {
-                        [self.iPopGesPopTopImageView removeFromSuperview];
+                        }
                     }
                 }
             }
@@ -262,13 +284,15 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
         UIViewController *topVc = self.topViewController;
         self.iPopGesPopFromVc = self.topViewController;
         self.iPopGesPopFromAlpha = self.navigationBar.subviews.firstObject.alpha;
-        self.iPopGesPopFromImage = [self.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault];
+        if (@available(iOS 15.0, *)) { self.iPopGesPopFromImage = self.navigationBar.standardAppearance.backgroundImage;
+        } else { self.iPopGesPopFromImage = [self.navigationBar backgroundImageForBarMetrics:UIBarMetricsDefault]; }
         if (self.iPopGesPopAnimate || self.iGesPopDelay) return NO;
         if (self.viewControllers.count <= 1) return NO;
         if ([topVc respondsToSelector:@selector(onPageCustomTapBackAction)] && ![topVc respondsToSelector:@selector(onPageCustomPanBackAction)]) return NO;
-        BOOL isCan = NO; SEL sel = @selector(isPageShieldInteractivePop);
-        if ([topVc respondsToSelector:sel]) {
-            kZSuppressLeakWarn(isCan = (BOOL)[topVc performSelector:sel]);
+        BOOL isCan = NO;
+        if ([topVc isKindOfClass:NSClassFromString(@"ZCViewController")]) {
+            ZCViewControllerCustomPageSet *customPageSet = [topVc valueForKey:@"customPageSet"];
+            isCan = customPageSet.isPageShieldInteractivePop;
         }
         if (!isCan && gestureRecognizer.state == UIGestureRecognizerStatePossible && [topVc respondsToSelector:@selector(onPageCustomPanBackAction)]) { //可以手动返回
             UIViewController *aimVc = [(id<ZCViewControllerPageBackProtocol>)topVc onPageCustomPanBackAction];
@@ -311,19 +335,15 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
         self.isPopAnimating = NO; return YES;
     }
     UIViewController *vc = self.topViewController;
-    if ([vc respondsToSelector:@selector(isPageCanResponseTouchPop)]) {
-        shouldPop = [(id<ZCViewControllerPageBackProtocol>)vc isPageCanResponseTouchPop];
-    }
-    
     if (shouldPop) {
         main_imp(^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:ZCViewControllerWillBeTouchPopNotification object:self.topViewController];
             if ([vc respondsToSelector:@selector(onPageCustomTapBackAction)]) {
                 [(id<ZCViewControllerPageBackProtocol>)vc onPageCustomTapBackAction];
                 if (@available(iOS 13.0, *)) {
                     shouldPop = NO;
                 }
             } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:ZCViewControllerWillBeTouchPopNotification object:vc];
                 if (@available(iOS 13.0, *)) {
                     
                 } else {

@@ -8,7 +8,6 @@
 
 #import "UIView+ZC.h"
 #import <objc/runtime.h>
-#import "UITableViewCell+ZC.h"
 #import "NSArray+ZC.h"
 #import "ZCMacro.h"
 
@@ -36,26 +35,6 @@
         v = v.superview;
     }
     return alpha;
-}
-
-- (UITableViewCell *)currentCell {
-    for (UIView *view = self; view; view = view.superview) {
-        if ([view isKindOfClass:UITableViewCell.class]) {
-            return (UITableViewCell *)view;
-        }
-    }
-    return nil;
-}
-
-- (NSIndexPath *)currentCellIndexPath {
-    UITableViewCell *cell = [self currentCell];
-    if (cell) {
-        UITableView *table = [cell currentTableView];
-        if (table) {
-            return [table indexPathForCell:cell];
-        }
-    }
-    return nil;
 }
 
 - (UIViewController *)currentViewController {

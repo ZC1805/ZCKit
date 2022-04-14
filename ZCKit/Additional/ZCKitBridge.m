@@ -18,13 +18,12 @@
 
 @implementation ZCKitBridge
 
-@dynamic naviBackImage, sideArrowImage, isPrintLog, isStrToAccurateFloat, classNamePrefix;
+@dynamic naviBackImage, isPrintLog, isStrToAccurateFloat, classNamePrefix;
 @dynamic toastTextColor, toastBackGroundColor, realize, naviBarImageOrColor, naviBarTitleColor;
 @dynamic aimLocale, aimTimeZone;
 
 static UIColor *_toastBackGroundColor = nil;
 static UIColor *_toastTextColor = nil;
-static UIImage *_sideArrowImage = nil;
 static UIImage *_naviBackImage = nil;
 static NSString *_naviBarImageOrColor = nil;
 static NSString *_naviBarTitleColor = nil;
@@ -44,9 +43,22 @@ static NSTimeZone *_aimTimeZone = nil;
 }
 
 #pragma mark - Ivar
++ (NSString *)classNamePrefix {
+    if (_classNamePrefix == nil) {
+        _classNamePrefix = @"";
+    }
+    return _classNamePrefix;
+}
+
++ (void)setClassNamePrefix:(NSString *)classNamePrefix {
+    if (classNamePrefix) {
+        _classNamePrefix = [classNamePrefix copy];
+    }
+}
+
 + (UIImage *)naviBackImage {
     if (_naviBackImage == nil) {
-        _naviBackImage = [ZCGlobal ZCImageName:@"zc_image_back_arrow"];
+        _naviBackImage = [ZCGlobal ZCImageName:@"zc_image_back_white"];
     }
     return _naviBackImage;
 }
@@ -80,32 +92,6 @@ static NSTimeZone *_aimTimeZone = nil;
 + (void)setNaviBarTitleColor:(NSString *)naviBarTitleColor {
     if (naviBarTitleColor) {
         _naviBarTitleColor = [naviBarTitleColor copy];
-    }
-}
-
-+ (NSString *)classNamePrefix {
-    if (_classNamePrefix == nil) {
-        _classNamePrefix = @"";
-    }
-    return _classNamePrefix;
-}
-
-+ (void)setClassNamePrefix:(NSString *)classNamePrefix {
-    if (classNamePrefix) {
-        _classNamePrefix = [classNamePrefix copy];
-    }
-}
-
-+ (UIImage *)sideArrowImage {
-    if (_sideArrowImage == nil) {
-        _sideArrowImage = [ZCGlobal ZCImageName:@"zc_image_common_side_arrow"];
-    }
-    return _sideArrowImage;
-}
-
-+ (void)setSideArrowImage:(UIImage *)sideArrowImage {
-    if (sideArrowImage) {
-        _sideArrowImage = sideArrowImage;
     }
 }
 

@@ -7,13 +7,14 @@
 //
 
 #import "ZCNaviView.h"
-#import "UIViewController+ZC.h"
+#import "ZCNavigationController.h"
 #import "ZCViewController.h"
 #import "ZCQueueHandler.h"
 #import "ZCKitBridge.h"
 #import "NSString+ZC.h"
 #import "UIView+ZC.h"
 #import "ZCButton.h"
+#import "ZCLabel.h"
 #import "ZCMacro.h"
 
 @interface ZCNaviView ()
@@ -30,11 +31,15 @@
 
 @property (nonatomic, strong) UIView *rightCustomView;
 
-@property (nonatomic, copy) void(^leftBlock)(void);
+@property (nonatomic, strong, readonly) ZCImageView *cushionView;  /**< 背景视图，外部可设置颜色和透明度 */
+
+@property (nonatomic, strong, readonly) ZCImageView *lineShadowView;  /**< 阴影线，外部可设置颜色和透明度 */
+
+@property (nonatomic, weak) UIViewController *weakAssociate;  /**< 阴影线，外部可设置颜色和透明度 */
 
 @property (nonatomic, copy) void(^rightBlock)(void);
 
-@property (nonatomic, weak) UIViewController *associate;
+@property (nonatomic, strong) UIImage *arrowImage;
 
 @end
 
@@ -49,56 +54,88 @@
 
 - (void)initUI {
     self.backgroundColor = kZCClear;
-    UIImage *imageBar = [UIImage imageNamed:ZCKitBridge.naviBarImageOrColor];
-    if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
-    _cushionView = [[ZCImageView alloc] initWithFrame:self.bounds image:imageBar isInteract:YES isAspectFit:NO];
-    _lineShadowView = [[UIView alloc] initWithFrame:CGRectMake(0, self.zc_height - kZSPixel, self.zc_width, kZSPixel) color:kZCSplit];
-    [self addSubview:self.cushionView];
+    _cushionView = [[ZCImageView alloc] initWithFrame:self.bounds image:nil isInteract:YES isAspectFit:NO];
+    _lineShadowView = [[ZCImageView alloc] initWithFrame:CGRectMake(0, _cushionView.zc_height - kZSPixel, _cushionView.zc_width, kZSPixel) image:nil isInteract:NO isAspectFit:NO];
+    [_cushionView addSubview:_lineShadowView];
+    [self addSubview:_cushionView];
     
-    self.leftButton = [[ZCButton alloc] initWithTitle:nil font:[UIFont fontWithName:@"HelveticaNeue" size:14] color:nil image:nil target:self action:@selector(onLeftItem)];
+    self.leftButton = [[ZCButton alloc] initWithTitle:nil font:[UIFont fontWithName:@"HelveticaNeue" size:15] color:nil image:nil target:self action:@selector(onLeftItem)];
     self.leftButton.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     self.leftButton.adjustsImageWhenHighlighted = YES;
-    [self.leftButton setTitleColor:kZCS(ZCKitBridge.naviBarTitleColor) forState:UIControlStateNormal];
-    [self.leftButton setTitleColor:kZCSA(ZCKitBridge.naviBarTitleColor, 0.3) forState:UIControlStateHighlighted];
     [self addSubview:self.leftButton];
     
-    self.rightButton = [[ZCButton alloc] initWithTitle:nil font:[UIFont fontWithName:@"HelveticaNeue" size:14] color:nil image:nil target:self action:@selector(onRightItem)];
+    self.rightButton = [[ZCButton alloc] initWithTitle:nil font:[UIFont fontWithName:@"HelveticaNeue" size:15] color:nil image:nil target:self action:@selector(onRightItem)];
     self.rightButton.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     self.rightButton.adjustsImageWhenHighlighted = YES;
-    [self.rightButton setTitleColor:kZCS(ZCKitBridge.naviBarTitleColor) forState:UIControlStateNormal];
-    [self.rightButton setTitleColor:kZCSA(ZCKitBridge.naviBarTitleColor, 0.3) forState:UIControlStateHighlighted];
     [self addSubview:self.rightButton];
     
-    self.middleLabel = [[ZCLabel alloc] initWithColor:kZCS(ZCKitBridge.naviBarTitleColor) font:[UIFont fontWithName:@"HelveticaNeue-Medium" size:16] alignment:NSTextAlignmentCenter adjustsSize:NO];
+    self.middleLabel = [[ZCLabel alloc] initWithColor:nil font:[UIFont fontWithName:@"HelveticaNeue-Medium" size:17] alignment:NSTextAlignmentCenter adjustsSize:NO];
     self.middleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     [self addSubview:self.middleLabel];
+    [self setTitle:nil rightName:nil rightColor:nil];
+}
+
+- (void)resetAssociate:(UIViewController *)associate {
+    self.weakAssociate = associate;
+    ZCViewControllerCustomPageSet *customPageSet = nil;
+    if ([associate isKindOfClass:NSClassFromString(@"ZCViewController")]) {
+        customPageSet = [associate valueForKey:@"customPageSet"];
+        customPageSet.isPageHiddenNavigationBar = YES;
+    } else {
+        customPageSet = [[ZCViewControllerCustomPageSet alloc] init];
+        NSAssert(0, @"ZCKit: need associate ZCViewController");
+    }
     
-    [self addSubview:self.lineShadowView];
-    [self setTitle:nil leftName:(NSString *)ZCKitBridge.naviBackImage rightName:nil];
+    NSString *backName = ZCKitBridge.naviBarImageOrColor;
+    if (customPageSet.naviUseCustomBackgroundName.length) backName = customPageSet.naviUseCustomBackgroundName;
+    UIImage *backImage = [UIImage imageNamed:backName];
+    if (!backImage) backImage = [UIImage imageWithColor:kZCS(backName)];
+    
+    UIImage *shadowImage = [UIImage imageWithColor:kZCSplit size:CGSizeMake(self.zc_width, kZSPixel)];
+    if (customPageSet.isNaviUseShieldBarLine) shadowImage = [UIImage imageWithColor:kZCClear size:CGSizeMake(self.zc_width, kZSPixel)];
+    
+    UIColor *shadowColor = (!customPageSet.isNaviUseShieldBarLine && customPageSet.isNaviUseBarShadowColor) ? kZCSplit : kZCClear;
+    CGFloat alpha = customPageSet.isNaviUseClearBar ? 0 : 1;
+    
+    UIColor *titleColor = kZCS(ZCKitBridge.naviBarTitleColor);
+    if (customPageSet.naviUseCustomTitleColor.length) { titleColor = kZCS(customPageSet.naviUseCustomTitleColor); }
+    
+    self.arrowImage = ZCKitBridge.naviBackImage;
+    if (customPageSet.naviUseCustomBackArrowImage) { self.arrowImage = customPageSet.naviUseCustomBackArrowImage; }
+    
+    [self resetCushionImage:backImage titleColor:titleColor rightColor:nil];
+    [self setShadow:shadowColor offset:CGSizeZero radius:1];
+    self.lineShadowView.image = shadowImage;
+    self.cushionView.alpha = alpha;
+    [self setNeedsLayout];
+    [self layoutIfNeeded];
 }
 
 #pragma mark - ClassFunc
-+ (instancetype)viewWithTitle:(NSString *)title {
-    return [self viewWithTitle:title rightName:nil leftBlock:nil rightBlock:nil];
++ (instancetype)viewWithAssociate:(UIViewController *)associate title:(nullable NSString *)title {
+    return [self viewWithAssociate:associate title:title rightName:nil rightBlock:nil];
 }
 
-+ (instancetype)viewWithTitle:(NSString *)title rightName:(NSString *)rightName leftBlock:(void(^)(void))leftBlock rightBlock:(void(^)(void))rightBlock {
++ (instancetype)viewWithAssociate:(UIViewController *)associate title:(nullable NSString *)title rightName:(nullable NSString *)rightName rightBlock:(nullable void(^)(void))rightBlock {
     ZCNaviView *customView = [[ZCNaviView alloc] initWithFrame:CGRectMake(0, 0, kZSWid, kZSNaviHei)];
-    customView.leftBlock = leftBlock;
     customView.rightBlock = rightBlock;
-    [customView setTitle:title leftName:(NSString *)ZCKitBridge.naviBackImage rightName:rightName];
+    [customView resetAssociate:associate];
+    [customView setTitle:title rightName:rightName rightColor:nil];
     return customView;
 }
 
-+ (instancetype)viewWithTitle:(NSString *)title rightView:(UIView *)rightView {
++ (instancetype)viewWithAssociate:(UIViewController *)associate title:(nullable NSString *)title rightView:(nullable UIView *)rightView {
     ZCNaviView *customView = [[ZCNaviView alloc] initWithFrame:CGRectMake(0, 0, kZSWid, kZSNaviHei)];
     customView.rightCustomView = rightView;
-    [customView setTitle:title leftName:(NSString *)ZCKitBridge.naviBackImage rightName:nil];
+    [customView resetAssociate:associate];
+    [customView setTitle:title rightName:nil rightColor:nil];
     return customView;
 }
 
 #pragma mark - ApiFunc
-- (void)setTitle:(NSString *)title leftName:(NSString *)leftName rightName:(NSString *)rightName {
+- (void)setTitle:(NSString *)title rightName:(NSString *)rightName rightColor:(nullable UIColor *)rightColor {
+    id leftName = self.arrowImage;
+    
     CGFloat left_wid = 0;
     if (self.leftCustomView) {
         self.leftButton.hidden = YES;
@@ -112,11 +149,11 @@
         [self.leftButton setTitle:nil forState:UIControlStateNormal];
         [self.leftButton setImage:nil forState:UIControlStateNormal];
         [self.leftButton setImage:nil forState:UIControlStateHighlighted];
-        if (leftName && [leftName isKindOfClass:NSString.class] && leftName.length) {
+        if (leftName && [leftName isKindOfClass:NSString.class] && ((NSString *)leftName).length) {
             UIImage *leftImage = [UIImage imageNamed:leftName];
             if (leftImage) { leftName = (NSString *)leftImage; }
         }
-        if (leftName && [leftName isKindOfClass:NSString.class] && leftName.length) {
+        if (leftName && [leftName isKindOfClass:NSString.class] && ((NSString *)leftName).length) {
             self.leftButton.userInteractionEnabled = YES;
             left_wid = [leftName sizeLabelForFont:self.leftButton.titleLabel.font width:CGFLOAT_MAX alignment:self.leftButton.titleLabel.textAlignment spacing:0].width + 10;
             [self.leftButton setTitle:leftName forState:UIControlStateNormal];
@@ -164,6 +201,10 @@
         } right_wid = MIN(right_wid, self.cushionView.zc_width - left_wid - 80);
         self.rightButton.zc_size = CGSizeMake(right_wid, 22);
     }
+    if (rightColor) {
+        [self.rightButton setTitleColor:rightColor forState:UIControlStateNormal];
+        [self.rightButton setTitleColor:kZCA(rightColor, 0.3) forState:UIControlStateHighlighted];
+    }
     
     CGFloat middle_wid = 0;
     if (self.middleCustomView) {
@@ -190,26 +231,16 @@
     if (leftView && ![leftView isDescendantOfView:self]) [self addSubview:leftView];
     if (rightView) self.rightCustomView = rightView;
     if (rightView && ![rightView isDescendantOfView:self]) [self addSubview:rightView];
-    [self bringSubviewToFront:self.lineShadowView];
-    [self resetTitleFont:nil leftFont:nil rightFont:nil];
-}
-
-- (void)resetTitleFont:(UIFont *)titleFont leftFont:(UIFont *)leftFont rightFont:(UIFont *)rightFont { //重设置文本的字体，传入nil将不做更改，调用有可能会更改子视图布局
-    if (titleFont) self.middleLabel.font = titleFont;
-    if (leftFont) self.leftButton.titleLabel.font = leftFont;
-    if (rightFont) self.rightButton.titleLabel.font = rightFont;
-    UIImage *leftImage = [self.leftButton imageForState:UIControlStateNormal];
-    NSString *leftTitle = [self.leftButton titleForState:UIControlStateNormal];
+    
     NSString *title = self.middleLabel.text;
     UIImage *rightImage = [self.rightButton imageForState:UIControlStateNormal];
     NSString *rightTtitle = [self.rightButton titleForState:UIControlStateNormal];
-    [self setTitle:title leftName:(leftTitle.length ? leftTitle : (NSString *)leftImage) rightName:(rightTtitle.length ? rightTtitle : (NSString *)rightImage)];
+    [self setTitle:title rightName:(rightTtitle.length ? rightTtitle : (NSString *)rightImage) rightColor:nil];
 }
 
-- (void)resetCushionImage:(UIImage *)cushionImage titleColor:(UIColor *)titleColor leftColor:(UIColor *)leftColor rightColor:(UIColor *)rightColor {
-    if (cushionImage) { self.cushionView.image = cushionImage; self.cushionView.backgroundColor = kZCClear; }
+- (void)resetCushionImage:(UIImage *)cushionImage titleColor:(UIColor *)titleColor rightColor:(UIColor *)rightColor {
+    if (cushionImage) { self.cushionView.image = cushionImage; }
     if (titleColor) self.middleLabel.textColor = titleColor;
-    if (leftColor) { [self.leftButton setTitleColor:leftColor forState:UIControlStateNormal]; [self.leftButton setTitleColor:kZCA(leftColor, 0.3) forState:UIControlStateHighlighted]; }
     if (rightColor) { [self.rightButton setTitleColor:rightColor forState:UIControlStateNormal]; [self.rightButton setTitleColor:kZCA(rightColor, 0.3) forState:UIControlStateHighlighted]; }
 }
 
@@ -238,53 +269,19 @@
     }
 }
 
-- (void)willMoveToSuperview:(UIView *)newSuperview {
-    if (newSuperview) {
-        self.associate = newSuperview.currentViewController;
-        if ([self.associate respondsToSelector:@selector(isPageHiddenNavigationBar)]) {
-            if (![(id<ZCViewControllerPageBackProtocol>)self.associate isPageHiddenNavigationBar]) {
-                NSAssert(0, @"ZCKit: this need manual completion");
-            }
-        } else if (self.associate.navigationController) {
-            if (!self.associate.navigationController.navigationBarHidden || !self.associate.navigationController.navigationBar.hidden) {
-                NSAssert(0, @"ZCKit: this need manual completion");
-            }
-        }
-        if ([self.associate respondsToSelector:@selector(isNaviUseClearBar)]) {
-            if ([(id<ZCViewControllerNaviBarProtocol>)self.associate isNaviUseClearBar]) {
-                self.cushionView.image = nil;
-                self.cushionView.backgroundColor = kZCClear;
-                self.lineShadowView.backgroundColor = kZCClear;
-            }
-        }
-        if ([self.associate respondsToSelector:@selector(isNaviUseShieldBarLine)]) {
-            if ([(id<ZCViewControllerNaviBarProtocol>)self.associate isNaviUseShieldBarLine]) {
-                self.lineShadowView.backgroundColor = kZCClear;
-            }
-        }
-    } else {
-        self.associate = nil;
-    }
-}
-
 #pragma mark - Action
 - (void)onLeftItem {
-    if (self.leftBlock) {
-        self.leftBlock();
-    } else if (self.associate) {
-        BOOL isCanBack = YES;
-        if ([self.associate respondsToSelector:@selector(isPageCanResponseTouchPop)]) {
-            isCanBack = [(id<ZCViewControllerPageBackProtocol>)self.associate isPageCanResponseTouchPop];
-        }
-        if (isCanBack) {
-            main_imp(^{
-                if ([self.associate respondsToSelector:@selector(onPageCustomTapBackAction)]) {
-                    [(id<ZCViewControllerPageBackProtocol>)self.associate onPageCustomTapBackAction];
-                } else {
-                    [self.associate backToUpControllerAnimated:YES];
-                }
-            });
-        }
+    if (self.weakAssociate) {
+        main_imp(^{
+            if ([self.weakAssociate respondsToSelector:@selector(onPageCustomTapBackAction)]) {
+                [(id<ZCViewControllerPageBackProtocol>)self.weakAssociate onPageCustomTapBackAction];
+            } else if (self.weakAssociate.navigationController && self.weakAssociate.parentViewController == self.weakAssociate.navigationController) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:ZCViewControllerWillBeTouchPopNotification object:self.weakAssociate];
+                [self.weakAssociate.navigationController popViewControllerAnimated:YES];
+            } else {
+                NSAssert(0, @"ZCKit: left btn auto back fail");
+            }
+        });
     }
 }
 

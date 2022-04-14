@@ -7,15 +7,8 @@
 
 #import "KKViewController.h"
 #import "KKNextViewController.h"
-#import "ZCKit.h"
-#import "NSDate+ZC.h"
-#import "ZCDateManager.h"
-#import "ZCKitBridge.h"
-#import "ZCBoxView.h"
-#import "UIResponder+ZC.h"
-#import "ZCQueueHandler.h"
-
-#import <os/lock.h>
+#import "ZCMacro.h"
+#import "UIView+ZC.h"
 #import "ZCTest-Swift.h"
 
 @interface KKViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -28,18 +21,46 @@
 
 @implementation KKViewController
 
+
+
+
+- (void)onPageCustomInitSet:(ZCViewControllerCustomPageSet *)customPageSet {
+    customPageSet.isNaviUseClearBar = NO;
+    customPageSet.isNaviUseShieldBarLine = NO;
+    customPageSet.isNaviUseBarShadowColor = YES;
+    customPageSet.isPageHiddenNavigationBar = NO;
+    customPageSet.isPageShieldInteractivePop = NO;
+    customPageSet.naviUseCustomBackgroundName = @"#0000FF";
+    customPageSet.naviUseCustomTitleColor = @"#FFFFFF";
+    customPageSet.naviUseCustomBackArrowImage = kZIN(@"zc_image_back_black");
+}
+
+
+
+
+
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.navigationItem.title = @"1";
+    self.navigationItem.title = [NSString stringWithFormat:@"%ld", self.navigationController.viewControllers.count];
     self.view.backgroundColor = kZCRGB(0xEE88AA);
+    self.hidesBottomBarWhenPushed = NO;
     
-    self.automaticallyAdjustsScrollViewInsets = NO;
-    self.edgesForExtendedLayout = UIRectEdgeAll;
+    //self.automaticallyAdjustsScrollViewInsets = NO;
+    //self.edgesForExtendedLayout = UIRectEdgeAll;
+    
+    
+    
     
     UITableView *listView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     listView.dataSource = self; listView.delegate = self;
+    if (@available(iOS 11.0, *)) {
+        listView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+    }
     listView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    listView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0.01)];
+    listView.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 80.0)];
     listView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 0.01)];
     listView.separatorStyle = UITableViewCellSeparatorStyleNone;
     listView.estimatedSectionFooterHeight = 0;
@@ -53,26 +74,24 @@
     listView.separatorInset = UIEdgeInsetsZero;
     listView.directionalLockEnabled = YES;
     listView.bounces = YES;
-    listView.frame = CGRectMake(0, 64, kZSWid, kZSHei - 64 - 200); //这里要设置大些
-    listView.backgroundColor = kZCRGB(0xEEEEEE);
+    listView.backgroundColor = [UIColor clearColor];
+    listView.frame = CGRectMake(0, 0, kZSWid, kZSHei - 200); //这里要设置大些
     [self.view addSubview:listView];
-    #warning - ZCTableView分类初始化方法 & JSON object & 自定义导航替换问题 & :(BOOL)    dissmiss时候通知发送的问题等
     
-    main_delay(2, ^{
-        
-    });
+#warning - ZCTableView分类初始化方法 & JSON object  dissmiss时候通知发送的问题等  tableView先设置代理在设置表头  parentViewController  contentInsetAdjustmentBehavior  & 多层导航 & 屏蔽导航手势
+    
 }
 
-
-
-
-
-
-
-
+- (void)onPageCustomTapBackAction {
+    
+}
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self.navigationController pushViewController:[[KKNextViewController alloc] init] animated:YES];
+    if (self.navigationController.viewControllers.count == 1) {
+        [self.navigationController pushViewController:[[KKViewController alloc] init] animated:YES];
+    } else {
+        [self.navigationController pushViewController:[[KKNextViewController alloc] init] animated:YES];
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -84,11 +103,16 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    return 50;
+    return 150;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    return [[UIView alloc] initWithFrame:CGRectMake(0, 0, kZSWid, 50) color:kZCRGB(0xFFFFFF)];
+    UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kZSWid, 150) color:kZCRGB(0xFFFFFF)];
+    
+    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 150, 150)];
+    iv.image = [UIImage imageNamed:@"Wallet"];
+    [v addSubview:iv];
+    return v;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section {
@@ -103,7 +127,7 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     cell.textLabel.text = kZStrFormat(@"%ld", indexPath.row);
-    cell.backgroundColor = kZCClear;
+    cell.backgroundColor = kZCRGB(0xEEEEEE);
     return cell;
 }
 

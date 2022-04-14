@@ -7,13 +7,9 @@
 //
 
 #import "UIViewController+ZCSwizzle.h"
-#import "UINavigationController+ZCSwizzle.h"
-#import "UIViewController+ZC.h"
-#import "ZCViewController.h"
 #import "ZCSwizzleHeader.h"
 #import "ZCKitBridge.h"
 #import "UIView+ZC.h"
-#import "ZCMacro.h"
 
 @implementation UIViewController (ZCSwizzle)
 
@@ -47,8 +43,7 @@
 
 - (void)swizzle1_vc_viewDidLoad {
     if (self.navigationController && self.parentViewController == self.navigationController) {
-        UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
-        self.navigationItem.backBarButtonItem = item;
+        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     }
     [self swizzle1_vc_viewDidLoad];
 }
@@ -59,68 +54,10 @@
             if (ZCKitBridge.isPrintLog) NSLog(@"\nZCKit: --------- %@ --------- appear\n", NSStringFromClass(self.class));
         }
     }
-    if (self.navigationController && self.parentViewController == self.navigationController) {
-        if ([self vc_isPageHiddenNavigationBar]) {
-            self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
-            [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
-        } else {
-            if ([self vc_isNaviUseClearBar]) {
-                UIImage *imageBar = [[UIImage alloc] init];
-                UIImage *imageShadow = [[UIImage alloc] init];
-                if (@available(iOS 13.0, *)) { //导航过渡需要的
-                    imageBar = [UIImage imageNamed:ZCKitBridge.naviBarImageOrColor];
-                    if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
-                    imageShadow = [UIImage imageWithColor:kZCSplit size:CGSizeMake(kZSWid, kZSPixel)];
-                }
-                self.navigationController.navigationBar.subviews.firstObject.alpha = 0;
-                [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
-                [self.navigationController.navigationBar setShadowImage:imageShadow];
-                [self.navigationController.navigationBar setShadow:kZCClear offset:CGSizeZero radius:1];
-                [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
-            } else if ([self vc_isNaviUseShieldBarLine]) {
-                UIImage *imageBar = [UIImage imageNamed:ZCKitBridge.naviBarImageOrColor];
-                if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
-                self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
-                [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
-                [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-                [self.navigationController.navigationBar setShadow:kZCClear offset:CGSizeZero radius:1];
-                [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
-            } else if ([self vc_onNaviUseCustomBar]) {
-                UIColor *shadowColor = [self vc_isNaviUseBarShadowColor] ? kZCSplit : kZCClear;
-                self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
-                [self.navigationController.navigationBar setShadow:shadowColor offset:CGSizeZero radius:1];
-                [self.navigationController setValue:@(NO) forKey:@"isNormalBar"];
-            } else {
-                if (!self.navigationController.isNormalBar) {
-                    UIImage *imageBar = [UIImage imageNamed:ZCKitBridge.naviBarImageOrColor];
-                    if (!imageBar) imageBar = [UIImage imageWithColor:kZCS(ZCKitBridge.naviBarImageOrColor)];
-                    UIImage *imageShadow = [UIImage imageWithColor:kZCSplit size:CGSizeMake(kZSWid, kZSPixel)];
-                    UIColor *shadowColor = [self vc_isNaviUseBarShadowColor] ? kZCSplit : kZCClear;
-                    self.navigationController.navigationBar.subviews.firstObject.alpha = 1.0;
-                    [self.navigationController.navigationBar setBackgroundImage:imageBar forBarMetrics:UIBarMetricsDefault];
-                    [self.navigationController.navigationBar setShadowImage:imageShadow];
-                    [self.navigationController.navigationBar setShadow:shadowColor offset:CGSizeZero radius:1];
-                    if (@available(iOS 14.0, *)) {} else { //iOS14以上不用在此刷新下这地方
-                    [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:NO];
-                    [self.navigationController setNavigationBarHidden:!self.navigationController.navigationBarHidden animated:NO];}
-                    [self.navigationController setValue:@(![self vc_isNaviUseBarShadowColor]) forKey:@"isNormalBar"];
-                }
-            }
-            if ([self vc_isNaviUseTranslucentBar] || [self vc_isNaviUseClearBar]) {
-                self.navigationController.navigationBar.barTintColor = nil;
-                self.navigationController.navigationBar.translucent = YES;
-                self.extendedLayoutIncludesOpaqueBars = NO;
-            } else {
-                self.navigationController.navigationBar.barTintColor = nil;
-                self.navigationController.navigationBar.translucent = NO;
-                self.extendedLayoutIncludesOpaqueBars = YES;
-            }
-        }
-    }
     [self swizzle1_vc_viewWillAppear:animated];
     for (UIView *view in self.view.containAllSubviews) {
         if ([view respondsToSelector:@selector(onControllerViewWillAppear)]) {
-            [(id<ZCViewLayoutProtocol>)view onControllerViewWillAppear];
+            [(id<ZCViewSyncLayoutProtocol>)view onControllerViewWillAppear];
         }
     }
 }
@@ -129,7 +66,7 @@
     [self swizzle1_vc_viewWillDisappear:animated];
     for (UIView *view in self.view.containAllSubviews) {
         if ([view respondsToSelector:@selector(onControllerViewWillDisappear)]) {
-            [(id<ZCViewLayoutProtocol>)view onControllerViewWillDisappear];
+            [(id<ZCViewSyncLayoutProtocol>)view onControllerViewWillDisappear];
         }
     }
 }
@@ -138,58 +75,9 @@
     [self swizzle1_vc_viewDidLayoutSubviews];
     for (UIView *view in self.view.containAllSubviews) {
         if ([view respondsToSelector:@selector(onControllerDidLayout)]) {
-            [(id<ZCViewLayoutProtocol>)view onControllerDidLayout];
+            [(id<ZCViewSyncLayoutProtocol>)view onControllerDidLayout];
         }
     }
-}
-
-#pragma mark - Private
-- (BOOL)vc_onNaviUseCustomBar {
-    SEL sel = @selector(onNaviUseCustomBar);
-    if ([self respondsToSelector:sel]) {
-        kZSuppressLeakWarn([self performSelector:sel]); return YES;
-    }
-    return NO;
-}
-
-- (BOOL)vc_isNaviUseClearBar {
-    BOOL use = NO; SEL sel = @selector(isNaviUseClearBar);
-    if ([self respondsToSelector:sel]) {
-        kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
-    }
-    return use;
-}
-
-- (BOOL)vc_isNaviUseShieldBarLine {
-    BOOL use = NO; SEL sel = @selector(isNaviUseShieldBarLine);
-    if ([self respondsToSelector:sel]) {
-        kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
-    }
-    return use;
-}
-
-- (BOOL)vc_isNaviUseTranslucentBar {
-    BOOL use = NO; SEL sel = @selector(isNaviUseTranslucentBar);
-    if ([self respondsToSelector:sel]) {
-        kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
-    }
-    return use;
-}
-
-- (BOOL)vc_isNaviUseBarShadowColor {
-    BOOL use = NO; SEL sel = @selector(isNaviUseBarShadowColor);
-    if ([self respondsToSelector:sel]) {
-        kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
-    }
-    return use;
-}
-
-- (BOOL)vc_isPageHiddenNavigationBar {
-    BOOL use = NO; SEL sel = @selector(isPageHiddenNavigationBar);
-    if ([self respondsToSelector:sel]) {
-        kZSuppressLeakWarn(use = (BOOL)[self performSelector:sel]);
-    }
-    return use;
 }
 
 @end

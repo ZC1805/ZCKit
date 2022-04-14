@@ -43,12 +43,4 @@
     return finalvc;
 }
 
-- (void)setBackArrowImage:(UIImage *)backArrowImage {
-    objc_setAssociatedObject(self, @selector(backArrowImage), backArrowImage, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (UIImage *)backArrowImage {
-    return objc_getAssociatedObject(self, _cmd);
-}
-
 @end
