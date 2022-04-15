@@ -275,7 +275,7 @@
         main_imp(^{
             if ([self.weakAssociate respondsToSelector:@selector(onPageCustomTapBackAction)]) {
                 [(id<ZCViewControllerPageBackProtocol>)self.weakAssociate onPageCustomTapBackAction];
-            } else if (self.weakAssociate.navigationController && self.weakAssociate.parentViewController == self.weakAssociate.navigationController) {
+            } else if (!self.weakAssociate.presentedViewController && self.weakAssociate.navigationController) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:ZCViewControllerWillBeTouchPopNotification object:self.weakAssociate];
                 [self.weakAssociate.navigationController popViewControllerAnimated:YES];
             } else {

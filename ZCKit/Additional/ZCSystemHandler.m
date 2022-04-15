@@ -171,9 +171,9 @@
     }];
 }
 
-- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    navigationController.navigationBar.barTintColor = kZCS(ZCKitBridge.naviBarImageOrColor);
-    navigationController.navigationBar.tintColor = kZCS(ZCKitBridge.naviBarTitleColor);
+- (void)navigationController:(UINavigationController *)naviController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    naviController.navigationBar.barTintColor = kZCS(ZCKitBridge.naviBarImageOrColor);
+    naviController.navigationBar.tintColor = kZCS(ZCKitBridge.naviBarTitleColor);
 }
 
 #pragma mark - Send message

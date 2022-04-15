@@ -28,11 +28,6 @@ typedef NS_ENUM(NSInteger, ZCEnumScrollViewDirection) {
 
 @property (nonatomic) CGFloat zc_sizeHeight;  /**< size高 */
 
-#pragma mark - Offset
-@property (nullable, nonatomic, strong) UIColor *topExpandColor;  /**< 上部偏移出来的颜色设置，在确定frame后再设置 */
-
-@property (nullable, nonatomic, strong) UIColor *bottomExpandColor;  /**< 底部偏移出来的颜色设置，在确定frame后再设置 */
-
 #pragma mark - Direction
 @property (nonatomic, assign, readonly) ZCEnumScrollViewDirection horizontalScrollingDirection;  /**< 水平滑动方向 */
 

@@ -42,7 +42,7 @@
 }
 
 - (void)swizzle1_vc_viewDidLoad {
-    if (self.navigationController && self.parentViewController == self.navigationController) {
+    if (self.navigationController) {
         self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
     }
     [self swizzle1_vc_viewDidLoad];

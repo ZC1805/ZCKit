@@ -21,9 +21,6 @@
 
 @implementation KKViewController
 
-
-
-
 - (void)onPageCustomInitSet:(ZCViewControllerCustomPageSet *)customPageSet {
     customPageSet.isNaviUseClearBar = NO;
     customPageSet.isNaviUseShieldBarLine = NO;
@@ -32,13 +29,8 @@
     customPageSet.isPageShieldInteractivePop = NO;
     customPageSet.naviUseCustomBackgroundName = @"#0000FF";
     customPageSet.naviUseCustomTitleColor = @"#FFFFFF";
-    customPageSet.naviUseCustomBackArrowImage = kZIN(@"zc_image_back_black");
+    //customPageSet.naviUseCustomBackArrowImage = kZIN(@"zc_image_back_black");
 }
-
-
-
-
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -48,9 +40,7 @@
     
     //self.automaticallyAdjustsScrollViewInsets = NO;
     //self.edgesForExtendedLayout = UIRectEdgeAll;
-    
-    
-    
+    //contentInsetAdjustmentBehavior
     
     UITableView *listView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     listView.dataSource = self; listView.delegate = self;
@@ -78,21 +68,14 @@
     listView.frame = CGRectMake(0, 0, kZSWid, kZSHei - 200); //这里要设置大些
     [self.view addSubview:listView];
     
-#warning - ZCTableView分类初始化方法 & JSON object  dissmiss时候通知发送的问题等  tableView先设置代理在设置表头  parentViewController  contentInsetAdjustmentBehavior  & 多层导航 & 屏蔽导航手势
-    
-}
-
-- (void)onPageCustomTapBackAction {
-    
+#warning - ZCTableView分类初始化方法   JSON object   tableView先设置代理在设置表头   ZCNavVC屏蔽导航过渡问题
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    if (self.navigationController.viewControllers.count == 1) {
-        [self.navigationController pushViewController:[[KKViewController alloc] init] animated:YES];
-    } else {
-        [self.navigationController pushViewController:[[KKNextViewController alloc] init] animated:YES];
-    }
+    [self.navigationController pushViewController:[[KKNextViewController alloc] init] animated:YES];
 }
+
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return  10;
@@ -108,7 +91,6 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kZSWid, 150) color:kZCRGB(0xFFFFFF)];
-    
     UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 150, 150)];
     iv.image = [UIImage imageNamed:@"Wallet"];
     [v addSubview:iv];

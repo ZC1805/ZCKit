@@ -25,13 +25,11 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 
 @property (nonatomic, assign) BOOL isPushToPresent;
 
-@property (nonatomic, assign) CGFloat slipNaciBackAlpha;
-
 @property (nonatomic, weak) UIViewController *visibleChildVc;
 
-@property (nonatomic, copy) void(^willPush)(UIViewController *toVc);
+@property (nonatomic, copy) void(^willPushBlock)(UIViewController *toVc);
 
-@property (nonatomic, copy) void(^willPop)(UIViewController *toVc);
+@property (nonatomic, copy) void(^willPopBlock)(UIViewController *toVc);
 
 @property (nonatomic, weak) UIViewController *willPushToVc;
 
@@ -62,8 +60,8 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 - (void)viewDidLoad {
     [super viewDidLoad];
     __weak typeof(self) wkself = self;
-    self.willPop = ^(UIViewController *toVc) { wkself.willPopToVc = toVc; wkself.isWillPush = NO; };
-    self.willPush = ^(UIViewController *toVc) { wkself.willPushToVc = toVc; wkself.isWillPush = YES; };
+    self.willPopBlock = ^(UIViewController *toVc) { wkself.willPopToVc = toVc; wkself.isWillPush = NO; };
+    self.willPushBlock = ^(UIViewController *toVc) { wkself.willPushToVc = toVc; wkself.isWillPush = YES; };
 }
 
 - (void)didReceiveMemoryWarning {
@@ -108,7 +106,7 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 
 #pragma mark - NaviBarUI
 - (void)onResetNaviBarUserInterface {
-    if (self.navigationController && self.parentViewController == self.navigationController) {
+    if (!self.presentedViewController && self.navigationController) {
         NSString *backName = ZCKitBridge.naviBarImageOrColor;
         if (self.customPageSet.naviUseCustomBackgroundName.length) backName = self.customPageSet.naviUseCustomBackgroundName;
         UIImage *backImage = [UIImage imageNamed:backName];

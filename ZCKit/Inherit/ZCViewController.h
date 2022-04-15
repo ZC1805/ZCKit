@@ -16,7 +16,7 @@ extern NSNotificationName const ZCViewControllerDidBeGesPopNotification;  /**< �
 
 @property (nonatomic, assign) BOOL isPageShieldInteractivePop;  /**< 是否屏蔽手动返回，若实现了onPageCustomTapBackAction而没实现onPageCustomPanBackAction则自动返回YES，默认NO */
 
-@property (nonatomic, assign) BOOL isPageHiddenNavigationBar;  /**< 是否在viewWillAppear&viewWillDisappear内设置导航隐藏，默认NO */
+@property (nonatomic, assign) BOOL isPageHiddenNavigationBar;  /**< 是否在viewWillAppear&viewWillDisappear内设置导航隐藏，导航推出TabbarVC&其子视图为新的NaviVC时需要手动隐藏导航栏，默认NO */
 
 @property (nonatomic, assign) BOOL isNaviUseClearBar;  /**< 使用全透明导航栏，默认NO */
 

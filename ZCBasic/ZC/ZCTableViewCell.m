@@ -1630,8 +1630,6 @@ static const CGFloat rowHideHei = 0.11; //行隐藏高度
                 ((UIScrollView *)view).refreshControl = nil;
             }
             ((UIScrollView *)view).keyboardDismissMode = UIScrollViewKeyboardDismissModeNone;
-            ((UIScrollView *)view).bottomExpandColor = kZCClear;
-            ((UIScrollView *)view).topExpandColor = kZCClear;
         }
     }
 }

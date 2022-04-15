@@ -28,10 +28,8 @@
 
     
     UINavigationController *nvc = [[ZCNavigationController alloc] initWithRootViewController:[[KKViewController alloc] init]];
-    nvc.view.backgroundColor = UIColor.whiteColor;
     nvc.tabBarItem = [[UITabBarItem alloc] initWithTabBarSystemItem:UITabBarSystemItemHistory tag:0];
     UITabBarController *tab = [[ZCTabBarController alloc] init];
-    tab.view.backgroundColor = UIColor.whiteColor;
     tab.viewControllers = @[nvc];
     
     
