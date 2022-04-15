@@ -22,14 +22,14 @@
 @implementation KKNextViewController
 
 - (void)onPageCustomInitSet:(ZCViewControllerCustomPageSet *)customPageSet {
-    customPageSet.isNaviUseClearBar = NO;
-    customPageSet.isNaviUseShieldBarLine = NO;
-    customPageSet.isNaviUseBarShadowColor = YES;
+//    customPageSet.isNaviUseClearBar = NO;
+//    customPageSet.isNaviUseShieldBarLine = NO;
+//    customPageSet.isNaviUseBarShadowColor = YES;
     customPageSet.isPageHiddenNavigationBar = YES;
-    customPageSet.isPageShieldInteractivePop = NO;
-    customPageSet.naviUseCustomBackgroundName = @"#FF0000";
-    customPageSet.naviUseCustomTitleColor = @"#FFFFFF";
-    //customPageSet.naviUseCustomBackArrowImage = kZIN(@"zc_image_back_black");
+//    customPageSet.isPageShieldInteractivePop = NO;
+//    customPageSet.naviUseCustomBackgroundName = @"#FF0000";
+//    customPageSet.naviUseCustomTitleColor = @"#FFFFFF";
+//    customPageSet.naviUseCustomBackArrowImage = kZIN(@"zc_image_back_black");
 }
 
 - (void)viewDidLoad {
@@ -37,9 +37,9 @@
     self.title = @"2";
     self.view.backgroundColor = kZCRGB(0xEE8800);
     
-    ZCNaviView *v = [ZCNaviView viewWithAssociate:self title:@"2"];
-    [v setTitle:@"2" rightName:@"2Xx" rightColor:UIColor.redColor];
-    [self.view addSubview:v];
+    //ZCNaviView *v = [ZCNaviView viewWithAssociate:self title:@"2"];
+    //[v setTitle:@"2" rightName:@"2Xx" rightColor:UIColor.redColor];
+    //[self.view addSubview:v];
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
