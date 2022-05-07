@@ -38,7 +38,7 @@ extern NSString * const ZCFlagStr;
 
 - (CGFloat)heightForFont:(UIFont *)font width:(CGFloat)width isSystemStyle:(BOOL)isSystemStyle;  /**< 计算高度，NSLineBreakByWordWrapping，isSystemStyle计算label和button最好设为YES */
 
-- (CGSize)sizeLabelForFont:(UIFont *)font width:(CGFloat)width alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing;  /**< 取Label自适应高度 */
+- (CGSize)sizeFitLabelForFont:(UIFont *)font width:(CGFloat)width alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing;  /**< 取Label自适应高度 */
 
 - (NSUInteger)charCount;  /**< 字符长度 */
 
@@ -151,7 +151,7 @@ extern NSString * const ZCFlagStr;
 
 @interface NSAttributedString (ZC)
 
-- (CGSize)sizeLabelForWidth:(CGFloat)width;  /**< 取Label自适应高度 */
+- (CGSize)sizeFitLabelForWidth:(CGFloat)width;  /**< 取Label自适应高度 */
 
 @end
 

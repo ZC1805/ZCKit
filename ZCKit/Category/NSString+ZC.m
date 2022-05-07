@@ -74,7 +74,7 @@ NSString * const ZCFlagStr = @"^.~!*.^";
     return ceilf(size.height);
 }
 
-- (CGSize)sizeLabelForFont:(UIFont *)font width:(CGFloat)width alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing {
+- (CGSize)sizeFitLabelForFont:(UIFont *)font width:(CGFloat)width alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing {
     if (!self.length || width < 0.01) return CGSizeZero;
     static NSMutableParagraphStyle *kStyle = nil;
     static UILabel *kCalSpacLabel = nil;
@@ -713,7 +713,7 @@ NSString * const ZCFlagStr = @"^.~!*.^";
 #pragma mark - ~ NSAttributedString ~
 @implementation NSAttributedString (ZC)
 
-- (CGSize)sizeLabelForWidth:(CGFloat)width {
+- (CGSize)sizeFitLabelForWidth:(CGFloat)width {
     if (!self.length || width < 0.01) return CGSizeZero;
     static UILabel *kCalAttLabel = nil;
     static dispatch_once_t onceToken;

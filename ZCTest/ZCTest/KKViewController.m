@@ -68,7 +68,10 @@
     listView.frame = CGRectMake(0, 0, kZSWid, kZSHei - 200); //这里要设置大些
     [self.view addSubview:listView];
     
-#warning - ZCTableView分类初始化方法   JSON object   tableView先设置代理在设置表头   ZCNavVC屏蔽导航过渡问题
+#warning - ZCTableView分类初始化方法   JSON object   tableView先设置代理在设置表头   ZCNavVC屏蔽导航过渡问题    ZSA像素对齐问题   ZCButton布局问题   UITableView不想设置SectionHeader高度时不要用0.01用CGFLOAT_MIN
+#warning - SDWebImage来下载网络图片为了更好处理图片的缩放和圆角等问题，需要在原来库增加某些特性（图片缩放、裁圆角和缓存等）单例类方法取名
+    
+#warning - 固戍花园骑车 铁仔山 人才公园
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
@@ -91,7 +94,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
     UIView *v = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kZSWid, 150) color:kZCRGB(0xFFFFFF)];
-    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 150, 150)];
+    UIImageView *iv = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 154, 120.1)];
     iv.image = [UIImage imageNamed:@"Wallet"];
     [v addSubview:iv];
     return v;

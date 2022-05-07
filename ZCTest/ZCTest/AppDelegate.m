@@ -20,7 +20,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     
-    ZCKitBridge.isPrintLog = YES;
+    ZCKitBridge.isPrintLog = NO;
     ZCKitBridge.classNamePrefix = @"KK";
     ZCKitBridge.isStrToAccurateFloat = YES;
     ZCKitBridge.naviBarImageOrColor = @"#CCCCCC";

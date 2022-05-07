@@ -155,7 +155,7 @@
         }
         if (leftName && [leftName isKindOfClass:NSString.class] && ((NSString *)leftName).length) {
             self.leftButton.userInteractionEnabled = YES;
-            left_wid = [leftName sizeLabelForFont:self.leftButton.titleLabel.font width:CGFLOAT_MAX alignment:self.leftButton.titleLabel.textAlignment spacing:0].width + 10;
+            left_wid = [leftName sizeFitLabelForFont:self.leftButton.titleLabel.font width:CGFLOAT_MAX alignment:self.leftButton.titleLabel.textAlignment spacing:0].width + 10;
             [self.leftButton setTitle:leftName forState:UIControlStateNormal];
         } else if (leftName && [leftName isKindOfClass:UIImage.class]) {
             self.leftButton.userInteractionEnabled = YES;
@@ -188,7 +188,7 @@
         }
         if (rightName && [rightName isKindOfClass:NSString.class] && rightName.length) {
             self.rightButton.userInteractionEnabled = YES;
-            right_wid = [rightName sizeLabelForFont:self.rightButton.titleLabel.font width:CGFLOAT_MAX alignment:self.rightButton.titleLabel.textAlignment spacing:0].width + 10;
+            right_wid = [rightName sizeFitLabelForFont:self.rightButton.titleLabel.font width:CGFLOAT_MAX alignment:self.rightButton.titleLabel.textAlignment spacing:0].width + 10;
             [self.rightButton setTitle:rightName forState:UIControlStateNormal];
         } else if (rightName && [rightName isKindOfClass:UIImage.class]) {
             self.rightButton.userInteractionEnabled = YES;
@@ -214,7 +214,7 @@
         self.middleCustomView.zc_size = CGSizeMake(middle_wid, self.middleCustomView.zc_height);
     } else {
         self.middleLabel.hidden = NO;
-        if (title.length) { middle_wid = [title sizeLabelForFont:self.middleLabel.font width:CGFLOAT_MAX alignment:self.middleLabel.textAlignment spacing:0].width + 10; }
+        if (title.length) { middle_wid = [title sizeFitLabelForFont:self.middleLabel.font width:CGFLOAT_MAX alignment:self.middleLabel.textAlignment spacing:0].width + 10; }
         else { middle_wid = 10; }
         self.middleLabel.zc_size = CGSizeMake(middle_wid, 22);
         self.middleLabel.text = title;
