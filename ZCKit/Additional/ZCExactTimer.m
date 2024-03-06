@@ -77,13 +77,11 @@
                 attach:(id)attach
                 option:(ZCEnumExactTimerOption)option
                  block:(void(^)(BOOL *stop))block {
-    //validate
     if (timerName == nil || timerName.length == 0) {NSAssert(0, @"ZCKit: timer name is invalid"); return;}
     if (block == nil || block == NULL) {NSAssert(0, @"ZCKit: timer block is invalid"); return;}
     if (queue == nil) queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     if (attach == nil) attach = [NSNull null];
     
-    //timer
     ZCExactTimer *handle = [ZCExactTimer sharedTimer];
     dispatch_source_t timer = [handle.timerContainer objectForKey:timerName];
     if (!timer) {
@@ -92,7 +90,6 @@
         [handle.timerContainer setObject:timer forKey:timerName];
     }
     
-    //run
     ZCExactTimerItem *item = [[ZCExactTimerItem alloc] initWithBlock:block repeat:repeat stop:NO attach:attach];
     dispatch_source_set_timer(timer, dispatch_time(DISPATCH_TIME_NOW, interval * NSEC_PER_SEC), interval * NSEC_PER_SEC, 0.001 * NSEC_PER_SEC);
     if (option == ZCEnumExactTimerOptionAbandon) [handle.timerMaps removeObjectForKey:timerName]; //移除之前的block

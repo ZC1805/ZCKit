@@ -51,14 +51,14 @@ extern const ZCMonitorType ZCMonitorTypeNone;  /**< 用于获取监听类型等 
 @protocol ZCMonitorProtocol <NSObject>  /**< 监听需要实现的方法 */
 
 @required
-/** 返回的复合值值就是需要监听的广播 & 返回值不可变，收到广播在此分发下去，特定对象在此接收，broadcast.type在此为单值 */
+/**< 返回的复合值值就是需要监听的广播 & 返回值不可变，收到广播在此分发下去，特定对象在此接收，broadcast.type在此为单值 */
 - (ZCMonitorType)monitorForwardBroadcast:(ZCMonitorBroadcast *)broadcast;
 
 @optional
-/** 返回对特定类型的广播接收的优先级，broadcast.type在此为单值，在注册的时候调用一次，默认为Normal */
+/**< 返回对特定类型的广播接收的优先级，broadcast.type在此为单值，在注册的时候调用一次，默认为Normal */
 - (ZCEnumMonitorPriority)monitorPriorityWithType:(ZCMonitorType)type;
 
-/** 返回此类型广播是否是懒广播，broadcast.type在此为单值，在注册的时候调用一次，默认为NO */
+/**< 返回此类型广播是否是懒广播，broadcast.type在此为单值，在注册的时候调用一次，默认为NO */
 - (BOOL)monitorLazyReceiveWithType:(ZCMonitorType)type;
 
 @end
@@ -66,22 +66,22 @@ extern const ZCMonitorType ZCMonitorTypeNone;  /**< 用于获取监听类型等 
 
 @interface ZCMonitorService : NSObject  /**< 通知广播发送类 */
 
-/** 发布广播，type在此可以是复合值来同时发送多个广播 & 复合值发送顺序按子type从小到大 */
+/**< 发布广播，type在此可以是复合值来同时发送多个广播 & 复合值发送顺序按子type从小到大 */
 + (void)issue_broadcast:(ZCMonitorType)type issuer:(nullable id)issuer;
 
-/** 发布广播，type在此可以是复合值来同时发送多个广播 & 复合值发送顺序按子type从小到大 */
+/**< 发布广播，type在此可以是复合值来同时发送多个广播 & 复合值发送顺序按子type从小到大 */
 + (void)issue_broadcast:(ZCMonitorBroadcast *)broadcast;
 
-/** 开始接收聚集的懒广播，并且进入活跃状态，开始时时接收懒广播，type在此可以是复合值，设置type为None时则认为是所有类型 */
+/**< 开始接收聚集的懒广播，并且进入活跃状态，开始时时接收懒广播，type在此可以是复合值，设置type为None时则认为是所有类型 */
 + (void)open_lazyReceive:(id <ZCMonitorProtocol>)listener type:(ZCMonitorType)type;
 
-/** 停止接收懒广播，并且进入非活跃状态，暂停接收懒广播，type在此可以是复合值，设置type为None时则认为是所有类型 */
+/**< 停止接收懒广播，并且进入非活跃状态，暂停接收懒广播，type在此可以是复合值，设置type为None时则认为是所有类型 */
 + (void)close_lazyReceive:(id <ZCMonitorProtocol>)listener type:(ZCMonitorType)type;
 
-/** 移除监听 */
+/**< 移除监听 */
 + (void)remove_listener:(id <ZCMonitorProtocol>)listener;
     
-/** 注册监听 */
+/**< 注册监听 */
 + (void)register_listener:(id <ZCMonitorProtocol>)listener;
 
 @end

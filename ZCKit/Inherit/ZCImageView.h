@@ -16,7 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)initWithFrame:(CGRect)frame image:(nullable UIImage *)image;  /**< interact_NO */
 
-/** 要父视图有交互则interact为NO，子视图有交互则interact为YES，isAspectFit是否按比例填满还是拉伸填满 */
+/**< 要父视图有交互则interact为NO，子视图有交互则interact为YES，isAspectFit是否按比例填满还是拉伸填满 */
 - (instancetype)initWithFrame:(CGRect)frame image:(nullable UIImage *)image isInteract:(BOOL)isInteract isAspectFit:(BOOL)isAspectFit;
 
 @end

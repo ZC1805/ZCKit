@@ -30,7 +30,6 @@
     return nil;
 }
 
-
 //SEL sel1 = @selector(pointInside:withEvent:);
 //SEL sel1x = @selector(swizzle1_vi_pointInside:withEvent:);
 //SEL sel3 = @selector(hitTest:withEvent:);
@@ -57,6 +56,5 @@
 //    }
 //    return [self swizzle1_vi_hitTest:point withEvent:event];
 //}
-
 
 @end

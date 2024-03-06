@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZCLabel.h"
+
+@class ZCLabel;
 
 NS_ASSUME_NONNULL_BEGIN
 

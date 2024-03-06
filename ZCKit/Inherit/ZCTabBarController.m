@@ -27,7 +27,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    self.view.frame = kZSScreen; //会话界面发送拍摄的视频，拍摄结束后点击发送后可能顶部会有红条，导致的界面错位。
+    self.view.frame = kZSScreen;
 }
 
 #pragma mark - Override
@@ -128,8 +128,8 @@
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    if (self.isUsePushStyleToPresent) { //待实现
-        [super dismissViewControllerAnimated:flag completion:completion];
+    if (self.isUsePushStyleToPresent) {
+        ///!!!: 待实现
     } else {
         [super dismissViewControllerAnimated:flag completion:completion];
     }
@@ -140,8 +140,8 @@
         [self.presentFromViewController presentViewController:viewControllerToPresent animated:flag completion:completion];
     } else {
         if ([viewControllerToPresent respondsToSelector:@selector(isUsePushStyleToPresent)] &&
-            [(id<ZCViewControllerPrivateProtocol>)viewControllerToPresent isUsePushStyleToPresent]) { //待实现
-            [super presentViewController:viewControllerToPresent animated:flag completion:completion];
+            [(id<ZCViewControllerPrivateProtocol>)viewControllerToPresent isUsePushStyleToPresent]) {
+            ///!!!: 待实现
         } else {
             [super presentViewController:viewControllerToPresent animated:flag completion:completion];
         }

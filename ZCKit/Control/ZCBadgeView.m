@@ -25,18 +25,17 @@
 
 @implementation ZCBadgeView
 
-- (instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame badgeValue:(NSString *)badgeValue {
     if (self = [super initWithFrame:frame]) {
         [self resetInitProperty];
+        self.badgeValue = badgeValue;
     }
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame badgeValue:(NSString *)badgeValue {
-    if (self = [self initWithFrame:frame]) {
-        self.badgeValue = badgeValue;
-    }
-    return self;
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [self initWithFrame:frame badgeValue:@""]) {
+    } return self;
 }
 
 - (void)resetInitProperty {

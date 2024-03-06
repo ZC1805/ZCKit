@@ -36,8 +36,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) void(^touchAction)(ZCTextField *sender);  /**< 添加allEditEvent回调，默认nil */
 
+- (instancetype)initWithHolder:(nullable NSString *)holder font:(nullable UIFont *)font color:(nullable UIColor *)color;  /**< 初始化方法 */
+
 #pragma mark - Delegate block
-/** 以下方法将会设置delegate为self */
+/**< 以下方法将会设置delegate为self */
 - (ZCTextField *)shouldBeginEdit:(nullable BOOL(^)(ZCTextField *field))block;
 
 - (ZCTextField *)shouldEndEdit:(nullable BOOL(^)(ZCTextField *field))block;

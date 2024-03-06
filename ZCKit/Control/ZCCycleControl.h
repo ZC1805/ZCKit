@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZCImageView.h"
-#import "ZCLabel.h"
+
+@class ZCLabel, ZCImageView;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -52,8 +52,6 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 #pragma mark - Set
 @property (nonatomic, assign) BOOL isAutoScroll;  /**< 是否自动滚动，默认YES */
-
-@property (nonatomic, assign) BOOL isInfiniteLoop;  /**< 是否无限循环，默认YES */
 
 @property (nonatomic, assign) BOOL isShowPageControl;  /**< 是否显示分页控件，默认YES */
 
@@ -104,13 +102,13 @@ typedef NS_ENUM(NSInteger, ZCEnumCyclePageStyle) {
 
 #pragma mark - Init
 /** Url初始化，数组内可为NSUrl或NSString */
-- (instancetype)initWithFrame:(CGRect)frame imageUrlGroup:(NSArray *)imageUrlGroup;
+- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageUrlGroup:(NSArray *)imageUrlGroup;
 
 /** 本地图片初始化，loop是否循环，space是否有水平间距布局 */
-- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(NSArray <UIImage *>*)imageGroup itemHorSpace:(CGFloat)itemHorSpace isShowMultiple:(BOOL)isShowMultiple;
+- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(nullable NSArray <UIImage *>*)imageGroup itemHorSpace:(CGFloat)itemHorSpace;
 
 /** 代理初始化，holders占位image */
-- (instancetype)initWithFrame:(CGRect)frame delegate:(nullable id<ZCCycleControlDelegate>)delegate holder:(nullable UIImage *)holder;
+- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop delegate:(nullable id<ZCCycleControlDelegate>)delegate holder:(nullable UIImage *)holder;
 
 /** 解决viewWillAppear时出现时轮播图卡在一半的问题，在控制器viewWillAppear时调用此方法 */
 - (void)adjustWhenControllerViewWillAppera;

@@ -12,6 +12,7 @@
 #import "NSString+ZC.h"
 #import "NSArray+ZC.h"
 #import "NSData+ZC.h"
+#import "ZCMacro.h"
 
 #pragma mark - ~ NSDictionary ~
 @implementation NSDictionary (ZC)
@@ -143,7 +144,7 @@
         if (!error && jsonData) jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         if (jsonStr.length) return jsonStr;
     }
-    if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse to json string fail");
+    if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse to json string fail");
     return @"";
 }
 
@@ -154,7 +155,7 @@
         if (!error && jsonData) jsonStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         if (jsonStr.length) return jsonStr;
     }
-    if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse to json string fail");
+    if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse to json string fail");
     return nil;
 }
 
@@ -183,14 +184,14 @@
 }
 
 #pragma mark - Parse
-/** 键是否有效 */
+/**< 键是否有效 */
 - (BOOL)keyIsInvalidKey:(NSString *)key {
     if (key != nil && [key isKindOfClass:NSString.class]) return NO;
     NSAssert(0, @"ZCKit: parse dic for key is fail");
     return YES;
 }
 
-/** 错误时候默认返回 nil*/
+/**< 错误时候默认返回 nil*/
 - (ZCJsonValue)jsonValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return nil;
     id obj = [self objectForKey:key];
@@ -201,7 +202,7 @@
     return obj;
 }
 
-/** 错误时候默认返回 @[] */
+/**< 错误时候默认返回 @[] */
 - (NSArray *)arrayValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return [NSArray array];
     NSArray *arrvalue = nil;
@@ -209,15 +210,17 @@
     if ([obj isKindOfClass:NSArray.class]) {
         arrvalue = (NSArray *)obj;
     } else if (obj == nil || obj == NULL || [obj isKindOfClass:NSNull.class]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse array obj is null");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse array obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse array obj is invalid");
     }
-    if (arrvalue == nil) arrvalue = [NSArray array];
+    if (!arrvalue || ![arrvalue isKindOfClass:NSArray.class]) {
+        arrvalue = [NSArray array];
+    }
     return arrvalue;
 }
 
-/** 错误时候默认返回 @{} */
+/**< 错误时候默认返回 @{} */
 - (NSDictionary *)dictionaryValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return [NSDictionary dictionary];
     NSDictionary *dicvalue = nil;
@@ -225,22 +228,24 @@
     if ([obj isKindOfClass:NSDictionary.class]) {
         dicvalue = (NSDictionary *)obj;
     } else if (obj == nil || obj == NULL || [obj isKindOfClass:NSNull.class]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse dict obj is null");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse dict obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse dict obj is invalid");
     }
-    if (dicvalue == nil) dicvalue = [NSDictionary dictionary];
+    if (!dicvalue || ![dicvalue isKindOfClass:NSDictionary.class]) {
+        dicvalue = [NSDictionary dictionary];
+    }
     return dicvalue;
 }
 
-/** 错误时候默认返回 @""，number型会强制精确到6位小数点 */
+/**< 错误时候默认返回 @""，number型会强制精确到6位小数点 */
 - (NSString *)stringValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return @"";
     NSString *strvalue = nil;
     id obj = [self objectForKey:key];
     if ([obj isKindOfClass:NSString.class]) {
         if ([obj isEqualToString:@"<null>"] || [obj isEqualToString:@"(null)"]) {
-            if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse string obj is null");
+            if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse string obj is null");
         } else if (ZCKitBridge.isStrToAccurateFloat && ![obj isPureInteger] && [obj isPureDouble]) { //对纯数字字符串检查是否是不精确的浮点类型
             NSDecimalNumber *decimal = [NSDecimalNumber decimalString:obj];
             if (decimal.isANumber) {
@@ -259,15 +264,17 @@
             NSAssert(0, @"ZCKit: parse string obj is invalid string");
         }
     } else if (obj == nil || obj == NULL || [obj isKindOfClass:NSNull.class]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse string obj is null");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse string obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse string obj is invalid string");
     }
-    if (strvalue == nil) strvalue = @"";
+    if (!strvalue || ![strvalue isKindOfClass:NSString.class]) {
+        strvalue = @"";
+    }
     return strvalue;
 }
 
-/** 错误时候默认返回 0，字符串浮点数解析会精确到6位小数点 */
+/**< 错误时候默认返回 0，字符串浮点数解析会精确到6位小数点 */
 - (NSNumber *)numberValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return [NSNumber numberWithFloat:0];
     NSNumber *numvalue = nil;
@@ -282,15 +289,17 @@
             NSAssert(0, @"ZCKit: parse number obj is invalid number");
         }
     } else if (obj == nil || obj == NULL || [obj isKindOfClass:NSNull.class]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse number obj is null");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse number obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse number obj is invalid");
     }
-    if (numvalue == nil) numvalue = [NSNumber numberWithFloat:0];
+    if (!numvalue || ![numvalue isKindOfClass:NSNumber.class]) {
+        numvalue = [NSNumber numberWithFloat:0];
+    }
     return numvalue;
 }
 
-/** 错误时候默认返回 zero，字符串浮点数解析会精确到6位小数点 */
+/**< 错误时候默认返回 zero，字符串浮点数解析会精确到6位小数点 */
 - (NSDecimalNumber *)decimalValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return [NSDecimalNumber zero];
     NSDecimalNumber *decvalue = nil;
@@ -300,7 +309,7 @@
     } else if ([obj isKindOfClass:NSString.class]) {
         decvalue = [NSDecimalNumber decimalString:obj];
     } else if (obj == nil || obj == NULL || [obj isKindOfClass:NSNull.class]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse decimal obj is null");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse decimal obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse decimal obj is invalid");
     }
@@ -311,7 +320,7 @@
     return decvalue;
 }
 
-/** 错误时候默认返回 @"0.00"，四舍五入，保留2位小数点 */
+/**< 错误时候默认返回 @"0.00"，四舍五入，保留2位小数点 */
 - (NSString *)priceValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return @"0.00";
     NSString *privalue = nil;
@@ -331,7 +340,7 @@
             NSAssert(0, @"ZCKit: parse price obj is invalid price");
         }
     } else if (obj == nil || obj == NULL || [obj isKindOfClass:NSNull.class]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse price obj is null");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse price obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse price obj is invalid");
     }
@@ -339,7 +348,7 @@
     return privalue;
 }
 
-/** 错误时候默认返回 0，浮点数在此取整后会舍弃小数部分 */
+/**< 错误时候默认返回 0，浮点数在此取整后会舍弃小数部分 */
 - (long)longValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return 0;
     long intvalue = 0;
@@ -358,17 +367,17 @@
             intvalue = [decimal longValue];
         } else {
             NSAssert(0, @"ZCKit: parse long obj is invalid integer");
-            intvalue = [obj longValue];
+            intvalue = [obj integerValue];
         }
     } else if (obj == nil || obj == NULL || [obj isKindOfClass:NSNull.class]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse long obj is null");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse long obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse long obj is invalid");
     }
     return intvalue;
 }
 
-/** 错误时候默认返回 0，保留有效位数为四舍五入模式，保留6位小数 */
+/**< 错误时候默认返回 0，保留有效位数为四舍五入模式，保留6位小数 */
 - (float)floatValueForKey:(NSString *)key {
     if ([self keyIsInvalidKey:key]) return 0;
     float flovalue = 0;
@@ -388,14 +397,14 @@
             NSAssert(0, @"ZCKit: parse float obj is invalid number");
         }
     } else if (obj == nil || obj == NULL || [obj isKindOfClass:NSNull.class]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse float obj is null");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse float obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse float obj is invalid");
     }
     return flovalue;
 }
 
-/** 错误时候默认返回 defaultValue */
+/**< 错误时候默认返回 defaultValue */
 - (BOOL)boolValueForKey:(NSString *)key defaultValue:(BOOL)defalut {
     if ([self keyIsInvalidKey:key]) return defalut;
     BOOL boolvalue = defalut;
@@ -418,20 +427,20 @@
             NSAssert(0, @"ZCKit: parse bool obj is invalid bool");
         }
     } else if (obj == nil || obj == NULL || [obj isKindOfClass:NSNull.class]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse bool obj is null");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse bool obj is null");
     } else {
         NSAssert(0, @"ZCKit: parse bool obj is invalid");
     }
     return boolvalue;
 }
 
-/** 错误时候默认返回 NO */
+/**< 错误时候默认返回 NO */
 - (BOOL)boolValueForKey:(NSString *)key {
     return [self boolValueForKey:key defaultValue:NO];
 }
 
 #pragma mark - Check
-/** 判断字典是否含有指定的键，存在未知键则返回nil，否则返回key对应value的数组 */
+/**< 判断字典是否含有指定的键，存在未知键则返回nil，否则返回key对应value的数组 */
 - (NSArray *)checkInvalidKeys:(NSString *)firstKey,... __attribute__((sentinel)) {
     if (self.count && firstKey) {
         id firstObject = [self objectForKey:firstKey];
@@ -462,7 +471,7 @@
 #pragma mark - ~ NSMutableDictionary ~
 @implementation NSMutableDictionary (ZC)
 
-/** 替换键，若传入空键或没有值将按不做处理 */
+/**< 替换键，若传入空键或没有值将按不做处理 */
 - (void)replaceKey:(NSString *)originKey toKey:(NSString *)finalKey {
     if (!originKey) return;
     id value = [self objectForKey:originKey];
@@ -472,8 +481,8 @@
     [self setObject:value forKey:finalKey];
 }
 
-/** 当从dict按keys取值然后按keys注入到self字典中，为nil则不注入 */
-- (void)extractKeyValueFromDictionary:(NSDictionary *)dictionary forKeys:(NSArray *)keys {
+/**< 当从dict按keys取值然后按keys注入到self字典中，为nil则不注入 */
+- (void)extractKeyValue:(NSDictionary *)dictionary forKeys:(NSArray *)keys {
     if (!keys.count || !dictionary.count) return;
     for (NSString *key in keys) { if (key && [key isKindOfClass:NSString.class]) {
         id object = [dictionary objectForKey:key];
@@ -481,41 +490,41 @@
     }}
 }
 
-/** 注入布尔值(会转换为NSNumber存储) */
+/**< 注入布尔值(会转换为NSNumber存储) */
 - (void)injectBoolValue:(BOOL)value forKey:(NSString *)key {
     [self injectValue:[NSNumber numberWithBool:value] forKey:key];
 }
 
-/** 注入整型值(会转换为NSNumber存储) */
+/**< 注入整型值(会转换为NSNumber存储) */
 - (void)injectFloatValue:(float)value forKey:(NSString *)key {
     [self injectValue:[NSNumber numberWithFloat:value] forKey:key];
 }
 
-/** 注入长整型值(会转换为NSNumber存储) */
+/**< 注入长整型值(会转换为NSNumber存储) */
 - (void)injectLongValue:(long)value forKey:(NSString *)key {
     [self injectValue:[NSNumber numberWithLong:value] forKey:key];
 }
 
-/** 当value = abnormalValue 不会注入到字典中 */
+/**< 当value = abnormalValue 不会注入到字典中 */
 - (void)injectLongValue:(long)value forKey:(NSString *)key abnormalValue:(long)abnormalValue {
     if (value != abnormalValue) {
         [self injectValue:[NSNumber numberWithLong:value] forKey:key];
     }
 }
 
-/** 当value为nil、@""、@"null"时不会注入字典 */
+/**< 当value为nil、@""、@"null"时不会注入字典 */
 - (void)injectValue:(ZCJsonValue)value forKey:(NSString *)key {
     [self injectValue:value forKey:key allowNull:NO allowRemove:NO];
 }
 
-/** 当value为nil、@""、@"null"时不会注入字典且会移除之前的键值对 */
+/**< 当value为nil、@""、@"null"时不会注入字典且会移除之前的键值对 */
 - (void)injectValue:(ZCJsonValue)value forAutoKey:(NSString *)autoKey {
     [self injectValue:value forKey:autoKey allowNull:NO allowRemove:YES];
 }
 
-/** allowNull为YES时候，不规则的value值将替换成NSNull注入 */
-/** allowNull为NO时候，allowRemove为NO，不规则的value值将不会注入也不会移除原有值 */
-/** allowNull为NO时候，allowRemove为YES，不规则的value将按key移除之前的key-value */
+/**< allowNull为YES时候，不规则的value值将替换成NSNull注入 */
+/**< allowNull为NO时候，allowRemove为NO，不规则的value值将不会注入也不会移除原有值 */
+/**< allowNull为NO时候，allowRemove为YES，不规则的value将按key移除之前的key-value */
 - (void)injectValue:(ZCJsonValue)value forKey:(NSString *)key allowNull:(BOOL)allowNull allowRemove:(BOOL)allowRemove {
     if ([self keyIsInvalidKey:key value:value allowNull:allowNull allowRemove:allowRemove]) return;
     if (allowNull && (value == nil || value == NULL)) {
@@ -534,7 +543,7 @@
             if (allowRemove) {
                 [self removeObjectForKey:key];
             } else {
-                if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: dic inject string obj is invalid");
+                if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: dic inject string obj is invalid");
             }
         }
     } else {
@@ -558,7 +567,7 @@
         if (allowRemove) {
             [self removeObjectForKey:key];
         } else {
-            if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: dic inject value obj is nil");
+            if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: dic inject value obj is nil");
         }
         return YES;
     }

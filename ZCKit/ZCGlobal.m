@@ -7,7 +7,6 @@
 //
 
 #import "ZCGlobal.h"
-#import "UIView+ZC.h"
 #import "ZCViewController.h"
 
 @interface ZCGlobal ()
@@ -51,7 +50,7 @@
     return _imageSuffixSmaller;
 }
 
-#pragma mark - Misc
+#pragma mark - Misc1
 + (CGFloat)ratio {
     return [ZCGlobal sharedGlobal].radio375;
 }
@@ -109,6 +108,8 @@
             return [value1 isEqualToArray:value2];
         } else if ([value1 isKindOfClass:NSDictionary.class] && [value2 isKindOfClass:NSDictionary.class]) {
             return [value1 isEqualToDictionary:value2];
+        } else if (value1 == value2) {
+            return YES;
         } else {
             return NO;
         }
@@ -144,7 +145,7 @@
     return NO;
 }
 
-+ (BOOL)isExplicitElementTypeArray:(nullable NSArray *)array elementClass:(Class)elementClass {
++ (BOOL)isExplicitArray:(nullable NSArray *)array elementClass:(Class)elementClass {
     BOOL isExplicitElement = YES;
     if (array && [array isKindOfClass:NSArray.class]) {
         if (elementClass) {
@@ -156,23 +157,6 @@
         isExplicitElement = NO;
     }
     return isExplicitElement;
-}
-
-+ (nullable id)appointInvalid:(nullable id)originObj default:(nullable id)defaultObj {
-    if (originObj == nil || ([originObj isKindOfClass:NSString.class] && [(NSString *)originObj length] == 0)) {
-        return defaultObj;
-    }
-    if ([self isValidString:originObj] || [self isValidArray:originObj] || [self isValidDictionary:originObj]) {
-        return originObj;
-    }
-    if ([originObj isKindOfClass:NSSet.class] && [(NSSet *)originObj count]) {
-        return originObj;
-    }
-    if ([originObj isKindOfClass:NSString.class] || [originObj isKindOfClass:NSArray.class] ||
-        [originObj isKindOfClass:NSDictionary.class] || [originObj isKindOfClass:NSSet.class]) {
-        return defaultObj;
-    }
-    return originObj;
 }
 
 + (NSString *)resourcePath:(NSString *)bundle name:(NSString *)name ext:(NSString *)ext {
@@ -192,8 +176,8 @@
     return nil;
 }
 
-#pragma mark - Controller
-+ (UIViewController *)rootController { //根控制器
+#pragma mark - Misc2
++ (UIViewController *)rootController {
     UIWindow *window = [UIApplication sharedApplication].delegate.window;
     if (!window || window.windowLevel != UIWindowLevelNormal) {
         NSArray *windows = [[UIApplication sharedApplication] windows];
@@ -216,7 +200,7 @@
     }
 }
 
-+ (UIViewController *)topController:(UIViewController *)rootvc { //顶控制器，初始rootvc可为nil
++ (UIViewController *)topController:(UIViewController *)rootvc {
     if (!rootvc) {
         rootvc = [UIApplication sharedApplication].delegate.window.rootViewController;
     }
@@ -242,7 +226,7 @@
     return rootvc;
 }
 
-+ (UIViewController *)currentController { //当前控制器
++ (UIViewController *)currentController {
     return [self topController:[self rootController]];
 }
 

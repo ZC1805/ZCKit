@@ -12,6 +12,7 @@
 #import <sys/stat.h>
 #import <UIKit/UIKit.h>
 #import "UIDevice+ZC.h"
+#import "NSString+ZC.h"
 #import "ZCQueueHandler.h"
 
 @interface ZCMiscTool ()
@@ -42,7 +43,7 @@
     return [[NSNumber numberWithLong:(long)(NSDate.date.timeIntervalSince1970 * 1000)] stringValue];
 }
 
-+ (BOOL)isChinese { //当前语言是否是汉语
++ (BOOL)isChinese {
     NSString *languageCode = [NSLocale preferredLanguages].firstObject;
     if (languageCode && [languageCode hasPrefix:@"zh"]) return YES;
     return NO;
@@ -122,7 +123,7 @@
 }
 
 + (void)ipAddressWifi:(BOOL)wifi block:(void(^)(NSString *address))block {
-    if (wifi) { //在此切换WiFi不会及时更新WiFi地址
+    if (wifi) { ///!!!: 在此切换WiFi不会及时更新WiFi地址
         if ([ZCMiscTool sharedTool].wifiIpv4Address.length) {
             if (block) block([ZCMiscTool sharedTool].wifiIpv4Address.copy);
         } else {
@@ -166,12 +167,18 @@
     return host;
 }
 
-+ (NSDictionary <NSString *, NSString *>*)paramFromUrlString:(NSString *)urlString {
++ (NSDictionary <NSString *, NSString *>*)paramFromUrlString:(NSString *)urlString isNeedDecode:(BOOL)isNeedDecode isOnlyParam:(BOOL)isOnlyParam {
     if (!urlString || !urlString.length) return @{};
-    NSArray *allElements = [urlString componentsSeparatedByString:@"?"];
+    if (isNeedDecode) { urlString = urlString.stringByURLDecode; }
     NSMutableDictionary <NSString *, NSString *>*param = [NSMutableDictionary dictionary];
-    if (allElements.count == 2) {
-        NSString *paramString = allElements[1];
+    NSString *paramString = nil;
+    if (!isOnlyParam) {
+        NSArray *allElements = [urlString.stringByURLDecode componentsSeparatedByString:@"?"];
+        if (allElements.count == 2) { paramString = allElements[1]; }
+    } else {
+        paramString = urlString;
+    }
+    if (paramString.length) {
         NSArray *paramArray = [paramString componentsSeparatedByString:@"&"];
         if (paramArray.count) {
             for (NSString *singleParamString in paramArray) {

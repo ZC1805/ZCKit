@@ -39,7 +39,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 @interface ZCGrowView : UIScrollView  /**< 输入框view，didChangeHeight中需要改变外部位置 */
 
 @property (nonatomic, assign) NSInteger minLines;  /**< 可最小显示的行数，默认为1行 */
@@ -53,7 +52,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, strong) UIView *inputView;  /**< 内部输入框的inputView */
 
 @end
-
 
 
 @interface ZCGrowView(TextView)

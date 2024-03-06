@@ -32,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign, readonly) NSUInteger overtimeCount;  /**< 当前超时计数 */
 
-/** 都会按延迟时间执行。timeoutCount为0时Timer将不会重复，timeoutCount允许超时计数，当到达允许超时计数时，timer将sleep。second不能为0，默认1。*/
+/**< 都会按延迟时间执行。timeoutCount为0时Timer将不会重复，timeoutCount允许超时计数，当到达允许超时计数时，timer将sleep。second不能为0，默认1。*/
 - (void)startTimer:(NSTimeInterval)seconds sleepTimeout:(NSUInteger)timeoutCount delegate:(nullable id<ZCTimerHolderDelegate>)delegate;
 
 - (void)sleepTimer;  /**< 睡眠timer */
@@ -42,7 +42,6 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)invalidateTimer;  /**< 销毁timer，无法再重启 */
 
 @end
-
 
 
 @interface ZCAssemblePart : NSObject  /**< 监听收到的broadcast的Ids为Assemble.fireId的数组、object为Assemble、type为Assemble.type */
@@ -72,16 +71,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, assign) BOOL isOnlyActivateIssue;  /**< 非时时发送下，是否仅在前台时允许发布，设置YES时切换状态将发布所有缓存广播，默认NO */
 
-/** timeoutCount不能小于1，既超时多少次会进入睡眠状态，interval是每次发送广播的时间间隔，maxAssemble小于2时将会视为时时发送 */
+/**< timeoutCount不能小于1，既超时多少次会进入睡眠状态，interval是每次发送广播的时间间隔，maxAssemble小于2时将会视为时时发送 */
 - (instancetype)initWithSleepTimeoutCount:(NSUInteger)timeoutCount interval:(NSTimeInterval)interval maxAssemble:(NSUInteger)maxAssemble;
 
-/** 聚集广播，broadcast的Ids为fireId的数组、object为ZCAssemblePart对象，type可以是复合值 */
+/**< 聚集广播，broadcast的Ids为fireId的数组、object为ZCAssemblePart对象，type可以是复合值 */
 - (void)fireAssemblePart:(ZCMonitorType)type fireId:(nullable NSString *)fireId content:(nullable id)content;
 
-/** 按类型发布聚集的所有广播，type为None时将发布所有类型广播来清空，type可以是复合值 */
+/**< 按类型发布聚集的所有广播，type为None时将发布所有类型广播来清空，type可以是复合值 */
 - (void)issueAllAssembleParts:(ZCMonitorType)type;
 
-/** 重新存储值，保存为待发送中 */
+/**< 重新存储值，保存为待发送中 */
 - (void)cacheAssemblePart:(ZCAssemblePart *)assemblePart;
 
 @end

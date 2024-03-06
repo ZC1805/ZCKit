@@ -12,6 +12,7 @@
 		581F6E402809568E00313928 /* UIScrollView+ZXXXX.m in Sources */ = {isa = PBXBuildFile; fileRef = 581F6E3F2809568E00313928 /* UIScrollView+ZXXXX.m */; };
 		583370822806B409009F4995 /* Wallet@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 583370812806B409009F4995 /* Wallet@2x.png */; };
 		5836AEFC2785B2E0001F05B1 /* ZCBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5836AEFB2785B2E0001F05B1 /* ZCBoxView.m */; };
+		584A2EFB2A0E4C7400CC3C65 /* AAA.m in Sources */ = {isa = PBXBuildFile; fileRef = 584A2EFA2A0E4C7400CC3C65 /* AAA.m */; };
 		58710A3227C6286F00E8E1FF /* SwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58710A3127C6286F00E8E1FF /* SwiftViewController.swift */; };
 		58710A3427C62BFF00E8E1FF /* PageSwiftVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 58710A3327C62BFF00E8E1FF /* PageSwiftVC.swift */; };
 		58D0201126A94B8500D8D316 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D0201026A94B8500D8D316 /* AppDelegate.m */; };
@@ -92,6 +93,7 @@
 		58D0232A26A991E200D8D316 /* UIView+ZCToast.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D026A991E200D8D316 /* UIView+ZCToast.m */; };
 		58D0232B26A991E200D8D316 /* ZCFlowSectionLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D126A991E200D8D316 /* ZCFlowSectionLayout.m */; };
 		58D0232C26A991E200D8D316 /* ZCPredefine.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D022D426A991E200D8D316 /* ZCPredefine.m */; };
+		58D1F94129221F6600A82DB5 /* ZCShareModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 58D1F94029221F6600A82DB5 /* ZCShareModel.m */; };
 		58E666182807FB8000A8C35A /* zc_image_back_black@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 58E666172807FB8000A8C35A /* zc_image_back_black@3x.png */; };
 		58E6665A28083E0100A8C35A /* UIGestureRecognizer+ZCSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E6661C28083E0000A8C35A /* UIGestureRecognizer+ZCSwizzle.m */; };
 		58E6665B28083E0100A8C35A /* UIViewController+ZXXXX.m in Sources */ = {isa = PBXBuildFile; fileRef = 58E6661D28083E0000A8C35A /* UIViewController+ZXXXX.m */; };
@@ -148,6 +150,8 @@
 		583370812806B409009F4995 /* Wallet@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Wallet@2x.png"; sourceTree = "<group>"; };
 		5836AEFA2785B2E0001F05B1 /* ZCBoxView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZCBoxView.h; sourceTree = "<group>"; };
 		5836AEFB2785B2E0001F05B1 /* ZCBoxView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZCBoxView.m; sourceTree = "<group>"; };
+		584A2EF92A0E4C7400CC3C65 /* AAA.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AAA.h; sourceTree = "<group>"; };
+		584A2EFA2A0E4C7400CC3C65 /* AAA.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AAA.m; sourceTree = "<group>"; };
 		58710A3027C6286E00E8E1FF /* ZCTest-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZCTest-Bridging-Header.h"; sourceTree = "<group>"; };
 		58710A3127C6286F00E8E1FF /* SwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftViewController.swift; sourceTree = "<group>"; };
 		58710A3327C62BFF00E8E1FF /* PageSwiftVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSwiftVC.swift; sourceTree = "<group>"; };
@@ -308,6 +312,8 @@
 		58D022D226A991E200D8D316 /* UIView+ZCToast.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ZCToast.h"; sourceTree = "<group>"; };
 		58D022D326A991E200D8D316 /* ZCFlowSectionLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZCFlowSectionLayout.h; sourceTree = "<group>"; };
 		58D022D426A991E200D8D316 /* ZCPredefine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZCPredefine.m; sourceTree = "<group>"; };
+		58D1F93F29221F6600A82DB5 /* ZCShareModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ZCShareModel.h; sourceTree = "<group>"; };
+		58D1F94029221F6600A82DB5 /* ZCShareModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZCShareModel.m; sourceTree = "<group>"; };
 		58E666172807FB8000A8C35A /* zc_image_back_black@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "zc_image_back_black@3x.png"; sourceTree = "<group>"; };
 		58E6661C28083E0000A8C35A /* UIGestureRecognizer+ZCSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIGestureRecognizer+ZCSwizzle.m"; sourceTree = "<group>"; };
 		58E6661D28083E0000A8C35A /* UIViewController+ZXXXX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+ZXXXX.m"; sourceTree = "<group>"; };
@@ -692,6 +698,8 @@
 				58E6665128083E0100A8C35A /* ZCClassInfo.m */,
 				58E6665428083E0100A8C35A /* NSObject+YYModel.h */,
 				58E6665028083E0100A8C35A /* NSObject+YYModel.m */,
+				58D1F93F29221F6600A82DB5 /* ZCShareModel.h */,
+				58D1F94029221F6600A82DB5 /* ZCShareModel.m */,
 			);
 			path = "解析";
 			sourceTree = "<group>";
@@ -727,6 +735,8 @@
 				58E6665728083E0100A8C35A /* ZCPhotoZoomControl.m */,
 				581F6E3E2809568E00313928 /* UIScrollView+ZXXXX.h */,
 				581F6E3F2809568E00313928 /* UIScrollView+ZXXXX.m */,
+				584A2EF92A0E4C7400CC3C65 /* AAA.h */,
+				584A2EFA2A0E4C7400CC3C65 /* AAA.m */,
 			);
 			name = ZCBasic;
 			path = ../../ZCBasic;
@@ -837,6 +847,7 @@
 				58E6667A28083E0200A8C35A /* UIView+ZXXXXX.m in Sources */,
 				58E6667E28083E0200A8C35A /* NSObject+YYModel.m in Sources */,
 				58D022DC26A991E200D8D316 /* UITableViewCell+ZC.m in Sources */,
+				584A2EFB2A0E4C7400CC3C65 /* AAA.m in Sources */,
 				58E6668328083E0200A8C35A /* ZCPhotoZoomControl.m in Sources */,
 				58E6665A28083E0100A8C35A /* UIGestureRecognizer+ZCSwizzle.m in Sources */,
 				58E7FA11280562740069E06A /* ZCNaviView.m in Sources */,
@@ -913,6 +924,7 @@
 				58D0231F26A991E200D8D316 /* ZCCountLabel.m in Sources */,
 				58D0231A26A991E200D8D316 /* ZCMaskView.m in Sources */,
 				58D022FB26A991E200D8D316 /* ZCTextView.m in Sources */,
+				58D1F94129221F6600A82DB5 /* ZCShareModel.m in Sources */,
 				58D0230826A991E200D8D316 /* ZCModel.m in Sources */,
 				58D0232326A991E200D8D316 /* ZCIndicatorView.m in Sources */,
 				58D022F326A991E200D8D316 /* ZCGlobal.m in Sources */,

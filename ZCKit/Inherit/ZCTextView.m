@@ -75,12 +75,18 @@
         }
     }
     if (self.text.length || self.attributedText.length) {
-        [_placeholderLabel setAlpha:0];
+        if (_placeholderLabel.alpha != 0) {
+            _placeholderLabel.alpha = 0;
+            [self setNeedsLayout];
+            [self layoutIfNeeded];
+        }
     } else {
-        [_placeholderLabel setAlpha:1];
+        if (_placeholderLabel.alpha != 1) {
+            _placeholderLabel.alpha = 1;
+            [self setNeedsLayout];
+            [self layoutIfNeeded];
+        }
     }
-    [self setNeedsLayout];
-    [self layoutIfNeeded];
 }
 
 #pragma mark - Override
@@ -96,21 +102,21 @@
 
 - (void)setFont:(UIFont *)font {
     [super setFont:font];
-    self.placeholderLabel.font = self.font;
+    _placeholderLabel.font = self.font;
     [self setNeedsLayout];
     [self layoutIfNeeded];
 }
 
 - (void)setTextAlignment:(NSTextAlignment)textAlignment {
     [super setTextAlignment:textAlignment];
-    self.placeholderLabel.textAlignment = textAlignment;
+    _placeholderLabel.textAlignment = textAlignment;
     [self setNeedsLayout];
     [self layoutIfNeeded];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
-    self.placeholderLabel.frame = [self placeholderExpectedFrame];
+    _placeholderLabel.frame = [self placeholderExpectedFrame];
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
@@ -135,7 +141,7 @@
 }
 
 - (void)setPlaceholderTextColor:(UIColor *)placeholderTextColor {
-    if (!placeholderTextColor) placeholderTextColor = kZCA(kZCBlackA8, 0.7);
+    if (!placeholderTextColor) placeholderTextColor = kZCA(kZCBlackA6, 0.7);
     _placeholderTextColor = placeholderTextColor;
     self.placeholderLabel.textColor = placeholderTextColor;
 }
@@ -152,7 +158,7 @@
     UIEdgeInsets placeholderInsets = [self placeholderInsets];
     CGFloat maxWidth = self.zc_width - placeholderInsets.left - placeholderInsets.right;
     CGSize size = CGSizeMake(maxWidth, self.zc_height - placeholderInsets.top - placeholderInsets.bottom);
-    CGSize expectedSize = [self.placeholderLabel sizeThatFits:size];
+    CGSize expectedSize = [_placeholderLabel sizeThatFits:size];
     return CGRectMake(placeholderInsets.left, placeholderInsets.top, maxWidth, expectedSize.height);
 }
 
@@ -165,7 +171,7 @@
         _placeholderLabel.font = self.font;
         _placeholderLabel.textAlignment = self.textAlignment;
         _placeholderLabel.backgroundColor = kZCClear;
-        _placeholderLabel.textColor = kZCA(kZCBlackA8, 0.7);
+        _placeholderLabel.textColor = kZCA(kZCBlackA6, 0.7);
         _placeholderLabel.alpha = 0;
         [self addSubview:_placeholderLabel];
     }
@@ -175,14 +181,6 @@
 - (id<UITextViewDelegate>)delegate {
     [self refreshIPlaceholder:nil];
     return [super delegate];
-}
-
-- (CGSize)intrinsicContentSize {
-    if (self.hasText) return [super intrinsicContentSize];
-    UIEdgeInsets placeholderInsets = [self placeholderInsets];
-    CGSize newSize = [super intrinsicContentSize];
-    newSize.height = [self placeholderExpectedFrame].size.height + placeholderInsets.top + placeholderInsets.bottom;
-    return newSize;
 }
 
 #pragma mark - Delegate

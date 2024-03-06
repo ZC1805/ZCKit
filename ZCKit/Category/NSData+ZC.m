@@ -7,6 +7,7 @@
 //
 
 #import "NSData+ZC.h"
+#import "ZCMacro.h"
 #import "ZCKitBridge.h"
 #include <CommonCrypto/CommonCrypto.h>
 
@@ -37,7 +38,7 @@
     NSError *error = nil;
     id object = [NSJSONSerialization JSONObjectWithData:self options:NSJSONReadingAllowFragments error:&error];
     if (object && !error) return object;
-    if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: parse to json object fail");
+    if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: parse to json object fail");
     return nil;
 }
 

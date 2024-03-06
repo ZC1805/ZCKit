@@ -110,7 +110,7 @@
             UIAlertAction *ac2 = [UIAlertAction actionWithTitle:items[1] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
                 [self photoPicker:[sourceTypes[1] integerValue] edit:edit front:front finish:done];
             }];
-            UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil]; //取消
+            UIAlertAction *cancel = [UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:nil];
             [alert addAction:ac1]; [alert addAction:ac2]; [alert addAction:cancel];
             UIViewController *fromVc = [ZCGlobal currentController];
             if (fromVc) [fromVc presentViewController:alert animated:YES completion:nil];
@@ -206,10 +206,9 @@
             mvc.recipients = receivers;
             mvc.body = message;
             [fromVc presentViewController:mvc animated:YES completion:nil];
-        } else {
-            //提示 该设备不支持短信功能
+        } else { //提示该设备不支持短信功能
             UIAlertController *avc = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"Tips", nil) message:NSLocalizedString(@"The device does not support SMS function", nil) preferredStyle:UIAlertControllerStyleAlert];
-            [avc addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleCancel handler:nil]]; //确定
+            [avc addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleCancel handler:nil]];
             [fromVc presentViewController:avc animated:YES completion:nil];
         }
     }
@@ -242,7 +241,7 @@
         }
     }
     if (!cancel.length && !confirm.length) {
-        UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) { //确定
+        UIAlertAction *action = [UIAlertAction actionWithTitle:NSLocalizedString(@"Confirm", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             if (doAction) doAction(YES);
         }];
         [alert addAction:action];
@@ -279,7 +278,7 @@
                 }]];
             }
         } else {
-            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) { //取消
+            [alert addAction:[UIAlertAction actionWithTitle:NSLocalizedString(@"Cancel", nil) style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
                 if (doAction) doAction(-1);
             }]];
         }

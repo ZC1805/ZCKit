@@ -7,44 +7,65 @@
 //
 
 #import "ZCService.h"
-#import "ZCKitBridge.h"
-#import <UIKit/UIKit.h>
 #import "ZCMacro.h"
 
+#define kZSuppressLeakWarn(func) \
+do { \
+_Pragma("clang diagnostic push") \
+_Pragma("clang diagnostic ignored \"-Warc-performSelector-leaks\"") \
+func; \
+_Pragma("clang diagnostic pop") \
+} while (0)
+
 #pragma mark - ~ ZCServiceImpl ~
+@interface ZCService ()
+
+- (instancetype)initWithClass:(Class)instanceClass;
+
+@end
+
 @interface ZCServiceImpl : NSObject
 
-@property (nonatomic, strong) NSMutableDictionary *singletons;
+@property (nonatomic, strong) NSMutableDictionary *implKvs;
 
 @end
 
 @implementation ZCServiceImpl
 
-+ (ZCServiceImpl *)coreImpl {
++ (ZCServiceImpl *)implCore {
     ZCServiceImpl *impl = [[ZCServiceImpl alloc] init];
-    impl.singletons = [NSMutableDictionary dictionary];
+    impl.implKvs = [NSMutableDictionary dictionary];
     return impl;
 }
 
-- (instancetype)startSingletonByClass:(Class)singletonClass {
-    NSString *singletonClassName = NSStringFromClass(singletonClass);
-    id singleton = [_singletons objectForKey:singletonClassName];
-    if (!singleton) {
-        singleton = [[singletonClass alloc] init];
-        [_singletons setObject:singleton forKey:singletonClassName];
+- (instancetype)implStartSingletonByClass:(Class)singletonClass {
+    NSString *singletonName = NSStringFromClass(singletonClass);
+    id instance = [_implKvs objectForKey:singletonName];
+    if (!instance) { instance = [(ZCService *)[singletonClass alloc] initWithClass:nil];
+        [_implKvs setObject:instance forKey:singletonName];
+        [self implCallSingletonSelector:@selector(serviceInit) class:singletonClass];
+    } return instance;
+}
+
+- (void)implStopSingletonByClass:(Class)singletonClass {
+    if (singletonClass) {
+        [_implKvs removeObjectForKey:NSStringFromClass(singletonClass)];
+    } else {
+        [_implKvs removeAllObjects];
     }
-    return singleton;
 }
 
-- (void)stopSingletonByClass:(Class)singletonClass {
-    [self.singletons removeObjectForKey:NSStringFromClass(singletonClass)];
-}
-
-- (void)callSingletonSelector:(SEL)selecotr {
-    NSArray *instances = [_singletons allValues];
-    for (id instance in instances) {
-        if ([instance respondsToSelector:selecotr]) {
+- (void)implCallSingletonSelector:(SEL)selecotr class:(Class)singletonClass {
+    if (singletonClass) {
+        id instance = [_implKvs objectForKey:NSStringFromClass(singletonClass)];
+        if (instance && [instance respondsToSelector:selecotr]) {
             kZSuppressLeakWarn([instance performSelector:selecotr]);
+        }
+    } else {
+        for (id instance in _implKvs.allValues) {
+            if (instance && [instance respondsToSelector:selecotr]) {
+                kZSuppressLeakWarn([instance performSelector:selecotr]);
+            }
         }
     }
 }
@@ -52,8 +73,8 @@
 @end
 
 
-#pragma mark - ~ ZCServiceManager ~
-@interface ZCServiceManager ()
+#pragma mark - ~ ZCServiceHandler ~
+@interface ZCServiceHandler ()
 
 @property (nonatomic, strong) NSLock *lock;
 
@@ -61,27 +82,23 @@
 
 @end
 
-@implementation ZCServiceManager
+@implementation ZCServiceHandler
 
 + (instancetype)sharedManager {
-    static ZCServiceManager *instance;
+    static ZCServiceHandler *instance;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        instance = [[ZCServiceManager alloc] init];
-    });
-    return instance;
+        instance = [[ZCServiceHandler alloc] init];
+    }); return instance;
 }
 
-- (id)init {
+- (instancetype)init {
     if (self = [super init]) {
         _lock = [[NSLock alloc] init];
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-        [center addObserver:self selector:@selector(callMemoryWarning) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
         [center addObserver:self selector:@selector(callEnterBackground) name:UIApplicationDidEnterBackgroundNotification object:nil];
         [center addObserver:self selector:@selector(callEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
-        [center addObserver:self selector:@selector(callAppWillTerminate) name:UIApplicationWillTerminateNotification object:nil];
-    }
-    return self;
+    } return self;
 }
 
 - (void)dealloc {
@@ -89,58 +106,46 @@
 }
 
 + (void)fire {
-    ZCServiceManager *manager = [ZCServiceManager sharedManager];
+    ZCServiceHandler *manager = ZCServiceHandler.sharedManager;
     [manager.lock lock];
-    manager.core = [ZCServiceImpl coreImpl];
+    manager.core = [ZCServiceImpl implCore];
     [manager.lock unlock];
 }
 
-+ (void)destory {
-    ZCServiceManager *manager = [ZCServiceManager sharedManager];
++ (void)destoryService {
+    ZCServiceHandler *manager = ZCServiceHandler.sharedManager;
     [manager.lock lock];
-    [manager callSingletonClean];
-    [manager.core.singletons removeAllObjects];
-    manager.core = nil;
+    [manager.core implCallSingletonSelector:@selector(serviceCleanData) class:nil];
+    [manager.core implStopSingletonByClass:nil];
     [manager.lock unlock];
 }
 
-- (id)singletonByClass:(Class)singletonClass {
+- (id)constructInstanceByClass:(Class)instanceClass {
     id instance = nil;
     [_lock lock];
-    instance = [_core startSingletonByClass:singletonClass];
+    instance = [_core implStartSingletonByClass:instanceClass];
     [_lock unlock];
     return instance;
 }
 
-- (void)stopSingletonByClass:(Class)singletonClass {
+- (void)cleanInstanceByClass:(Class)instanceClass {
     [_lock lock];
-    [_core stopSingletonByClass:singletonClass];
+    [_core implCallSingletonSelector:@selector(serviceCleanData) class:instanceClass];
+    [_core implStopSingletonByClass:instanceClass];
     [_lock unlock];
 }
 
 #pragma mark - Call
-- (void)callSingletonClean {
-    [self callSelector:@selector(serviceCleanData)];
-}
-
-- (void)callMemoryWarning {
-    [self callSelector:@selector(serviceReceiveMemoryWarning)];
-}
-
 - (void)callEnterBackground {
-    [self callSelector:@selector(serviceEnterBackground)];
+    [_lock lock];
+    [_core implCallSingletonSelector:@selector(serviceEnterBackground) class:nil];
+    [_lock unlock];
 }
 
 - (void)callEnterForeground {
-    [self callSelector:@selector(serviceEnterForeground)];
-}
-
-- (void)callAppWillTerminate {
-    [self callSelector:@selector(serviceAppWillTerminate)];
-}
-
-- (void)callSelector:(SEL)selector {
-    [_core callSingletonSelector:selector];
+    [_lock lock];
+    [_core implCallSingletonSelector:@selector(serviceEnterForeground) class:nil];
+    [_lock unlock];
 }
 
 @end
@@ -150,16 +155,27 @@
 @implementation ZCService
 
 + (instancetype)sharedService {
-    return [[ZCServiceManager sharedManager] singletonByClass:self.class];
+    NSAssert(![NSStringFromClass(self) isEqualToString:@"ZCService"], @"ZCKit: service not be ZCService");
+    return [ZCServiceHandler.sharedManager constructInstanceByClass:self];
 }
 
-- (void)start {
-    if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: service %@ start", self);
+- (instancetype)initWithClass:(Class)instanceClass {
+    if (self = [super init]) {}
+    return self;
+}
+
+- (instancetype)init {
+    if (self = [super init]) { NSAssert(NO, @"ZCKit: service not be init"); }
+    return self;
 }
 
 - (void)stop {
-    if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: service %@ stop", self);
-    [[ZCServiceManager sharedManager] stopSingletonByClass:self.class];
+    [ZCServiceHandler.sharedManager cleanInstanceByClass:self.class];
+}
+
+- (void)start {
+#warning - 数据本地化代码 & 日期选则框 & ZCBoxView & ZCMaskView & ZCScrollView
+    
 }
 
 @end

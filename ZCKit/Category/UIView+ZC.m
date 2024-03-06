@@ -7,6 +7,7 @@
 //
 
 #import "UIView+ZC.h"
+#import "ZCBlankControl.h"
 #import <objc/runtime.h>
 #import "NSArray+ZC.h"
 #import "ZCMacro.h"
@@ -66,21 +67,15 @@
 - (ZCBlankControl *)blankCoverView {
     ZCBlankControl *blankCoverView = objc_getAssociatedObject(self, _cmd);
     if (!blankCoverView) {
-        blankCoverView = [[ZCBlankControl alloc] initWithFrame:CGRectMake(0, 0, self.zc_width, self.zc_height) color:self.backgroundColor];
+        blankCoverView = [[ZCBlankControl alloc] initWithFrame:CGRectMake(0, 0, self.zc_width, self.zc_height)];
         objc_setAssociatedObject(self, _cmd, blankCoverView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        blankCoverView.backgroundColor = self.backgroundColor;
         [self addSubview:blankCoverView];
     }
     return blankCoverView;
 }
 
 #pragma mark - Func
-- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color {
-    if (self = [self initWithFrame:frame]) {
-        if (color) self.backgroundColor = color;
-    }
-    return self;
-}
-
 - (void)removeAllSubviews {
     while (self.subviews.count) {
         [self.subviews.lastObject removeFromSuperview];
@@ -91,8 +86,7 @@
     NSMutableArray *container = [NSMutableArray array];
     [self addSubviewsToContainer:container];
     return container;
-}
-
+} 
 - (void)addSubviewsToContainer:(NSMutableArray *)container {
     if (self.subviews.count) {
         for (UIView *subview in self.subviews) {
@@ -227,6 +221,12 @@
     return snap;
 }
 
+- (CGPoint)convertPointToScrren:(CGPoint)point {
+    UIWindow *window = [UIApplication sharedApplication].delegate.window;
+    if (!window) return point;
+    return [self convertPoint:point toView:window];
+}
+
 - (void)setShadow:(UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius {
     if (!color) return;
     self.layer.shadowColor = color.CGColor;
@@ -253,10 +253,34 @@
     self.layer.mask = masklayer;
 }
 
-- (CGPoint)convertPointToScrren:(CGPoint)point {
-    UIWindow *window = [UIApplication sharedApplication].delegate.window;
-    if (!window) return point;
-    return [self convertPoint:point toView:window];
+- (void)setGradientColors:(NSArray <UIColor *>*)colors isHor:(BOOL)isHor {
+    CAGradientLayer *gradientLayer = [CAGradientLayer layer];
+    NSMutableArray *CGColors = [NSMutableArray array];
+    for (UIColor *color in colors) { [CGColors addObject:(__bridge id)[color CGColor]]; }
+    gradientLayer.colors = CGColors.copy;
+    if (isHor) {
+        gradientLayer.startPoint = CGPointMake(0, 0.5);
+        gradientLayer.endPoint = CGPointMake(1.0, 0.5);
+    } else {
+        gradientLayer.startPoint = CGPointMake(0.5, 0);
+        gradientLayer.endPoint = CGPointMake(0.5, 1.0);
+    }
+    NSMutableArray *locs = [NSMutableArray array];
+    if (CGColors.count == 1) {
+        [locs addObject:[NSNumber numberWithFloat:1.0]];
+    } else {
+        for (int i = 0; i < CGColors.count; i ++) {
+            [locs addObject:[NSNumber numberWithFloat:i * (1.0 / (CGColors.count - 1))]];
+        }
+    }
+    gradientLayer.locations = locs.copy;
+    gradientLayer.name = @"gradientLayer_bk_img";
+    gradientLayer.frame = self.bounds;
+    UIGraphicsBeginImageContextWithOptions(self.bounds.size, self.opaque, 0);
+    [gradientLayer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *img = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    self.backgroundColor = [UIColor colorWithPatternImage:img];
 }
 
 #pragma mark - Line

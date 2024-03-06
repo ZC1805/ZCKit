@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZCImageView.h"
-#import "ZCButton.h"
-#import "ZCLabel.h"
+
+@class ZCLabel, ZCButton, ZCImageView;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, readonly) UIView *containerView;  /**< 懒加载，底部容器视图 */
 
 @property (nullable, nonatomic, copy) void(^touchAction)(BOOL isOnHandleButton);  /**< 添加TouchUpInset回调，默认nil */
+
+- (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color inBelow:(nullable UIView *)inBelow;  /**< 初始化添加在某视图下面 */
 
 - (void)resetImage:(nullable UIImage *)image message:(nullable NSString *)message;  /**< 重置image和content */
 

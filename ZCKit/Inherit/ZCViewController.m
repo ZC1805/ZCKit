@@ -47,16 +47,99 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 
 @implementation ZCViewController
 
-#pragma mark - System
-- (instancetype)init {
-    if (self = [super init]) {
-        self.customPageSet = [[ZCViewControllerCustomPageSet alloc] init];
-        if ([self respondsToSelector:@selector(onPageCustomInitSet:)]) {
-            [(id<ZCViewControllerPageBackProtocol>)self onPageCustomInitSet:self.customPageSet];
-        }
+@synthesize iniProps = _iniProps;
+
+- (instancetype)initWithCoder:(NSCoder *)coder {
+    if (self = [super initWithCoder:coder]) {
+        [self initSetFunc];
     } return self;
 }
 
+- (instancetype)initWithIniProps:(NSDictionary<NSString *, id> *)iniProps {
+    if (self = [super initWithNibName:nil bundle:nil]) {
+        if (iniProps.count) { [self setValuesForKeysWithDictionary:iniProps]; }
+        if (!iniProps) { iniProps = @{}; }
+        _iniProps = iniProps.copy;
+        [self initSetFunc];
+    } return self;
+}
+
+- (instancetype)init {
+    if (self = [super init]) {
+        [self initSetFunc];
+    } return self;
+}
+
+- (void)initSetFunc {
+    self.customPageSet = [[ZCViewControllerCustomPageSet alloc] init];
+    if ([self respondsToSelector:@selector(onPageCustomInitSet:)]) {
+        [(id<ZCViewControllerPageBackProtocol>)self onPageCustomInitSet:self.customPageSet];
+    }
+}
+
+- (NSDictionary<NSString *, id> *)iniProps {
+    if (!_iniProps) { _iniProps = @{}; }
+    return _iniProps;
+}
+
+#pragma mark - Back
+- (BOOL)isCanMSideBack {
+    return YES;
+}
+
+- (int)currentPageStyle { 
+    return 6;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle {
+    if (self.currentPageStyle & 1) {
+        return UIStatusBarStyleLightContent;
+    } else {
+        if (@available(iOS 13.0, *)) { return UIStatusBarStyleDarkContent; }
+        else { return UIStatusBarStyleDefault; }
+    }
+}
+
+- (BOOL)prefersStatusBarHidden {
+    if (self.currentPageStyle & 4) {
+        return NO;
+    } else {
+        return YES;
+    }
+}
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.view.backgroundColor = kColor(@"#FFFFFF");
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    #pragma clang diagnostic pop
+    self.edgesForExtendedLayout = UIRectEdgeAll;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self resetHideSystemNaviBarType:1];
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    #pragma clang diagnostic pop
+    self.edgesForExtendedLayout = UIRectEdgeAll;
+    if (self.currentPageStyle & 1) {
+        [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
+    } else {
+        if (@available(iOS 13.0, *)) { [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDarkContent; }
+        else { [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault; }
+    }
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self resetCheckHideSystemNaviBarType:([self isCanMSideBack] ? 1 : 0)];
+}
+
+#pragma mark - System
 - (void)viewDidLoad {
     [super viewDidLoad];
     __weak typeof(self) wkself = self;
@@ -157,7 +240,7 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
     [super willMoveToParentViewController:parent];
 }
 
-- (void)didMoveToParentViewController:(UIViewController *)parent { //对于AddChildViewController，需要手动实现这两个方法
+- (void)didMoveToParentViewController:(UIViewController *)parent { ///!!!: 对于AddChildViewController，需要手动实现这两个方法
     [super didMoveToParentViewController:parent];
     if (!parent && self.isParentNaviContainer && self.isPopGes) {
         [[NSNotificationCenter defaultCenter] postNotificationName:ZCViewControllerDidBeGesPopNotification object:self];
@@ -171,7 +254,7 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 
 #pragma mark - Override
 - (BOOL)prefersStatusBarHidden {
-    return [super prefersStatusBarHidden]; //NO
+    return [super prefersStatusBarHidden];
 }
 
 - (UIViewController *)childViewControllerForStatusBarHidden {
@@ -182,7 +265,7 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle {
-    return UIStatusBarStyleDefault; //return [super preferredStatusBarStyle];
+    return [super preferredStatusBarStyle];
 }
 
 - (UIViewController *)childViewControllerForStatusBarStyle {
@@ -193,19 +276,19 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 }
 
 - (UIStatusBarAnimation)preferredStatusBarUpdateAnimation {
-    return [super preferredStatusBarUpdateAnimation]; //UIStatusBarAnimationFade
+    return [super preferredStatusBarUpdateAnimation];
 }
 
 - (BOOL)shouldAutorotate {
-    return [super shouldAutorotate]; //YES
+    return [super shouldAutorotate];
 }
 
 - (UIInterfaceOrientationMask)supportedInterfaceOrientations {
-    return [super supportedInterfaceOrientations]; //current user set
+    return [super supportedInterfaceOrientations];
 }
 
 - (UIRectEdge)preferredScreenEdgesDeferringSystemGestures {
-    return [super preferredScreenEdgesDeferringSystemGestures]; //UIRectEdgeNone(返回UIRectEdgeAll可半透明底部HomeIndicator)
+    return [super preferredScreenEdgesDeferringSystemGestures];
 }
 
 - (UIViewController *)childViewControllerForScreenEdgesDeferringSystemGestures {
@@ -216,7 +299,7 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 }
 
 - (BOOL)prefersHomeIndicatorAutoHidden {
-    return [super prefersHomeIndicatorAutoHidden]; //NO
+    return [super prefersHomeIndicatorAutoHidden];
 }
 
 - (UIViewController *)childViewControllerForHomeIndicatorAutoHidden {
@@ -227,8 +310,8 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    if (self.isUsePushStyleToPresent) { //待实现
-        [super dismissViewControllerAnimated:flag completion:completion];
+    if (self.isUsePushStyleToPresent) {
+        ///!!!: 待实现
     } else {
         [super dismissViewControllerAnimated:flag completion:completion];
     }
@@ -239,8 +322,8 @@ NSNotificationName const ZCViewControllerDidBeGesPopNotification = @"ZCViewContr
         [self.presentFromViewController presentViewController:viewControllerToPresent animated:flag completion:completion];
     } else {
         if ([viewControllerToPresent respondsToSelector:@selector(isUsePushStyleToPresent)] &&
-            [(id<ZCViewControllerPrivateProtocol>)viewControllerToPresent isUsePushStyleToPresent]) { //待实现
-            [super presentViewController:viewControllerToPresent animated:flag completion:completion];
+            [(id<ZCViewControllerPrivateProtocol>)viewControllerToPresent isUsePushStyleToPresent]) {
+            ///!!!: 待实现
         } else {
             [super presentViewController:viewControllerToPresent animated:flag completion:completion];
         }

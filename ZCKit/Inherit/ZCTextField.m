@@ -30,7 +30,16 @@
 
 @synthesize underlineView = _underlineView;
 
-#pragma mark - Sys
+#pragma mark - System
+- (instancetype)initWithHolder:(nullable NSString *)holder font:(nullable UIFont *)font color:(nullable UIColor *)color {
+    if (self = [self initWithFrame:CGRectZero]) {
+        if (holder) self.placeholder = holder;
+        if (color) self.textColor = color;
+        if (font) self.font = font;
+    }
+    return self;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         _fixSize = CGSizeZero;

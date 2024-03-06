@@ -22,7 +22,7 @@ typedef id ZCJsonValue;  /**< 只可为 nil & NSString & NSNumber & NSArray & NS
 
 @interface ZCGlobal : NSObject  /**< 全局管理类 */
 
-#pragma mark - Misc
+#pragma mark - Misc1
 + (CGFloat)ratio;  /**< 按375适配的单位比例点 */
 
 + (BOOL)isiPhoneX;  /**< 是否是iPhoneX系列手机 */
@@ -39,15 +39,13 @@ typedef id ZCJsonValue;  /**< 只可为 nil & NSString & NSNumber & NSArray & NS
 
 + (BOOL)isValidDictionary:(nullable NSDictionary *)dictionary;  /**< 判断对象是否是有效的字典 & count不为零 */
 
-+ (BOOL)isExplicitElementTypeArray:(nullable NSArray *)array elementClass:(Class)elementClass;  /**< 判断数组是否是指定元素类型的数组，空数组时返回YES */
-
-+ (nullable id)appointInvalid:(nullable id)originObj default:(nullable id)defaultObj;  /**< 指定无效对象的默认对象，原无效换成默认 */
++ (BOOL)isExplicitArray:(nullable NSArray *)array elementClass:(Class)elementClass;  /**< 判断数组是否是指定元素类型的数组，空数组时返回YES */
 
 + (nullable NSString *)resourcePath:(nullable NSString *)bundle name:(NSString *)name ext:(NSString *)ext;  /**< 资源文件路径 */
 
 + (nullable UIImage *)ZCImageName:(NSString *)imageName;  /**< ZCBundle中图片资源 */
 
-#pragma mark - Misc
+#pragma mark - Misc2
 + (nullable UIViewController *)topController:(nullable UIViewController *)rootvc;  /**< 顶控制器，初始rootvc可为nil */
 
 + (nullable UIViewController *)currentController;  /**< 当前控制器 */

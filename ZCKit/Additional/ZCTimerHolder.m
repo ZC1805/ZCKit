@@ -164,7 +164,7 @@ static const long zc_max_allow_cache_count = 100;
         NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
         [center addObserver:self selector:@selector(lostActive:) name:UIApplicationWillResignActiveNotification object:nil];
         [center addObserver:self selector:@selector(becomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: assemble init fail");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: assemble init fail");
     }
     return self;
 }

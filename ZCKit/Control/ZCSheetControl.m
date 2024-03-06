@@ -10,6 +10,7 @@
 #import "ZCScrollView.h"
 #import "ZCMaskView.h"
 #import "UIView+ZC.h"
+#import "ZCButton.h"
 #import "ZCLabel.h"
 #import "ZCMacro.h"
 
@@ -70,7 +71,7 @@ static const CGFloat sheetFlagTag = 83803;
     self.isMaskClear = NO;
     self.isCanTouch = NO;
     self.dangerous = nil;
-    self.cancelTitle = NSLocalizedString(@"Cancel", nil); //取消
+    self.cancelTitle = NSLocalizedString(@"Cancel", nil);
     self.maxHeight = 383.0;
 }
 
@@ -196,7 +197,7 @@ static const CGFloat sheetFlagTag = 83803;
         [self addSubview:msglabel];
         if (self.isMaskClear) {
             UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, kZSPixel)];
-            line.backgroundColor = kZCBlackDC;
+            line.backgroundColor = kZCBlackDE;
             [msglabel addSubview:line];
         }
         if (self.msgLabelCtor) { self.msgLabelCtor(msglabel); self.msgLabelCtor = nil; }
@@ -228,7 +229,7 @@ static const CGFloat sheetFlagTag = 83803;
                 itemBtn.frame = CGRectMake(0, i * sheetItemHei, initWid, sheetItemHei);
                 if (i != 0 || (!msgExist && self.isMaskClear)) {
                     topSep = [[UIView alloc] initWithFrame:CGRectMake(0, i * sheetItemHei, initWid, kZSPixel)];
-                    topSep.backgroundColor = kZCBlackDC;
+                    topSep.backgroundColor = kZCBlackDE;
                 }
             }
         }
@@ -237,7 +238,7 @@ static const CGFloat sheetFlagTag = 83803;
             itemBtn.responseAreaExtend = UIEdgeInsetsMake(0, 0, -safeHei, 0);
             if (isOnly && self.isMaskClear) {
                 UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, initWid, kZSPixel)];
-                line.backgroundColor = kZCBlackDC;
+                line.backgroundColor = kZCBlackDE;
                 [itemBtn addSubview:line];
             }
         }

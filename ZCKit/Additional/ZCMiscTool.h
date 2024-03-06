@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)urlStringFromHost:(NSString *)host param:(nullable NSDictionary <NSString *, NSString *>*)param;  /**< 合并成Url */
 
-+ (NSDictionary <NSString *, NSString *>*)paramFromUrlString:(NSString *)urlString;  /**< 从Url上提取参数 */
++ (NSDictionary <NSString *, NSString *>*)paramFromUrlString:(NSString *)urlString isNeedDecode:(BOOL)isNeedDecode isOnlyParam:(BOOL)isOnlyParam;  /**< 从Url上提取参数 */
 
 + (long long)calculateFileSizeAtPath:(NSString *)path;  /**< 文件大小 */
 

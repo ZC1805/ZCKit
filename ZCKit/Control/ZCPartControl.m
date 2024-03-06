@@ -7,6 +7,7 @@
 //
 
 #import "ZCPartControl.h"
+#import "ZCScrollView.h"
 #import "ZCImageView.h"
 #import "NSArray+ZC.h"
 #import "UIColor+ZC.h"
@@ -33,9 +34,9 @@
 
 @implementation ZCPartSet
 
-- (instancetype)init {
+- (instancetype)initWithTitle:(NSString *)title {
     if (self = [super init]) {
-        self.title = nil;
+        self.title = title;
         self.normalImage = nil;
         self.selectImage = nil;
         self.normalTitleFont = [UIFont fontWithName:@"HelveticaNeue" size:15];
@@ -49,15 +50,14 @@
         self.itemSelCalwid = 20.0;
         self.itemSelMarkSize = CGSizeMake(6.0, 2.0);
         self.isUseFixSelMarkSize = YES;
+        self.calExtraAddWidth = 0;
     }
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title {
-    if (self = [self init]) {
-        self.title = title;
-    }
-    return self;
+- (instancetype)init {
+    if (self = [self initWithTitle:@""]) {
+    } return self;
 }
 
 - (void)setNormalColorRGB:(uint32_t)normalColorRGB {
@@ -79,16 +79,17 @@
 - (void)calcelateSelectWidth {
     if (self.title) {
         NSDictionary *att = @{NSFontAttributeName : self.selectTitleFont};
-        CGFloat wid = [self.title boundingRectWithSize:CGSizeMake(MAXFLOAT, 30.0) options:NSStringDrawingUsesLineFragmentOrigin attributes:att context:nil].size.width;
-        self.itemSelCalwid = MAX(self.itemSelCalwid, ceilf(wid) + 12.0);
+        NSStringDrawingOptions ops = NSStringDrawingUsesLineFragmentOrigin;
+        CGFloat wid = [self.title boundingRectWithSize:CGSizeMake(MAXFLOAT, 30.0) options:ops attributes:att context:nil].size.width;
+        self.itemSelCalwid = MAX(self.itemSelCalwid, ceilf(wid) + (self.calExtraAddWidth > 0.1 ? self.calExtraAddWidth : 12.0));
     }
     if (self.selectImage) {
-        self.itemSelCalwid = MAX(self.itemSelCalwid, self.selectImage.size.width + 12.0);
+        self.itemSelCalwid = MAX(self.itemSelCalwid, self.selectImage.size.width + (self.calExtraAddWidth > 0.1 ? self.calExtraAddWidth : 12.0));
     }
     if (self.isUseFixSelMarkSize) {
-        self.itemSelMarkSize = CGSizeMake(30, 3);
+        self.itemSelMarkSize = CGSizeMake(30.0, 3.0);
     } else {
-        self.itemSelMarkSize = CGSizeMake(self.itemSelCalwid - 14.0, 2);
+        self.itemSelMarkSize = CGSizeMake(MAX(self.itemSelCalwid - 14.0, 6.0), 2.0);
     }
 }
 
@@ -100,10 +101,11 @@ static NSString * const kvo_observe_offset = @"contentOffset";
 static void *kvo_context_offset = @"segmentViewScrollView_context";
 typedef void(^block)(NSInteger touchIndex);
 
-@interface ZCPartControl () {
-    CGFloat _markOffset; //mar view宽高小于固定item的宽高多少，默认30
-    CGFloat _alphaOffset; //透明视图的宽度，默认 8
-}
+@interface ZCPartControl ()
+
+@property (nonatomic, assign) CGFloat markOffset;
+
+@property (nonatomic, assign) CGFloat alphaOffset;
 
 @property (nonatomic, strong) NSMutableArray <ZCPartSet *>*items;
 
@@ -139,16 +141,6 @@ typedef void(^block)(NSInteger touchIndex);
 
 @implementation ZCPartControl
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        _isBottomMark = NO;
-        _isFixItemWid = NO;
-        [self initialSet];
-        [self initialload];
-    }
-    return self;
-}
-
 - (instancetype)initWithFrame:(CGRect)frame normalMark:(BOOL)bottomMark fixWidth:(BOOL)fixWidth {
     if (self = [super initWithFrame:frame]) {
         _isBottomMark = bottomMark;
@@ -157,6 +149,11 @@ typedef void(^block)(NSInteger touchIndex);
         [self initialload];
     }
     return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [self initWithFrame:frame normalMark:NO fixWidth:NO]) {
+    } return self;
 }
 
 - (void)initialSet {
@@ -171,7 +168,7 @@ typedef void(^block)(NSInteger touchIndex);
     _contentEdge = UIEdgeInsetsZero;
     _allBtns = NSMutableArray.array;
     _allSpaces = NSMutableArray.array;
-    _markColor = kZCBlackDC;
+    _markColor = kZCBlackDE;
     _currentTapIndex = -1;
     _selectItemIndex = -1;
     _targetScrollIndex = -1;
@@ -533,7 +530,7 @@ typedef void(^block)(NSInteger touchIndex);
     _backgroundView = [[UIView alloc] initWithFrame:CGRectZero];
     _backgroundView.backgroundColor = kZCClear;
     
-    _barView = [[ZCScrollView alloc] initWithFrame:CGRectZero color:nil];
+    _barView = [[ZCScrollView alloc] initWithFrame:CGRectZero];
     _barView.backgroundColor = _barColor;
     _barView.showsHorizontalScrollIndicator = NO;
     _barView.showsVerticalScrollIndicator = NO;
@@ -563,7 +560,7 @@ typedef void(^block)(NSInteger touchIndex);
     [self.allBtns removeAllObjects];
     for (NSInteger i = 0; i < self.items.count; i ++) {
         ZCPartSet *item = self.items[i];
-        ZCButton *button = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
+        ZCButton *button = [[ZCButton alloc] initWithFrame:CGRectZero];
         button.adjustsImageWhenDisabled = NO;
         button.adjustsImageWhenHighlighted = NO;
         if (item.normalAttTitle || item.selectAttTitle) {
@@ -583,22 +580,13 @@ typedef void(^block)(NSInteger touchIndex);
         if (item.normalImage) [button setImage:item.normalImage forState:UIControlStateHighlighted|UIControlStateNormal];
         if (item.selectImage) [button setImage:item.selectImage forState:UIControlStateSelected];
         if (item.selectImage) [button setImage:item.selectImage forState:UIControlStateHighlighted|UIControlStateSelected];
-        button.responseAreaExtend = UIEdgeInsetsMake(5, 5, 5, 5);
+        button.responseAreaExtend = UIEdgeInsetsMake(5.0, 5.0, 5.0, 5.0);
         button.responseTouchInterval = 0.35;
-        if (item.normalImage) {
-            button.imageViewSize = item.imageSize;
-            button.centerAlignmentSpace = item.imageTitleSpace;
-            button.isVerticalCenterAlignment = item.isVerticalAlignment;
-        } else {
-            button.isVerticalCenterAlignment = NO;
-            button.imageViewSize = CGSizeZero;
-            button.centerAlignmentSpace = 0;
-        }
-        button.titleLabel.adjustsFontSizeToFitWidth = YES;
         button.titleLabel.textAlignment = NSTextAlignmentCenter;
+        [button resetImageSize:(item.normalImage ? item.imageSize : CGSizeZero) titleSize:CGSizeZero];
         [button addTarget:self action:@selector(onItemBar:) forControlEvents:UIControlEventTouchUpInside];
         UIView *spaceline = [[UIView alloc] init];
-        spaceline.backgroundColor = kZCBlackDC;
+        spaceline.backgroundColor = kZCBlackDE;
         [self.barView addSubview:button];
         [self.barView addSubview:spaceline];
         [self.allBtns addObject:button];

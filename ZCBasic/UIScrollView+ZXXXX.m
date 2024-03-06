@@ -56,5 +56,4 @@
     return self.bottomExpandOffsetView.backgroundColor;
 }
 
-
 @end

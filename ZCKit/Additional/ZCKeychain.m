@@ -53,7 +53,7 @@
             result = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
         }
         @catch (NSException *exception) {
-            if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: key chain no existent data");
+            if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: key chain no existent data");
         }
         @finally {
             

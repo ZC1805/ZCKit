@@ -101,7 +101,6 @@
 }
 
 + (NSTimeInterval)systemUptime {
-    //offset = serverTimer - upTime; time = upTime + offset; //拿一次服务器时间算出当前时间
     return [NSProcessInfo processInfo].systemUptime;
 }
 
@@ -172,7 +171,6 @@
     else iphoneType = @"iPhone";
     return iphoneType;
 }
-
 
 #define K_IOS_CELLULAR    @"pdp_ip0"
 #define K_IOS_WIFI        @"en0"

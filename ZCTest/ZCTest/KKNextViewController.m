@@ -50,7 +50,7 @@
     //redVi.transform = CGAffineTransformTranslate(redVi.transform, 50, 0);
     //redVi.transform = CGAffineTransformMakeScale(0.5, 0.5);
     [self.view addSubview:redVi];
-    NSLog(@"----->>>>>frame:%@   bounds:%@   center:%@", NSStringFromCGRect(redVi.frame), NSStringFromCGRect(redVi.bounds), NSStringFromCGPoint(redVi.center));
+    kZLog(@"----->>>>>frame:%@   bounds:%@   center:%@", NSStringFromCGRect(redVi.frame), NSStringFromCGRect(redVi.bounds), NSStringFromCGPoint(redVi.center));
     
     ZCLabel *lab = [[ZCLabel alloc] initWithColor:UIColor.whiteColor font:kZFR(10) alignment:NSTextAlignmentLeft adjustsSize:YES];
     lab.frame = CGRectMake(0, 0, 80, 20);

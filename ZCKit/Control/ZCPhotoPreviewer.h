@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZCImageView.h"
-#import "ZCLabel.h"
+
+@class ZCLabel, ZCImageView;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,10 +28,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, strong) NSURL *imageURL;  /**< 原图Url，此时image变成holder，默认nil */
 
-/** image为显示的image，当给定imageUrl时，image为占位图，ctor回调中可给previewer的属性赋值，但不可改frame */
+/**< image为显示的image，当给定imageUrl时，image为占位图，ctor回调中可给previewer的属性赋值，但不可改frame */
 + (void)display:(nullable UIImage *)image ctor:(nullable void(^)(ZCPhotoPreviewer *previewer))ctor;
 
-/** 显示的imageView，imageURL，radius，carrier都已经赋值，ctor回调中只需给余下的属性赋值，但不可改frame */
+/**< 显示的imageView，imageURL，radius，carrier都已经赋值，ctor回调中只需给余下的属性赋值，但不可改frame */
 + (void)displayImageView:(ZCImageView *)imageView ctor:(nullable void(^)(ZCPhotoPreviewer *previewer))ctor;
 
 @end

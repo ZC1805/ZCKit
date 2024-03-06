@@ -26,27 +26,25 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) CGFloat fontSize;  /**< 获取字体字号大小 */
 
-
-/** 获取粗体font对象 */
+/**< 获取粗体font对象 */
 - (UIFont *)fontWithBold;
 
-/** 获取斜体font对象 */
+/**< 获取斜体font对象 */
 - (UIFont *)fontWithItalic;
 
-/** 获取粗体斜体font对象 */
+/**< 获取粗体斜体font对象 */
 - (UIFont *)fontWithBoldItalic;
 
-/** 获取normal font对象 */
+/**< 获取normal font对象 */
 - (UIFont *)fontWithNormal;
 
-
-/** 字体设置，weight [1, 9] */
+/**< 字体设置，weight [1, 9] */
 + (UIFont *)fontSize:(CGFloat)size weight:(NSInteger)weight;
 
-/** 字体设置，slant [-1, 1] */
+/**< 字体设置，slant [-1, 1] */
 + (UIFont *)fontSize:(CGFloat)size weight:(NSInteger)weight slant:(CGFloat)slant;
 
-/** 字体设置，family 字体 */
+/**< 字体设置，family 字体 */
 + (UIFont *)fontFamily:(NSString *)family size:(CGFloat)size weight:(NSInteger)weight slant:(CGFloat)slant;
 
 @end

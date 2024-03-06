@@ -15,7 +15,7 @@ static inline void zc_swizzle_exchange_instance_selector(Class clazz, SEL origin
     Method originalMethod = class_getInstanceMethod(clazz, originalSelector);
     Method swizzledMethod = class_getInstanceMethod(clazz, swizzledSelector);
     if (!swizzledMethod) { return; }
-    if (!originalMethod) { //防止原方法没有实现时出现死循环
+    if (!originalMethod) {
         class_addMethod(clazz, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
         method_setImplementation(swizzledMethod, imp_implementationWithBlock(^(id self, SEL _cmd){ }));
     }
@@ -32,7 +32,7 @@ static inline void zc_swizzle_exchange_class_selector(Class clazz, SEL originalS
     Method originalMethod = class_getInstanceMethod(metaClass, originalSelector);
     Method swizzledMethod = class_getInstanceMethod(metaClass, swizzledSelector);
     if (!swizzledMethod) { return; }
-    if (!originalMethod) { //防止原方法没有实现时出现死循环
+    if (!originalMethod) {
         class_addMethod(metaClass, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
         method_setImplementation(swizzledMethod, imp_implementationWithBlock(^(id self, SEL _cmd){ }));
     }

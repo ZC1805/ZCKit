@@ -60,7 +60,7 @@
 
 - (NSNumberFormatter *)handlerFormatNumberDigits:(int)digits {
     if (digits < 0 || digits > 6) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: digits point error"); digits = 0;
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: digits point error"); digits = 0;
     }
     if (self.numberFormatters.count <= digits) {
         for (NSUInteger i = self.numberFormatters.count; i <= digits; i ++) {
@@ -83,7 +83,7 @@
 
 - (NSDecimalNumberHandler *)handlerForDecimalPoint:(int)point mode:(ZCEnumRoundType)mode {
     if (point < 0 || point > 6) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: digits point error"); point = 0;
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: digits point error"); point = 0;
     }
     NSDecimalNumberHandler *handler = nil;
     switch (mode) {
@@ -116,7 +116,7 @@
         }
         default:{
             handler = [NSDecimalNumberHandler defaultDecimalNumberHandler];
-            if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: round mode error");
+            if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: round mode error");
             break;
         }
     }
@@ -133,17 +133,17 @@
 }
 
 - (nullable NSDecimalNumber *)exceptionDuringOperation:(SEL)operation error:(NSCalculationError)error leftOperand:(NSDecimalNumber *)leftOperand rightOperand:(nullable NSDecimalNumber *)rightOperand {
-    if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: decimal number calculate fail");
+    if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: decimal number calculate fail");
     return nil;
 }
 
 #pragma mark - Class decimal number
-/** 获取DecimalHandler，来处理四舍五入 */
+/**< 获取DecimalHandler，来处理四舍五入 */
 + (NSDecimalNumberHandler *)decimalHandler:(int)decimal type:(ZCEnumRoundType)type {
     return [[ZCDecimalManager sharedManager] handlerForDecimalPoint:decimal mode:type];
 }
 
-/** 转化成->NSDecimalNumber，在此会稍微转换，返回数据都是6位精度 */
+/**< 转化成->NSDecimalNumber，在此会稍微转换，返回数据都是6位精度 */
 + (NSDecimalNumber *)decimalNumberString:(NSString *)string orDouble:(double)dou {
     NSString *douvalue = nil;
     if (string && string.length) {
@@ -154,7 +154,7 @@
     return [NSDecimalNumber decimalNumberWithString:douvalue];
 }
 
-/** 转换成->NSDecimalNumber，会四舍五入处理，number为nil返回notANumber */
+/**< 转换成->NSDecimalNumber，会四舍五入处理，number为nil返回notANumber */
 + (NSDecimalNumber *)decimalNumber:(NSNumber *)number decimalPoint:(int)point roundMode:(ZCEnumRoundType)mode {
     if (number == nil) return [NSDecimalNumber notANumber];
     NSDecimalNumberHandler *handler = [self decimalHandler:point type:mode];
@@ -162,14 +162,14 @@
     return [decimal decimalNumberByRoundingAccordingToBehavior:handler];
 }
 
-/** 舍入转换成string显示，zero是否舍去末尾0，number为nil返回@"NaN" */
+/**< 舍入转换成string显示，zero是否舍去末尾0，number为nil返回@"NaN" */
 + (NSString *)roundNumber:(NSNumber *)number decimalPoint:(int)point roundMode:(ZCEnumRoundType)mode roundZero:(BOOL)zero {
     NSDecimalNumber *decimal = [self decimalNumber:number decimalPoint:point roundMode:mode];
     if (zero) return [decimal stringValue];
     return [self formatFloorNumber:decimal digits:point];
 }
 
-/** 四舍五入转换成string显示，且舍去末尾0，小于6位精度 */
+/**< 四舍五入转换成string显示，且舍去末尾0，小于6位精度 */
 + (NSString *)roundString:(NSString *)string orDouble:(double)dou decimalPoint:(int)point {
     NSDecimalNumberHandler *handler = [self decimalHandler:point type:ZCEnumRoundTypeRound];
     NSDecimalNumber *decimal = [self decimalNumberString:string orDouble:dou];
@@ -177,7 +177,7 @@
     return [result stringValue];
 }
 
-/** 四舍五入转换成标准价格显示，四舍五入，不规范传入格式返回0.00 */
+/**< 四舍五入转换成标准价格显示，四舍五入，不规范传入格式返回0.00 */
 + (NSString *)priceFormat:(NSNumber *)number orString:(NSString *)string orDouble:(double)dou {
     NSDecimalNumberHandler *handler = [self decimalHandler:2 type:ZCEnumRoundTypeRound];
     NSDecimalNumber *decimal = nil;
@@ -195,7 +195,7 @@
     return [self formatFloorNumber:result digits:2];
 }
 
-/** 保留指定位数有效小数，后面舍去 */
+/**< 保留指定位数有效小数，后面舍去 */
 + (NSString *)formatFloorNumber:(NSNumber *)number digits:(int)digits {
     if (number == nil) return nil;
     NSNumberFormatter *formatter = [[ZCDecimalManager sharedManager] handlerFormatNumberDigits:digits];
@@ -212,7 +212,7 @@
     return instance;
 }
 
-/** 去除无效数字，只对浮点数有用 */
+/**< 去除无效数字，只对浮点数有用 */
 + (NSString *)stringDisposeWithFloatString:(NSString *)floatString {
     if (!floatString) return floatString;
     if ([floatString rangeOfString:@"."].location == NSNotFound) {
@@ -229,13 +229,13 @@
     else return floatString;
 }
 
-/** 计算浮点数的有效小数位数，最大六位小数 */
+/**< 计算浮点数的有效小数位数，最大六位小数 */
 + (int)calculateDecimalDigitFromFloat:(double)dou {
     NSString *string = [[self decimalNumberString:nil orDouble:dou] stringValue];
     return [self calculateDecimalDigitFromString:string];
 }
 
-/** 计算字符串的小数位数，最大六位小数 */
+/**< 计算字符串的小数位数，最大六位小数 */
 + (int)calculateDecimalDigitFromString:(NSString *)str {
     int length = 0;
     if (str.length && [str isPureDouble]) {
@@ -246,27 +246,27 @@
             comps = [str componentsSeparatedByString:@"."];
             if (comps && comps.count == 2) length = (int)[comps.lastObject length];
             if (length > 6) length = 6;
-            if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: float string is fail value");
+            if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: float string is fail value");
         }
     } else if (str.length && [str isPureInteger]) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: calculate integer digit");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: calculate integer digit");
     } else {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: calculate decimal digit fail");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: calculate decimal digit fail");
     }
     return length;
 }
 
-/** 计算指定小数位数的最小正小数，默认 1 */
+/**< 计算指定小数位数的最小正小数，默认 1 */
 + (float)minFloatFromDecimalDigit:(int)digit {
     double x = 10, y = -digit, min = 1.0;
     if (x < 0) {
         double fraction, integer;
         fraction = modf(y, &integer);
         if (fabs(fraction) > 0) {
-            if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: value is fail");
+            if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: value is fail");
         } else min = pow(x, y);
     } else if (x == 0 && y <= 0) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: value is fail");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: value is fail");
     } else {
         min = pow(x, y);
     }

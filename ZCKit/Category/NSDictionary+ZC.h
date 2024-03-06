@@ -80,7 +80,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)replaceKey:(NSString *)originKey toKey:(NSString *)finalKey;
 
-- (void)extractKeyValueFromDictionary:(NSDictionary *)dictionary forKeys:(NSArray *)keys;
+- (void)extractKeyValue:(NSDictionary *)dictionary forKeys:(NSArray *)keys;
 
 - (void)injectBoolValue:(BOOL)value forKey:(NSString *)key;
 

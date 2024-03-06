@@ -36,8 +36,8 @@
 
 - (instancetype)swizzle1_vc_initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     id instance = [self swizzle1_vc_initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (instance) self.hidesBottomBarWhenPushed = YES; //如果希望值为NO的话，需要在init之后设置hidesBottomBarWhenPushed为NO;
-    if (instance) self.modalPresentationStyle = UIModalPresentationFullScreen; //不显示层叠样式
+    if (instance) self.hidesBottomBarWhenPushed = YES; ///!!!: 如果希望值为NO的话，需要在init之后设置hidesBottomBarWhenPushed为NO;
+    if (instance) self.modalPresentationStyle = UIModalPresentationFullScreen;
     return instance;
 }
 
@@ -51,7 +51,7 @@
 - (void)swizzle1_vc_viewWillAppear:(BOOL)animated {
     if (ZCKitBridge.isPrintLog) {
         if ([self isKindOfClass:UIViewController.class] && ![self isKindOfClass:UINavigationController.class]) {
-            if (ZCKitBridge.isPrintLog) NSLog(@"\nZCKit: --------- %@ --------- appear\n", NSStringFromClass(self.class));
+            if (ZCKitBridge.isPrintLog) kZLog(@"\nZCKit: --------- %@ --------- appear\n", NSStringFromClass(self.class));
         }
     }
     [self swizzle1_vc_viewWillAppear:animated];

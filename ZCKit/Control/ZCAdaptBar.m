@@ -37,10 +37,15 @@
         _isShowMidLine = NO;
         _isVagueBackground = NO;
         _adaptPosition = position;
-        _reserveHei = position ? kZSBomResHei : kZSTopResHei;
+        _reserveHei = position ? kZSBomResHei : kZSStuBarHei;
         self.backgroundColor = kZCClear;
     }
     return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [self initWithFrame:frame position:ZCEnumAdaptBarPositionTop]) {
+    } return self;
 }
 
 - (void)layoutSubviews {
@@ -93,7 +98,8 @@
 #pragma mark - Get
 - (UIView *)topSepline1 {
     if (!_topSepline1) {
-        _topSepline1 = [[UIView alloc] initWithFrame:CGRectZero color:kZCSplit];
+        _topSepline1 = [[UIView alloc] initWithFrame:CGRectZero];
+        _topSepline1.backgroundColor = kZCSplit;
         [self addSubview:_topSepline1];
     }
     return _topSepline1;
@@ -101,7 +107,8 @@
 
 - (UIView *)midSepline1 {
     if (!_midSepline1) {
-        _midSepline1 = [[UIView alloc] initWithFrame:CGRectZero color:kZCSplit];
+        _midSepline1 = [[UIView alloc] initWithFrame:CGRectZero];
+        _midSepline1.backgroundColor = kZCSplit;
         [self addSubview:_midSepline1];
     }
     return _midSepline1;
@@ -109,7 +116,8 @@
 
 - (UIView *)contentView {
     if (!_contentView) {
-        _contentView = [[UIView alloc] initWithFrame:CGRectZero color:kZCClear];
+        _contentView = [[UIView alloc] initWithFrame:CGRectZero];
+        _contentView.backgroundColor = kZCClear;
         [self addSubview:_contentView];
     }
     return _contentView;
@@ -117,7 +125,8 @@
 
 - (UIView *)reserveView {
     if (!_reserveView) {
-        _reserveView = [[UIView alloc] initWithFrame:CGRectZero color:kZCClear];
+        _reserveView = [[UIView alloc] initWithFrame:CGRectZero];
+        _reserveView.backgroundColor = kZCClear;
         [self addSubview:_reserveView];
     }
     return _reserveView;

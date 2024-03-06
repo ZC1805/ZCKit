@@ -100,16 +100,16 @@
     if (title.length) {
         titleLabel = [[ZCLabel alloc] initWithColor:kZCBlack30 font:[UIFont fontWithName:@"HelveticaNeue-Medium" size:16] alignment:NSTextAlignmentCenter adjustsSize:NO];
         titleLabel.frame = CGRectMake(15, headerHei, self.zc_width - 30, 0);
-        titleLabel.numberOfLines = 0; titleLabel.lineSpace = 3; titleLabel.text = title;
+        titleLabel.numberOfLines = 0; titleLabel.lineSpacing = 3; titleLabel.text = title;
         [titleLabel autoAdaptToSize];
         [self addSubview:titleLabel];
         headerHei = titleLabel.zc_bottom;
     }
     if (message.length) {
         if (title.length) headerHei = headerHei + 5;
-        messageLabel = [[ZCLabel alloc] initWithColor:kZCBlackA8 font:[UIFont fontWithName:@"HelveticaNeue" size:13] alignment:NSTextAlignmentCenter adjustsSize:NO];
+        messageLabel = [[ZCLabel alloc] initWithColor:kZCBlackA6 font:[UIFont fontWithName:@"HelveticaNeue" size:13] alignment:NSTextAlignmentCenter adjustsSize:NO];
         messageLabel.frame = CGRectMake(15, headerHei, self.zc_width - 30, 0);
-        messageLabel.numberOfLines = 0; messageLabel.lineSpace = 3; messageLabel.text = message;
+        messageLabel.numberOfLines = 0; messageLabel.lineSpacing = 3; messageLabel.text = message;
         [messageLabel autoAdaptToSize];
         [self addSubview:messageLabel];
         headerHei = messageLabel.zc_bottom;
@@ -147,7 +147,7 @@
     listView.sectionIndexColor = kZCBlack30;
     listView.directionalLockEnabled = YES;
     listView.bounces = YES;
-    listView.frame = CGRectMake(0, line.zc_bottom, self.zc_width, 1000); //这里要设置大些
+    listView.frame = CGRectMake(0, line.zc_bottom, self.zc_width, 1000);
     [listView registerClass:NSClassFromString(self.cellClassName) forCellReuseIdentifier:@"listCellx"];
     [self addSubview:listView];
     [listView reloadData];

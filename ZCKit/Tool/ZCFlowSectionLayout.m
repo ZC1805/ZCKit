@@ -16,11 +16,11 @@
 @property (nonatomic, assign) BOOL is_stop_line;
 
 @property (nonatomic, assign) CGFloat i_h;
-@property (nonatomic, assign) CGFloat sh_h; //分区头高
+@property (nonatomic, assign) CGFloat sh_h;
 @property (nonatomic, assign) CGFloat hor_space;
 @property (nonatomic, assign) CGFloat ver_space;
 @property (nonatomic, assign) UIEdgeInsets s_insets;
-@property (nonatomic, assign) CGFloat additional_hei; //额外高度
+@property (nonatomic, assign) CGFloat additional_hei;
 
 @property (nonatomic, assign) int line_count;
 @property (nonatomic, assign) BOOL isHorLayout;

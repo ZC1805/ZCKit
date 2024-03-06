@@ -92,6 +92,10 @@
     return nowCmps.year == selfCmps.year;
 }
 
+- (long)stamp {
+    return (long)(self.timeIntervalSince1970 * 1000);
+}
+
 - (NSString *)timestamp {
     return [[NSNumber numberWithLong:(long)(self.timeIntervalSince1970 * 1000)] stringValue];
 }
@@ -205,12 +209,12 @@
 
 - (BOOL)isSameMonthAsDate:(NSDate *)date {
     if (!date) return NO;
-    return [NSCalendar.gregorianCalendar isDate:self equalToDate:date toUnitGranularity:NSCalendarUnitMonth];
+    return [NSCalendar.gregorianCalendar isDate:self equalToDate:date toUnitGranularity:NSCalendarUnitEra|NSCalendarUnitYear|NSCalendarUnitMonth];
 }
 
 - (BOOL)isSameYearAsDate:(NSDate *)date {
     if (!date) return NO;
-    return [NSCalendar.gregorianCalendar isDate:self equalToDate:date toUnitGranularity:NSCalendarUnitYear];
+    return [NSCalendar.gregorianCalendar isDate:self equalToDate:date toUnitGranularity:NSCalendarUnitEra|NSCalendarUnitYear];
 }
 
 - (NSString *)stringWithFormat:(NSString *)format {

@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (class, nonatomic, readonly) NSString *appVersion;  /**< 应用 Version "1.2.0" */
 
-@property (class, nonatomic, readonly) NSString *appBuildVersion;  /**< 应用 Build number "123" */
+@property (class, nonatomic, readonly) NSString *appBuildVersion;  /**< 应用 Build number "123456" */
 
 @property (class, nonatomic, readonly) NSString *appSign;  /**< 应用签名信息 */
 

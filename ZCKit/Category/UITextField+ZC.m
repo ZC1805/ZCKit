@@ -118,13 +118,4 @@
     [self makeOffset:offset];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame holder:(NSString *)holder font:(UIFont *)font color:(UIColor *)color {
-    if (self = [self initWithFrame:frame]) {
-        if (holder) self.placeholder = holder;
-        if (color) self.textColor = color;
-        if (font) self.font = font;
-    }
-    return self;
-}
-
 @end

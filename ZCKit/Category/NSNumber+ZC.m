@@ -39,7 +39,7 @@
         return num;
     }
     
-    int sign = 0; //hex number
+    int sign = 0;
     if ([str hasPrefix:@"0x"]) sign = 1;
     else if ([str hasPrefix:@"-0x"]) sign = -1;
     if (sign != 0) {
@@ -53,7 +53,7 @@
         }
     }
     
-    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init]; //normal number
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
     [formatter setNumberStyle:NSNumberFormatterDecimalStyle];
     return [formatter numberFromString:string];
 }
@@ -65,87 +65,87 @@
 @implementation NSDecimalNumber (ZC)
 
 #pragma mark - Class func
-/** -1 */
+/**< -1 */
 + (NSDecimalNumber *)nOne {
     return [self decimalNumberWithMantissa:1 exponent:0 isNegative:YES];
 }
 
-/** string初始化，能规避精度问题，六位小数精度，string为nil或非浮点型时都返回notANumber */
+/**< string初始化，能规避精度问题，六位小数精度，string为nil或非浮点型时都返回notANumber */
 + (NSDecimalNumber *)decimalString:(NSString *)strValue {
     if (!strValue || !strValue.isPureDouble) return [NSDecimalNumber notANumber];
     double douValue = [strValue doubleValue];
     NSString *doubleStr = [NSString stringWithFormat:@"%lf", douValue];
-    return [NSDecimalNumber decimalNumberWithString:doubleStr]; //以这种初始化方法测试结果表明只会保留6位小数精度
+    return [NSDecimalNumber decimalNumberWithString:doubleStr]; ///!!!: 以这种初始化方法测试结果表明只会保留6位小数精度
 }
 
-/** double初始化，能规避精度问题，六位小数精度 */
+/**< double初始化，能规避精度问题，六位小数精度 */
 + (NSDecimalNumber *)decimalDouble:(double)douValue {
     NSString *doubleStr = [NSString stringWithFormat:@"%lf", douValue];
     return [NSDecimalNumber decimalNumberWithString:doubleStr];
 }
 
-/** integer初始化 */
+/**< integer初始化 */
 + (NSDecimalNumber *)decimalInteger:(long)lonValue {
     NSString *longStr = [NSString stringWithFormat:@"%ld", lonValue];
     return [NSDecimalNumber decimalNumberWithString:longStr];
 }
 
-/** number初始化，number为nil返回notANumber */
+/**< number初始化，number为nil返回notANumber */
 + (NSDecimalNumber *)decimalNumber:(NSNumber *)number {
     if (number == nil) return [NSDecimalNumber notANumber];
     return [NSDecimalNumber decimalNumberWithDecimal:[number decimalValue]];
 }
 
 #pragma mark - Instance func
-/** decimal的最精度，最小返回值为0.000001 */
+/**< decimal的最精度，最小返回值为0.000001 */
 - (NSDecimalNumber *)decimalPrecise {
     int dec = [ZCDecimalManager calculateDecimalDigitFromString:[self stringValue]];
     return [NSDecimalNumber decimalNumberWithMantissa:1 exponent:-dec isNegative:NO];
 }
 
-/** decimal按小数位数四舍五入操作 */
+/**< decimal按小数位数四舍五入操作 */
 - (NSDecimalNumber *)decimalRound:(short)decimal mode:(ZCEnumRoundType)mode {
     NSDecimalNumberHandler *handler = [ZCDecimalManager decimalHandler:decimal type:mode];
     return [self decimalNumberByRoundingAccordingToBehavior:handler];
 }
 
 #pragma mark - Calculate func
-/** 加 */
+/**< 加 */
 - (NSDecimalNumber *)plus:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) decimalNumber = [NSDecimalNumber zero];
     return [self decimalNumberByAdding:decimalNumber withBehavior:[ZCDecimalManager sharedManager]];
 }
 
-/** 减 */
+/**< 减 */
 - (NSDecimalNumber *)minus:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) decimalNumber = [NSDecimalNumber zero];
     return [self decimalNumberBySubtracting:decimalNumber withBehavior:[ZCDecimalManager sharedManager]];
 }
 
-/** 乘 */
+/**< 乘 */
 - (NSDecimalNumber *)mltiply:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) decimalNumber = [NSDecimalNumber one];
     return [self decimalNumberByMultiplyingBy:decimalNumber withBehavior:[ZCDecimalManager sharedManager]];
 }
 
-/** 除 */
+/**< 除 */
 - (NSDecimalNumber *)divide:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) decimalNumber = [NSDecimalNumber one];
     return [self decimalNumberByDividingBy:decimalNumber withBehavior:[ZCDecimalManager sharedManager]];
 }
 
-/** 幂 */
+/**< 幂 */
 - (NSDecimalNumber *)raisingToPower:(NSUInteger)power {
     return [self decimalNumberByRaisingToPower:power withBehavior:[ZCDecimalManager sharedManager]];
 }
 
-/** 乘10^x方 */
+/**< 乘10^x方 */
 - (NSDecimalNumber *)mltiplyPower10:(short)power {
     return [self decimalNumberByMultiplyingByPowerOf10:power withBehavior:[ZCDecimalManager sharedManager]];
 }
 
 #pragma mark - Compare func
-/** 小于 */
+/**< 小于 */
 - (BOOL)less:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) return NO;
     NSComparisonResult result = [self compare:decimalNumber];
@@ -153,7 +153,7 @@
     return NO;
 }
 
-/** 大于 */
+/**< 大于 */
 - (BOOL)more:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) return NO;
     NSComparisonResult result = [self compare:decimalNumber];
@@ -161,7 +161,7 @@
     return NO;
 }
 
-/** 等于 */
+/**< 等于 */
 - (BOOL)equal:(NSDecimalNumber *)decimalNumber {
     if (!decimalNumber) return NO;
     NSComparisonResult result = [self compare:decimalNumber];
@@ -169,13 +169,13 @@
     return NO;
 }
 
-/** 返回价格格式，notANumber返回0.00 */
+/**< 返回价格格式，notANumber返回0.00 */
 - (NSString *)priceValue {
     if (self.isANumber) return [ZCDecimalManager priceFormat:self orString:nil orDouble:0];
     return @"0.00";
 }
 
-/** 是否是number */
+/**< 是否是number */
 - (BOOL)isANumber {
     if ([self equal:[NSDecimalNumber notANumber]]) return NO;
     return YES;

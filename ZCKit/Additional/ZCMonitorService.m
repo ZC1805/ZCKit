@@ -37,7 +37,7 @@ const ZCMonitorType ZCMonitorTypeNone = 0;  /**< 用于获取监听类型等 */
         _ids = [NSArray array];
         _infos = [NSDictionary dictionary];
         _priority = ZCEnumMonitorPriorityNormal;
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: monitor init fail");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: monitor init fail");
     }
     return self;
 }

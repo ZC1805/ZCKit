@@ -8,6 +8,7 @@
 
 #import "ZCKitBridge.h"
 #import "ZCDateManager.h"
+#import "ZCImageView.h"
 #import "ZCMacro.h"
 
 @interface ZCKitBridge ()
@@ -139,18 +140,18 @@ static NSTimeZone *_aimTimeZone = nil;
 
 + (id<ZCKitExternalRealize>)realize {
     id <ZCKitExternalRealize> singleRealize = [ZCKitBridge sharedBridge].singleRealize;
-    if (!singleRealize) { if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: kit manager delegate is nil"); }
+    if (!singleRealize) { if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: kit manager delegate is nil"); }
     return singleRealize;
 }
 
 + (void)setRealize:(id<ZCKitExternalRealize>)realize {
     if ([ZCKitBridge sharedBridge].singleRealize) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: single delegate only registration once");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: single delegate only registration once");
     }
     if (realize) {
         [ZCKitBridge sharedBridge].singleRealize = realize;
     } else {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: kit manager delegate is nil");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: kit manager delegate is nil");
     }
 }
 

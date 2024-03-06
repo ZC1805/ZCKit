@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, copy) void(^textChangeBlock)(ZCTextView *textView);  /**< 内容改变回调，默认nil */
 
 #pragma mark - Delegate block
-/** 以下方法将会设置delegate为self */
+/**< 以下方法将会设置delegate为self */
 - (ZCTextView *)shouldBeginEdit:(nullable BOOL(^)(ZCTextView *textView))block;
 
 - (ZCTextView *)shouldEndEdit:(nullable BOOL(^)(ZCTextView *textView))block;

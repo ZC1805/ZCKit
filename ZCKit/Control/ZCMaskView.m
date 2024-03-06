@@ -63,7 +63,7 @@
     dispatch_once(&onceToken, ^{
         mask = [[ZCMaskView alloc] initWithFrame:CGRectZero];
         mask.animateTime = 0.32;
-        mask.maskAlpha = 0.52;
+        mask.maskAlpha = 0.57;
     });
     return mask;
 }

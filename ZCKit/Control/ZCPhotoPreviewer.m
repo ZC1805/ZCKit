@@ -9,6 +9,8 @@
 #import "ZCPhotoPreviewer.h"
 #import "ZCScrollView.h"
 #import "ZCKitBridge.h"
+#import "ZCImageView.h"
+#import "ZCLabel.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
 
@@ -70,7 +72,7 @@
     longPress.minimumPressDuration = 0.5;
     [self addGestureRecognizer:longPress];
     
-    self.scrollView = [[ZCScrollView alloc] initWithFrame:self.bounds color:nil];
+    self.scrollView = [[ZCScrollView alloc] initWithFrame:self.bounds];
     self.scrollView.bounces = YES;
     self.scrollView.delegate = self;
     self.scrollView.bouncesZoom = YES;
@@ -90,7 +92,7 @@
 
 - (ZCLabel *)titleLabel {
     if (!_titleLabel) {
-        _titleLabel = [[ZCLabel alloc] initWithFrame:CGRectZero color:kZCClear];
+        _titleLabel = [[ZCLabel alloc] initWithFrame:CGRectZero];
         _titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.textColor = self.isUseDarkStyle ? self.textOriginColor : kZCBlack30;

@@ -8,6 +8,8 @@
 
 #import "ZCCycleControl.h"
 #import "ZCKitBridge.h"
+#import "ZCImageView.h"
+#import "ZCLabel.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
 
@@ -71,7 +73,7 @@ static NSString * const ident = @"cycleControlCell";
 #pragma mark - ~ ZCCyclePageControl ~
 @class ZCCyclePageControl;
 
-@protocol ZCCyclePageControlDelegate <NSObject>  //点击回调
+@protocol ZCCyclePageControlDelegate <NSObject>
 
 - (void)cyclePageControl:(ZCCyclePageControl *)pageControl didSelectPageAtIndex:(NSInteger)index;
 
@@ -316,19 +318,19 @@ static NSString * const ident = @"cycleControlCell";
 
 @property (nonatomic, assign) CGFloat itemHorSpace; //横向滚动时，每张轮播图的间距
 
-@property (nonatomic, assign) CGFloat itemMinScale; //前后2张图的缩小比例 (0.1 ~ 1.0)
+@property (nonatomic, assign) CGFloat itemMinScale; //前后2张图的缩小比例(0.1 ~ 1.0)
 
-@property (nonatomic, assign) BOOL isMultiple; //是否同时显示两张图
+@property (nonatomic, assign) CGFloat itemHorInit; //前后2张图的缩小比例(0.1 ~ 1.0)
 
 @end
 
 @implementation ZCCycleHorizontalFlowLayout
 
-- (instancetype)initWithItemHorSpace:(CGFloat)itemHorSpace isMultiple:(BOOL)isMultiple {
+- (instancetype)initWithItemHorSpace:(CGFloat)itemHorSpace itemHorInit:(CGFloat)itemHorInit {
     if (self = [super init]) {
-        self.isMultiple = isMultiple;
-        self.itemMinScale = 0.8;
+        self.itemMinScale = 0.95;
         self.itemHorSpace = itemHorSpace;
+        self.itemHorInit = itemHorInit;
     }
     return self;
 }
@@ -339,9 +341,9 @@ static NSString * const ident = @"cycleControlCell";
 
 - (void)prepareLayout {
     [super prepareLayout];
-    CGFloat offset = self.isMultiple ? (self.itemHorSpace / 2.0 + 0.5) : 0;
+    CGFloat onePage = self.collectionView.zc_width - 2.0 * self.itemHorInit - self.itemHorSpace;
     self.sectionInset = UIEdgeInsetsMake(0, self.itemHorSpace / 2.0, 0, self.itemHorSpace / 2.0);
-    self.itemSize = CGSizeMake(self.collectionView.zc_width - self.itemHorSpace - offset, self.collectionView.zc_height);
+    self.itemSize = CGSizeMake(onePage - self.itemHorSpace, self.collectionView.zc_height);
     self.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     self.minimumLineSpacing = self.itemHorSpace;
 }
@@ -355,6 +357,12 @@ static NSString * const ident = @"cycleControlCell";
         attri.transform = CGAffineTransformMakeScale(1.0, scale);
     }
     return atts;
+}
+
+- (CGSize)collectionViewContentSize {
+    CGSize size = [super collectionViewContentSize];
+    CGFloat baseOffset = self.itemHorInit + self.itemHorSpace / 2.0;
+    return CGSizeMake(size.width + baseOffset, size.height);
 }
 
 @end
@@ -371,9 +379,15 @@ static NSString * const ident = @"cycleControlCell";
 
 @property (nonatomic, weak) UIControl *pageControl;
 
+@property (nonatomic, assign) BOOL isInitLoop;
+
+@property (nonatomic, assign) BOOL isInfiniteLoop;
+
 @property (nonatomic, assign) CGFloat itemHorSpace;
 
-@property (nonatomic, assign) BOOL isShowMultiple;
+@property (nonatomic, assign) CGFloat itemHorInit;
+
+@property (nonatomic, assign) int dragBeginIndex;
 
 @property (nonatomic, strong) NSArray *imagePathsGroup;
 
@@ -386,10 +400,11 @@ static NSString * const ident = @"cycleControlCell";
 @implementation ZCCycleControl
 
 #pragma mark - Initial
-- (instancetype)initWithFrame:(CGRect)frame imageUrlGroup:(NSArray *)imageUrlGroup {
+- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageUrlGroup:(NSArray *)imageUrlGroup {
     if (self = [super initWithFrame:frame]) {
-        [self initialization:0 multiple:NO];
+        [self initialization:0];
         [self setupMainView];
+        self.isInitLoop = loop;
         if (imageUrlGroup) {
             self.imageURLStringsGroup = [NSMutableArray arrayWithArray:imageUrlGroup];
         }
@@ -397,21 +412,22 @@ static NSString * const ident = @"cycleControlCell";
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame delegate:(id<ZCCycleControlDelegate>)delegate holder:(nullable UIImage *)holder {
+- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop delegate:(id<ZCCycleControlDelegate>)delegate holder:(nullable UIImage *)holder {
     if (self = [super initWithFrame:frame]) {
-        [self initialization:0 multiple:NO];
+        [self initialization:0];
         [self setupMainView];
+        self.isInitLoop = loop;
         self.delegate = delegate;
         if (holder) self.placeholderImage = holder;
     }
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(NSArray *)imageGroup itemHorSpace:(CGFloat)itemHorSpace isShowMultiple:(BOOL)isShowMultiple {
+- (instancetype)initWithFrame:(CGRect)frame shouldLoop:(BOOL)loop imageGroup:(NSArray *)imageGroup itemHorSpace:(CGFloat)itemHorSpace {
     if (self = [super initWithFrame:frame]) {
-        [self initialization:itemHorSpace multiple:isShowMultiple];
+        [self initialization:itemHorSpace];
         [self setupMainView];
-        self.isInfiniteLoop = loop;
+        self.isInitLoop = loop;
         if (imageGroup) {
             self.localizationImageGroup = [NSMutableArray arrayWithArray:imageGroup];
         }
@@ -421,17 +437,18 @@ static NSString * const ident = @"cycleControlCell";
 
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
-        [self initialization:0 multiple:NO];
+        [self initialization:0];
         [self setupMainView];
     }
     return self;
 }
 
-- (void)initialization:(CGFloat)space multiple:(BOOL)multiple {
-    _isShowMultiple = multiple;
+- (void)initialization:(CGFloat)space {
     _itemHorSpace = space;
+    _itemHorInit = space;
+    _dragBeginIndex = -1;
     _isAutoScroll = YES;
-    _isInfiniteLoop = YES;
+    _isInfiniteLoop = NO;
     _isOnlyDisplayText = NO;
     _isShowPageControl = YES;
     _autoScrollTimeInterval = 4.0;
@@ -443,32 +460,34 @@ static NSString * const ident = @"cycleControlCell";
     _pageControlAliment = ZCEnumCycleAlimentCenter;
     _pageControlStyle = ZCEnumCyclePageStyleAnimated;
     _pageDotSelectColor = kZCWhite;
-    _pageDotColor = kZCBlackA8;
+    _pageDotColor = kZCBlackA6;
 }
 
 - (void)setupMainView {
     self.backgroundColor = kZCWhite;
     UICollectionViewFlowLayout *flowLayout = nil;
-    if (_itemHorSpace > 0) {
-        flowLayout = [[ZCCycleHorizontalFlowLayout alloc] initWithItemHorSpace:_itemHorSpace isMultiple:_isShowMultiple];
-    } else {
+    if (_itemHorSpace <= 0) {
         flowLayout = [[UICollectionViewFlowLayout alloc] init];
+        flowLayout.itemSize = self.zc_size;
         flowLayout.minimumLineSpacing = 0;
+    } else {
+        flowLayout = [[ZCCycleHorizontalFlowLayout alloc] initWithItemHorSpace:_itemHorSpace itemHorInit:_itemHorInit];
     }
     _flowLayout = flowLayout;
     _flowLayout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
     UICollectionView *mainView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:_flowLayout];
     if (@available(iOS 11.0, *)) { mainView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever; }
     mainView.backgroundColor = kZCClear;
-    mainView.pagingEnabled = YES;
+    mainView.pagingEnabled = _itemHorSpace <= 0;
     mainView.showsHorizontalScrollIndicator = NO;
     mainView.showsVerticalScrollIndicator = NO;
     mainView.directionalLockEnabled = YES;
     [mainView registerClass:ZCCycleCell.class forCellWithReuseIdentifier:ident];
-    mainView.clipsToBounds = _itemHorSpace <= 0;
+    mainView.clipsToBounds = YES;
     mainView.dataSource = self;
     mainView.delegate = self;
     mainView.scrollsToTop = NO;
+    mainView.bounces = YES;
     [self addSubview:mainView];
     _mainView = mainView;
 }
@@ -477,10 +496,10 @@ static NSString * const ident = @"cycleControlCell";
 - (void)setPlaceholderImage:(UIImage *)placeholderImage {
     _placeholderImage = placeholderImage;
     if (!_backgroundImageView) {
-        ZCImageView *bkImageView = [[ZCImageView alloc] initWithFrame:CGRectZero image:nil];
-        bkImageView.contentMode = UIViewContentModeScaleAspectFit;
-        [self insertSubview:bkImageView belowSubview:_mainView];
-        _backgroundImageView = bkImageView;
+        ZCImageView *bgImageView = [[ZCImageView alloc] initWithFrame:CGRectZero];
+        bgImageView.contentMode = UIViewContentModeScaleAspectFit;
+        [self insertSubview:bgImageView belowSubview:_mainView];
+        _backgroundImageView = bgImageView;
     }
     _backgroundImageView.image = placeholderImage;
 }
@@ -565,7 +584,7 @@ static NSString * const ident = @"cycleControlCell";
 - (void)setIsAutoScroll:(BOOL)isAutoScroll {
     _isAutoScroll = isAutoScroll;
     [self invalidateTimer];
-    if (_isAutoScroll) [self setupTimer];
+    if (_isAutoScroll) { [self setupTimer]; }
 }
 
 - (void)setScrollDirection:(UICollectionViewScrollDirection)scrollDirection {
@@ -587,9 +606,11 @@ static NSString * const ident = @"cycleControlCell";
 
 - (void)setImagePathsGroup:(NSArray *)imagePathsGroup {
     [self invalidateTimer];
+    _dragBeginIndex = -1;
     _imagePathsGroup = imagePathsGroup;
+    _isInfiniteLoop = self.isInitLoop && imagePathsGroup.count > 1;
     _totalItemsCount = self.isInfiniteLoop ? imagePathsGroup.count * 100 : imagePathsGroup.count;
-    if (imagePathsGroup.count != 1) {
+    if (imagePathsGroup.count > 1) {
         _mainView.scrollEnabled = YES;
         [self setIsAutoScroll:self.isAutoScroll];
     } else {
@@ -597,6 +618,9 @@ static NSString * const ident = @"cycleControlCell";
     }
     [self setupPageControl];
     [_mainView reloadData];
+    [_mainView setNeedsLayout];
+    [_mainView layoutIfNeeded];
+    [self layoutSubviews];
     self.backgroundImageView.hidden = imagePathsGroup.count;
 }
 
@@ -649,7 +673,7 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (void)setupPageControl {
-    if (_pageControl) [_pageControl removeFromSuperview]; //重新加载数据时调整
+    if (_pageControl) { [_pageControl removeFromSuperview]; } //重新加载数据时调整
     if (self.imagePathsGroup.count == 0 || self.isOnlyDisplayText) return;
     if (self.imagePathsGroup.count == 1) return;
     int indexOnPageControl = [self pageControlIndexWithCurrentCellIndex:[self currentIndex]];
@@ -692,9 +716,24 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (void)scrollToIndex:(int)targetIndex isAnimate:(BOOL)isAnimate {
-    if (targetIndex >= _totalItemsCount) {
-        isAnimate = NO; targetIndex = _totalItemsCount * 0.5;
-        if (!self.isInfiniteLoop) return;
+    if (self.isInfiniteLoop) {
+        if (_totalItemsCount <= 0) {
+            isAnimate = NO; targetIndex = 0;
+        }
+        else if (targetIndex >= _totalItemsCount * 0.8) {
+            isAnimate = NO; targetIndex = _totalItemsCount * 0.5;
+        }
+        else if (targetIndex < _totalItemsCount * 0.2) {
+            isAnimate = NO; targetIndex = _totalItemsCount * 0.5 - 1;
+        }
+    } else {
+        if (_itemHorSpace <= 0) {
+            if (targetIndex >= _totalItemsCount) return;
+        } else {
+            if (targetIndex >= _totalItemsCount) {
+                targetIndex = 0;
+            }
+        }
     }
     if (_itemHorSpace <= 0) {
         if (_flowLayout.scrollDirection == UICollectionViewScrollDirectionHorizontal) {
@@ -707,7 +746,9 @@ static NSString * const ident = @"cycleControlCell";
             [_mainView setContentOffset:CGPointMake(x, y) animated:isAnimate];
         }
     } else {
-        CGFloat x = self.zc_width * targetIndex;
+        CGFloat baseOffset = _itemHorInit + _itemHorSpace / 2.0;
+        CGFloat onePage = self.zc_width - 2.0 * _itemHorInit - _itemHorSpace;
+        CGFloat x = onePage * targetIndex - baseOffset;
         CGFloat y = _mainView.contentOffset.y;
         [_mainView setContentOffset:CGPointMake(x, y) animated:isAnimate];
     }
@@ -725,7 +766,9 @@ static NSString * const ident = @"cycleControlCell";
             index = (_mainView.contentOffset.y + _flowLayout.itemSize.height * 0.5) / _flowLayout.itemSize.height;
         }
     } else {
-        index = (_mainView.contentOffset.x + self.zc_width * 0.5) / self.zc_width;
+        CGFloat baseOffset = _itemHorInit + _itemHorSpace / 2.0;
+        CGFloat onePage = self.zc_width - 2.0 * _itemHorInit - _itemHorSpace;
+        index = (_mainView.contentOffset.x + baseOffset + onePage * 0.5) / onePage;
     }
     return MAX(0, index);
 }
@@ -741,14 +784,27 @@ static NSString * const ident = @"cycleControlCell";
         _flowLayout.itemSize = self.zc_size;
     }
     _mainView.frame = self.bounds;
-    if (_mainView.contentOffset.x == 0 && _totalItemsCount) {
-        int targetIndex = 0;
-        if (self.isInfiniteLoop) {
-            targetIndex = _totalItemsCount * 0.5;
-        } else {
-            targetIndex = 0;
+    if (_itemHorSpace <= 0) {
+        if (ABS(_mainView.contentOffset.x) < 1.0 && _totalItemsCount > 0) {
+            int targetIndex = 0;
+            if (self.isInfiniteLoop) {
+                targetIndex = _totalItemsCount * 0.5;
+            } else {
+                targetIndex = 0;
+            }
+            [self scrollToIndex:targetIndex isAnimate:NO];
         }
-        [self scrollToIndex:targetIndex isAnimate:NO];
+    } else {
+        CGFloat baseOffset = _itemHorInit + _itemHorSpace / 2.0;
+        if ((ABS(_mainView.contentOffset.x + baseOffset) < 1.0 || ABS(_mainView.contentOffset.x) < 1.0) && _totalItemsCount > 0) {
+            int targetIndex = 0;
+            if (self.isInfiniteLoop) {
+                targetIndex = _totalItemsCount * 0.5;
+            } else {
+                targetIndex = _totalItemsCount > 0 ? 1 : 0;
+            }
+            [self scrollToIndex:targetIndex isAnimate:NO];
+        }
     }
     
     CGSize size = CGSizeZero;
@@ -782,7 +838,7 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (void)willMoveToSuperview:(UIView *)newSuperview { //解决当父View释放时，当前视图因为被Timer强引用而不能释放的问题
-    if (!newSuperview) [self invalidateTimer];
+    if (!newSuperview) { [self invalidateTimer]; }
 }
 
 - (void)dealloc { //解决当timer释放后，回调scrollViewDidScroll时访问野指针导致崩溃
@@ -864,11 +920,54 @@ static NSString * const ident = @"cycleControlCell";
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView {
-    if (self.isAutoScroll) [self invalidateTimer];
+    if (self.isAutoScroll) { [self invalidateTimer]; }
+    if (!scrollView.pagingEnabled) {
+        _dragBeginIndex = [self currentIndex];
+    }
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (self.isAutoScroll) [self setupTimer];
+    if (!scrollView.pagingEnabled && !decelerate && _totalItemsCount > 0) {
+        [self scrollToIndex:[self currentIndex] isAnimate:YES];
+        _dragBeginIndex = -1;
+    }
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset {
+    if (!scrollView.pagingEnabled && velocity.x != 0 && _totalItemsCount > 0) {
+        CGFloat aimOffsetX = targetContentOffset->x;
+        int targetIndex = 0;
+        if (_mainView.zc_width == 0 || _mainView.zc_height == 0) {
+            targetIndex = 0;
+        } else {
+            CGFloat baseOffset = _itemHorInit + _itemHorSpace / 2.0;
+            CGFloat onePage = self.zc_width - 2.0 * _itemHorInit - _itemHorSpace;
+            targetIndex = (aimOffsetX + baseOffset + onePage * 0.5) / onePage;
+            if (_dragBeginIndex >= 0 && targetIndex > _dragBeginIndex) { targetIndex = MIN(_dragBeginIndex + 1, targetIndex); }
+            if (_dragBeginIndex >= 0 && targetIndex < _dragBeginIndex) { targetIndex = MAX(_dragBeginIndex - 1, targetIndex); }
+            targetIndex = MAX(0, targetIndex);
+        }
+        if (self.isInfiniteLoop) {
+            if (targetIndex >= _totalItemsCount * 0.8) {
+                targetIndex = _totalItemsCount * 0.8;
+            }
+            if (targetIndex < _totalItemsCount * 0.2) {
+                targetIndex = _totalItemsCount * 0.2 - 1;
+            } //这个地方可以滑动到临界值
+        } else {
+            if (targetIndex >= _totalItemsCount) {
+                targetIndex = (int)_totalItemsCount - 1;
+            } //这里划到第一个间距会没
+        }
+        CGFloat baseOffset = _itemHorInit + _itemHorSpace / 2.0;
+        CGFloat onePage = self.zc_width - 2.0 * _itemHorInit - _itemHorSpace;
+        CGFloat x = onePage * targetIndex - baseOffset;
+        targetContentOffset->x = x;
+    }
+    if (!scrollView.pagingEnabled) {
+        _dragBeginIndex = -1;
+    }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {

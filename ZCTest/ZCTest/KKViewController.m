@@ -10,6 +10,7 @@
 #import "ZCMacro.h"
 #import "UIView+ZC.h"
 #import "ZCTest-Swift.h"
+#import "ZCMenuControl.h"
 
 @interface KKViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -68,18 +69,42 @@
     listView.frame = CGRectMake(0, 0, kZSWid, kZSHei - 200); //这里要设置大些
     [self.view addSubview:listView];
     
-#warning - ZCTableView分类初始化方法   JSON object   tableView先设置代理在设置表头   ZCNavVC屏蔽导航过渡问题    ZSA像素对齐问题   ZCButton布局问题   UITableView不想设置SectionHeader高度时不要用0.01用CGFLOAT_MIN
-#warning - SDWebImage来下载网络图片为了更好处理图片的缩放和圆角等问题，需要在原来库增加某些特性（图片缩放、裁圆角和缓存等）单例类方法取名
+    ZCButton *btn = [[ZCButton alloc] initWithTitle:@"Sender" font:kZFB(18) color:UIColor.redColor image:nil target:nil action:nil];
+    btn.frame = CGRectMake(100, 88, 100, 100);
+    btn.backgroundColor = UIColor.greenColor;
+    btn.contentEdgeInsets = UIEdgeInsetsMake(0, 20, 20, 0);
+    btn.titleLabel.backgroundColor = UIColor.whiteColor;
+    [self.view addSubview:btn];
     
+    
+#warning - ZCTableView分类初始化方法   JSON object   tableView先设置代理在设置表头   ZCNavVC屏蔽导航过渡问题    ZSA像素对齐问题   UITableView不想设置SectionHeader高度时不要用0.01用CGFLOAT_MIN
+#warning - SDWebImage来下载网络图片为了更好处理图片的缩放和圆角等问题，需要在原来库增加某些特性（图片缩放、裁圆角和缓存等）单例类方法取名
+#warning - Box弹窗时候不能运行侧滑返回
 #warning - 固戍花园骑车 铁仔山 人才公园
 }
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
-    [self.navigationController pushViewController:[[KKNextViewController alloc] init] animated:YES];
+    //[self.navigationController pushViewController:[[KKNextViewController alloc] init] animated:YES];
+    
+    [ZCMenuControl display:@[@"AAAAAAAA", @"BBBBBC", @"CBBBBC", @"DBBBBC"] width:100 vertex:CGPointMake(100, 88+100) set:^(ZCMenuControl * _Nonnull menuControl) {
+        menuControl.fillColor = UIColor.redColor;
+        menuControl.maxLine = 10;
+        menuControl.topHeight = 10;
+        menuControl.rowHeight = 50;
+        menuControl.initArrowRect = CGRectMake(60.5, 0, 15, 10);
+    } btnSet:^(NSInteger index, ZCButton * _Nonnull itemBtn, UIView * _Nullable line) {
+        itemBtn.backgroundColor = UIColor.whiteColor;
+        
+    } click:^(NSInteger selectIndex) {
+        
+    }];
+    
+    
+    
+    
 }
 
-
-
+#pragma mark - xxxx
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return  10;
 }

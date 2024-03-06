@@ -7,6 +7,9 @@
 //
 
 #import "ZCBlankControl.h"
+#import "ZCImageView.h"
+#import "ZCButton.h"
+#import "ZCLabel.h"
 #import "UIView+ZC.h"
 #import "ZCMacro.h"
 
@@ -14,12 +17,26 @@
 
 @property (nonatomic, strong) ZCImageView *originImageView;
 
+@property (nonatomic, weak) UIView *inBelowView; //加在这个视图底部
+
 @end
 
 @implementation ZCBlankControl
 
 @synthesize headerLabel = _headerLabel, imageView = _imageView, contentLabel = _contentLabel;
 @synthesize handleButton = _handleButton, footerLabel = _footerLabel, containerView = _containerView;
+
+- (instancetype)initWithFrame:(CGRect)frame color:(UIColor *)color inBelow:(UIView *)inBelow {
+    if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = color ? color : kZCWhite;
+        self.inBelowView = inBelow;
+    } return self;
+}
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [self initWithFrame:frame color:nil inBelow:nil]) {
+    } return self;
+}
 
 - (void)layoutSubviews {
     [super layoutSubviews];
@@ -125,7 +142,7 @@
 
 - (ZCButton *)handleButton {
     if (!_handleButton) {
-        _handleButton = [[ZCButton alloc] initWithFrame:CGRectZero color:nil];
+        _handleButton = [[ZCButton alloc] initWithFrame:CGRectZero];
         _handleButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:15];
         [_handleButton setCorner:3 color:kZCClear width:0];
         [self addSubview:_handleButton];
@@ -199,7 +216,13 @@
 - (void)resetSize {
     [self layoutSubviews];
     if (self.superview && !self.hidden) {
-        [self.superview bringSubviewToFront:self];
+        if (self.inBelowView && [self.superview.subviews containsObject:self.inBelowView]) {
+            UIView *tempSuperView = self.superview;
+            [self removeFromSuperview];
+            [tempSuperView insertSubview:self belowSubview:self.inBelowView];
+        } else {
+            [self.superview bringSubviewToFront:self];
+        }
     }
     if ([self isSeatView:_originImageView]) {
         [self bringSubviewToFront:_originImageView];

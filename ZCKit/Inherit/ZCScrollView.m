@@ -9,6 +9,15 @@
 #import "ZCScrollView.h"
 #import "ZCMacro.h"
 
+#pragma mark - ~ UIScrollView ~
+@interface UIScrollView ()
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch;
+
+@end
+
+
+#pragma mark - ~ ZCScrollView ~
 @interface ZCScrollView ()
 
 @end
@@ -17,16 +26,35 @@
 
 - (void)didMoveToWindow {
     [super didMoveToWindow];
-    if (self.contentOffset.y != 0) { //适配io9的问题
+    if (self.contentOffset.y != 0) {
+#warning - 待修改
         self.contentOffset = CGPointMake(self.contentOffset.x, 0);
     }
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldReceiveTouch:(UITouch *)touch {
-    if (!self.isShieldPriorityEditGestures && [NSStringFromClass(touch.view.class) isEqualToString:@"UITableViewCellContentView"]) {
+    if (self.isPriorityEditGestures && touch.view && [NSStringFromClass(touch.view.class) isEqualToString:@"UITableViewCellContentView"]) {
+#warning - pan手势在边缘时候返回YES吧 & boxView侧滑问题
         return NO;
     }
-    return YES;
+    if ([super respondsToSelector:@selector(gestureRecognizer:shouldReceiveTouch:)]) {
+        return [super gestureRecognizer:gestureRecognizer shouldReceiveTouch:touch];
+    } return YES;
+}
+
+- (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
+    if (gestureRecognizer.view && gestureRecognizer == self.panGestureRecognizer && [gestureRecognizer isKindOfClass:UIPanGestureRecognizer.class]) {
+        UIGestureRecognizerState state = gestureRecognizer.state;
+        CGFloat screen_width = UIScreen.mainScreen.bounds.size.width;
+        if ((self.frame.size.width >= screen_width - 60) && (state == UIGestureRecognizerStateBegan || state == UIGestureRecognizerStatePossible)) {
+            CGPoint verocity = [(UIPanGestureRecognizer *)gestureRecognizer velocityInView:gestureRecognizer.view];
+            CGPoint point = [(UIPanGestureRecognizer *)gestureRecognizer translationInView:gestureRecognizer.view];
+            CGPoint location = [gestureRecognizer locationInView:gestureRecognizer.view];
+            if (self.contentOffset.x <= 0 && point.x > 0 && location.x <= 40 && (fabs(verocity.x) - fabs(verocity.y)) > 0 && verocity.x > 0) {
+                return YES;
+            }
+        }
+    } return NO;
 }
 
 #pragma mark - Basic

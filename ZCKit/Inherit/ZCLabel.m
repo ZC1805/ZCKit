@@ -60,7 +60,7 @@
 }
 
 - (void)resetInitProperty {
-    _lineSpace = 0;
+    _lineSpacing = 0;
     _headIndent = 0;
     _fixSize = CGSizeZero;
     _verticalAlignmentType = 0;
@@ -155,11 +155,11 @@
 }
 
 - (void)setText:(NSString *)text {
-    if ((_lineSpace != 0 || _headIndent != 0) && text.length) {
+    if ((_lineSpacing != 0 || _headIndent != 0) && text.length) {
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.lineBreakMode = self.lineBreakMode;
         style.alignment = self.textAlignment;
-        style.lineSpacing = _lineSpace;
+        style.lineSpacing = _lineSpacing;
         style.firstLineHeadIndent = _headIndent;
         style.headIndent = _headIndent; //整体缩进(首行除外)
         UIFont *font = self.font ? self.font : [UIFont fontWithName:@"HelveticaNeue" size:12];
@@ -296,7 +296,7 @@
         kSpacLabelX.font = self.font;
         kSpacLabelX.textAlignment = self.textAlignment;
         kSpacLabelX.insideInsets = self.insideInsets;
-        kSpacLabelX.lineSpace = 0;
+        kSpacLabelX.lineSpacing = 0;
         kSpacLabelX.headIndent = 0;
         [kSpacLabelX setText:nil];
         [kSpacLabelX setAttributedText:self.attributedText.copy];
@@ -304,7 +304,7 @@
         kSpacLabelX.font = self.font;
         kSpacLabelX.textAlignment = self.textAlignment;
         kSpacLabelX.insideInsets = self.insideInsets;
-        kSpacLabelX.lineSpace = self.lineSpace;
+        kSpacLabelX.lineSpacing = self.lineSpacing;
         kSpacLabelX.headIndent = self.headIndent;
         [kSpacLabelX setAttributedText:nil];
         [kSpacLabelX setText:self.text.copy];

@@ -7,7 +7,18 @@
 //
 
 #import "ZCBoxView.h"
+#import "UIViewController+ZC.h"
+#import "UIView+ZC.h"
 #import "ZCMacro.h"
+
+@interface UIViewController ()
+
+- (NSString *)backMarkStr;
+
+- (void)resetHideSystemNaviBarType:(int)slideBack;
+
+@end
+
 
 @interface ZCBoxView ()
 
@@ -33,22 +44,26 @@
 
 @property (nonatomic, assign) NSTimeInterval animateTime;
 
+@property (nonatomic, assign) int cNavGesEnable;
+
 @end
 
 @implementation ZCBoxView
 
-+ (void)display:(UIView *)displayView above:(UIView *)aboveView didHide:(nullable void (^)(BOOL))didHide {
-    [self display:displayView above:aboveView autoHide:NO clearCover:NO showAnimate:nil hideAnimate:nil willHide:nil didHide:didHide];
++ (instancetype)display:(UIView *)displayView above:(UIView *)aboveView didHide:(nullable void (^)(BOOL))didHide {
+    return [self display:displayView above:aboveView autoHide:NO clearCover:NO effect:nil showAnimate:nil hideAnimate:nil willHide:nil didHide:didHide];
 }
 
-+ (void)display:(UIView *)displayView above:(UIView *)aboveView autoHide:(BOOL)autoHide clearCover:(BOOL)clearCover willHide:(nullable void (^)(BOOL))willHide didHide:(nullable void (^)(BOOL))didHide {
-    [self display:displayView above:aboveView autoHide:autoHide clearCover:clearCover showAnimate:nil hideAnimate:nil willHide:willHide didHide:didHide];
++ (instancetype)display:(UIView *)displayView above:(UIView *)aboveView autoHide:(BOOL)autoHide clearCover:(BOOL)clearCover
+               willHide:(nullable void (^)(BOOL))willHide didHide:(nullable void (^)(BOOL))didHide {
+    return [self display:displayView above:aboveView autoHide:autoHide clearCover:clearCover effect:nil showAnimate:nil hideAnimate:nil willHide:willHide didHide:didHide];
 }
 
-+ (void)display:(UIView *)displayView above:(UIView *)aboveView autoHide:(BOOL)autoHide clearCover:(BOOL)clearCover
-    showAnimate:(void (^)(UIView * _Nonnull))showAnimate hideAnimate:(void (^)(UIView * _Nonnull))hideAnimate
-       willHide:(nullable void (^)(BOOL))willHide didHide:(nullable void (^)(BOOL))didHide {
-    if (!displayView || !aboveView) return;
++ (instancetype)display:(UIView *)displayView above:(UIView *)aboveView autoHide:(BOOL)autoHide
+             clearCover:(BOOL)clearCover effect:(nullable UIVisualEffectView *)effect
+            showAnimate:(void (^)(UIView * _Nonnull))showAnimate hideAnimate:(void (^)(UIView * _Nonnull))hideAnimate
+               willHide:(nullable void (^)(BOOL))willHide didHide:(nullable void (^)(BOOL))didHide {
+    if (!displayView || !aboveView) { NSAssert(0, @"ZCKit: box above view is fail"); return [[ZCBoxView alloc] init]; }
     ZCBoxView *boxView = [[ZCBoxView alloc] initWithFrame:aboveView.bounds];
     boxView.isAutoHide = autoHide;
     boxView.isGreyCover = !clearCover;
@@ -61,26 +76,47 @@
     UIView *coverView = [[UIView alloc] initWithFrame:aboveView.bounds];
     [aboveView addSubview:coverView];
     [coverView addSubview:boxView];
+    if (effect) { effect.frame = boxView.bounds; effect.userInteractionEnabled = NO; [boxView addSubview:effect]; }
     [boxView addSubview:displayView];
     [boxView onShow];
+    [boxView resetCover:coverView];
+    [boxView resetNavGesChanged:YES];
+    return boxView;
 }
 
 + (void)dismiss:(UIView *)displayView {
-    ZCBoxView *boxView = (ZCBoxView *)displayView.superview;
+    ZCBoxView *boxView = (ZCBoxView *)displayView;
+    if (!boxView || ![boxView isKindOfClass:ZCBoxView.class]) {
+        boxView = (ZCBoxView *)displayView.subviews.firstObject;
+    }
+    if (!boxView || ![boxView isKindOfClass:ZCBoxView.class]) {
+        boxView = (ZCBoxView *)displayView.superview;
+    }
     if (boxView && [boxView isKindOfClass:ZCBoxView.class]) {
-        [boxView autoDismiss:NO];
+        [boxView autoDismiss:NO]; return;
+    }
+    while (boxView && ![boxView isKindOfClass:ZCBoxView.class]) {
+        boxView = (ZCBoxView *)boxView.superview;
+    }
+    if (boxView && [boxView isKindOfClass:ZCBoxView.class]) {
+        [boxView autoDismiss:NO]; return;
     }
 }
 
 #pragma mark - Instance
+- (void)resetCover:(UIView *)coverView {
+    _coverView = coverView;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         self.animateTime = 0.32;
-        self.coverAlpha = 0.52;
+        self.coverAlpha = 0.57;
     } return self;
 }
 
 - (void)autoDismiss:(BOOL)isByAutoHide {
+    [self resetNavGesChanged:NO];
     if (self.willHideBlock) { self.willHideBlock(isByAutoHide); }
     [self onHideIsAuto:isByAutoHide];
 }
@@ -101,8 +137,9 @@
             self.displayView.layer.transform = CATransform3DScale(startTransform, 5.0, 5.0, 5.0);
         } self.superview.backgroundColor = kZCA(kZCBlack, self.isGreyCover ? self.coverAlpha : 0);
     } completion:^(BOOL finished) {
-        self.displayView.layer.transform = originTransform;
-        self.isAnimate = NO;
+        if (!self.showAnimate) {
+            self.displayView.layer.transform = originTransform;
+        } self.isAnimate = NO;
     }];
 }
 
@@ -119,7 +156,6 @@
         } self.superview.backgroundColor = kZCA(kZCBlack, 0);
     } completion:^(BOOL finished) {
         if (self.hideAnimate) {
-            self.displayView.layer.transform = originTransform;
             self.isAnimate = NO;
             [self onFinishByAutoHide:isByAutoHide];
         }
@@ -151,15 +187,32 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
     if (self.isAutoHide && self.isAnimate == NO) {
-        if (self.subviews.firstObject) {
+        if (self.displayView) {
             UITouch *touch = [touches anyObject];
             CGPoint point = [touch locationInView:self];
-            CGRect rect = self.subviews.firstObject.frame;
+            CGRect rect = self.displayView.frame;
             if (CGRectContainsPoint(rect, point) == NO) {
                 [self autoDismiss:YES];
             }
         } else {
             [self autoDismiss:YES];
+        }
+    }
+}
+
+- (void)resetNavGesChanged:(BOOL)isShow {
+    UIViewController *vc = self.currentViewController;
+    if (vc && vc.view && ![vc isKindOfClass:UINavigationController.class]) {
+        if (isShow && vc.navigationController.interactivePopGestureRecognizer) {
+            self.cNavGesEnable = vc.navigationController.interactivePopGestureRecognizer.enabled ? 1 : 2;
+            vc.navigationController.interactivePopGestureRecognizer.enabled = NO;
+        }
+        if (!isShow && vc.navigationController.interactivePopGestureRecognizer && self.cNavGesEnable > 0) {
+            if ([vc respondsToSelector:@selector(backMarkStr)] && [vc respondsToSelector:@selector(resetHideSystemNaviBarType:)] && vc.backMarkStr.length) {
+                [vc resetHideSystemNaviBarType:(vc.backMarkStr.intValue + 10)];
+            } else if (vc.navigationController.interactivePopGestureRecognizer.enabled == NO) {
+                vc.navigationController.interactivePopGestureRecognizer.enabled = self.cNavGesEnable == 1;
+            } self.cNavGesEnable = 0;
         }
     }
 }

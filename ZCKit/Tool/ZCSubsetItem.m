@@ -13,7 +13,7 @@
 #pragma mark - ~ ZCSubsetItem ~
 @interface ZCSubsetItem ()
 
-@property (nonatomic, strong) NSDictionary *innate; //固有参数
+@property (nonatomic, strong) NSDictionary *innate;
 
 @end
 
@@ -30,8 +30,8 @@
         _listView = listView;
         _requestUrl = kZStrNonnil(url);
         _dataItems = [NSMutableArray array];
-        _requestParm = [NSMutableDictionary dictionary];
-        if (_innate && _innate.count) [_requestParm addEntriesFromDictionary:_innate];
+        _requestParam = [NSMutableDictionary dictionary];
+        if (_innate && _innate.count) [_requestParam addEntriesFromDictionary:_innate];
     }
     return self;
 }
@@ -54,8 +54,8 @@
     _isOnRequest = NO;
     _isAlreadyLoad = NO;
     [(NSMutableArray *)_dataItems removeAllObjects];
-    [_requestParm removeAllObjects];
-    if (_innate && _innate.count) [_requestParm addEntriesFromDictionary:_innate];
+    [_requestParam removeAllObjects];
+    if (_innate && _innate.count) [_requestParam addEntriesFromDictionary:_innate];
 }
 
 - (void)resetLoadStateNo {
@@ -70,8 +70,8 @@
 - (void)resetRequestComplete:(BOOL)isRefresh list:(NSArray *)list isInsert:(BOOL)isInsert isAddToLast:(BOOL)isAddToLast {
     _isOnRequest = NO;
     _isAlreadyLoad = YES;
-    [_requestParm removeAllObjects];
-    if (_innate && _innate.count) [_requestParm addEntriesFromDictionary:_innate];
+    [_requestParam removeAllObjects];
+    if (_innate && _innate.count) [_requestParam addEntriesFromDictionary:_innate];
     //刷新时候list不为nil则移除数据刷新，即如果list返回你来则表示请求数据失败&不做处理
     if (isAddToLast) list = @[];
     if (isRefresh && list) [(NSMutableArray *)_dataItems removeAllObjects];
@@ -82,6 +82,11 @@
             [(NSMutableArray *)_dataItems addObjectsFromArray:list];
         }
     }
+}
+
+- (void)resetManualDataItems:(NSArray *)dataItems {
+    [(NSMutableArray *)_dataItems removeAllObjects];
+    if (dataItems && dataItems.count) [(NSMutableArray *)_dataItems addObjectsFromArray:dataItems];
 }
 
 @end

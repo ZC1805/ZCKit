@@ -112,13 +112,4 @@
     }
 }
 
-#pragma mark - Kvc
-- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
-    NSAssert(0, @"ZCKit: kvc set value for key fail -> key: %@", key);
-}
-
-- (id)valueForUndefinedKey:(NSString *)key {
-    NSAssert(0, @"ZCKit: kvc get value for key fail -> key: %@", key); return nil;
-}
-
 @end

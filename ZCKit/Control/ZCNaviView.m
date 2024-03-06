@@ -10,6 +10,7 @@
 #import "ZCNavigationController.h"
 #import "ZCViewController.h"
 #import "ZCQueueHandler.h"
+#import "ZCImageView.h"
 #import "ZCKitBridge.h"
 #import "NSString+ZC.h"
 #import "UIView+ZC.h"
@@ -31,11 +32,11 @@
 
 @property (nonatomic, strong) UIView *rightCustomView;
 
-@property (nonatomic, strong, readonly) ZCImageView *cushionView;  /**< 背景视图，外部可设置颜色和透明度 */
+@property (nonatomic, strong, readonly) ZCImageView *cushionView; //背景视图，外部可设置颜色和透明度
 
-@property (nonatomic, strong, readonly) ZCImageView *lineShadowView;  /**< 阴影线，外部可设置颜色和透明度 */
+@property (nonatomic, strong, readonly) ZCImageView *lineShadowView; //阴影线，外部可设置颜色和透明度
 
-@property (nonatomic, weak) UIViewController *weakAssociate;  /**< 阴影线，外部可设置颜色和透明度 */
+@property (nonatomic, weak) UIViewController *weakAssociate; //关联控制器
 
 @property (nonatomic, copy) void(^rightBlock)(void);
 
@@ -59,14 +60,16 @@
     [_cushionView addSubview:_lineShadowView];
     [self addSubview:_cushionView];
     
-    self.leftButton = [[ZCButton alloc] initWithTitle:nil font:[UIFont fontWithName:@"HelveticaNeue" size:15] color:nil image:nil target:self action:@selector(onLeftItem)];
+    self.leftButton = [[ZCButton alloc] initWithTitle:nil font:[UIFont fontWithName:@"HelveticaNeue" size:15] color:nil image:nil bgColor:nil];
     self.leftButton.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     self.leftButton.adjustsImageWhenHighlighted = YES;
+    [self.leftButton addTarget:self action:@selector(onLeftItem) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.leftButton];
     
-    self.rightButton = [[ZCButton alloc] initWithTitle:nil font:[UIFont fontWithName:@"HelveticaNeue" size:15] color:nil image:nil target:self action:@selector(onRightItem)];
+    self.rightButton = [[ZCButton alloc] initWithTitle:nil font:[UIFont fontWithName:@"HelveticaNeue" size:15] color:nil image:nil bgColor:nil];
     self.rightButton.responseAreaExtend = UIEdgeInsetsMake(10, 10, 10, 10);
     self.rightButton.adjustsImageWhenHighlighted = YES;
+    [self.rightButton addTarget:self action:@selector(onRightItem) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.rightButton];
     
     self.middleLabel = [[ZCLabel alloc] initWithColor:nil font:[UIFont fontWithName:@"HelveticaNeue-Medium" size:17] alignment:NSTextAlignmentCenter adjustsSize:NO];
@@ -145,10 +148,10 @@
     } else {
         self.leftButton.hidden = NO;
         self.leftButton.userInteractionEnabled = NO;
-        self.leftButton.imageViewSize = CGSizeZero;
         [self.leftButton setTitle:nil forState:UIControlStateNormal];
         [self.leftButton setImage:nil forState:UIControlStateNormal];
         [self.leftButton setImage:nil forState:UIControlStateHighlighted];
+        [self.leftButton resetImageSize:CGSizeZero titleSize:CGSizeZero];
         if (leftName && [leftName isKindOfClass:NSString.class] && ((NSString *)leftName).length) {
             UIImage *leftImage = [UIImage imageNamed:leftName];
             if (leftImage) { leftName = (NSString *)leftImage; }
@@ -162,7 +165,7 @@
             left_wid = 22;
             [self.leftButton setImage:(UIImage *)leftName forState:UIControlStateNormal];
             [self.leftButton setImage:[(UIImage *)leftName imageWithAlpha:0.3] forState:UIControlStateHighlighted];
-            self.leftButton.imageViewSize = CGSizeMake(22, 22);
+            [self.leftButton resetImageSize:CGSizeMake(22, 22) titleSize:CGSizeZero];
         } else {
             left_wid = 10;
         } left_wid = MIN(left_wid, self.cushionView.zc_width - 150);
@@ -178,10 +181,10 @@
     } else {
         self.rightButton.hidden = NO;
         self.rightButton.userInteractionEnabled = NO;
-        self.rightButton.imageViewSize = CGSizeZero;
         [self.rightButton setTitle:nil forState:UIControlStateNormal];
         [self.rightButton setImage:nil forState:UIControlStateNormal];
         [self.rightButton setImage:nil forState:UIControlStateHighlighted];
+        [self.rightButton resetImageSize:CGSizeZero titleSize:CGSizeZero];
         if (rightName && [rightName isKindOfClass:NSString.class] && rightName.length) {
             UIImage *rightImage = [UIImage imageNamed:rightName];
             if (rightImage) { rightName = (NSString *)rightImage; }
@@ -195,7 +198,7 @@
             right_wid = 22;
             [self.rightButton setImage:(UIImage *)rightName forState:UIControlStateNormal];
             [self.rightButton setImage:[(UIImage *)rightName imageWithAlpha:0.3] forState:UIControlStateHighlighted];
-            self.rightButton.imageViewSize = CGSizeMake(22, 22);
+            [self.rightButton resetImageSize:CGSizeMake(22, 22) titleSize:CGSizeZero];
         } else {
             right_wid = 10;
         } right_wid = MIN(right_wid, self.cushionView.zc_width - left_wid - 80);

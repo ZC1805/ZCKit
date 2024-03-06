@@ -33,19 +33,19 @@ typedef NS_ENUM(NSUInteger, ZCEnumExactTimerOption) {
                 option:(ZCEnumExactTimerOption)option
                  block:(void(^)(BOOL *stop))block;
 
-/** block在全局队列中执行，适当时候回到主队列 (repeat: yes，option: merge，queue: global default) */
+/**< block在全局队列中执行，适当时候回到主队列 (repeat: yes，option: merge，queue: global default) */
 + (void)scheduledTimer:(NSString *)timerName interval:(NSTimeInterval)interval block:(void(^)(BOOL *stop))block;
 
-/** 暂停某个timer，必须成对出现 */
+/**< 暂停某个timer，必须成对出现 */
 + (void)pauseTimer:(NSString *)timerName;
 
-/** 恢复某个timer，必须成对出现 */
+/**< 恢复某个timer，必须成对出现 */
 + (void)resumeTimer:(NSString *)timerName;
 
-/** 撤销某个timer，设置nil的话则撤销所有timer */
+/**< 撤销某个timer，设置nil的话则撤销所有timer */
 + (void)invalidateTimer:(nullable NSString *)timerName;
 
-/** 是否存在某个名称标识的timer */
+/**< 是否存在某个名称标识的timer */
 + (BOOL)existTimer:(NSString *)timerName;
 
 @end
@@ -53,7 +53,7 @@ typedef NS_ENUM(NSUInteger, ZCEnumExactTimerOption) {
 
 @interface NSObject (ZC_Timer)  /**< 全局计时器 */
 
-/** 全局的，时间间隔设置为1s，block在self变为nil时候或者stop时候自动销毁，block在全局队列中执行，适当时候回到主队列 */
+/**< 全局的，时间间隔设置为1s，block在self变为nil时候或者stop时候自动销毁，block在全局队列中执行，适当时候回到主队列 */
 - (void)scheduledGlobalTimer:(void(^)(BOOL *stop))block;
 
 @end

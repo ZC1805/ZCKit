@@ -57,6 +57,14 @@ extern NSNotificationName const ZCViewControllerDidBeGesPopNotification;  /**< �
 
 @interface ZCViewController : UIViewController <ZCViewControllerPageBackProtocol, ZCViewControllerPrivateProtocol>  /**< 通用vc，供子类继承 */
 
+@property (nonatomic, copy, readonly) NSDictionary <NSString *, id>*iniProps;  /**< 初始化属性 */
+
+- (instancetype)initWithIniProps:(nullable NSDictionary<NSString *, id> *)iniProps;  /**< 统一初始化方法 */
+
+- (BOOL)isCanMSideBack;  /**< 子类继承 能否侧滑 */
+
+- (int)currentPageStyle;  /**< 子类继承 1.nav_white 2.nav_black 4.has_status_bar 8.no_status_bar */
+
 @end
 
 NS_ASSUME_NONNULL_END

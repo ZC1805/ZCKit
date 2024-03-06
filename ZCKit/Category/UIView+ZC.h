@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ZCBlankControl.h"
+
+@class ZCBlankControl;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -62,9 +63,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, strong) NSDictionary *flagDic;  /**< 类似tag的标识，默认nil */
 
-
-- (instancetype)initWithFrame:(CGRect)frame color:(nullable UIColor *)color;  /**< 默认初始化方法，带背景颜色初始化，可供子类重写隐式实现 */
-
 - (void)removeAllSubviews;  /**< 移除所有子视图 */
 
 - (NSArray <UIView *>*)containAllSubviews;  /**< 所有子视图集合 */
@@ -87,25 +85,26 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (nullable UIImage *)clipToImage;  /**< 当前视图的快照 */
 
+- (CGPoint)convertPointToScrren:(CGPoint)point;  /**< 转换到屏幕的坐标 */
+
 - (void)setShadow:(UIColor *)color offset:(CGSize)offset radius:(CGFloat)radius;  /**< 阴影 */
 
 - (void)setCorner:(CGFloat)radius color:(nullable UIColor *)color width:(CGFloat)width;  /**< 圆角 & 描边 */
 
 - (void)setCorner:(UIRectCorner)corner radius:(CGSize)radius;  /**< 设置部分圆角 */
 
-- (CGPoint)convertPointToScrren:(CGPoint)point;  /**< 转换到屏幕的坐标 */
+- (void)setGradientColors:(NSArray <UIColor *>*)colors isHor:(BOOL)isHor;  /**< 设置渐变背景色 */
 
-
-/** 使用inset来确定子视图位置，inset.bottom为视图的高，当inset为zero时，移除视图，返回nil */
+/**< 使用inset来确定子视图位置，inset.bottom为视图的高，当inset为zero时，移除视图，返回nil */
 - (nullable UIView *)setTopLineInsets:(UIEdgeInsets)insets color:(UIColor *)color;
 
-/** 使用inset来确定子视图位置，inset.right为视图的宽，当inset为zero时，移除视图，返回nil */
+/**< 使用inset来确定子视图位置，inset.right为视图的宽，当inset为zero时，移除视图，返回nil */
 - (nullable UIView *)setLeftLineInsets:(UIEdgeInsets)insets color:(UIColor *)color;
 
-/** 使用inset来确定子视图位置，inset.top为视图的高，当inset为zero时，移除视图，返回nil */
+/**< 使用inset来确定子视图位置，inset.top为视图的高，当inset为zero时，移除视图，返回nil */
 - (nullable UIView *)setBottomLineInsets:(UIEdgeInsets)insets color:(UIColor *)color;
 
-/** 使用inset来确定子视图位置，inset.left为视图的宽，当inset为zero时，移除视图，返回nil */
+/**< 使用inset来确定子视图位置，inset.left为视图的宽，当inset为zero时，移除视图，返回nil */
 - (nullable UIView *)setRightLineInsets:(UIEdgeInsets)insets color:(UIColor *)color;
 
 @end

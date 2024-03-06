@@ -1,4 +1,4 @@
-   //
+//
 //  NSArray+ZC.h
 //  ZCKit
 //
@@ -14,6 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSArray (ZC)
 
 - (nullable id)randomObject;  /**< 随机值 */
+
+- (NSArray *)subArrayValueForRange:(NSRange)range;  /**< 返回指定值 */
 
 - (nullable id)objectOrNilAtIndex:(NSUInteger)index;  /**< 越界返回nil */
 

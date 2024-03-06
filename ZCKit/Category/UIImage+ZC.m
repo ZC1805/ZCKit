@@ -176,10 +176,10 @@
     [self drawAtPoint:CGPointMake(0, 0)];
     NSMutableParagraphStyle *paragraphStyle = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
     paragraphStyle.lineBreakMode = NSLineBreakByCharWrapping;
-    paragraphStyle.alignment = NSTextAlignmentCenter; //文字居中
+    paragraphStyle.alignment = NSTextAlignmentCenter;
     CGSize sizeText = [title boundingRectWithSize:self.size options:NSStringDrawingUsesLineFragmentOrigin
                                        attributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue" size:fontSize]}
-                                          context:nil].size; //计算文字所占的size
+                                          context:nil].size;
     CGRect rect = CGRectMake(point.x, point.y, sizeText.width, sizeText.height);
     [title drawInRect:rect withAttributes:@{NSFontAttributeName : [UIFont fontWithName:@"HelveticaNeue" size:fontSize],
                                             NSForegroundColorAttributeName : [ UIColor whiteColor],
@@ -331,7 +331,6 @@
 }
 
 - (NSData *)imageCompress:(NSUInteger)maxLength {
-    //Compress by quality
     CGFloat compression = 1.0;
     NSData *data = UIImageJPEGRepresentation(self, compression);
     if (data.length < maxLength) return (data ? data : [NSData data]);
@@ -352,7 +351,6 @@
     if (data.length < maxLength) return (data ? data : [NSData data]);
     UIImage *resultImage = [UIImage imageWithData:data];
     
-    //Compress by size
     NSUInteger lastDataLength = 0;
     while (data.length > maxLength && data.length != lastDataLength) {
         lastDataLength = data.length;
@@ -690,19 +688,18 @@
                     saturation:(CGFloat)saturation
                      maskImage:(UIImage *)maskImage {
     if (self.size.width < 1 || self.size.height < 1) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: UIImage+ZC error: invalid size: (%.2f x %.2f). Both dimensions must be >= 1: %@", self.size.width, self.size.height, self);
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: UIImage+ZC error: invalid size: (%.2f x %.2f). Both dimensions must be >= 1: %@", self.size.width, self.size.height, self);
         return nil;
     }
     if (!self.CGImage) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: UIImage+ZC error: inputImage must be backed by a CGImage: %@", self);
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: UIImage+ZC error: inputImage must be backed by a CGImage: %@", self);
         return nil;
     }
     if (maskImage && !maskImage.CGImage) {
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: UIImage+ZC error: effectMaskImage must be backed by a CGImage: %@", maskImage);
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: UIImage+ZC error: effectMaskImage must be backed by a CGImage: %@", maskImage);
         return nil;
     }
     
-    //iOS7 and above can use new func.
     BOOL hasNewFunc = (long)vImageBuffer_InitWithCGImage != 0 && (long)vImageCreateCGImageFromBuffer != 0;
     BOOL hasBlur = blurRadius > __FLT_EPSILON__;
     BOOL hasSaturation = fabs(saturation - 1.0) > __FLT_EPSILON__;
@@ -734,12 +731,12 @@
         vImage_Error err;
         err = vImageBuffer_InitWithCGImage(&effect, &format, NULL, imageRef, kvImagePrintDiagnosticsToConsole);
         if (err != kvImageNoError) {
-            if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: UIImage+ZC error: vImageBuffer_InitWithCGImage returned error code %zi for inputImage: %@", err, self);
+            if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: UIImage+ZC error: vImageBuffer_InitWithCGImage returned error code %zi for inputImage: %@", err, self);
             return nil;
         }
         err = vImageBuffer_Init(&scratch, effect.height, effect.width, format.bitsPerPixel, kvImageNoFlags);
         if (err != kvImageNoError) {
-            if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: UIImage+ZC error: vImageBuffer_Init returned error code %zi for inputImage: %@", err, self);
+            if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: UIImage+ZC error: vImageBuffer_Init returned error code %zi for inputImage: %@", err, self);
             return nil;
         }
     } else {
@@ -768,7 +765,7 @@
         CGFloat inputRadius = blurRadius * scale;
         if (inputRadius - 2.0 < __FLT_EPSILON__) inputRadius = 2.0;
         uint32_t radius = floorf((inputRadius * 3.0 * sqrt(2 * M_PI) / 4 + 0.5) / 2);
-        radius |= 1; //force radius to be odd so that the three box-blur methodology works.
+        radius |= 1;
         int iterations;
         if (blurRadius * scale < 0.5) iterations = 1;
         else if (blurRadius * scale < 1.5) iterations = 2;
@@ -783,7 +780,6 @@
     }
     
     if (hasSaturation) {
-        //These values appear in the W3C Filter Effects spec:
         CGFloat s = saturation;
         CGFloat matrixFloat[] = {
             0.0722 + 0.9278 * s,  0.0722 - 0.0722 * s,  0.0722 - 0.0722 * s,  0,
@@ -825,7 +821,6 @@
     return outputImage;
 }
 
-//Helper function to handle deferred cleanup of a buffer.
 static void _yy_cleanupBuffer(void *userData, void *buf_data) {
     free(buf_data);
 }

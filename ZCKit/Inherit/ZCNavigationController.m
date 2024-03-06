@@ -319,7 +319,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
 
 #pragma mark - UINavigationBarDelegate
 - (BOOL)navigationBar:(UINavigationBar *)navigationBar shouldPopItem:(UINavigationItem *)item {
-    __block BOOL shouldPop = YES; //非系统手动pop不走此代理
+    __block BOOL shouldPop = YES; ///!!!: 非系统手动pop不走此代理
     NSUInteger vcsCount = self.viewControllers.count;
     NSUInteger itemsCount = navigationBar.items.count;
     if (self.isPopAnimating) {
@@ -331,7 +331,7 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
     }
     
     self.isPopAnimating = YES;
-    if (vcsCount < itemsCount) { //非系统手动pop不走此
+    if (vcsCount < itemsCount) { ///!!!: 非系统手动pop不走此
         self.isPopAnimating = NO; return YES;
     }
     UIViewController *vc = self.topViewController;
@@ -457,8 +457,8 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
 }
 
 - (void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)(void))completion {
-    if (self.isUsePushStyleToPresent) { //待实现
-        [super dismissViewControllerAnimated:flag completion:completion];
+    if (self.isUsePushStyleToPresent) {
+        ///!!!: 待实现
     } else {
         [super dismissViewControllerAnimated:flag completion:completion];
     }
@@ -469,8 +469,8 @@ NSNotificationName const ZCViewControllerWillBeTouchPopNotification = @"ZCViewCo
         [self.presentFromViewController presentViewController:viewControllerToPresent animated:flag completion:completion];
     } else {
         if ([viewControllerToPresent respondsToSelector:@selector(isUsePushStyleToPresent)] &&
-            [(id<ZCViewControllerPrivateProtocol>)viewControllerToPresent isUsePushStyleToPresent]) { //待实现
-            [super presentViewController:viewControllerToPresent animated:flag completion:completion];
+            [(id<ZCViewControllerPrivateProtocol>)viewControllerToPresent isUsePushStyleToPresent]) {
+            ///!!!: 待实现
         } else {
             [super presentViewController:viewControllerToPresent animated:flag completion:completion];
         }

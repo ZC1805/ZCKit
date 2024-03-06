@@ -20,21 +20,19 @@
 
 @implementation ZCIndicatorView
 
-- (instancetype)initWithFrame:(CGRect)frame {
+- (instancetype)initWithFrame:(CGRect)frame diameter:(CGFloat)diameter {
     if (self = [super initWithFrame:frame]) {
+        _diameter = diameter;
         _tintColor = kZCBlack80;
-        _diameter = frame.size.width / 9;
         self.backgroundColor = kZCRGB(0xFF0000);
         [self indicatorSize:self.zc_size];
     }
     return self;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame diameter:(CGFloat)diameter {
-    if (self = [self initWithFrame:frame]) {
-        self.diameter = diameter;
-    }
-    return self;
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [self initWithFrame:frame diameter:(frame.size.width / 9.0)]) {
+    } return self;
 }
 
 - (void)setDiameter:(CGFloat)diameter {
@@ -117,17 +115,17 @@
 }
 
 - (void)pause {
-    CFTimeInterval pauseTime = [self.layer convertTime:CACurrentMediaTime() fromLayer:nil]; //将当前时间转layer时间，即将parentTime转localtime
-    self.layer.timeOffset = pauseTime; //设置layer的timeOffset在，继续操作也会使用到
-    self.layer.speed = 0; //localtime与parenttime的比例为0，意味着localtime暂停了
+    CFTimeInterval pauseTime = [self.layer convertTime:CACurrentMediaTime() fromLayer:nil];
+    self.layer.timeOffset = pauseTime;
+    self.layer.speed = 0;
 }
 
 - (void)resume {
-    CFTimeInterval pauseTime = self.layer.timeOffset; //时间转换
-    CFTimeInterval timeSincePause = CACurrentMediaTime() - pauseTime; //计算暂停时间
-    self.layer.timeOffset = 0; //取消
-    self.layer.beginTime = timeSincePause; //localTime相对于parentTime世界的beginTime
-    self.layer.speed = 1; //继续
+    CFTimeInterval pauseTime = self.layer.timeOffset;
+    CFTimeInterval timeSincePause = CACurrentMediaTime() - pauseTime;
+    self.layer.timeOffset = 0;
+    self.layer.beginTime = timeSincePause;
+    self.layer.speed = 1;
 }
 
 @end

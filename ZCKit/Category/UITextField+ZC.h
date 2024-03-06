@@ -23,22 +23,19 @@ NS_ASSUME_NONNULL_BEGIN
 /**< 设置站位文字颜色*/
 - (void)setPlaceholderText:(NSString *)placeholderText color:(nullable UIColor *)color font:(nullable UIFont *)font;
 
-/**< 带字体的初始化和占位文字的初始化，color为textColor */
-- (instancetype)initWithFrame:(CGRect)frame holder:(nullable NSString *)holder font:(UIFont *)font color:(nullable UIColor *)color;
-
-/** 选定所有文本 */
+/**< 选定所有文本 */
 - (void)selectAllText;
 
-/** 选定目标范围文本 */
+/**< 选定目标范围文本 */
 - (void)setSelectedRange:(NSRange)range;
 
-/** 基于文首设置光标位置 */
+/**< 基于文首设置光标位置 */
 - (void)makeOffsetPosition:(NSInteger)position;
 
-/** 实现原理是先获取一个基于文尾的偏移，然后加上要施加的偏移，再重新根据文尾计算位置，最后利用选取来实现光标定位 */
+/**< 实现原理是先获取一个基于文尾的偏移，然后加上要施加的偏移，再重新根据文尾计算位置，最后利用选取来实现光标定位 */
 - (void)makeOffset:(NSInteger)offset;
 
-/** 先把光标移动到文首，然后再调用上面实现的偏移函数 */
+/**< 先把光标移动到文首，然后再调用上面实现的偏移函数 */
 - (void)makeOffsetFromBeginning:(NSInteger)offset;
 
 @end

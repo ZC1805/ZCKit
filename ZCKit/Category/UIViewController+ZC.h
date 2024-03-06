@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIViewController (ZC)
 
+@property (nonatomic, readonly) BOOL isViewInDisplay;  /**< 当前的view是否正在展示 */
+
 @property (nonatomic, readonly) UIViewController *presentFromViewController;  /**< 当前控制器顶部的Present控制器 */
 
 - (void)dismissAllViewControllerAnimated:(BOOL)animated completion:(nullable void(^)(void))completion;  /**< dismiss所有从当前控制器present出来的控制器 */

@@ -40,9 +40,15 @@ extern NSString * const ZCFlagStr;
 
 - (CGSize)sizeFitLabelForFont:(UIFont *)font width:(CGFloat)width alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing;  /**< 取Label自适应高度 */
 
+- (NSArray <NSString *>*)charStrings;  /**< 转成字符数组 */
+
 - (NSUInteger)charCount;  /**< 字符长度 */
 
 - (NSUInteger)bytesCount;  /**< 字节长度 */
+
+- (NSString *)saveCacheString;
+
+- (NSString *)obtainCacheString;
 
 - (NSString *)preciseString;  /**< 精确浮点数 & 去除无效数字 */
 
@@ -64,6 +70,10 @@ extern NSString * const ZCFlagStr;
 
 - (NSString *)suffixForFlag:(NSString *)flag;  /**< 返回匹配到的第一个标记符后面字符串，flag不为空且至少包含有一个匹配结果，否则返回@"" */
 
+- (NSString *)subStringValueForRange:(NSRange)range;  /**< 返回子字符串，异常返回@"" */
+
+- (NSString *)formatLast:(long)charCount separationCount:(long)separationCount separationStr:(NSString *)separationStr;  /**< 返回字符串格式化处理 */
+
 - (NSString *)matchString:(NSString *)matchString replace:(NSString *)replaceString;  /**< 替换字符串，递归处理 */
 
 - (NSString *)replaceCharStrings:(NSString *)charStrings withString:(NSString *)aString reverse:(BOOL)isReverse;  /**< 使用字符串替换字符集中的每项 */
@@ -72,9 +82,9 @@ extern NSString * const ZCFlagStr;
 
 - (NSString *)replaceStringArray:(NSArray <NSString *>*)strings withString:(NSString *)aString;  /**< 将数组中字符串都匹配替换 */
 
-- (NSMutableAttributedString *)attriToMatch:(nullable NSString *)match matchAtt:(nullable NSDictionary *)matchAtt otherAtt:(nullable NSDictionary *)otherAtt alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing;  /**< 富文本 */
+- (NSMutableAttributedString *)matchText:(nullable NSString *)matchText matchAtt:(nullable NSDictionary *)matchAtt otherAtt:(nullable NSDictionary *)otherAtt alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing;  /**< 富文本 */
 
-- (NSArray <NSString *>*)charStrings;
+- (NSMutableAttributedString *)matchTexts:(nullable NSArray <NSString *>*)matchTexts matchAtt:(nullable NSDictionary *)matchAtt otherAtt:(nullable NSDictionary *)otherAtt alignment:(NSTextAlignment)alignment spacing:(CGFloat)spacing;  /**< 富文本 */
 
 #pragma mark - Judge
 @property (nonatomic, readonly) BOOL isPureInteger;  /**< 是否是整形 */
@@ -113,10 +123,7 @@ extern NSString * const ZCFlagStr;
 
 @property (nonatomic, readonly) BOOL isBankCard;  /**< 是否是银行卡号 */
 
-@property (nonatomic, readonly) BOOL isUserName;  /**< 是否是用户姓名，1-20位的中文或英文 */
-
 @property (nonatomic, readonly) BOOL isNotBlank;  /**< 是否不是空白，nil，@""，@"  "，@"\n" will Returns NO */
-
 
 - (BOOL)isCompositionFromCharactersInString:(NSString *)aString;  /**< 字符串是否由当前字符集组成，self为@""时返回YES */
 
@@ -126,9 +133,6 @@ extern NSString * const ZCFlagStr;
 
 - (BOOL)isEqualIgnoreCase:(NSString *)str;  /**< 不区分大小写比对字符串相等 */
 
-- (BOOL)isPasswordAllowAdmitSpecialCharacter:(BOOL)specialChar mustAllContain:(BOOL)allContain allowSimple:(BOOL)allowSimple
-                                   shieldStr:(nullable NSString *)shieldStr min:(int)min max:(int)max;  /**< 是否是规范的密码 */
-
 #pragma mark - Class
 + (NSString *)stringWithUUID;  /**< 生成唯一个的UUID */
 
@@ -136,7 +140,7 @@ extern NSString * const ZCFlagStr;
 
 + (NSString *)emojiWithStringCode:(NSString *)stringCode;  /**< 将十六进制的编码转为emoji字符 */
 
-+ (nullable NSString *)stringWithBase64EncodedString:(nullable NSString *)base64EncodedString;  /**< 转换base64字符串 */
++ (nullable NSString *)stringWithBase64EncodedString:(nullable NSString *)base64EncodedString;  /**< 解码base64字符串 */
 
 #pragma mark - Expand
 - (NSString *)stringByURLEncode;
@@ -146,7 +150,6 @@ extern NSString * const ZCFlagStr;
 - (NSString *)stringByEscapingHTML;
 
 @end
-
 
 
 @interface NSAttributedString (ZC)

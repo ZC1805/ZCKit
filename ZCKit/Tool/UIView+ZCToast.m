@@ -22,10 +22,13 @@ static const NSString *ZCToastTapActionKey = @"ZCToastTapActionKey";
 
 #pragma mark - Toast
 - (void)makeToast:(NSString *)message {
-    [self makeToast:message duration:ZCToastDefaultDuration position:ZCEnumToastPositionCenter title:nil image:nil];
+    if (!message.length) return;
+    NSTimeInterval duration = 2.0 + message.length / 40;
+    [self makeToast:message duration:duration position:ZCEnumToastPositionCenter title:nil image:nil];
 }
 
 - (void)makeToast:(NSString *)message duration:(NSTimeInterval)duration position:(ZCEnumToastPosition)position {
+    if (!message.length || duration < 0.1) return;
     [self makeToast:message duration:duration position:position title:nil image:nil];
 }
 

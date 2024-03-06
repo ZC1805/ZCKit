@@ -30,7 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nullable, nonatomic, copy) NSString *sectionIndexTitleKey;  /**< 取值左边索引的键，外部需先排序，默认nil */
 
-/* cellCtor重用cell的设置，action点击时候的响应(-1时为点击背景隐藏此时selectItem为nil) */
+/**< cellCtor重用cell的设置，action点击时候的响应(-1时为点击背景隐藏此时selectItem为nil) */
 + (void)display:(NSArray <NSDictionary *>*)items title:(nullable NSString *)title message:(nullable NSString *)message
            ctor:(nullable void(^)(ZCListControl *listControl))ctor
        cellCtor:(nullable void(^)(__kindof UITableViewCell *cell, NSIndexPath *idxp, NSDictionary *item))cellCtor

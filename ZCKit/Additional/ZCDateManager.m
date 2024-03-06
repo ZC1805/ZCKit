@@ -30,7 +30,6 @@
 @end
 
 
-
 @interface ZCDateManager ()
 
 @property (nonatomic, strong) NSMutableDictionary *formatMaps;
@@ -110,12 +109,12 @@
     } else if ([NSCalendar.gregorianCalendar isDate:date equalToDate:NSDate.date toUnitGranularity:NSCalendarUnitYear]) { //今年，显示日期，24小时制
         NSCalendarUnit unit = NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
         NSDateComponents *comps = [NSCalendar.gregorianCalendar components:unit fromDate:date];
-        result = [NSString stringWithFormat:@"%zd%@%zd%@ ", comps.month, NSLocalizedString(@"Month", nil), comps.day, NSLocalizedString(@"Day", nil)]; //月 日
+        result = [NSString stringWithFormat:@"%zd%@%zd%@ ", comps.month, NSLocalizedString(@"Month", nil), comps.day, NSLocalizedString(@"Day", nil)]; //月日
         if (detail) result = [result stringByAppendingFormat:@"%02zd:%02zd", comps.hour, comps.minute];
     } else { //去年，显示日期，24小时制
         NSCalendarUnit unit = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitHour | NSCalendarUnitMinute;
         NSDateComponents *comps = [NSCalendar.gregorianCalendar components:unit fromDate:date];
-        result = [NSString stringWithFormat:@"%zd%@%zd%@%zd%@ ", comps.year, NSLocalizedString(@"Year", nil), comps.month, NSLocalizedString(@"Month", nil), comps.day, NSLocalizedString(@"Day", nil)]; //年 月 日
+        result = [NSString stringWithFormat:@"%zd%@%zd%@%zd%@ ", comps.year, NSLocalizedString(@"Year", nil), comps.month, NSLocalizedString(@"Month", nil), comps.day, NSLocalizedString(@"Day", nil)]; //年月日
         if (detail) result = [result stringByAppendingFormat:@"%02zd:%02zd", comps.hour, comps.minute];
     }
     return result;
@@ -148,7 +147,7 @@
 
 - (NSArray *)weekdays {
     if (!_weekdays) {
-        _weekdays = @[@"", NSLocalizedString(@"Sunday", nil), NSLocalizedString(@"Monday", nil), NSLocalizedString(@"Tuesday", nil), NSLocalizedString(@"Wednesday", nil), NSLocalizedString(@"Thursday", nil), NSLocalizedString(@"Friday", nil), NSLocalizedString(@"Saturday", nil)]; //星期日 星期一 星期二 星期三 星期四 星期五 星期六
+        _weekdays = @[@"", NSLocalizedString(@"Sunday", nil), NSLocalizedString(@"Monday", nil), NSLocalizedString(@"Tuesday", nil), NSLocalizedString(@"Wednesday", nil), NSLocalizedString(@"Thursday", nil), NSLocalizedString(@"Friday", nil), NSLocalizedString(@"Saturday", nil)]; //星期日、星期一、星期二、星期三、星期四、星期五、星期六
     }
     return _weekdays;
 }
@@ -184,14 +183,14 @@
 #pragma mark - Set & Get
 - (NSLocale *)chinaLocale {
     if (!_chinaLocale) {
-        _chinaLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"]; //简体中文语言环境
+        _chinaLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"zh_CN"];
     }
     return _chinaLocale;
 }
 
 - (NSTimeZone *)beijingTimeZone {
     if (!_beijingTimeZone) {
-        _beijingTimeZone = [NSTimeZone timeZoneForSecondsFromGMT:8*3600]; //东八区
+        _beijingTimeZone = [NSTimeZone timeZoneForSecondsFromGMT:8*3600];
     }
     return _beijingTimeZone;
 }

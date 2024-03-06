@@ -9,6 +9,7 @@
 #import "ZCAvatarControl.h"
 #import "ZCKitBridge.h"
 #import "UIView+ZC.h"
+#import "ZCLabel.h"
 #import "ZCMacro.h"
 
 @implementation ZCAvatarControl
@@ -118,7 +119,7 @@
         CGContextClip(context);
     }
     UIImage *image = _localImage;
-    if (image && image.size.height && image.size.width) { //ScaleAspectFill模式
+    if (image && image.size.height && image.size.width) { //此处使用ScaleAspectFill模式
         CGPoint center = CGPointMake(self.zc_width / 2.0, self.zc_height / 2.0);
         CGFloat widScale = image.size.width / self.zc_width;
         CGFloat heiScale = image.size.height / self.zc_height;

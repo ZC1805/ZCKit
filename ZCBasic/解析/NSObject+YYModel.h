@@ -210,7 +210,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 /**
  Provide some data-model method for NSArray.
  */
@@ -231,7 +230,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 /**
  Provide some data-model method for NSDictionary.
  */
@@ -249,7 +247,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (nullable NSDictionary *)modelDictionaryWithClass:(Class)cls json:(id)json;
 @end
-
 
 
 /**

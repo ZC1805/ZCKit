@@ -239,7 +239,6 @@ static K_FORCE_INLINE NSDate *YYNSDateFromString(__unsafe_unretained NSString *s
     #undef kParserNum
 }
 
-
 /// Get the 'NSBlock' class.
 static K_FORCE_INLINE Class YYNSBlockClass() {
     static Class cls;
@@ -253,8 +252,6 @@ static K_FORCE_INLINE Class YYNSBlockClass() {
     });
     return cls; // current is "NSBlock"
 }
-
-
 
 /**
  Get the ISO date formatter.
@@ -309,9 +306,6 @@ static K_FORCE_INLINE id YYValueForMultiKeys(__unsafe_unretained NSDictionary *d
     }
     return value;
 }
-
-
-
 
 /// A property info in object model.
 @interface _YYModelPropertyMeta : NSObject {
@@ -1098,7 +1092,6 @@ static void ModelSetValueForProperty(__unsafe_unretained id model,
     }
 }
 
-
 typedef struct {
     void *modelMeta;  ///< _YYModelMeta
     void *model;      ///< id (self)
@@ -1428,7 +1421,6 @@ static NSString *ModelDescription(NSObject *model) {
         }
     }
 }
-
 
 @implementation NSObject (YYModel)
 
@@ -1770,7 +1762,6 @@ static NSString *ModelDescription(NSObject *model) {
 }
 
 @end
-
 
 
 @implementation NSArray (YYModel)

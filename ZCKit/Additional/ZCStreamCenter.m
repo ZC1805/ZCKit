@@ -75,7 +75,7 @@ NSString * const ZCStreamValueInvalid = @"ZCStreamValueInvalid";
         _unitKp = [@"aimObject." stringByAppendingString:@"n"];
         _unit = [[ZCStreamUnit alloc] initWithBindObject:nil keyPath:@"n"];
         [self resetAimObjectObserve:YES];
-        if (ZCKitBridge.isPrintLog) NSLog(@"ZCKit: stream init fail");
+        if (ZCKitBridge.isPrintLog) kZLog(@"ZCKit: stream init fail");
     }
     return self;
 }

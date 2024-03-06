@@ -51,7 +51,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, readonly) BOOL isThisYear;  /**< 是否是今年 (based on current locale) */
 
-@property (nonatomic, readonly) NSString *timestamp;  /**< 当前时间戳毫秒，精确到秒乘以1000，，注意用户手动设置 */
+@property (nonatomic, readonly) long stamp;  /**< 当前时间戳毫秒，精确到秒乘以1000，注意用户手动设置 */
+
+@property (nonatomic, readonly) NSString *timestamp;  /**< 当前时间戳毫秒，精确到秒乘以1000，注意用户手动设置 */
 
 @property (nonatomic, readonly) NSString *dateString;  /**< 日期年月日时分秒，2018-10-01 02:20:08 */
 
@@ -109,10 +111,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (NSString *)dateStringWithTime:(long)timestamp format:(NSString *)format;  /**< timestamp为13位时可算上了三位毫秒数 */
 
-/** 将字符串时间格式化成NSDate */
+/**< 将字符串时间格式化成NSDate */
 + (nullable NSDate *)dateWithString:(NSString *)dateString format:(NSString *)format;
 
-/** 将字符串时间格式化成NSDate，不设置使用系统时区和语言 */
+/**< 将字符串时间格式化成NSDate，不设置使用系统时区和语言 */
 + (nullable NSDate *)dateWithString:(NSString *)dateString format:(NSString *)format timeZone:(nullable NSTimeZone *)timeZone locale:(nullable NSLocale *)locale;
 
 @end

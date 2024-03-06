@@ -17,7 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 
-
 @interface ZCDateManager : NSObject  /**< 日期处理类 */
 
 @property (class, nonatomic, readonly) NSLocale *chinaLocale;  /**< 简体中文语言环境 */
